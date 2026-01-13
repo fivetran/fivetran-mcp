@@ -1,6 +1,6 @@
 # Fivetran MCP Server
 
-A read-only MCP server for querying Fivetran connections, destinations, and groups.
+An MCP server that you can use to interact with your Fivetran environment.  It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connection's broken?"  Additionally, if you set FIVETRAN_ALLOW_WRITES to "true" you can complete write operations like "update the sync frequency of my Redshift connections to every 3 hours"
 
 ## Setup
 
@@ -21,7 +21,7 @@ python3 -m venv .venv
 
 ### 3. Configure your MCP client
 
-See `.mcp.example.json` for an example configuration. Copy it and update the paths and credentials to match your setup.
+See `.mcp.example.json` for an example configuration. Copy it, name it .mcp.json, and update the paths and credentials to match your setup.
 
 ## Environment Variables
 
