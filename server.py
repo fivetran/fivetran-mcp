@@ -402,7 +402,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_destination": {
-        "description": "Create a new destination.",
+        "description": "Create a new destination. IMPORTANT: A group_id is required. Groups are 1:1 with destinations, so you should typically create a new group first using create_group, then use that group's ID here. Only ask the user about existing groups if they specifically mention having one.",
         "schema_file": "open-api-definitions/destinations/create_destination.json",
         "method": "POST",
         "endpoint": "/v1/destinations",
@@ -550,7 +550,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_group": {
-        "description": "Create a new group.",
+        "description": "Create a new group. Groups are containers that hold a destination and its connections. When creating a new destination, you should create a group first, then create the destination in that group.",
         "schema_file": "open-api-definitions/groups/create_group.json",
         "method": "POST",
         "endpoint": "/v1/groups",

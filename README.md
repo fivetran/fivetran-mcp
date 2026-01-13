@@ -21,33 +21,7 @@ python3 -m venv .venv
 
 ### 3. Configure your MCP client
 
-#### Claude Code
-
-```bash
-claude mcp add fivetran \
-  -e FIVETRAN_APIKEY=your-api-key \
-  -e FIVETRAN_APISECRET=your-api-secret \
-  -- /path/to/.venv/bin/python3 /path/to/server.py
-```
-
-#### Claude Desktop
-
-Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (Mac) or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
-
-```json
-{
-  "mcpServers": {
-    "fivetran": {
-      "command": "/path/to/.venv/bin/python3",
-      "args": ["/path/to/server.py"],
-      "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret"
-      }
-    }
-  }
-}
-```
+See `.mcp.example.json` for an example configuration. Copy it and update the paths and credentials to match your setup.
 
 ## Environment Variables
 
