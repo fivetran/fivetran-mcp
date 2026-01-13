@@ -52,6 +52,54 @@ async def fivetran_request(
         return response.json()
 
 
+async def fivetran_request_all_pages(
+    endpoint: str,
+    params: dict[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Make paginated requests to the Fivetran API and return all results.
+
+    Automatically follows next_cursor until all pages are fetched.
+    """
+    all_items = []
+    params = params or {}
+    params["limit"] = 1000  # Use max limit for efficiency
+
+    async with httpx.AsyncClient() as client:
+        while True:
+            url = f"{BASE_URL}{endpoint}"
+            response = await client.request(
+                method="GET",
+                url=url,
+                headers=get_auth_header(),
+                params=params,
+                timeout=30.0,
+            )
+            response.raise_for_status()
+            result = response.json()
+
+            # Extract items from response
+            data = result.get("data", {})
+            items = data.get("items", [])
+            all_items.extend(items)
+
+            # Check for next page
+            next_cursor = data.get("next_cursor")
+            if not next_cursor:
+                break
+
+            params["cursor"] = next_cursor
+
+    # Return in same format as single-page response
+    return {
+        "code": "Success",
+        "data": {
+            "items": all_items,
+            "_auto_paginated": True,
+            "_total_items": len(all_items),
+        }
+    }
+
+
 def validate_and_read_schema(schema_file: str) -> dict[str, Any]:
     """Read and validate the schema file before allowing API call.
 
@@ -100,9 +148,9 @@ def validate_and_read_schema(schema_file: str) -> dict[str, Any]:
 # Tool definitions with their expected schema files
 TOOLS = {
     "list_connections": {
-        "description": "List Fivetran connections in your account. PAGINATION: Results paginated (default 100, max 1000). Follow next_cursor until null for complete results.",
+        "description": "List ALL Fivetran connections in your account. Automatically fetches all pages.",
         "schema_file": "open-api-definitions/connections/list_connections.json",
-        "params": ["limit", "cursor"],
+        "auto_paginate": True,
     },
     "get_connection_details": {
         "description": "Get detailed information about a specific connection.",
@@ -120,9 +168,9 @@ TOOLS = {
         "required": ["connection_id"],
     },
     "list_destinations": {
-        "description": "List data warehouse destinations in your Fivetran account. PAGINATION: Results paginated (default 100, max 1000). Follow next_cursor until null for complete results.",
+        "description": "List ALL data warehouse destinations in your Fivetran account. Automatically fetches all pages.",
         "schema_file": "open-api-definitions/destinations/list_destinations.json",
-        "params": ["limit", "cursor"],
+        "auto_paginate": True,
     },
     "get_destination_details": {
         "description": "Get detailed information about a specific destination.",
@@ -130,9 +178,9 @@ TOOLS = {
         "required": ["destination_id"],
     },
     "list_groups": {
-        "description": "List groups in your Fivetran account. Groups organize connections and destinations together. PAGINATION: Results paginated (default 100, max 1000). Follow next_cursor until null for complete results.",
+        "description": "List ALL groups in your Fivetran account. Groups organize connections and destinations together. Automatically fetches all pages.",
         "schema_file": "open-api-definitions/groups/list_all_groups.json",
-        "params": ["limit", "cursor"],
+        "auto_paginate": True,
     },
     "get_group_details": {
         "description": "Get detailed information about a specific group.",
@@ -140,10 +188,10 @@ TOOLS = {
         "required": ["group_id"],
     },
     "list_connections_in_group": {
-        "description": "List connections within a specific group. PAGINATION: Results paginated (default 100, max 1000). Follow next_cursor until null for complete results.",
+        "description": "List ALL connections within a specific group. Automatically fetches all pages.",
         "schema_file": "open-api-definitions/groups/list_all_connections_in_group.json",
         "required": ["group_id"],
-        "params": ["limit", "cursor"],
+        "auto_paginate": True,
     },
 }
 
@@ -177,19 +225,6 @@ def build_tool_schema(tool_name: str, tool_config: dict) -> Tool:
                 "description": "The unique identifier for the group",
             }
         required.append(param)
-
-    # Add optional pagination parameters
-    if "limit" in tool_config.get("params", []):
-        properties["limit"] = {
-            "type": "integer",
-            "description": "Number of records to fetch (1-1000, default 100)",
-            "default": 100,
-        }
-    if "cursor" in tool_config.get("params", []):
-        properties["cursor"] = {
-            "type": "string",
-            "description": "Pagination cursor for fetching next page",
-        }
 
     return Tool(
         name=tool_name,
@@ -252,15 +287,9 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
 async def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
     """Execute the actual API call after validation."""
-    params = {}
-
-    if arguments.get("limit"):
-        params["limit"] = arguments["limit"]
-    if arguments.get("cursor"):
-        params["cursor"] = arguments["cursor"]
 
     if name == "list_connections":
-        return await fivetran_request("GET", "/connections", params or None)
+        return await fivetran_request_all_pages("/connections")
 
     elif name == "get_connection_details":
         connection_id = arguments["connection_id"]
@@ -275,14 +304,14 @@ async def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         return await fivetran_request("GET", f"/connections/{connection_id}/schemas")
 
     elif name == "list_destinations":
-        return await fivetran_request("GET", "/destinations", params or None)
+        return await fivetran_request_all_pages("/destinations")
 
     elif name == "get_destination_details":
         destination_id = arguments["destination_id"]
         return await fivetran_request("GET", f"/destinations/{destination_id}")
 
     elif name == "list_groups":
-        return await fivetran_request("GET", "/groups", params or None)
+        return await fivetran_request_all_pages("/groups")
 
     elif name == "get_group_details":
         group_id = arguments["group_id"]
@@ -290,7 +319,7 @@ async def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
 
     elif name == "list_connections_in_group":
         group_id = arguments["group_id"]
-        return await fivetran_request("GET", f"/groups/{group_id}/connections", params or None)
+        return await fivetran_request_all_pages(f"/groups/{group_id}/connections")
 
     else:
         raise ValueError(f"Unknown tool: {name}")
