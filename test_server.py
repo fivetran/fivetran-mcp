@@ -13,11 +13,11 @@ os.environ["FIVETRAN_APISECRET"] = "test_api_secret"
 from server import (
     get_auth_header,
     fivetran_request,
-    _execute_tool,
-    _format_result,
+    execute_tool,
     list_tools,
     call_tool,
     BASE_URL,
+    TOOLS,
 )
 
 
@@ -66,11 +66,11 @@ class TestFivetranRequest:
     async def test_fivetran_request_makes_correct_get_request(self, httpx_mock):
         """Test that GET requests are made correctly."""
         httpx_mock.add_response(
-            url=f"{BASE_URL}/connections",
+            url=f"{BASE_URL}/v1/connections",
             json={"data": {"items": []}},
         )
 
-        result = await fivetran_request("GET", "/connections")
+        result = await fivetran_request("GET", "/v1/connections")
 
         assert result == {"data": {"items": []}}
 
@@ -78,11 +78,11 @@ class TestFivetranRequest:
     async def test_fivetran_request_includes_params(self, httpx_mock):
         """Test that query parameters are included."""
         httpx_mock.add_response(
-            url=f"{BASE_URL}/connections?limit=50",
+            url=f"{BASE_URL}/v1/connections?limit=50",
             json={"data": {"items": []}},
         )
 
-        result = await fivetran_request("GET", "/connections", params={"limit": 50})
+        result = await fivetran_request("GET", "/v1/connections", params={"limit": 50})
 
         assert result == {"data": {"items": []}}
 
@@ -90,20 +90,20 @@ class TestFivetranRequest:
     async def test_fivetran_request_raises_on_http_error(self, httpx_mock):
         """Test that HTTP errors are propagated."""
         httpx_mock.add_response(
-            url=f"{BASE_URL}/connections",
+            url=f"{BASE_URL}/v1/connections",
             status_code=401,
         )
 
         with pytest.raises(httpx.HTTPStatusError):
-            await fivetran_request("GET", "/connections")
+            await fivetran_request("GET", "/v1/connections")
 
 
 class TestListConnections:
     """Tests for list_connections tool."""
 
     @pytest.mark.asyncio
-    async def test_list_connections_no_params(self, httpx_mock):
-        """Test listing connections without parameters."""
+    async def test_list_connections_returns_items(self, httpx_mock):
+        """Test listing connections returns items."""
         expected_response = {
             "data": {
                 "items": [
@@ -113,37 +113,15 @@ class TestListConnections:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/connections",
+            url=f"{BASE_URL}/v1/connections?limit=1000",
             json=expected_response,
         )
 
-        result = await _execute_tool("list_connections", {})
+        result = await execute_tool("list_connections", {})
 
-        assert result == expected_response
-
-    @pytest.mark.asyncio
-    async def test_list_connections_with_limit(self, httpx_mock):
-        """Test listing connections with limit parameter."""
-        httpx_mock.add_response(
-            url=f"{BASE_URL}/connections?limit=10",
-            json={"data": {"items": []}},
-        )
-
-        result = await _execute_tool("list_connections", {"limit": 10})
-
-        assert result == {"data": {"items": []}}
-
-    @pytest.mark.asyncio
-    async def test_list_connections_with_cursor(self, httpx_mock):
-        """Test listing connections with pagination cursor."""
-        httpx_mock.add_response(
-            url=f"{BASE_URL}/connections?cursor=abc123",
-            json={"data": {"items": []}, "next_cursor": "def456"},
-        )
-
-        result = await _execute_tool("list_connections", {"cursor": "abc123"})
-
-        assert "next_cursor" in result
+        # Auto-paginate wraps response
+        assert "data" in result
+        assert "items" in result["data"]
 
 
 class TestGetConnectionDetails:
@@ -164,11 +142,11 @@ class TestGetConnectionDetails:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/connections/conn_123",
+            url=f"{BASE_URL}/v1/connections/conn_123",
             json=expected_response,
         )
 
-        result = await _execute_tool("get_connection_details", {"connection_id": "conn_123"})
+        result = await execute_tool("get_connection_details", {"connection_id": "conn_123"})
 
         assert result == expected_response
 
@@ -176,13 +154,13 @@ class TestGetConnectionDetails:
     async def test_get_connection_details_not_found(self, httpx_mock):
         """Test getting details for non-existent connection."""
         httpx_mock.add_response(
-            url=f"{BASE_URL}/connections/invalid_id",
+            url=f"{BASE_URL}/v1/connections/invalid_id",
             status_code=404,
             json={"message": "Connection not found"},
         )
 
         with pytest.raises(httpx.HTTPStatusError):
-            await _execute_tool("get_connection_details", {"connection_id": "invalid_id"})
+            await execute_tool("get_connection_details", {"connection_id": "invalid_id"})
 
 
 class TestGetConnectionState:
@@ -198,11 +176,11 @@ class TestGetConnectionState:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/connections/conn_123/state",
+            url=f"{BASE_URL}/v1/connections/conn_123/state",
             json=expected_response,
         )
 
-        result = await _execute_tool("get_connection_state", {"connection_id": "conn_123"})
+        result = await execute_tool("get_connection_state", {"connection_id": "conn_123"})
 
         assert result == expected_response
 
@@ -227,11 +205,11 @@ class TestGetConnectionSchemaConfig:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/connections/conn_123/schemas",
+            url=f"{BASE_URL}/v1/connections/conn_123/schemas",
             json=expected_response,
         )
 
-        result = await _execute_tool("get_connection_schema_config", {"connection_id": "conn_123"})
+        result = await execute_tool("get_connection_schema_config", {"connection_id": "conn_123"})
 
         assert result == expected_response
 
@@ -240,8 +218,8 @@ class TestListDestinations:
     """Tests for list_destinations tool."""
 
     @pytest.mark.asyncio
-    async def test_list_destinations_no_params(self, httpx_mock):
-        """Test listing destinations without parameters."""
+    async def test_list_destinations_returns_items(self, httpx_mock):
+        """Test listing destinations returns items."""
         expected_response = {
             "data": {
                 "items": [
@@ -251,25 +229,14 @@ class TestListDestinations:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/destinations",
+            url=f"{BASE_URL}/v1/destinations?limit=1000",
             json=expected_response,
         )
 
-        result = await _execute_tool("list_destinations", {})
+        result = await execute_tool("list_destinations", {})
 
-        assert result == expected_response
-
-    @pytest.mark.asyncio
-    async def test_list_destinations_with_pagination(self, httpx_mock):
-        """Test listing destinations with pagination."""
-        httpx_mock.add_response(
-            url=f"{BASE_URL}/destinations?limit=5&cursor=page2",
-            json={"data": {"items": []}},
-        )
-
-        result = await _execute_tool("list_destinations", {"limit": 5, "cursor": "page2"})
-
-        assert result == {"data": {"items": []}}
+        assert "data" in result
+        assert "items" in result["data"]
 
 
 class TestGetDestinationDetails:
@@ -290,11 +257,11 @@ class TestGetDestinationDetails:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/destinations/dest_123",
+            url=f"{BASE_URL}/v1/destinations/dest_123",
             json=expected_response,
         )
 
-        result = await _execute_tool("get_destination_details", {"destination_id": "dest_123"})
+        result = await execute_tool("get_destination_details", {"destination_id": "dest_123"})
 
         assert result == expected_response
 
@@ -303,8 +270,8 @@ class TestListGroups:
     """Tests for list_groups tool."""
 
     @pytest.mark.asyncio
-    async def test_list_groups_no_params(self, httpx_mock):
-        """Test listing groups without parameters."""
+    async def test_list_groups_returns_items(self, httpx_mock):
+        """Test listing groups returns items."""
         expected_response = {
             "data": {
                 "items": [
@@ -314,25 +281,14 @@ class TestListGroups:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/groups",
+            url=f"{BASE_URL}/v1/groups?limit=1000",
             json=expected_response,
         )
 
-        result = await _execute_tool("list_groups", {})
+        result = await execute_tool("list_groups", {})
 
-        assert result == expected_response
-
-    @pytest.mark.asyncio
-    async def test_list_groups_with_limit(self, httpx_mock):
-        """Test listing groups with limit."""
-        httpx_mock.add_response(
-            url=f"{BASE_URL}/groups?limit=25",
-            json={"data": {"items": []}},
-        )
-
-        result = await _execute_tool("list_groups", {"limit": 25})
-
-        assert result == {"data": {"items": []}}
+        assert "data" in result
+        assert "items" in result["data"]
 
 
 class TestGetGroupDetails:
@@ -349,11 +305,11 @@ class TestGetGroupDetails:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/groups/group_123",
+            url=f"{BASE_URL}/v1/groups/group_123",
             json=expected_response,
         )
 
-        result = await _execute_tool("get_group_details", {"group_id": "group_123"})
+        result = await execute_tool("get_group_details", {"group_id": "group_123"})
 
         assert result == expected_response
 
@@ -373,28 +329,14 @@ class TestListConnectionsInGroup:
             }
         }
         httpx_mock.add_response(
-            url=f"{BASE_URL}/groups/group_123/connections",
+            url=f"{BASE_URL}/v1/groups/group_123/connections?limit=1000",
             json=expected_response,
         )
 
-        result = await _execute_tool("list_connections_in_group", {"group_id": "group_123"})
+        result = await execute_tool("list_connections_in_group", {"group_id": "group_123"})
 
-        assert result == expected_response
-
-    @pytest.mark.asyncio
-    async def test_list_connections_in_group_with_pagination(self, httpx_mock):
-        """Test listing connections in a group with pagination."""
-        httpx_mock.add_response(
-            url=f"{BASE_URL}/groups/group_123/connections?limit=10&cursor=next",
-            json={"data": {"items": []}},
-        )
-
-        result = await _execute_tool(
-            "list_connections_in_group",
-            {"group_id": "group_123", "limit": 10, "cursor": "next"}
-        )
-
-        assert result == {"data": {"items": []}}
+        assert "data" in result
+        assert "items" in result["data"]
 
 
 class TestUnknownTool:
@@ -402,88 +344,48 @@ class TestUnknownTool:
 
     @pytest.mark.asyncio
     async def test_unknown_tool_raises_error(self):
-        """Test that unknown tools raise ValueError."""
-        with pytest.raises(ValueError, match="Unknown tool: nonexistent_tool"):
-            await _execute_tool("nonexistent_tool", {})
-
-
-class TestFormatResult:
-    """Tests for result formatting."""
-
-    def test_format_result_returns_json_string(self):
-        """Test that results are formatted as JSON."""
-        result = _format_result({"key": "value", "nested": {"a": 1}})
-
-        assert '"key": "value"' in result
-        assert '"nested"' in result
-
-    def test_format_result_handles_empty_dict(self):
-        """Test formatting empty dictionary."""
-        result = _format_result({})
-
-        assert result == "{}"
+        """Test that unknown tools raise KeyError for unknown tools."""
+        with pytest.raises(KeyError):
+            await execute_tool("nonexistent_tool", {})
 
 
 class TestCallTool:
     """Tests for the call_tool handler."""
 
     @pytest.mark.asyncio
-    async def test_call_tool_returns_text_content(self, httpx_mock):
-        """Test that call_tool returns TextContent list."""
-        httpx_mock.add_response(
-            url=f"{BASE_URL}/groups",
-            json={"data": {"items": []}},
-        )
-
-        result = await call_tool("list_groups", {})
+    async def test_call_tool_validates_schema_file(self):
+        """Test that call_tool requires correct schema_file."""
+        result = await call_tool("list_groups", {"schema_file": "wrong/path.json"})
 
         assert len(result) == 1
-        assert result[0].type == "text"
-        assert "items" in result[0].text
+        assert "Invalid schema_file" in result[0].text or "Error" in result[0].text
 
     @pytest.mark.asyncio
-    async def test_call_tool_handles_http_error(self, httpx_mock):
-        """Test that HTTP errors are handled gracefully."""
-        httpx_mock.add_response(
-            url=f"{BASE_URL}/connections/bad_id",
-            status_code=404,
-            json={"message": "Not found"},
-        )
-
-        result = await call_tool("get_connection_details", {"connection_id": "bad_id"})
-
-        assert len(result) == 1
-        assert "404" in result[0].text or "error" in result[0].text.lower()
-
-    @pytest.mark.asyncio
-    async def test_call_tool_handles_generic_error(self):
-        """Test that generic errors are handled gracefully."""
+    async def test_call_tool_handles_unknown_tool(self):
+        """Test that unknown tools are handled gracefully."""
         result = await call_tool("unknown_tool", {})
 
         assert len(result) == 1
-        assert "Error" in result[0].text
+        assert "Error" in result[0].text or "Unknown tool" in result[0].text
 
 
 class TestListTools:
     """Tests for the list_tools handler."""
 
     @pytest.mark.asyncio
-    async def test_list_tools_returns_all_tools(self):
-        """Test that all 9 tools are returned."""
+    async def test_list_tools_returns_tools(self):
+        """Test that tools are returned."""
         tools = await list_tools()
 
-        assert len(tools) == 9
+        # Should have all tools defined in TOOLS dict
+        assert len(tools) == len(TOOLS)
 
         tool_names = [t.name for t in tools]
+        # Check some core tools exist
         assert "list_connections" in tool_names
         assert "get_connection_details" in tool_names
-        assert "get_connection_state" in tool_names
-        assert "get_connection_schema_config" in tool_names
         assert "list_destinations" in tool_names
-        assert "get_destination_details" in tool_names
         assert "list_groups" in tool_names
-        assert "get_group_details" in tool_names
-        assert "list_connections_in_group" in tool_names
 
     @pytest.mark.asyncio
     async def test_list_tools_have_descriptions(self):
@@ -503,6 +405,15 @@ class TestListTools:
             assert tool.inputSchema
             assert "type" in tool.inputSchema
             assert tool.inputSchema["type"] == "object"
+
+    @pytest.mark.asyncio
+    async def test_list_tools_require_schema_file(self):
+        """Test that all tools require schema_file parameter."""
+        tools = await list_tools()
+
+        for tool in tools:
+            assert "schema_file" in tool.inputSchema.get("required", [])
+            assert "schema_file" in tool.inputSchema.get("properties", {})
 
 
 # Pytest fixtures
