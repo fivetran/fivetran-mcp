@@ -1,0 +1,110 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Retrieve Connection Membership",
+    "description": "Returns details of a team membership in a connection."
+  },
+  "path": "/v1/teams/{teamId}/connections/{connectionId}",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Team Management"
+    ],
+    "summary": "Retrieve Connection Membership",
+    "description": "Returns details of a team membership in a connection.",
+    "operationId": "get_team_membership_in_connection",
+    "parameters": [
+      {
+        "name": "teamId",
+        "in": "path",
+        "description": "The unique identifier for the team within the account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "teamId"
+        },
+        "example": "teamId"
+      },
+      {
+        "name": "connectionId",
+        "in": "path",
+        "description": "The unique identifier for the connection within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "connectionId"
+        },
+        "example": "connectionId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/MembershipResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MembershipResponse": {
+        "required": [
+          "created_at",
+          "id",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The membership entity unique identifier",
+            "example": "resource_id"
+          },
+          "role": {
+            "type": "string",
+            "description": "The role the user has within the entity",
+            "example": "Role Title"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The timestamp that the user created their Fivetran account",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00Z"
+          }
+        }
+      }
+    }
+  }
+}

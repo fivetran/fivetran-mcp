@@ -1,0 +1,120 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Create a Team",
+    "description": "Creates a new team in your Fivetran account"
+  },
+  "path": "/v1/teams",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "Team Management"
+    ],
+    "summary": "Create a Team",
+    "description": "Creates a new team in your Fivetran account",
+    "operationId": "create_team",
+    "parameters": [
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/TeamRequest"
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "default response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TeamRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the team within your account",
+            "example": "Team Title"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team within your account",
+            "example": "Team Description"
+          },
+          "role": {
+            "type": "string",
+            "description": "The account role of the team",
+            "example": "Account Analyst"
+          }
+        }
+      },
+      "TeamResponse": {
+        "required": [
+          "id",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the team within your account",
+            "example": "team_id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the team within your account",
+            "example": "Team Title"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team within your account",
+            "example": "Team Description"
+          },
+          "role": {
+            "type": "string",
+            "description": "The account role of the team",
+            "example": "Account Reviewer"
+          }
+        }
+      }
+    }
+  }
+}

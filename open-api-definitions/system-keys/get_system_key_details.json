@@ -1,0 +1,228 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Retrieve System Key Details",
+    "description": "Retrieves a system key object within your Fivetran account."
+  },
+  "path": "/v1/system-keys/{keyId}",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "System Key Management"
+    ],
+    "summary": "Retrieve System Key Details",
+    "description": "Retrieves a system key object within your Fivetran account.",
+    "operationId": "get_system_key_details",
+    "parameters": [
+      {
+        "name": "keyId",
+        "in": "path",
+        "description": "The unique identifier for the system key within your Fivetran account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "keyId"
+        },
+        "example": "keyId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/SystemKeyResponse"
+                }
+              }
+            },
+            "examples": {
+              "get_response": {
+                "value": {
+                  "code": "Success",
+                  "data": {
+                    "id": "rushed_fainting",
+                    "name": "updated_key",
+                    "key_value": "<key_value>",
+                    "created_at": "2023-10-17T14:01:16.318Z",
+                    "updated_at": "2023-10-17T14:02:20.919291Z",
+                    "expired_at": "2024-01-17T14:01:16.318Z",
+                    "permissions": [
+                      {
+                        "resource_type": "CONNECTOR",
+                        "access_level": "MANAGE"
+                      },
+                      {
+                        "resource_type": "DESTINATION",
+                        "access_level": "MANAGE"
+                      },
+                      {
+                        "resource_type": "TRANSFORMATION",
+                        "access_level": "MANAGE",
+                        "resource_filter": {
+                          "group_ids": [
+                            "group_id_1",
+                            "group_id_2"
+                          ]
+                        }
+                      },
+                      {
+                        "resource_type": "CONNECTOR",
+                        "access_level": "NONE",
+                        "resource_filter": {
+                          "ids": [
+                            "connection_id_3",
+                            "connection_id_4"
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SystemKeyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the system key within the Fivetran system",
+            "example": "key_id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The system key name within the account",
+            "example": "MySystemKey"
+          },
+          "key": {
+            "type": "string",
+            "description": "The key value of the system key",
+            "example": "ft_rDefAFDSgFdAGdFG"
+          },
+          "secret": {
+            "type": "string",
+            "description": "The secret value of rotated system key",
+            "example": "uytFfdSfDADFgfCgFBVsdCSFg4fsGfFg87fhRuuFASuTHkETSfg"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SystemKeyPermissionResponse"
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The system key creation timestamp",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          },
+          "expired_at": {
+            "type": "string",
+            "description": "The system key expiration timestamp",
+            "format": "date-time",
+            "example": "2024-08-20T10:15:20.677566Z"
+          },
+          "last_used_at": {
+            "type": "string",
+            "description": "The timestamp of last usage",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "The system key update timestamp",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          }
+        }
+      },
+      "SystemKeyPermissionResponse": {
+        "type": "object",
+        "properties": {
+          "resource_filter": {
+            "$ref": "#/components/schemas/SystemKeyPermissionResourceFilter"
+          },
+          "access_level": {
+            "type": "string",
+            "description": "The access level for the permission",
+            "example": "MANAGE",
+            "enum": [
+              "NONE",
+              "READ",
+              "MANAGE"
+            ]
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type for the permission",
+            "example": "DESTINATION",
+            "enum": [
+              "ACCOUNT",
+              "USER",
+              "WEBHOOK",
+              "TEAM",
+              "ROLES",
+              "DESTINATION",
+              "TRANSFORMATION",
+              "REMOTE_EXECUTION_AGENT",
+              "CONNECTOR"
+            ]
+          }
+        }
+      },
+      "SystemKeyPermissionResourceFilter": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "description": "The IDs of managed entities",
+            "example": {},
+            "items": {
+              "type": "string"
+            }
+          },
+          "group_ids": {
+            "type": "array",
+            "description": "The IDs of managed groups",
+            "example": {},
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

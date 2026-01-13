@@ -1,0 +1,94 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Add a User to a Group",
+    "description": "Adds an existing user to a group in your Fivetran account."
+  },
+  "path": "/v1/groups/{groupId}/users",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "Group Management"
+    ],
+    "summary": "Add a User to a Group",
+    "description": "Adds an existing user to a group in your Fivetran account.",
+    "operationId": "add_user_to_group",
+    "parameters": [
+      {
+        "name": "groupId",
+        "in": "path",
+        "description": "The unique identifier for the group within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "groupId"
+        },
+        "example": "groupId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/AddUserToGroupRequest"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AddUserToGroupRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "The email address that the user has associated with their user profile.",
+            "example": "user@email.value"
+          },
+          "role": {
+            "type": "string",
+            "description": "The group role that you would like to assign this new user to. Supported group roles: \u2018Manage Destination\u2018, \u2018View Destination\u2018, \u2018Edit Destination\u2018, \u2018Create Connection\u2018, or a custom destination role",
+            "example": "Owner"
+          }
+        }
+      }
+    }
+  }
+}

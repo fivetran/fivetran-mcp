@@ -1,0 +1,153 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "List all roles",
+    "description": "Returns a list of all predefined and custom roles within your Fivetran account."
+  },
+  "path": "/v1/roles",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Role Management"
+    ],
+    "summary": "List all roles",
+    "description": "Returns a list of all predefined and custom roles within your Fivetran account.",
+    "operationId": "list_all_roles",
+    "parameters": [
+      {
+        "name": "cursor",
+        "in": "query",
+        "description": "Paging cursor, [read more about pagination](https://fivetran.com/docs/rest-api/pagination)",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "cursor_value"
+        },
+        "example": "cursor_value"
+      },
+      {
+        "name": "limit",
+        "in": "query",
+        "description": "Number of records to fetch per page. Accepts a number in the range 1..1000; the default value is 100.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "example": 100
+        },
+        "example": 100
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "description": "The collection of returned items",
+                      "items": {
+                        "$ref": "#/components/schemas/RoleResponse"
+                      }
+                    },
+                    "next_cursor": {
+                      "type": "string",
+                      "description": "The value of the cursor parameter for the next page",
+                      "example": "cursor_value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RoleResponse": {
+        "required": [
+          "is_custom",
+          "is_deprecated",
+          "name",
+          "replacement_role_name",
+          "scope"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The role name",
+            "example": "Destination Administrator"
+          },
+          "description": {
+            "type": "string",
+            "description": "The role description",
+            "example": "Role Description"
+          },
+          "scope": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Defines the list of resources the role manages",
+            "example": "DESTINATION",
+            "items": {
+              "type": "string"
+            },
+            "enum": [
+              "ACCOUNT",
+              "DESTINATION",
+              "CONNECTOR",
+              "TEAM"
+            ]
+          },
+          "is_deprecated": {
+            "type": "boolean",
+            "description": "Defines whether the role is deprecated",
+            "example": false
+          },
+          "replacement_role_name": {
+            "type": "string",
+            "description": "The name of the new role replacing the deprecated role",
+            "example": "Manage Destination"
+          },
+          "is_custom": {
+            "type": "boolean",
+            "description": "Defines whether the role is standard or custom",
+            "example": false
+          }
+        }
+      }
+    }
+  }
+}

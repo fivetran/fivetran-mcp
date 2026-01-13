@@ -1,0 +1,173 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Retrieve Source Table Columns Config",
+    "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields. \n\n> Note: This endpoint works only for an existing connection that is in a 'Connected' state.\n"
+  },
+  "path": "/v1/connections/{connectionId}/schemas/{schema}/tables/{table}/columns",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Connection Schema Management"
+    ],
+    "summary": "Retrieve Source Table Columns Config",
+    "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields. \n\n> Note: This endpoint works only for an existing connection that is in a 'Connected' state.\n",
+    "operationId": "connection_column_config",
+    "parameters": [
+      {
+        "name": "connectionId",
+        "in": "path",
+        "description": "The unique identifier for the connection within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "connectionId"
+        },
+        "example": "connectionId"
+      },
+      {
+        "name": "schema",
+        "in": "path",
+        "description": "The database schema name within your destination",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "schema"
+        },
+        "example": "schema"
+      },
+      {
+        "name": "table",
+        "in": "path",
+        "description": "The table name within your database schema",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "table"
+        },
+        "example": "table"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TableColumnsConfigResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TableColumnsConfigResponse": {
+        "required": [
+          "columns"
+        ],
+        "type": "object",
+        "properties": {
+          "columns": {
+            "title": "Columns",
+            "type": "object",
+            "properties": {
+              "column": {
+                "$ref": "#/components/schemas/ColumnConfigResponse"
+              }
+            },
+            "description": "The set of columns within your table schema config. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync."
+          }
+        }
+      },
+      "ColumnConfigResponse": {
+        "required": [
+          "enabled",
+          "enabled_patch_settings",
+          "hashed",
+          "name_in_destination"
+        ],
+        "type": "object",
+        "properties": {
+          "name_in_destination": {
+            "type": "string",
+            "description": "The schema name within your destination in accordance with Fivetran conventional rules",
+            "example": "column_name_in_destination"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "The boolean value specifying whether the sync for the table into the destination is enabled.",
+            "example": true
+          },
+          "hashed": {
+            "type": "boolean",
+            "description": "The boolean value specifying whether a column should be hashed",
+            "example": false
+          },
+          "enabled_patch_settings": {
+            "$ref": "#/components/schemas/ColumnEnabledPatchSettings"
+          },
+          "is_primary_key": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ColumnEnabledPatchSettings": {
+        "required": [
+          "allowed"
+        ],
+        "type": "object",
+        "properties": {
+          "allowed": {
+            "type": "boolean",
+            "description": "The boolean value specifying whether the enabled property can be updated",
+            "example": false
+          },
+          "reason": {
+            "type": "string",
+            "description": "The additional message indicating the reason why the enabled property cannot be updated. This field appears in the response only when the reason_code value is OTHER",
+            "example": "..."
+          },
+          "reason_code": {
+            "type": "string",
+            "description": "The reason code indicating the reason why the enabled property cannot be updated: <br /> SYSTEM_TABLE - the table is a system table <br /> DELETED - the table was deleted in the source <br /> OTHER - the table was excluded by the system for some reason <br /> This field appears in the response when the allowed property value is FALSE",
+            "example": "SYSTEM_COLUMN",
+            "enum": [
+              "SYSTEM_COLUMN",
+              "DELETED",
+              "OTHER"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

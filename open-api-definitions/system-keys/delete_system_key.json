@@ -1,0 +1,74 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Delete a System Key",
+    "description": "Deletes a system key from your Fivetran account."
+  },
+  "path": "/v1/system-keys/{keyId}",
+  "method": "DELETE",
+  "operation": {
+    "tags": [
+      "System Key Management"
+    ],
+    "summary": "Delete a System Key",
+    "description": "Deletes a system key from your Fivetran account.",
+    "operationId": "delete_system_key",
+    "parameters": [
+      {
+        "name": "keyId",
+        "in": "path",
+        "description": "The unique identifier for the system key within your Fivetran account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "keyId"
+        },
+        "example": "keyId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                }
+              }
+            },
+            "examples": {
+              "delete_response": {
+                "value": {
+                  "code": "Success",
+                  "message": "System key with id 'rushed_fainting' has been deleted"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

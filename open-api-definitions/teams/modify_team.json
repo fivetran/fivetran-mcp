@@ -1,0 +1,131 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Update a Team",
+    "description": "Updates information for an existing team within your Fivetran account"
+  },
+  "path": "/v1/teams/{teamId}",
+  "method": "PATCH",
+  "operation": {
+    "tags": [
+      "Team Management"
+    ],
+    "summary": "Update a Team",
+    "description": "Updates information for an existing team within your Fivetran account",
+    "operationId": "modify_team",
+    "parameters": [
+      {
+        "name": "teamId",
+        "in": "path",
+        "description": "The unique identifier for the team within the account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "teamId"
+        },
+        "example": "teamId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/UpdateTeamRequest"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TeamResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TeamResponse": {
+        "required": [
+          "id",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the team within your account",
+            "example": "team_id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the team within your account",
+            "example": "Team Title"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team within your account",
+            "example": "Team Description"
+          },
+          "role": {
+            "type": "string",
+            "description": "The account role of the team",
+            "example": "Account Reviewer"
+          }
+        }
+      },
+      "UpdateTeamRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the team within your account",
+            "example": "Team Name"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the team within your account",
+            "example": "Team description"
+          },
+          "role": {
+            "type": "string",
+            "description": "The account role of the team",
+            "example": "Account Analyst"
+          }
+        }
+      }
+    }
+  }
+}

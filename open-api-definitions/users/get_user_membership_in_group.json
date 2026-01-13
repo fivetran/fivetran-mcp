@@ -1,0 +1,113 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Retrieve Group Membership Details",
+    "description": "Returns details of a user membership in group."
+  },
+  "path": "/v1/users/{userId}/groups/{groupId}",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "User Management"
+    ],
+    "summary": "Retrieve Group Membership Details",
+    "description": "Returns details of a user membership in group.",
+    "operationId": "get_user_membership_in_group",
+    "parameters": [
+      {
+        "name": "userId",
+        "in": "path",
+        "description": "The unique identifier for the user within the account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "userId"
+        },
+        "example": "userId"
+      },
+      {
+        "name": "groupId",
+        "in": "path",
+        "description": "The unique identifier for the group within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "groupId"
+        },
+        "example": "groupId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/MembershipResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "User not found"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MembershipResponse": {
+        "required": [
+          "created_at",
+          "id",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The membership entity unique identifier",
+            "example": "resource_id"
+          },
+          "role": {
+            "type": "string",
+            "description": "The role the user has within the entity",
+            "example": "Role Title"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The timestamp that the user created their Fivetran account",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00Z"
+          }
+        }
+      }
+    }
+  }
+}

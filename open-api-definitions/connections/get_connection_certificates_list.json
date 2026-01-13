@@ -1,0 +1,177 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "List Certificates Approved for the Connection",
+    "description": "Returns the list of approved certificates for the specified connection."
+  },
+  "path": "/v1/connections/{connectionId}/certificates",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Certificate Management"
+    ],
+    "summary": "List Certificates Approved for the Connection",
+    "description": "Returns the list of approved certificates for the specified connection.",
+    "operationId": "get_connection_certificates_list",
+    "parameters": [
+      {
+        "name": "connectionId",
+        "in": "path",
+        "description": "The unique identifier for the connection within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "connectionId"
+        },
+        "example": "connectionId"
+      },
+      {
+        "name": "cursor",
+        "in": "query",
+        "description": "Paging cursor, [read more about pagination](https://fivetran.com/docs/rest-api/pagination)",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "cursor_value"
+        },
+        "example": "cursor_value"
+      },
+      {
+        "name": "limit",
+        "in": "query",
+        "description": "Number of records to fetch per page. Accepts a number in the range 1..1000; the default value is 100.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "example": 100
+        },
+        "example": 100
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "description": "The collection of returned items",
+                      "items": {
+                        "$ref": "#/components/schemas/CertificateDetailsResponse"
+                      }
+                    },
+                    "next_cursor": {
+                      "type": "string",
+                      "description": "The value of the cursor parameter for the next page",
+                      "example": "cursor_value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Connection not found."
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CertificateDetailsResponse": {
+        "required": [
+          "hash",
+          "id",
+          "name",
+          "public_key",
+          "sha1",
+          "sha256",
+          "type",
+          "validated_by",
+          "validated_date"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of the certificate (Base64URL encoded hash of the certificate).",
+            "example": "Y29ubmVjdG9yIGNlcnRpZmljYXRlIGhhc2g"
+          },
+          "name": {
+            "type": "string",
+            "description": "The certificate name.",
+            "example": "Certificate Name"
+          },
+          "hash": {
+            "type": "string",
+            "description": "Hash of the certificate.",
+            "example": "jhg5UI7fgrI6yy..."
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the certificate.",
+            "example": "TLS"
+          },
+          "sha1": {
+            "type": "string",
+            "description": "SHA1 of certificate.",
+            "example": "c8de1d13vtu435ilj435lj345796d8jh7hk8hgk"
+          },
+          "sha256": {
+            "type": "string",
+            "description": "SHA256 of certificate.",
+            "example": "5vt6rt6jtr654eef94ec3f91122a623b389f4d331ff330026e43af21013vb45f"
+          },
+          "validated_date": {
+            "type": "string",
+            "description": "Date when certificate has been validated and approved.",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          },
+          "validated_by": {
+            "type": "string",
+            "description": "The unique identified for the user who has approved the certificate.",
+            "example": "user_id"
+          },
+          "public_key": {
+            "type": "string",
+            "description": "The certificate decoded public key.",
+            "example": "Sun RSA public key, 2048 bits params: null modulus: 7685655455... public exponent: 65537"
+          }
+        }
+      }
+    }
+  }
+}

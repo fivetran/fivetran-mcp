@@ -1,0 +1,66 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Delete a Group",
+    "description": "Deletes a group from your Fivetran account."
+  },
+  "path": "/v1/groups/{groupId}",
+  "method": "DELETE",
+  "operation": {
+    "tags": [
+      "Group Management"
+    ],
+    "summary": "Delete a Group",
+    "description": "Deletes a group from your Fivetran account.",
+    "operationId": "delete_group",
+    "parameters": [
+      {
+        "name": "groupId",
+        "in": "path",
+        "description": "The unique identifier for the group within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "groupId"
+        },
+        "example": "groupId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

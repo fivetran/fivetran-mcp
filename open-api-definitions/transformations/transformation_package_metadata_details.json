@@ -1,0 +1,116 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Retrieve a Quickstart Package Metadata Details",
+    "description": "Returns the metadata details of the Quickstart transformation package if a valid identifier is provided."
+  },
+  "path": "/v1/transformations/package-metadata/{package_definition_id}",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Transformation Management"
+    ],
+    "summary": "Retrieve a Quickstart Package Metadata Details",
+    "description": "Returns the metadata details of the Quickstart transformation package if a valid identifier is provided.",
+    "operationId": "transformation_package_metadata_details",
+    "parameters": [
+      {
+        "name": "package_definition_id",
+        "in": "path",
+        "description": "The unique identifier for the Quickstart transformation package definition within the Fivetran system",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "package_definition_id"
+        },
+        "example": "package_definition_id"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TransformationPackageMetadataResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Transformation Package not found"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TransformationPackageMetadataResponse": {
+        "required": [
+          "id",
+          "name",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the Quickstart transformation package definition within the Fivetran system",
+            "example": "package_definition_id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The Quickstart transformation package name",
+            "example": "package_definition_name"
+          },
+          "version": {
+            "type": "string",
+            "description": "The Quickstart package definition version",
+            "example": "version"
+          },
+          "connector_types": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The set of connector types",
+            "items": {
+              "type": "string"
+            }
+          },
+          "output_model_names": {
+            "type": "array",
+            "description": "The list of transformation output models",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

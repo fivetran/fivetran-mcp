@@ -1,0 +1,273 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Rotate a System Key",
+    "description": "Updates the secret value and expired_at date for an existing system key within your Fivetran account."
+  },
+  "path": "/v1/system-keys/{keyId}/rotate",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "System Key Management"
+    ],
+    "summary": "Rotate a System Key",
+    "description": "Updates the secret value and expired_at date for an existing system key within your Fivetran account.",
+    "operationId": "rotate_system_key",
+    "parameters": [
+      {
+        "name": "keyId",
+        "in": "path",
+        "description": "The unique identifier for the system key within your Fivetran account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "keyId"
+        },
+        "example": "keyId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/RotateSystemKeyRequest"
+          },
+          "examples": {
+            "rotate_request": {
+              "value": {
+                "name": "updated_key",
+                "permissions": {
+                  "expiration_period": "THREE_MONTHS"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/SystemKeyResponse"
+                }
+              }
+            },
+            "examples": {
+              "rotate_response": {
+                "value": {
+                  "code": "Success",
+                  "message": "System key with id 'rushed_fainting' has been rotated",
+                  "data": {
+                    "id": "rushed_fainting",
+                    "name": "prod_key",
+                    "key": "<key_value>",
+                    "secret": "<secret_value>",
+                    "created_at": "2023-11-10T19:32:58.646Z",
+                    "expired_at": "2024-02-10T19:32:58.646Z",
+                    "permissions": [
+                      {
+                        "resource_type": "USER",
+                        "access_level": "READ"
+                      },
+                      {
+                        "resource_type": "WEBHOOK",
+                        "access_level": "MANAGE"
+                      },
+                      {
+                        "resource_type": "DESTINATION",
+                        "access_level": "MANAGE"
+                      },
+                      {
+                        "resource_type": "TRANSFORMATION",
+                        "access_level": "MANAGE",
+                        "resource_filter": {
+                          "group_ids": [
+                            "group_id_1",
+                            "group_id_2"
+                          ]
+                        }
+                      },
+                      {
+                        "resource_type": "CONNECTOR",
+                        "access_level": "NONE",
+                        "resource_filter": {
+                          "ids": [
+                            "connection_id_3",
+                            "connection_id_4"
+                          ]
+                        }
+                      },
+                      {
+                        "resource_type": "CONNECTOR",
+                        "access_level": "MANAGE"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SystemKeyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the system key within the Fivetran system",
+            "example": "key_id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The system key name within the account",
+            "example": "MySystemKey"
+          },
+          "key": {
+            "type": "string",
+            "description": "The key value of the system key",
+            "example": "ft_rDefAFDSgFdAGdFG"
+          },
+          "secret": {
+            "type": "string",
+            "description": "The secret value of rotated system key",
+            "example": "uytFfdSfDADFgfCgFBVsdCSFg4fsGfFg87fhRuuFASuTHkETSfg"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SystemKeyPermissionResponse"
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The system key creation timestamp",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          },
+          "expired_at": {
+            "type": "string",
+            "description": "The system key expiration timestamp",
+            "format": "date-time",
+            "example": "2024-08-20T10:15:20.677566Z"
+          },
+          "last_used_at": {
+            "type": "string",
+            "description": "The timestamp of last usage",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "The system key update timestamp",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          }
+        }
+      },
+      "SystemKeyPermissionResponse": {
+        "type": "object",
+        "properties": {
+          "resource_filter": {
+            "$ref": "#/components/schemas/SystemKeyPermissionResourceFilter"
+          },
+          "access_level": {
+            "type": "string",
+            "description": "The access level for the permission",
+            "example": "MANAGE",
+            "enum": [
+              "NONE",
+              "READ",
+              "MANAGE"
+            ]
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type for the permission",
+            "example": "DESTINATION",
+            "enum": [
+              "ACCOUNT",
+              "USER",
+              "WEBHOOK",
+              "TEAM",
+              "ROLES",
+              "DESTINATION",
+              "TRANSFORMATION",
+              "REMOTE_EXECUTION_AGENT",
+              "CONNECTOR"
+            ]
+          }
+        }
+      },
+      "SystemKeyPermissionResourceFilter": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "description": "The IDs of managed entities",
+            "example": {},
+            "items": {
+              "type": "string"
+            }
+          },
+          "group_ids": {
+            "type": "array",
+            "description": "The IDs of managed groups",
+            "example": {},
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "RotateSystemKeyRequest": {
+        "type": "object",
+        "properties": {
+          "expiration_period": {
+            "type": "string",
+            "description": "The system key's expiration period",
+            "example": "SIX_MONTHS",
+            "enum": [
+              "ONE_WEEK",
+              "ONE_MONTH",
+              "THREE_MONTHS",
+              "SIX_MONTHS",
+              "INFINITE"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

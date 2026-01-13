@@ -1,0 +1,166 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "List All Quickstart Package Metadata",
+    "description": "Returns a list of available Quickstart transformation package metadata details."
+  },
+  "path": "/v1/transformations/package-metadata",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Transformation Management"
+    ],
+    "summary": "List All Quickstart Package Metadata",
+    "description": "Returns a list of available Quickstart transformation package metadata details.",
+    "operationId": "transformation_package_metadata_list",
+    "parameters": [
+      {
+        "name": "service",
+        "in": "query",
+        "description": "Specify the service identifier to filter Quickstart packages by connection service",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "service"
+        },
+        "example": "service"
+      },
+      {
+        "name": "name",
+        "in": "query",
+        "description": "Specify the package name to filter Quickstart packages by name",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "service"
+        },
+        "example": "service"
+      },
+      {
+        "name": "cursor",
+        "in": "query",
+        "description": "Paging cursor, [read more about pagination](https://fivetran.com/docs/rest-api/pagination)",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "cursor_value"
+        },
+        "example": "cursor_value"
+      },
+      {
+        "name": "limit",
+        "in": "query",
+        "description": "Number of records to fetch per page. Accepts a number in the range 1..1000; the default value is 100.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "example": 100
+        },
+        "example": 100
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "description": "The collection of returned items",
+                      "items": {
+                        "$ref": "#/components/schemas/TransformationPackageMetadataResponse"
+                      }
+                    },
+                    "next_cursor": {
+                      "type": "string",
+                      "description": "The value of the cursor parameter for the next page",
+                      "example": "cursor_value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TransformationPackageMetadataResponse": {
+        "required": [
+          "id",
+          "name",
+          "version"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the Quickstart transformation package definition within the Fivetran system",
+            "example": "package_definition_id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The Quickstart transformation package name",
+            "example": "package_definition_name"
+          },
+          "version": {
+            "type": "string",
+            "description": "The Quickstart package definition version",
+            "example": "version"
+          },
+          "connector_types": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The set of connector types",
+            "items": {
+              "type": "string"
+            }
+          },
+          "output_model_names": {
+            "type": "array",
+            "description": "The list of transformation output models",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

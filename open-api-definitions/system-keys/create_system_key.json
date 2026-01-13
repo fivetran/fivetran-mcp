@@ -1,0 +1,343 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Create a System Key",
+    "description": "Creates a new system key with your Fivetran account."
+  },
+  "path": "/v1/system-keys",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "System Key Management"
+    ],
+    "summary": "Create a System Key",
+    "description": "Creates a new system key with your Fivetran account.",
+    "operationId": "create_system_key",
+    "parameters": [
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/NewSystemKeyRequest"
+          },
+          "examples": {
+            "create_request": {
+              "value": {
+                "name": "prod_key",
+                "expiration_period": "THREE_MONTHS",
+                "permissions": [
+                  {
+                    "resource_type": "USER",
+                    "access_level": "READ"
+                  },
+                  {
+                    "resource_type": "WEBHOOK",
+                    "access_level": "MANAGE"
+                  },
+                  {
+                    "resource_type": "CONNECTOR",
+                    "access_level": "MANAGE"
+                  },
+                  {
+                    "resource_type": "DESTINATION",
+                    "access_level": "MANAGE"
+                  },
+                  {
+                    "resource_type": "TRANSFORMATION",
+                    "access_level": "MANAGE",
+                    "resource_filter": {
+                      "group_ids": [
+                        "group_id_1",
+                        "group_id_2"
+                      ]
+                    }
+                  },
+                  {
+                    "resource_type": "CONNECTOR",
+                    "access_level": "NONE",
+                    "resource_filter": {
+                      "ids": [
+                        "connection_id_1",
+                        "connection_id_2"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/SystemKeyResponse"
+                }
+              }
+            },
+            "examples": {
+              "create_response": {
+                "value": {
+                  "code": "Success",
+                  "message": "System key has been created",
+                  "data": {
+                    "id": "sod_determine",
+                    "name": "prod_key",
+                    "key": "<key_value>",
+                    "secret": "<secret_value>",
+                    "created_at": "2023-11-10T19:32:58.646Z",
+                    "expired_at": "2024-02-10T19:32:58.646Z",
+                    "permissions": [
+                      {
+                        "resource_type": "USER",
+                        "access_level": "READ"
+                      },
+                      {
+                        "resource_type": "WEBHOOK",
+                        "access_level": "MANAGE"
+                      },
+                      {
+                        "resource_type": "DESTINATION",
+                        "access_level": "MANAGE"
+                      },
+                      {
+                        "resource_type": "TRANSFORMATION",
+                        "access_level": "MANAGE",
+                        "resource_filter": {
+                          "group_ids": [
+                            "group_id_1",
+                            "group_id_2"
+                          ]
+                        }
+                      },
+                      {
+                        "resource_type": "CONNECTOR",
+                        "access_level": "NONE",
+                        "resource_filter": {
+                          "ids": [
+                            "connection_id_1",
+                            "connection_id_2"
+                          ]
+                        }
+                      },
+                      {
+                        "resource_type": "CONNECTOR",
+                        "access_level": "MANAGE"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SystemKeyResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the system key within the Fivetran system",
+            "example": "key_id"
+          },
+          "name": {
+            "type": "string",
+            "description": "The system key name within the account",
+            "example": "MySystemKey"
+          },
+          "key": {
+            "type": "string",
+            "description": "The key value of the system key",
+            "example": "ft_rDefAFDSgFdAGdFG"
+          },
+          "secret": {
+            "type": "string",
+            "description": "The secret value of rotated system key",
+            "example": "uytFfdSfDADFgfCgFBVsdCSFg4fsGfFg87fhRuuFASuTHkETSfg"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SystemKeyPermissionResponse"
+            }
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The system key creation timestamp",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          },
+          "expired_at": {
+            "type": "string",
+            "description": "The system key expiration timestamp",
+            "format": "date-time",
+            "example": "2024-08-20T10:15:20.677566Z"
+          },
+          "last_used_at": {
+            "type": "string",
+            "description": "The timestamp of last usage",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          },
+          "updated_at": {
+            "type": "string",
+            "description": "The system key update timestamp",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          }
+        }
+      },
+      "SystemKeyPermissionResponse": {
+        "type": "object",
+        "properties": {
+          "resource_filter": {
+            "$ref": "#/components/schemas/SystemKeyPermissionResourceFilter"
+          },
+          "access_level": {
+            "type": "string",
+            "description": "The access level for the permission",
+            "example": "MANAGE",
+            "enum": [
+              "NONE",
+              "READ",
+              "MANAGE"
+            ]
+          },
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type for the permission",
+            "example": "DESTINATION",
+            "enum": [
+              "ACCOUNT",
+              "USER",
+              "WEBHOOK",
+              "TEAM",
+              "ROLES",
+              "DESTINATION",
+              "TRANSFORMATION",
+              "REMOTE_EXECUTION_AGENT",
+              "CONNECTOR"
+            ]
+          }
+        }
+      },
+      "SystemKeyPermissionResourceFilter": {
+        "type": "object",
+        "properties": {
+          "ids": {
+            "type": "array",
+            "description": "The IDs of managed entities",
+            "example": {},
+            "items": {
+              "type": "string"
+            }
+          },
+          "group_ids": {
+            "type": "array",
+            "description": "The IDs of managed groups",
+            "example": {},
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "NewSystemKeyRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The system key name within the account",
+            "example": "MySystemKey"
+          },
+          "expiration_period": {
+            "type": "string",
+            "description": "The system key's expiration period",
+            "example": "SIX_MONTHS",
+            "enum": [
+              "ONE_WEEK",
+              "ONE_MONTH",
+              "THREE_MONTHS",
+              "SIX_MONTHS",
+              "INFINITE"
+            ]
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SystemKeyPermissionRequest"
+            }
+          }
+        }
+      },
+      "SystemKeyPermissionRequest": {
+        "type": "object",
+        "properties": {
+          "resource_type": {
+            "type": "string",
+            "description": "The resource type for the permission",
+            "example": "CONNECTOR",
+            "enum": [
+              "ACCOUNT",
+              "USER",
+              "WEBHOOK",
+              "TEAM",
+              "ROLES",
+              "DESTINATION",
+              "TRANSFORMATION",
+              "REMOTE_EXECUTION_AGENT",
+              "CONNECTOR"
+            ]
+          },
+          "access_level": {
+            "type": "string",
+            "description": "The access level for the permission",
+            "example": "MANAGE",
+            "enum": [
+              "NONE",
+              "READ",
+              "MANAGE"
+            ]
+          },
+          "resource_filter": {
+            "$ref": "#/components/schemas/SystemKeyPermissionResourceFilter"
+          }
+        }
+      }
+    }
+  }
+}

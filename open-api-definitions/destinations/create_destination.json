@@ -1,0 +1,583 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Create a Destination",
+    "description": "Creates a new destination within a specified group in your Fivetran account. \n\n> IMPORTANT: Groups and destinations are mapped 1:1 to each other. We do this mapping using the group's `id` value that we automatically generate when you create a group, and the destination's `group_id` value that you specify when you create a destination. This means that you must create a group in your Fivetran account before you can create a destination in it.\n"
+  },
+  "path": "/v1/destinations",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "Destination Management"
+    ],
+    "summary": "Create a Destination",
+    "description": "Creates a new destination within a specified group in your Fivetran account. \n\n> IMPORTANT: Groups and destinations are mapped 1:1 to each other. We do this mapping using the group's `id` value that we automatically generate when you create a group, and the destination's `group_id` value that you specify when you create a destination. This means that you must create a group in your Fivetran account before you can create a destination in it.\n",
+    "operationId": "create_destination",
+    "parameters": [
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json;version=2",
+          "default": "application/json;version=2"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/NewDestinationRequest"
+          },
+          "examples": {
+            "create_request": {
+              "value": {
+                "group_id": "target_group_id",
+                "service": "snowflake",
+                "region": "GCP_US_EAST4",
+                "time_zone_offset": "-5",
+                "config": {
+                  "host": "your-account.snowflakecomputing.com",
+                  "port": 443,
+                  "database": "fivetran",
+                  "auth": "PASSWORD",
+                  "user": "fivetran_user",
+                  "password": "123456"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "201": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Created"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/DestinationExtendedResponse"
+                }
+              }
+            },
+            "examples": {
+              "create_successful_response": {
+                "value": {
+                  "code": "Success",
+                  "message": "Destination has been created",
+                  "data": {
+                    "id": "decent_dropsy",
+                    "group_id": "decent_dropsy",
+                    "service": "snowflake",
+                    "region": "GCP_US_EAST4",
+                    "time_zone_offset": "-5",
+                    "setup_status": "connected",
+                    "setup_tests": [
+                      {
+                        "title": "Host Connection",
+                        "status": "PASSED",
+                        "message": ""
+                      },
+                      {
+                        "title": "Database Connection",
+                        "status": "PASSED",
+                        "message": ""
+                      },
+                      {
+                        "title": "Permission Test",
+                        "status": "PASSED",
+                        "message": ""
+                      }
+                    ],
+                    "config": {
+                      "host": "your-account.snowflakecomputing.com",
+                      "port": 443,
+                      "database": "fivetran",
+                      "auth": "PASSWORD",
+                      "user": "fivetran_user",
+                      "password": "******"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Bad request",
+        "content": {
+          "application/json": {
+            "examples": {
+              "service_not_supported": {
+                "value": {
+                  "code": "InvalidInput",
+                  "message": "Unsupported service 'service_id'"
+                }
+              },
+              "invalid_input_group_id": {
+                "value": {
+                  "code": "InvalidInput",
+                  "message": "Field 'group_id' is required"
+                }
+              },
+              "invalid_input_service": {
+                "value": {
+                  "code": "InvalidInput",
+                  "message": "Field 'service' is required"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "examples": {
+              "group_not_found": {
+                "value": {
+                  "code": "NotFound",
+                  "message": "Destination with id <groupId> not found"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "NewDestinationRequest": {
+        "required": [
+          "group_id",
+          "service",
+          "time_zone_offset"
+        ],
+        "type": "object",
+        "properties": {
+          "group_id": {
+            "type": "string",
+            "description": "The unique identifier for the group within the Fivetran system.",
+            "example": "group_id"
+          },
+          "service": {
+            "type": "string",
+            "description": "The name for the destination type within the Fivetran system.",
+            "example": "snowflake"
+          },
+          "region": {
+            "type": "string",
+            "description": "Data processing location. This is where Fivetran will operate and run computation on data.",
+            "example": "GCP_US_WEST1",
+            "enum": [
+              "GCP_US_EAST4",
+              "GCP_US_WEST1",
+              "GCP_US_CENTRAL1",
+              "GCP_EUROPE_WEST3",
+              "GCP_AUSTRALIA_SOUTHEAST1",
+              "GCP_NORTHAMERICA_NORTHEAST1",
+              "GCP_EUROPE_WEST2",
+              "GCP_ASIA_SOUTHEAST1",
+              "GCP_ASIA_SOUTHEAST2",
+              "GCP_ASIA_SOUTH1",
+              "GCP_ASIA_NORTHEAST1",
+              "AWS_US_EAST_1",
+              "AWS_US_EAST_2",
+              "AWS_US_WEST_2",
+              "AWS_AP_NORTHEAST_1",
+              "AWS_AP_SOUTHEAST_1",
+              "AWS_AP_SOUTHEAST_2",
+              "AWS_EU_CENTRAL_1",
+              "AWS_EU_WEST_1",
+              "AWS_EU_WEST_2",
+              "AWS_AP_SOUTH_1",
+              "AWS_CA_CENTRAL_1",
+              "AWS_US_GOV_WEST_1",
+              "AZURE_EASTUS2",
+              "AZURE_AUSTRALIAEAST",
+              "AZURE_UKSOUTH",
+              "AZURE_WESTEUROPE",
+              "AZURE_CENTRALUS",
+              "AZURE_CANADACENTRAL",
+              "AZURE_UAENORTH",
+              "AZURE_SOUTHEASTASIA",
+              "AZURE_EASTUS",
+              "AZURE_JAPANEAST",
+              "AZURE_CENTRALINDIA"
+            ]
+          },
+          "time_zone_offset": {
+            "type": "string",
+            "description": "Determines the time zone for the Fivetran sync schedule.",
+            "example": "+3",
+            "enum": [
+              "-11",
+              "-10",
+              "-9",
+              "-8",
+              "-7",
+              "-6",
+              "-5",
+              "-4",
+              "-3",
+              "-2",
+              "-1",
+              "0",
+              "+1",
+              "+2",
+              "+3",
+              "+4",
+              "+5",
+              "+6",
+              "+7",
+              "+8",
+              "+9",
+              "+10",
+              "+11",
+              "+12"
+            ]
+          },
+          "trust_certificates": {
+            "type": "boolean",
+            "description": "Specifies whether we should trust the certificate automatically. The default value is FALSE. If a certificate is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination certificate](https://fivetran.com/docs/rest-api/certificates#approveadestinationcertificate).",
+            "example": true
+          },
+          "trust_fingerprints": {
+            "type": "boolean",
+            "description": "Specifies whether we should trust the SSH fingerprint automatically. The default value is FALSE. If a fingerprint is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination fingerprint](https://fivetran.com/docs/rest-api/certificates#approveadestinationfingerprint).",
+            "example": true
+          },
+          "run_setup_tests": {
+            "type": "boolean",
+            "description": "Specifies whether setup tests should be run automatically.",
+            "example": true
+          },
+          "daylight_saving_time_enabled": {
+            "type": "boolean",
+            "description": "Shift my UTC offset with daylight savings time (US Only)",
+            "example": true
+          },
+          "hybrid_deployment_agent_id": {
+            "type": "string",
+            "description": "The unique identifier for the hybrid deployment agent within the Fivetran system",
+            "example": "hybrid_deployment_agent_id"
+          },
+          "private_link_id": {
+            "type": "string",
+            "description": "The unique identifier for the self-served private link that is used by the connection",
+            "example": "private_link_id"
+          },
+          "networking_method": {
+            "type": "string",
+            "enum": [
+              "Directly",
+              "PrivateLink",
+              "SshTunnel",
+              "ProxyAgent"
+            ]
+          },
+          "proxy_agent_id": {
+            "type": "string",
+            "description": "The unique identifier for the proxy agent within the Fivetran system",
+            "example": "proxy_agent_id"
+          }
+        },
+        "discriminator": {
+          "propertyName": "service",
+          "mapping": {
+            "adls": "#/components/schemas/adls_NewDestinationRequest",
+            "aiven_kafka_wh": "#/components/schemas/aiven_kafka_wh_NewDestinationRequest",
+            "aurora_postgres_warehouse": "#/components/schemas/aurora_postgres_warehouse_NewDestinationRequest",
+            "aurora_warehouse": "#/components/schemas/aurora_warehouse_NewDestinationRequest",
+            "aws_msk_wh": "#/components/schemas/aws_msk_wh_NewDestinationRequest",
+            "azure_postgres_warehouse": "#/components/schemas/azure_postgres_warehouse_NewDestinationRequest",
+            "azure_sql_data_warehouse": "#/components/schemas/azure_sql_data_warehouse_NewDestinationRequest",
+            "azure_sql_database": "#/components/schemas/azure_sql_database_NewDestinationRequest",
+            "azure_sql_managed_db_warehouse": "#/components/schemas/azure_sql_managed_db_warehouse_NewDestinationRequest",
+            "big_query": "#/components/schemas/big_query_NewDestinationRequest",
+            "big_query_dts": "#/components/schemas/big_query_dts_NewDestinationRequest",
+            "clickhouse": "#/components/schemas/clickhouse_NewDestinationRequest",
+            "confluent_cloud_wh": "#/components/schemas/confluent_cloud_wh_NewDestinationRequest",
+            "databricks": "#/components/schemas/databricks_NewDestinationRequest",
+            "managed_big_query": "#/components/schemas/managed_big_query_NewDestinationRequest",
+            "managed_data_lake": "#/components/schemas/managed_data_lake_NewDestinationRequest",
+            "maria_rds_warehouse": "#/components/schemas/maria_rds_warehouse_NewDestinationRequest",
+            "maria_warehouse": "#/components/schemas/maria_warehouse_NewDestinationRequest",
+            "materialize": "#/components/schemas/materialize_NewDestinationRequest",
+            "milvus": "#/components/schemas/milvus_NewDestinationRequest",
+            "motherduck": "#/components/schemas/motherduck_NewDestinationRequest",
+            "mysql_rds_warehouse": "#/components/schemas/mysql_rds_warehouse_NewDestinationRequest",
+            "mysql_warehouse": "#/components/schemas/mysql_warehouse_NewDestinationRequest",
+            "new_s3_datalake": "#/components/schemas/new_s3_datalake_NewDestinationRequest",
+            "onelake": "#/components/schemas/onelake_NewDestinationRequest",
+            "oracle_rac_warehouse": "#/components/schemas/oracle_rac_warehouse_NewDestinationRequest",
+            "oracle_rds_warehouse": "#/components/schemas/oracle_rds_warehouse_NewDestinationRequest",
+            "oracle_warehouse": "#/components/schemas/oracle_warehouse_NewDestinationRequest",
+            "postgres_databricks_warehouse": "#/components/schemas/postgres_databricks_warehouse_NewDestinationRequest",
+            "postgres_gcp_warehouse": "#/components/schemas/postgres_gcp_warehouse_NewDestinationRequest",
+            "postgres_rds_warehouse": "#/components/schemas/postgres_rds_warehouse_NewDestinationRequest",
+            "postgres_warehouse": "#/components/schemas/postgres_warehouse_NewDestinationRequest",
+            "redshift": "#/components/schemas/redshift_NewDestinationRequest",
+            "singlestore": "#/components/schemas/singlestore_NewDestinationRequest",
+            "snowflake": "#/components/schemas/snowflake_NewDestinationRequest",
+            "sql_server_rds_warehouse": "#/components/schemas/sql_server_rds_warehouse_NewDestinationRequest",
+            "sql_server_warehouse": "#/components/schemas/sql_server_warehouse_NewDestinationRequest",
+            "surrealdb_destination": "#/components/schemas/surrealdb_destination_NewDestinationRequest",
+            "teradata_destination": "#/components/schemas/teradata_destination_NewDestinationRequest"
+          }
+        }
+      },
+      "DestinationExtendedResponse": {
+        "required": [
+          "group_id",
+          "id",
+          "region",
+          "service",
+          "setup_status",
+          "time_zone_offset"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the destination within the Fivetran system",
+            "example": "destination_id"
+          },
+          "service": {
+            "type": "string",
+            "description": "The name for the destination type within the Fivetran system.",
+            "example": "snowflake"
+          },
+          "region": {
+            "type": "string",
+            "description": "Data processing location. This is where Fivetran will operate and run computation on data.",
+            "example": "GCP_US_EAST4",
+            "enum": [
+              "GCP_US_EAST4",
+              "GCP_US_WEST1",
+              "GCP_US_CENTRAL1",
+              "GCP_EUROPE_WEST3",
+              "GCP_AUSTRALIA_SOUTHEAST1",
+              "GCP_NORTHAMERICA_NORTHEAST1",
+              "GCP_EUROPE_WEST2",
+              "GCP_ASIA_SOUTHEAST1",
+              "GCP_ASIA_SOUTHEAST2",
+              "GCP_ASIA_SOUTH1",
+              "GCP_ASIA_NORTHEAST1",
+              "AWS_US_EAST_1",
+              "AWS_US_EAST_2",
+              "AWS_US_WEST_2",
+              "AWS_AP_NORTHEAST_1",
+              "AWS_AP_SOUTHEAST_1",
+              "AWS_AP_SOUTHEAST_2",
+              "AWS_EU_CENTRAL_1",
+              "AWS_EU_WEST_1",
+              "AWS_EU_WEST_2",
+              "AWS_AP_SOUTH_1",
+              "AWS_CA_CENTRAL_1",
+              "AWS_US_GOV_WEST_1",
+              "AZURE_EASTUS2",
+              "AZURE_AUSTRALIAEAST",
+              "AZURE_UKSOUTH",
+              "AZURE_WESTEUROPE",
+              "AZURE_CENTRALUS",
+              "AZURE_CANADACENTRAL",
+              "AZURE_UAENORTH",
+              "AZURE_SOUTHEASTASIA",
+              "AZURE_EASTUS",
+              "AZURE_JAPANEAST",
+              "AZURE_CENTRALINDIA"
+            ]
+          },
+          "networking_method": {
+            "type": "string",
+            "enum": [
+              "Directly",
+              "PrivateLink",
+              "SshTunnel",
+              "ProxyAgent"
+            ]
+          },
+          "setup_status": {
+            "type": "string",
+            "description": "Destination setup status",
+            "example": "CONNECTED",
+            "enum": [
+              "INCOMPLETE",
+              "CONNECTED",
+              "BROKEN"
+            ]
+          },
+          "daylight_saving_time_enabled": {
+            "type": "boolean",
+            "description": "Shift my UTC offset with daylight savings time (US Only)",
+            "example": true
+          },
+          "group_id": {
+            "type": "string",
+            "description": "The unique identifier for the group within the Fivetran system.",
+            "example": "group_id"
+          },
+          "time_zone_offset": {
+            "type": "string",
+            "description": "Determines the time zone for the Fivetran sync schedule.",
+            "example": "+3",
+            "enum": [
+              "-11",
+              "-10",
+              "-9",
+              "-8",
+              "-7",
+              "-6",
+              "-5",
+              "-4",
+              "-3",
+              "-2",
+              "-1",
+              "0",
+              "+1",
+              "+2",
+              "+3",
+              "+4",
+              "+5",
+              "+6",
+              "+7",
+              "+8",
+              "+9",
+              "+10",
+              "+11",
+              "+12"
+            ]
+          },
+          "setup_tests": {
+            "type": "array",
+            "description": "Setup tests results for this destination",
+            "items": {
+              "$ref": "#/components/schemas/SetupTestResultResponse"
+            }
+          },
+          "local_processing_agent_id": {
+            "type": "string",
+            "description": "(Deprecated) The unique identifier for the hybrid deployment agent within the Fivetran system",
+            "example": "local_processing_agent_id"
+          },
+          "private_link_id": {
+            "type": "string",
+            "description": "The unique identifier for the self-served private link that is used by the connection",
+            "example": "private_link_id"
+          },
+          "proxy_agent_id": {
+            "type": "string",
+            "description": "The unique identifier for the proxy agent within the Fivetran system",
+            "example": "proxy_agent_id"
+          },
+          "hybrid_deployment_agent_id": {
+            "type": "string",
+            "description": "The unique identifier for the hybrid deployment agent within the Fivetran system",
+            "example": "hybrid_deployment_agent_id"
+          }
+        },
+        "discriminator": {
+          "propertyName": "service",
+          "mapping": {
+            "adls": "#/components/schemas/adls_DestinationExtendedResponse",
+            "aiven_kafka_wh": "#/components/schemas/aiven_kafka_wh_DestinationExtendedResponse",
+            "aurora_postgres_warehouse": "#/components/schemas/aurora_postgres_warehouse_DestinationExtendedResponse",
+            "aurora_warehouse": "#/components/schemas/aurora_warehouse_DestinationExtendedResponse",
+            "aws_msk_wh": "#/components/schemas/aws_msk_wh_DestinationExtendedResponse",
+            "azure_postgres_warehouse": "#/components/schemas/azure_postgres_warehouse_DestinationExtendedResponse",
+            "azure_sql_data_warehouse": "#/components/schemas/azure_sql_data_warehouse_DestinationExtendedResponse",
+            "azure_sql_database": "#/components/schemas/azure_sql_database_DestinationExtendedResponse",
+            "azure_sql_managed_db_warehouse": "#/components/schemas/azure_sql_managed_db_warehouse_DestinationExtendedResponse",
+            "big_query": "#/components/schemas/big_query_DestinationExtendedResponse",
+            "big_query_dts": "#/components/schemas/big_query_dts_DestinationExtendedResponse",
+            "clickhouse": "#/components/schemas/clickhouse_DestinationExtendedResponse",
+            "confluent_cloud_wh": "#/components/schemas/confluent_cloud_wh_DestinationExtendedResponse",
+            "databricks": "#/components/schemas/databricks_DestinationExtendedResponse",
+            "managed_big_query": "#/components/schemas/managed_big_query_DestinationExtendedResponse",
+            "managed_data_lake": "#/components/schemas/managed_data_lake_DestinationExtendedResponse",
+            "maria_rds_warehouse": "#/components/schemas/maria_rds_warehouse_DestinationExtendedResponse",
+            "maria_warehouse": "#/components/schemas/maria_warehouse_DestinationExtendedResponse",
+            "materialize": "#/components/schemas/materialize_DestinationExtendedResponse",
+            "milvus": "#/components/schemas/milvus_DestinationExtendedResponse",
+            "motherduck": "#/components/schemas/motherduck_DestinationExtendedResponse",
+            "mysql_rds_warehouse": "#/components/schemas/mysql_rds_warehouse_DestinationExtendedResponse",
+            "mysql_warehouse": "#/components/schemas/mysql_warehouse_DestinationExtendedResponse",
+            "new_s3_datalake": "#/components/schemas/new_s3_datalake_DestinationExtendedResponse",
+            "onelake": "#/components/schemas/onelake_DestinationExtendedResponse",
+            "oracle_rac_warehouse": "#/components/schemas/oracle_rac_warehouse_DestinationExtendedResponse",
+            "oracle_rds_warehouse": "#/components/schemas/oracle_rds_warehouse_DestinationExtendedResponse",
+            "oracle_warehouse": "#/components/schemas/oracle_warehouse_DestinationExtendedResponse",
+            "postgres_databricks_warehouse": "#/components/schemas/postgres_databricks_warehouse_DestinationExtendedResponse",
+            "postgres_gcp_warehouse": "#/components/schemas/postgres_gcp_warehouse_DestinationExtendedResponse",
+            "postgres_rds_warehouse": "#/components/schemas/postgres_rds_warehouse_DestinationExtendedResponse",
+            "postgres_warehouse": "#/components/schemas/postgres_warehouse_DestinationExtendedResponse",
+            "redshift": "#/components/schemas/redshift_DestinationExtendedResponse",
+            "singlestore": "#/components/schemas/singlestore_DestinationExtendedResponse",
+            "snowflake": "#/components/schemas/snowflake_DestinationExtendedResponse",
+            "sql_server_rds_warehouse": "#/components/schemas/sql_server_rds_warehouse_DestinationExtendedResponse",
+            "sql_server_warehouse": "#/components/schemas/sql_server_warehouse_DestinationExtendedResponse",
+            "surrealdb_destination": "#/components/schemas/surrealdb_destination_DestinationExtendedResponse",
+            "teradata_destination": "#/components/schemas/teradata_destination_DestinationExtendedResponse"
+          }
+        }
+      },
+      "SetupTestResultResponse": {
+        "required": [
+          "status",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Setup test title",
+            "example": "Test Title"
+          },
+          "status": {
+            "type": "string",
+            "description": "Setup test status",
+            "example": "FAILED",
+            "enum": [
+              "PASSED",
+              "SKIPPED",
+              "WARNING",
+              "FAILED",
+              "JOB_FAILED"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Setup test message",
+            "example": "Test Message"
+          },
+          "details": {
+            "type": "object",
+            "description": "Setup test details",
+            "example": "..."
+          }
+        }
+      }
+    }
+  }
+}

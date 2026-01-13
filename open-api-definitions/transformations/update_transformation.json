@@ -1,0 +1,269 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Update a Transformation",
+    "description": "Updates the transformation if a valid identifier is provided."
+  },
+  "path": "/v1/transformations/{transformationId}",
+  "method": "PATCH",
+  "operation": {
+    "tags": [
+      "Transformation Management"
+    ],
+    "summary": "Update a Transformation",
+    "description": "Updates the transformation if a valid identifier is provided.",
+    "operationId": "update_transformation",
+    "parameters": [
+      {
+        "name": "transformationId",
+        "in": "path",
+        "description": "The unique identifier for the transformation within the Fivetran system",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "transformationId"
+        },
+        "example": "transformationId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/UpdateTransformationRequest"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TransformationResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Transformation not found"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TransformationResponse": {
+        "required": [
+          "created_at",
+          "created_by_id",
+          "id",
+          "paused",
+          "schedule",
+          "status",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the transformation within the Fivetran system",
+            "example": "transformation_id"
+          },
+          "status": {
+            "type": "string",
+            "description": "The status of transformation",
+            "example": "RUNNING",
+            "enum": [
+              "NEW",
+              "SCHEDULING",
+              "RUNNING",
+              "TERMINATING",
+              "SUCCEEDED",
+              "FAILED",
+              "BLOCKED",
+              "CANCELED",
+              "PARTIALLY_SUCCEEDED"
+            ]
+          },
+          "schedule": {
+            "$ref": "#/components/schemas/TransformationSchedule"
+          },
+          "type": {
+            "type": "string",
+            "description": "Transformation type",
+            "example": "DBT_CORE",
+            "enum": [
+              "DBT_CORE",
+              "QUICKSTART"
+            ]
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "The field indicates whether transformation is in paused state",
+            "example": true
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The timestamp when the transformation was created",
+            "format": "date-time",
+            "example": "2024-01-02T00:00:00.743708Z"
+          },
+          "created_by_id": {
+            "type": "string",
+            "description": "The unique identifier for the actor (user or system key) within the Fivetran system",
+            "example": "user_id"
+          },
+          "last_started_at": {
+            "type": "string",
+            "description": "The timestamp when the transformation was started last time",
+            "format": "date-time",
+            "example": "2024-01-02T00:00:00.000001Z"
+          },
+          "last_ended_at": {
+            "type": "string",
+            "description": "The timestamp when the transformation was ended last time",
+            "format": "date-time",
+            "example": "2024-01-02T00:00:00.000001Z"
+          },
+          "output_model_names": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The list of transformation output models",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "DBT_CORE": "#/components/schemas/DBT_CORE_TransformationResponse",
+            "QUICKSTART": "#/components/schemas/QUICKSTART_TransformationResponse"
+          }
+        }
+      },
+      "TransformationSchedule": {
+        "required": [
+          "schedule_type"
+        ],
+        "type": "object",
+        "properties": {
+          "cron": {
+            "type": "array",
+            "description": "Cron schedule: list of CRON strings.",
+            "example": [
+              "0 */1 * * *"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "interval": {
+            "type": "integer",
+            "description": "The interval in minutes",
+            "format": "int32",
+            "example": 60
+          },
+          "smart_syncing": {
+            "type": "boolean",
+            "description": "The boolean flag that enables the Smart Syncing schedule"
+          },
+          "connection_ids": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The list of the connection identifiers to be used for the integrated schedule. Not expected for QUICKSTART transformations",
+            "example": [
+              "connection_id"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "schedule_type": {
+            "type": "string",
+            "description": "The schedule type",
+            "example": "TIME_OF_DAY",
+            "enum": [
+              "INTEGRATED",
+              "TIME_OF_DAY",
+              "INTERVAL",
+              "CRON"
+            ]
+          },
+          "days_of_week": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The set of days of the week, where an empty set represents a daily schedule",
+            "example": [
+              "MONDAY",
+              "FRIDAY"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            }
+          },
+          "time_of_day": {
+            "type": "string",
+            "description": "The time of the day the transformation should be launched at. The following values are supported: '00:00', '00:30', '01:00', '01:30', '02:00', '02:30', '03:00', '03:30', '04:00', '04:30', '05:00', '05:30', '06:00', '06:30', '07:00', '07:30', '08:00', '08:30', '09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30', '15:00', '15:30', '16:00', '16:30', '17:00', '17:30', '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30', '22:00', '22:30', '23:00', '23:30'",
+            "example": "14:00"
+          }
+        }
+      },
+      "UpdateTransformationRequest": {
+        "type": "object",
+        "properties": {
+          "schedule": {
+            "$ref": "#/components/schemas/TransformationSchedule"
+          },
+          "paused": {
+            "type": "boolean"
+          }
+        },
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "DBT_CORE": "#/components/schemas/DBT_CORE_UpdateTransformationRequest",
+            "QUICKSTART": "#/components/schemas/QUICKSTART_UpdateTransformationRequest"
+          }
+        }
+      }
+    }
+  }
+}

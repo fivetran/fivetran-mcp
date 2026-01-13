@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Generated
+split/
+.env
+
+.mcp.json
+split_openapi_by_endpoint.py

@@ -1,0 +1,90 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Re-sync Connection Table Data",
+    "description": "Triggers a historical sync of all data for multiple schema tables within a connection. This action does not override the standard sync frequency you defined in the Fivetran dashboard."
+  },
+  "path": "/v1/connections/{connectionId}/schemas/tables/resync",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "Connection Schema Management"
+    ],
+    "summary": "Re-sync Connection Table Data",
+    "description": "Triggers a historical sync of all data for multiple schema tables within a connection. This action does not override the standard sync frequency you defined in the Fivetran dashboard.",
+    "operationId": "resync_tables",
+    "parameters": [
+      {
+        "name": "connectionId",
+        "in": "path",
+        "description": "The unique identifier for the connection within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "connectionId"
+        },
+        "example": "connectionId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "title": "Schema name",
+                "uniqueItems": true,
+                "type": "array",
+                "description": "Schema name",
+                "example": [
+                  "table1",
+                  "table2"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

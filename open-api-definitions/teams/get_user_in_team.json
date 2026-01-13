@@ -1,0 +1,110 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Retrieve User Membership in a Team",
+    "description": "Returns the membership details for a user in a team."
+  },
+  "path": "/v1/teams/{teamId}/users/{userId}",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Team Management"
+    ],
+    "summary": "Retrieve User Membership in a Team",
+    "description": "Returns the membership details for a user in a team.",
+    "operationId": "get_user_in_team",
+    "parameters": [
+      {
+        "name": "teamId",
+        "in": "path",
+        "description": "The unique identifier for the team within the account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "teamId"
+        },
+        "example": "teamId"
+      },
+      {
+        "name": "userId",
+        "in": "path",
+        "description": "The unique identifier for the user within the account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "userId"
+        },
+        "example": "userId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/TeamMembershipResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TeamMembershipResponse": {
+        "required": [
+          "created_at",
+          "role",
+          "user_id"
+        ],
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "The unique identifier of user",
+            "example": "user_id"
+          },
+          "role": {
+            "type": "string",
+            "description": "The user's role within the team",
+            "example": "Team Member"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The date and time the membership was created",
+            "format": "date-time",
+            "example": "2023-08-20T10:15:20.677566Z"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Delete Transformation Project",
+    "description": "Deletes transformation project if a valid identifier was provided."
+  },
+  "path": "/v1/transformation-projects/{projectId}",
+  "method": "DELETE",
+  "operation": {
+    "tags": [
+      "Transformation Projects Management"
+    ],
+    "summary": "Delete Transformation Project",
+    "description": "Deletes transformation project if a valid identifier was provided.",
+    "operationId": "delete_transformation_project",
+    "parameters": [
+      {
+        "name": "projectId",
+        "in": "path",
+        "description": "The unique identifier for the transformation project within the Fivetran system",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "projectId"
+        },
+        "example": "projectId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

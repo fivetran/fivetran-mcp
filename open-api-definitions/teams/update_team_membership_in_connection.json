@@ -1,0 +1,132 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Update Connection Membership",
+    "description": "Updates team membership in a connection"
+  },
+  "path": "/v1/teams/{teamId}/connections/{connectionId}",
+  "method": "PATCH",
+  "operation": {
+    "tags": [
+      "Team Management"
+    ],
+    "summary": "Update Connection Membership",
+    "description": "Updates team membership in a connection",
+    "operationId": "update_team_membership_in_connection",
+    "parameters": [
+      {
+        "name": "teamId",
+        "in": "path",
+        "description": "The unique identifier for the team within the account.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "teamId"
+        },
+        "example": "teamId"
+      },
+      {
+        "name": "connectionId",
+        "in": "path",
+        "description": "The unique identifier for the connection within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "connectionId"
+        },
+        "example": "connectionId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/UpdateMembershipRequest"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/MembershipResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "UpdateMembershipRequest": {
+        "required": [
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "The team's role",
+            "example": "Edit Connection"
+          }
+        }
+      },
+      "MembershipResponse": {
+        "required": [
+          "created_at",
+          "id",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The membership entity unique identifier",
+            "example": "resource_id"
+          },
+          "role": {
+            "type": "string",
+            "description": "The role the user has within the entity",
+            "example": "Role Title"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The timestamp that the user created their Fivetran account",
+            "format": "date-time",
+            "example": "2024-01-01T00:00:00Z"
+          }
+        }
+      }
+    }
+  }
+}

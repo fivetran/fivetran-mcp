@@ -1,0 +1,433 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "List All Connections",
+    "description": "Returns a list of all accessible connections within your Fivetran account."
+  },
+  "path": "/v1/connections",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Connection Management"
+    ],
+    "summary": "List All Connections",
+    "description": "Returns a list of all accessible connections within your Fivetran account.",
+    "operationId": "list_connections",
+    "parameters": [
+      {
+        "name": "group_id",
+        "in": "query",
+        "description": "Specify the group identifier to filter connections by group",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "group_id"
+        },
+        "example": "group_id"
+      },
+      {
+        "name": "schema",
+        "in": "query",
+        "description": "Specify the schema name to filter connections by schema",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "schema"
+        },
+        "example": "schema"
+      },
+      {
+        "name": "cursor",
+        "in": "query",
+        "description": "Paging cursor, [read more about pagination](https://fivetran.com/docs/rest-api/pagination)",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "cursor_value"
+        },
+        "example": "cursor_value"
+      },
+      {
+        "name": "limit",
+        "in": "query",
+        "description": "Number of records to fetch per page. Accepts a number in the range 1..1000; the default value is 100.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "example": 100
+        },
+        "example": 100
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json;version=2",
+          "default": "application/json;version=2"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "description": "The collection of returned items",
+                      "items": {
+                        "$ref": "#/components/schemas/ConnectorResponse"
+                      }
+                    },
+                    "next_cursor": {
+                      "type": "string",
+                      "description": "The value of the cursor parameter for the next page",
+                      "example": "cursor_value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ConnectorResponse": {
+        "required": [
+          "connected_by",
+          "created_at",
+          "group_id",
+          "id",
+          "pause_after_trial",
+          "paused",
+          "schedule_type",
+          "schema",
+          "service",
+          "status",
+          "sync_frequency"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier for the group within the Fivetran system.",
+            "example": "connection_id"
+          },
+          "service": {
+            "type": "string",
+            "description": "The name for the connector type within the Fivetran system.",
+            "example": "google_sheets"
+          },
+          "schema": {
+            "type": "string",
+            "description": "The name used both as the connection's name within the Fivetran system and as the source schema's name within your destination.",
+            "example": "gsheets.table"
+          },
+          "paused": {
+            "type": "boolean",
+            "description": "Specifies whether the connection is paused.",
+            "example": false
+          },
+          "status": {
+            "$ref": "#/components/schemas/ConnectorStatusResponse"
+          },
+          "config": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object"
+            },
+            "description": "The connection setup configuration."
+          },
+          "daily_sync_time": {
+            "type": "string",
+            "description": "The optional parameter that defines the sync start time when the sync frequency is already set or being set by the current request to 1440. It can be specified in one hour increments starting from 00:00 to 23:00. If not specified, we will use the baseline sync start time. This parameter has no effect on the 0 to 60 minutes offset used to determine the actual sync start time.",
+            "example": "14:00"
+          },
+          "succeeded_at": {
+            "type": "string",
+            "description": "The timestamp of the time the connection sync succeeded last time.",
+            "format": "date-time",
+            "example": "2024-12-01T15:43:29.013729Z"
+          },
+          "sync_frequency": {
+            "type": "integer",
+            "description": "The connection sync frequency in minutes",
+            "format": "int32",
+            "example": 360
+          },
+          "group_id": {
+            "type": "string",
+            "description": "The unique identifier for the group within the Fivetran system.",
+            "example": "group_id"
+          },
+          "connected_by": {
+            "type": "string",
+            "description": "The unique identifier of the user who has created the connection in your account.",
+            "example": "user_id"
+          },
+          "setup_tests": {
+            "type": "array",
+            "description": "Setup tests results",
+            "items": {
+              "$ref": "#/components/schemas/SetupTestResultResponse"
+            }
+          },
+          "source_sync_details": {
+            "type": "object",
+            "description": "The additional information about the connection's state. The format of this parameter is specific for each connector type."
+          },
+          "service_version": {
+            "type": "integer",
+            "description": "The connector type version within the Fivetran system.",
+            "format": "int32",
+            "example": 0
+          },
+          "created_at": {
+            "type": "string",
+            "description": "The timestamp of when the group was created in your account.",
+            "format": "date-time",
+            "example": "2024-12-01T15:43:29.013729Z"
+          },
+          "failed_at": {
+            "type": "string",
+            "description": "The timestamp of the time the connection sync failed last time.",
+            "format": "date-time",
+            "example": "2024-12-01T15:43:29.013729Z"
+          },
+          "private_link_id": {
+            "type": "string"
+          },
+          "proxy_agent_id": {
+            "type": "string"
+          },
+          "networking_method": {
+            "type": "string",
+            "enum": [
+              "Directly",
+              "SshTunnel",
+              "PrivateLink",
+              "ProxyAgent",
+              "UnmanagedProxyAgent",
+              "Unknown"
+            ]
+          },
+          "connect_card": {
+            "$ref": "#/components/schemas/ConnectCardResponse"
+          },
+          "pause_after_trial": {
+            "type": "boolean",
+            "description": "Specifies whether the connection should be paused after the free trial period has ended.",
+            "example": false
+          },
+          "data_delay_threshold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "data_delay_sensitivity": {
+            "type": "string",
+            "enum": [
+              "LOW",
+              "NORMAL",
+              "HIGH",
+              "CUSTOM",
+              "SYNC_FREQUENCY"
+            ]
+          },
+          "destination_configuration": {
+            "$ref": "#/components/schemas/DestinationConfiguration"
+          },
+          "schedule_type": {
+            "type": "string",
+            "description": "The connection schedule config type. Supported values: auto, manual. Lets you disable or enable an automatic data sync on a schedule.",
+            "example": "auto"
+          },
+          "connect_card_config": {
+            "$ref": "#/components/schemas/ConnectCardConfig"
+          },
+          "hybrid_deployment_agent_id": {
+            "type": "string"
+          }
+        }
+      },
+      "ConnectorStatusResponse": {
+        "required": [
+          "is_historical_sync",
+          "setup_state",
+          "sync_state",
+          "update_state"
+        ],
+        "type": "object",
+        "properties": {
+          "tasks": {
+            "type": "array",
+            "description": "The collection of tasks for the connection",
+            "items": {
+              "$ref": "#/components/schemas/Alert"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "description": "The collection of warnings for the connection",
+            "items": {
+              "$ref": "#/components/schemas/Alert"
+            }
+          },
+          "schema_status": {
+            "type": "string",
+            "description": "Schema status. Returned only for connectors that support [Universal Column Masking flow](https://fivetran.com/docs/rest-api/tutorials/schema-status).",
+            "example": "ready"
+          },
+          "update_state": {
+            "type": "string",
+            "description": "The current data update state of the connection. The available values are: <br /> - on_schedule - the sync is running smoothly, no delays <br /> - delayed - the data is delayed for a longer time than expected for the update.",
+            "example": "delayed"
+          },
+          "setup_state": {
+            "type": "string",
+            "description": "The current setup state of the connection. The available values are: <br /> - incomplete - the setup config is incomplete, the setup tests never succeeded <br /> - connected - the connection is properly set up <br /> - broken - the connection setup config is broken.",
+            "example": "connected"
+          },
+          "sync_state": {
+            "type": "string",
+            "description": "The current sync state of the connection. The available values are: <br /> - scheduled - the sync is waiting to be run <br /> - syncing - the sync is currently running <br /> - paused - the sync is currently paused <br /> - rescheduled - the sync is waiting until more API calls are available in the source service.",
+            "example": "scheduled"
+          },
+          "is_historical_sync": {
+            "type": "boolean",
+            "description": "The boolean specifying whether the connection should be triggered to re-sync all historical data. If you set this parameter to TRUE, the next scheduled sync will be historical. If the value is FALSE or not specified, the connection will not re-sync historical data. NOTE: When the value is TRUE, only the next scheduled sync will be historical, all subsequent ones will be incremental. This parameter is set to FALSE once the historical sync is completed.",
+            "example": false
+          },
+          "rescheduled_for": {
+            "type": "string",
+            "description": "The scheduled time for the next sync when sync_state is rescheduled. If schedule_type is manual, then the connection expects triggering the event at the designated time through the [Sync Connection Data](https://fivetran.com/docs/rest-api/api-reference/connections/sync-connection) endpoint.",
+            "format": "date-time",
+            "example": "2024-12-01T15:43:29.013729Z"
+          }
+        }
+      },
+      "Alert": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Code",
+            "example": "resync_table_warning"
+          },
+          "message": {
+            "type": "string",
+            "description": "Warning message",
+            "example": "Resync Table Warning"
+          },
+          "details": {
+            "type": "string"
+          }
+        }
+      },
+      "SetupTestResultResponse": {
+        "required": [
+          "status",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Setup test title",
+            "example": "Test Title"
+          },
+          "status": {
+            "type": "string",
+            "description": "Setup test status",
+            "example": "FAILED",
+            "enum": [
+              "PASSED",
+              "SKIPPED",
+              "WARNING",
+              "FAILED",
+              "JOB_FAILED"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Setup test message",
+            "example": "Test Message"
+          },
+          "details": {
+            "type": "object",
+            "description": "Setup test details",
+            "example": "..."
+          }
+        }
+      },
+      "ConnectCardConfig": {
+        "required": [
+          "redirect_uri"
+        ],
+        "type": "object",
+        "properties": {
+          "redirect_uri": {
+            "type": "string",
+            "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix. ",
+            "example": "https://your.site/path"
+          },
+          "hide_setup_guide": {
+            "type": "boolean",
+            "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card.",
+            "example": true
+          }
+        }
+      },
+      "DestinationConfiguration": {
+        "type": "object",
+        "properties": {
+          "virtual_warehouse": {
+            "type": "string",
+            "description": "Snowflake's virtual warehouse used in the connection",
+            "example": "virtual_warehouse"
+          }
+        }
+      },
+      "ConnectCardResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The connect-card auth token",
+            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkIjp7ImxvZ2luIjp0cnVlLCJ1c2VyIjoiX2FjY291bnR3b3J0aHkiLCJhY2NvdW50IjoiX21vb25iZWFtX2FjYyIsImdyb3VwIjoiX21vb25iZWFtIiwiY29ubmVjdG9yIjoiY29iYWx0X2VsZXZhdGlvbiIsIm1ldGhvZCI6IlBiZkNhcmQiLCJpZGVudGl0eSI6ZmFsc2V9LCJpYXQiOjE2Njc4MzA2MzZ9.YUMGUbzxW96xsKJLo4bTorqzx8Q19GTrUi3WFRFM8BU"
+          },
+          "uri": {
+            "type": "string",
+            "description": "The Connect Card URI for the user interface",
+            "example": "https://fivetran.com/connect-card/setup?auth=eyJ0eXAiOiJKV1QiLCJh..."
+          }
+        }
+      }
+    }
+  }
+}

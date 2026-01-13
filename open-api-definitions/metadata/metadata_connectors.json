@@ -1,0 +1,242 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Retrieve Source Metadata",
+    "description": "Returns all available source types within your Fivetran account. This endpoint makes it easier to display Fivetran connectors within your application because it provides metadata including the proper source name ('Facebook Ads' instead of 'facebook_ads'), the source icon, information about the Hybrid deployment support, and links to Fivetran resources. As we update source names and icons, that metadata will automatically update within this endpoint"
+  },
+  "path": "/v1/metadata/connector-types",
+  "method": "GET",
+  "operation": {
+    "tags": [
+      "Connector Metadata"
+    ],
+    "summary": "Retrieve Source Metadata",
+    "description": "Returns all available source types within your Fivetran account. This endpoint makes it easier to display Fivetran connectors within your application because it provides metadata including the proper source name ('Facebook Ads' instead of 'facebook_ads'), the source icon, information about the Hybrid deployment support, and links to Fivetran resources. As we update source names and icons, that metadata will automatically update within this endpoint",
+    "operationId": "metadata_connectors",
+    "parameters": [
+      {
+        "name": "cursor",
+        "in": "query",
+        "description": "Paging cursor, [read more about pagination](https://fivetran.com/docs/rest-api/pagination)",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "example": "cursor_value"
+        },
+        "example": "cursor_value"
+      },
+      {
+        "name": "limit",
+        "in": "query",
+        "description": "Number of records to fetch per page. Accepts a number in the range 1..1000; the default value is 100.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "example": 100
+        },
+        "example": 100
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "required": [
+                    "items"
+                  ],
+                  "properties": {
+                    "items": {
+                      "type": "array",
+                      "description": "The collection of returned items",
+                      "items": {
+                        "$ref": "#/components/schemas/MetadataResponse"
+                      }
+                    },
+                    "next_cursor": {
+                      "type": "string",
+                      "description": "The value of the cursor parameter for the next page",
+                      "example": "cursor_value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "MetadataResponse": {
+        "required": [
+          "id",
+          "name",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The connector type identifier within the Fivetran system",
+            "example": "google_ads"
+          },
+          "name": {
+            "type": "string",
+            "description": "The connector service name within the Fivetran system",
+            "example": "Google Ads"
+          },
+          "type": {
+            "type": "string",
+            "description": "The connector service type",
+            "example": "Marketing",
+            "enum": [
+              "API",
+              "Dbt",
+              "Marketing",
+              "HumanResources",
+              "Finance",
+              "Productivity",
+              "Engineering",
+              "Support",
+              "Sales",
+              "Security",
+              "SuperConnectorTest",
+              "Free",
+              "File",
+              "Database",
+              "Events",
+              "Function",
+              "BITool",
+              "Warehouse",
+              "Log",
+              "Hvr"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "description": "The description characterizing the purpose of the connector",
+            "example": "Google Ads is an online advertising platform"
+          },
+          "icons": {
+            "type": "array",
+            "description": "The set of additional icon resource URLs in different formats (.svg, .png). Updating this list is not a breaking change. The set of icon URLs or the icons themselves may be changed",
+            "items": {
+              "type": "string"
+            }
+          },
+          "config": {
+            "type": "object",
+            "description": "Metadata for configuration fields"
+          },
+          "auth": {
+            "type": "object",
+            "description": "Metadata for authorization fields (optional)"
+          },
+          "service_status_updated_at": {
+            "type": "string",
+            "description": "The date (yyyy-MM-dd) the connector status was updated to the current availability status",
+            "format": "date-time"
+          },
+          "supported_features": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Feature"
+            }
+          },
+          "link_to_docs": {
+            "type": "string",
+            "description": "The link to the connector documentation",
+            "example": "https://fivetran.com/docs/connectors/applications/google-ads"
+          },
+          "connector_class": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "lite"
+            ]
+          },
+          "link_to_erd": {
+            "type": "string",
+            "description": "The link to the connector ERD (entity\u2013relationship diagram)",
+            "example": "https://docs.google.com/presentation/d/1f16zOPxwT1AXoOcNkvwT82ApKqU1yhtJ04f-73M91nw/embed"
+          },
+          "service_status": {
+            "type": "string",
+            "description": "The current availability status of the connector",
+            "example": "general_availability",
+            "enum": [
+              "general_availability",
+              "beta",
+              "private_preview",
+              "sunset",
+              "development"
+            ]
+          },
+          "icon_url": {
+            "type": "string",
+            "description": "The icon resource URL",
+            "example": "https://fivetran.com/integrations/google_ads/resources/google-ads.png"
+          }
+        }
+      },
+      "Feature": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The unique identifier of a feature supported by the connector",
+            "example": "API_CONFIGURABLE",
+            "enum": [
+              "CUSTOM_DATA",
+              "CAPTURE_DELETES",
+              "DATA_BLOCKING",
+              "COLUMN_HASHING",
+              "RE_SYNC",
+              "HISTORY",
+              "API_CONFIGURABLE",
+              "PRIORITY_FIRST_SYNC",
+              "FIVETRAN_DATA_MODELS",
+              "PRIVATE_NETWORKING",
+              "AUTHORIZATION_VIA_API",
+              "ROW_FILTERING"
+            ]
+          },
+          "notes": {
+            "type": "string",
+            "description": "Additional information about the feature support of a specific connector",
+            "example": "..."
+          }
+        }
+      }
+    }
+  }
+}

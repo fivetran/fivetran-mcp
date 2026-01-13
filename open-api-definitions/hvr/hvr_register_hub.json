@@ -1,0 +1,107 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Register Hub",
+    "description": "Register a new hub within your Fivetran account."
+  },
+  "path": "/v1/hvr/register-hub",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "HVR Registrations Management"
+    ],
+    "summary": "Register Hub",
+    "description": "Register a new hub within your Fivetran account.",
+    "operationId": "hvr_register_hub",
+    "parameters": [
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/HvrHubRegistrationRequest"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/HvrHubRegistrationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HvrHubRegistrationResponse": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "Access token.",
+            "example": "access_token_value"
+          },
+          "registration_id": {
+            "type": "string",
+            "description": "Registration identifier.",
+            "example": "registration_id"
+          }
+        }
+      },
+      "HvrHubRegistrationRequest": {
+        "type": "object",
+        "properties": {
+          "fingerprint": {
+            "type": "string",
+            "description": "Installation fingerprint.",
+            "example": "fingerprint_value"
+          },
+          "port": {
+            "type": "integer",
+            "description": "Installation port.",
+            "format": "int32",
+            "example": 1234
+          },
+          "hub_server_url": {
+            "type": "string",
+            "description": "URL of Hub server.",
+            "example": "hub_server_url"
+          }
+        }
+      }
+    }
+  }
+}

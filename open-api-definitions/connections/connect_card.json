@@ -1,0 +1,142 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Create a Connect Card",
+    "description": "Generates the Connect Card URI for the connection"
+  },
+  "path": "/v1/connections/{connectionId}/connect-card",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "Connection Management"
+    ],
+    "summary": "Create a Connect Card",
+    "description": "Generates the Connect Card URI for the connection",
+    "operationId": "connect_card",
+    "parameters": [
+      {
+        "name": "connectionId",
+        "in": "path",
+        "description": "The unique identifier for the connection within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "connectionId"
+        },
+        "example": "connectionId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json;version=2",
+          "default": "application/json;version=2"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/ConnectCardConfigRequest"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/ConnectorConnectCardResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ConnectorConnectCardResponse": {
+        "required": [
+          "connector_id"
+        ],
+        "type": "object",
+        "properties": {
+          "connect_card": {
+            "$ref": "#/components/schemas/ConnectCardResponse"
+          },
+          "connector_id": {
+            "type": "string",
+            "description": "The connection identifier",
+            "example": "connection_id"
+          },
+          "connect_card_config": {
+            "$ref": "#/components/schemas/ConnectCardConfig"
+          }
+        }
+      },
+      "ConnectCardConfig": {
+        "required": [
+          "redirect_uri"
+        ],
+        "type": "object",
+        "properties": {
+          "redirect_uri": {
+            "type": "string",
+            "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix. ",
+            "example": "https://your.site/path"
+          },
+          "hide_setup_guide": {
+            "type": "boolean",
+            "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card.",
+            "example": true
+          }
+        }
+      },
+      "ConnectCardResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "The connect-card auth token",
+            "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJkIjp7ImxvZ2luIjp0cnVlLCJ1c2VyIjoiX2FjY291bnR3b3J0aHkiLCJhY2NvdW50IjoiX21vb25iZWFtX2FjYyIsImdyb3VwIjoiX21vb25iZWFtIiwiY29ubmVjdG9yIjoiY29iYWx0X2VsZXZhdGlvbiIsIm1ldGhvZCI6IlBiZkNhcmQiLCJpZGVudGl0eSI6ZmFsc2V9LCJpYXQiOjE2Njc4MzA2MzZ9.YUMGUbzxW96xsKJLo4bTorqzx8Q19GTrUi3WFRFM8BU"
+          },
+          "uri": {
+            "type": "string",
+            "description": "The Connect Card URI for the user interface",
+            "example": "https://fivetran.com/connect-card/setup?auth=eyJ0eXAiOiJKV1QiLCJh..."
+          }
+        }
+      },
+      "ConnectCardConfigRequest": {
+        "type": "object",
+        "properties": {
+          "connect_card_config": {
+            "$ref": "#/components/schemas/ConnectCardConfig"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Re-sync Connection Data (Historical Sync)",
+    "description": "Triggers a full historical sync of a connection or multiple schema tables within a connection. If the connection is paused, the table sync will be scheduled to be performed when the connection is re-enabled. If there is a data sync already in progress, we will try to complete it. If it fails, the request will be declined and the HTTP 409 Conflict error will be returned."
+  },
+  "path": "/v1/connections/{connectionId}/resync",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "Connection Management"
+    ],
+    "summary": "Re-sync Connection Data (Historical Sync)",
+    "description": "Triggers a full historical sync of a connection or multiple schema tables within a connection. If the connection is paused, the table sync will be scheduled to be performed when the connection is re-enabled. If there is a data sync already in progress, we will try to complete it. If it fails, the request will be declined and the HTTP 409 Conflict error will be returned.",
+    "operationId": "resync_connection",
+    "parameters": [
+      {
+        "name": "connectionId",
+        "in": "path",
+        "description": "The unique identifier for the connection within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "connectionId"
+        },
+        "example": "connectionId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json;version=2",
+          "default": "application/json;version=2"
+        }
+      }
+    ],
+    "requestBody": {
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "#/components/schemas/ResyncConnectorRequest"
+          }
+        }
+      }
+    },
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found error"
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ResyncConnectorRequest": {
+        "type": "object",
+        "properties": {
+          "scope": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "title": "Schema name",
+                "uniqueItems": true,
+                "type": "array",
+                "description": "Schema name",
+                "example": [
+                  "table1",
+                  "table2"
+                ],
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "A map containing an array of tables to re-sync for each schema.\n\nIt is an optional parameter that must be non-empty if provided. If not provided, all schemas and tables of the connection are re-synced.\n"
+          }
+        }
+      }
+    }
+  }
+}

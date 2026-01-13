@@ -1,0 +1,80 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Revoke Destination Certificate",
+    "description": "Revokes a certificate, so Fivetran no longer trusts it while connecting to the destination database."
+  },
+  "path": "/v1/destinations/{destinationId}/certificates/{hash}",
+  "method": "DELETE",
+  "operation": {
+    "tags": [
+      "Certificate Management"
+    ],
+    "summary": "Revoke Destination Certificate",
+    "description": "Revokes a certificate, so Fivetran no longer trusts it while connecting to the destination database.",
+    "operationId": "revoke_destination_certificate",
+    "parameters": [
+      {
+        "name": "destinationId",
+        "in": "path",
+        "description": "The unique identifier for the destination within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "destinationId"
+        },
+        "example": "destinationId"
+      },
+      {
+        "name": "hash",
+        "in": "path",
+        "description": "The unique identifier of the certificate (Base64URL encoded hash of the certificate).",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "Y29ubmVjdG9yIGNlcnRpZmljYXRlIGhhc2g"
+        },
+        "example": "Y29ubmVjdG9yIGNlcnRpZmljYXRlIGhhc2g"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "message"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Certificate with specified hash not found"
+      }
+    }
+  }
+}

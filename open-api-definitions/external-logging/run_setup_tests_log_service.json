@@ -1,0 +1,120 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Run Log Service Setup Tests",
+    "description": "Runs the setup tests for an existing logging service within your Fivetran account."
+  },
+  "path": "/v1/external-logging/{logId}/test",
+  "method": "POST",
+  "operation": {
+    "tags": [
+      "Log Service Management"
+    ],
+    "summary": "Run Log Service Setup Tests",
+    "description": "Runs the setup tests for an existing logging service within your Fivetran account.",
+    "operationId": "run_setup_tests_log_service",
+    "parameters": [
+      {
+        "name": "logId",
+        "in": "path",
+        "description": "The unique identifier for the log service within the Fivetran system.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "example": "logId"
+        },
+        "example": "logId"
+      },
+      {
+        "name": "Accept",
+        "in": "header",
+        "schema": {
+          "type": "string",
+          "example": "application/json",
+          "default": "application/json"
+        }
+      }
+    ],
+    "responses": {
+      "200": {
+        "description": "Successful response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "required": [
+                "code",
+                "data"
+              ],
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "description": "Response status code",
+                  "example": "Success"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Response status text",
+                  "example": "Operation performed."
+                },
+                "data": {
+                  "$ref": "#/components/schemas/LoggingServiceSetupTestResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LoggingServiceSetupTestResponse": {
+        "type": "object",
+        "properties": {
+          "setup_tests": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SetupTestResultResponse"
+            }
+          }
+        }
+      },
+      "SetupTestResultResponse": {
+        "required": [
+          "status",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Setup test title",
+            "example": "Test Title"
+          },
+          "status": {
+            "type": "string",
+            "description": "Setup test status",
+            "example": "FAILED",
+            "enum": [
+              "PASSED",
+              "SKIPPED",
+              "WARNING",
+              "FAILED",
+              "JOB_FAILED"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "description": "Setup test message",
+            "example": "Test Message"
+          },
+          "details": {
+            "type": "object",
+            "description": "Setup test details",
+            "example": "..."
+          }
+        }
+      }
+    }
+  }
+}
