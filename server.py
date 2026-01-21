@@ -15,6 +15,7 @@ from mcp.types import Tool, TextContent
 
 load_dotenv()
 
+# Credentials are configured in .mcp.json
 FIVETRAN_API_KEY = os.getenv("FIVETRAN_APIKEY")
 FIVETRAN_API_SECRET = os.getenv("FIVETRAN_APISECRET")
 FIVETRAN_ALLOW_WRITES = os.getenv("FIVETRAN_ALLOW_WRITES", "false").lower() == "true"
