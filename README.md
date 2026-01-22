@@ -15,13 +15,152 @@ python3 -m venv .venv
 
 ### 2. Get Fivetran API credentials
 
-1. Go to https://fivetran.com/account/settings
-2. Navigate to **API Config**
-3. Copy your API Key and API Secret
+You can generate credentials within https://fivetran.com/account/settings
 
 ### 3. Configure your MCP client
 
-See `.mcp.example.json` for an example configuration. Copy it, name it .mcp.json, and update the paths and credentials to match your setup.
+See `.mcp.example.json` for an example configuration. Update the paths and credentials in that file to match your setup and save it as .mcp.json in the primary folder.
+
+### 4. Connect to your AI client
+
+Choose your preferred AI client below and follow the configuration instructions.
+
+#### Claude Desktop
+
+1. Open Claude Desktop and go to **Settings** → **Developer** → **Edit Config**
+2. This opens `claude_desktop_config.json`. Add the Fivetran MCP server:
+
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "fivetran": {
+      "command": "python",
+      "args": ["/path/to/fivetran-mcp-server/server.py"],
+      "env": {
+        "FIVETRAN_APIKEY": "your-api-key",
+        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_ALLOW_WRITES": "false"
+      }
+    }
+  }
+}
+```
+
+3. Save the file and restart Claude Desktop
+4. Look for the MCP server indicator in the bottom-right corner of the chat input
+
+---
+
+#### Claude Code (CLI)
+
+Use the `claude mcp add` command to register the server:
+
+```bash
+claude mcp add fivetran \
+  --env FIVETRAN_APIKEY=your-api-key \
+  --env FIVETRAN_APISECRET=your-api-secret \
+  --env FIVETRAN_ALLOW_WRITES=false \
+  -- python /path/to/fivetran-mcp-server/server.py
+```
+
+Or add it directly to your `~/.claude.json` configuration:
+
+```json
+{
+  "mcpServers": {
+    "fivetran": {
+      "command": "python",
+      "args": ["/path/to/fivetran-mcp-server/server.py"],
+      "env": {
+        "FIVETRAN_APIKEY": "your-api-key",
+        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_ALLOW_WRITES": "false"
+      }
+    }
+  }
+}
+```
+
+Verify the server is configured:
+
+```bash
+claude mcp list
+```
+
+---
+
+#### OpenAI Codex
+
+Codex stores MCP configuration in `~/.codex/config.toml`. You can configure via CLI or by editing the file directly.
+
+**Option 1: CLI**
+
+```bash
+codex mcp add fivetran \
+  --env FIVETRAN_APIKEY=your-api-key \
+  --env FIVETRAN_APISECRET=your-api-secret \
+  --env FIVETRAN_ALLOW_WRITES=false \
+  -- python /path/to/fivetran-mcp-server/server.py
+```
+
+**Option 2: Edit config.toml**
+
+Add the following to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.fivetran]
+command = "python"
+args = ["/path/to/fivetran-mcp-server/server.py"]
+
+[mcp_servers.fivetran.env]
+FIVETRAN_APIKEY = "your-api-key"
+FIVETRAN_APISECRET = "your-api-secret"
+FIVETRAN_ALLOW_WRITES = "false"
+```
+
+Verify configuration:
+
+```bash
+codex mcp list
+```
+
+---
+
+#### Cursor
+
+Cursor supports both global and project-level MCP configurations.
+
+**Global Configuration:** `~/.cursor/mcp.json`  
+**Project Configuration:** `.cursor/mcp.json` (in your project root)
+
+Add the following to your chosen configuration file:
+
+```json
+{
+  "mcpServers": {
+    "fivetran": {
+      "command": "python",
+      "args": ["/path/to/fivetran-mcp-server/server.py"],
+      "env": {
+        "FIVETRAN_APIKEY": "your-api-key",
+        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_ALLOW_WRITES": "false"
+      }
+    }
+  }
+}
+```
+
+**Alternative:** Use Cursor's UI
+1. Open Cursor and press `Cmd/Ctrl + Shift + P`
+2. Search for "MCP" and select **View: Open MCP Settings**
+3. Click **Tools & Integrations** → **MCP Tools** → **Add Custom MCP**
+4. Add the configuration above
+
+Restart Cursor to load the new MCP server configuration.
 
 ## Environment Variables
 
