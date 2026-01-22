@@ -15,7 +15,7 @@ python3 -m venv .venv
 
 ### 2. Get Fivetran API credentials
 
-You can generate credentials within https://fivetran.com/account/settings
+You can generate credentials within https://fivetran.com/dashboard/user/api-config
 
 ### 3. Configure your MCP client
 
