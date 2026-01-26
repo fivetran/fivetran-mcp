@@ -1,0 +1,10 @@
+[project]
+name = "fivetran-mcp"
+version = "0.1.0"
+description = "MCP server for interacting with Fivetran"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.25.0",
+    "httpx>=0.28.0",
+    "python-dotenv>=1.0.0",
+]
