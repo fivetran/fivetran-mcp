@@ -6,6 +6,8 @@ import os
 import base64
 from pathlib import Path
 from typing import Any
+import hashlib
+import time
 
 import httpx
 from dotenv import load_dotenv
@@ -22,6 +24,55 @@ FIVETRAN_ALLOW_WRITES = os.getenv("FIVETRAN_ALLOW_WRITES", "false").lower() == "
 BASE_URL = "https://api.fivetran.com"
 SERVER_DIR = Path(__file__).parent
 
+# ============================================================================
+# CONFIRMATION SYSTEM FOR WRITE OPERATIONS
+# ============================================================================
+PENDING_CONFIRMATIONS: dict[str, dict[str, Any]] = {}
+CONFIRMATION_TTL_SECONDS = 300  # 5 minutes
+
+
+def generate_confirmation_token(tool_name: str, arguments: dict[str, Any]) -> str:
+    """Generate a unique token for a pending write operation."""
+    args_for_hash = {k: v for k, v in arguments.items() if k != "schema_file"}
+    data = f"{tool_name}:{json.dumps(args_for_hash, sort_keys=True)}:{time.time()}"
+    token = hashlib.sha256(data.encode()).hexdigest()[:16]
+    
+    PENDING_CONFIRMATIONS[token] = {
+        "tool": tool_name,
+        "arguments": arguments,
+        "created_at": time.time(),
+    }
+    return token
+
+
+def validate_confirmation_token(token: str, tool_name: str) -> dict[str, Any]:
+    """Validate and consume a confirmation token."""
+    pending = PENDING_CONFIRMATIONS.pop(token, None)
+    
+    if not pending:
+        raise ValueError(
+            "Invalid or expired confirmation token. "
+            "Please start the operation again without a confirmation_token."
+        )
+    
+    if pending["tool"] != tool_name:
+        raise ValueError(
+            f"Token was for '{pending['tool']}', not '{tool_name}'. "
+            "Please start the operation again."
+        )
+    
+    if time.time() - pending["created_at"] > CONFIRMATION_TTL_SECONDS:
+        raise ValueError(
+            "Confirmation token has expired. Please start the operation again."
+        )
+    
+    return pending["arguments"]
+
+
+def is_write_operation(tool_name: str) -> bool:
+    """Check if a tool performs a write operation."""
+    tool_config = TOOLS.get(tool_name, {})
+    return tool_config.get("method", "GET") in ("POST", "PATCH", "DELETE")
 
 def check_write_permission(method: str) -> None:
     """Raise error if writes not allowed for non-GET methods."""
@@ -1315,6 +1366,7 @@ PARAM_DEFINITIONS = {
     "column_name": {"type": "string", "description": "The name of the column"},
     "package_definition_id": {"type": "string", "description": "The unique identifier for the quickstart package"},
     "request_body": {"type": "string", "description": "JSON string containing the request body. Refer to the schema file for the expected structure."},
+    "confirmation_token": {"type": "string", "description": "Token from a previous call to confirm the write operation. Only provide this after the user has confirmed."},
 }
 
 
@@ -1358,9 +1410,8 @@ async def list_tools() -> list[Tool]:
 
 @server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
-    """Handle tool calls with mandatory schema validation."""
+    """Handle tool calls with mandatory schema validation and write confirmation."""
     try:
-        # Get tool config
         if name not in TOOLS:
             raise ValueError(f"Unknown tool: {name}")
 
@@ -1375,8 +1426,34 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                 f"You must read this file first, then provide the exact path."
             )
 
-        # Validate the file exists and is readable
         validate_and_read_schema(provided_schema)
+
+        # CONFIRMATION FLOW FOR WRITE OPERATIONS
+        if is_write_operation(name):
+            confirmation_token = arguments.get("confirmation_token")
+            
+            if not confirmation_token:
+                # First call: return confirmation request, DO NOT execute
+                args_preview = {k: v for k, v in arguments.items() 
+                               if k not in ("schema_file", "confirmation_token")}
+                token = generate_confirmation_token(name, arguments)
+                
+                return [TextContent(type="text", text=json.dumps({
+                    "status": "CONFIRMATION_REQUIRED",
+                    "message": "⚠️ This is a write operation that will modify your Fivetran account.",
+                    "tool": name,
+                    "method": tool_config["method"],
+                    "endpoint": tool_config["endpoint"],
+                    "parameters": args_preview,
+                    "instructions": "Please show this preview to the user and ask: 'Do you want to proceed with this action?' If they confirm, call this tool again with the same arguments PLUS confirmation_token.",
+                    "confirmation_token": token,
+                }, indent=2))]
+            
+            else:
+                # Second call: validate token, then execute
+                validated_args = validate_confirmation_token(confirmation_token, name)
+                # Remove confirmation_token before execution
+                arguments = {k: v for k, v in validated_args.items() if k != "confirmation_token"}
 
         # Execute the API call
         result = await execute_tool(name, arguments)
