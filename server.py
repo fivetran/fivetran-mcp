@@ -6,8 +6,6 @@ import os
 import base64
 from pathlib import Path
 from typing import Any
-import hashlib
-import time
 
 import httpx
 from dotenv import load_dotenv
@@ -23,56 +21,6 @@ FIVETRAN_API_SECRET = os.getenv("FIVETRAN_APISECRET")
 FIVETRAN_ALLOW_WRITES = os.getenv("FIVETRAN_ALLOW_WRITES", "false").lower() == "true"
 BASE_URL = "https://api.fivetran.com"
 SERVER_DIR = Path(__file__).parent
-
-# ============================================================================
-# CONFIRMATION SYSTEM FOR WRITE OPERATIONS
-# ============================================================================
-PENDING_CONFIRMATIONS: dict[str, dict[str, Any]] = {}
-CONFIRMATION_TTL_SECONDS = 300  # 5 minutes
-
-
-def generate_confirmation_token(tool_name: str, arguments: dict[str, Any]) -> str:
-    """Generate a unique token for a pending write operation."""
-    args_for_hash = {k: v for k, v in arguments.items() if k != "schema_file"}
-    data = f"{tool_name}:{json.dumps(args_for_hash, sort_keys=True)}:{time.time()}"
-    token = hashlib.sha256(data.encode()).hexdigest()[:16]
-    
-    PENDING_CONFIRMATIONS[token] = {
-        "tool": tool_name,
-        "arguments": arguments,
-        "created_at": time.time(),
-    }
-    return token
-
-
-def validate_confirmation_token(token: str, tool_name: str) -> dict[str, Any]:
-    """Validate and consume a confirmation token."""
-    pending = PENDING_CONFIRMATIONS.pop(token, None)
-    
-    if not pending:
-        raise ValueError(
-            "Invalid or expired confirmation token. "
-            "Please start the operation again without a confirmation_token."
-        )
-    
-    if pending["tool"] != tool_name:
-        raise ValueError(
-            f"Token was for '{pending['tool']}', not '{tool_name}'. "
-            "Please start the operation again."
-        )
-    
-    if time.time() - pending["created_at"] > CONFIRMATION_TTL_SECONDS:
-        raise ValueError(
-            "Confirmation token has expired. Please start the operation again."
-        )
-    
-    return pending["arguments"]
-
-
-def is_write_operation(tool_name: str) -> bool:
-    """Check if a tool performs a write operation."""
-    tool_config = TOOLS.get(tool_name, {})
-    return tool_config.get("method", "GET") in ("POST", "PATCH", "DELETE")
 
 def check_write_permission(method: str) -> None:
     """Raise error if writes not allowed for non-GET methods."""
@@ -229,7 +177,7 @@ TOOLS = {
     # CERTIFICATES (Deprecated)
     # ============================================================================
     "approve_certificate": {
-        "description": "(Deprecated) Approve a certificate for the account.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. (Deprecated) Approve a certificate for the account.",
         "schema_file": "open-api-definitions/certificates/approve_certificate.json",
         "method": "POST",
         "endpoint": "/v1/certificates",
@@ -247,7 +195,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_connection": {
-        "description": "Create a new connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new connection.",
         "schema_file": "open-api-definitions/connections/create_connection.json",
         "method": "POST",
         "endpoint": "/v1/connections",
@@ -261,14 +209,14 @@ TOOLS = {
         "params": ["connection_id"],
     },
     "modify_connection": {
-        "description": "Update an existing connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update an existing connection.",
         "schema_file": "open-api-definitions/connections/modify_connection.json",
         "method": "PATCH",
         "endpoint": "/v1/connections/{connection_id}",
         "params": ["connection_id", "request_body"],
     },
     "delete_connection": {
-        "description": "Delete a connection.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a connection permanently.",
         "schema_file": "open-api-definitions/connections/delete_connection.json",
         "method": "DELETE",
         "endpoint": "/v1/connections/{connection_id}",
@@ -282,42 +230,42 @@ TOOLS = {
         "params": ["connection_id"],
     },
     "modify_connection_state": {
-        "description": "Update the sync state of a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update the sync state of a connection.",
         "schema_file": "open-api-definitions/connections/modify_connection_state.json",
         "method": "PATCH",
         "endpoint": "/v1/connections/{connection_id}/state",
         "params": ["connection_id", "request_body"],
     },
     "sync_connection": {
-        "description": "Trigger a data sync for a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Trigger a data sync for a connection.",
         "schema_file": "open-api-definitions/connections/sync_connection.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/sync",
         "params": ["connection_id", "request_body"],
     },
     "resync_connection": {
-        "description": "Trigger a historical re-sync for a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Trigger a historical re-sync for a connection.",
         "schema_file": "open-api-definitions/connections/resync_connection.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/resync",
         "params": ["connection_id", "request_body"],
     },
     "resync_tables": {
-        "description": "Re-sync specific tables in a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Re-sync specific tables in a connection.",
         "schema_file": "open-api-definitions/connections/resync_tables.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/schemas/tables/resync",
         "params": ["connection_id", "request_body"],
     },
     "run_connection_setup_tests": {
-        "description": "Run setup tests for a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Run setup tests for a connection.",
         "schema_file": "open-api-definitions/connections/run_setup_tests.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/test",
         "params": ["connection_id"],
     },
     "create_connect_card": {
-        "description": "Create a connect card token for a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a connect card token for a connection.",
         "schema_file": "open-api-definitions/connections/connect_card.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/connect-card",
@@ -331,21 +279,21 @@ TOOLS = {
         "params": ["connection_id"],
     },
     "reload_connection_schema_config": {
-        "description": "Reload the schema configuration for a connection from the source.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Reload the schema configuration for a connection from the source.",
         "schema_file": "open-api-definitions/connections/reload_connection_schema_config.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/schemas/reload",
         "params": ["connection_id", "request_body"],
     },
     "modify_connection_schema_config": {
-        "description": "Update the schema configuration for a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update the schema configuration for a connection.",
         "schema_file": "open-api-definitions/connections/modify_connection_schema_config.json",
         "method": "PATCH",
         "endpoint": "/v1/connections/{connection_id}/schemas",
         "params": ["connection_id", "request_body"],
     },
     "modify_connection_database_schema_config": {
-        "description": "Update configuration for a specific database schema in a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update configuration for a specific database schema in a connection.",
         "schema_file": "open-api-definitions/connections/modify_connection_database_schema_config.json",
         "method": "PATCH",
         "endpoint": "/v1/connections/{connection_id}/schemas/{schema_name}",
@@ -359,28 +307,28 @@ TOOLS = {
         "params": ["connection_id", "schema_name", "table_name"],
     },
     "modify_connection_table_config": {
-        "description": "Update configuration for a specific table in a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update configuration for a specific table in a connection.",
         "schema_file": "open-api-definitions/connections/modify_connection_table_config.json",
         "method": "PATCH",
         "endpoint": "/v1/connections/{connection_id}/schemas/{schema_name}/tables/{table_name}",
         "params": ["connection_id", "schema_name", "table_name", "request_body"],
     },
     "modify_connection_column_config": {
-        "description": "Update configuration for a specific column in a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update configuration for a specific column in a connection.",
         "schema_file": "open-api-definitions/connections/modify_connection_column_config.json",
         "method": "PATCH",
         "endpoint": "/v1/connections/{connection_id}/schemas/{schema_name}/tables/{table_name}/columns/{column_name}",
         "params": ["connection_id", "schema_name", "table_name", "column_name", "request_body"],
     },
     "delete_connection_column_config": {
-        "description": "Drop a blocked column from the destination.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Drop a blocked column from the destination permanently.",
         "schema_file": "open-api-definitions/connections/delete_column_connection_config.json",
         "method": "DELETE",
         "endpoint": "/v1/connections/{connection_id}/schemas/{schema_name}/tables/{table_name}/columns/{column_name}",
         "params": ["connection_id", "schema_name", "table_name", "column_name"],
     },
     "delete_multiple_columns_connection_config": {
-        "description": "Drop multiple blocked columns from the destination.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Drop multiple blocked columns from the destination permanently.",
         "schema_file": "open-api-definitions/connections/delete_multiple_columns_connection_config.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/schemas/drop-columns",
@@ -394,7 +342,7 @@ TOOLS = {
         "params": ["connection_id"],
     },
     "approve_connection_certificate": {
-        "description": "Approve a certificate for a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Approve a certificate for a connection.",
         "schema_file": "open-api-definitions/connections/approve_connection_certificate.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/certificates",
@@ -408,7 +356,7 @@ TOOLS = {
         "params": ["connection_id", "hash"],
     },
     "revoke_connection_certificate": {
-        "description": "Revoke a certificate for a connection.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Revoke a certificate for a connection.",
         "schema_file": "open-api-definitions/connections/revoke_connection_certificate.json",
         "method": "DELETE",
         "endpoint": "/v1/connections/{connection_id}/certificates/{hash}",
@@ -422,7 +370,7 @@ TOOLS = {
         "params": ["connection_id"],
     },
     "approve_connection_fingerprint": {
-        "description": "Approve a fingerprint for a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Approve a fingerprint for a connection.",
         "schema_file": "open-api-definitions/connections/approve_connection_fingerprint.json",
         "method": "POST",
         "endpoint": "/v1/connections/{connection_id}/fingerprints",
@@ -436,7 +384,7 @@ TOOLS = {
         "params": ["connection_id", "hash"],
     },
     "revoke_connection_fingerprint": {
-        "description": "Revoke a fingerprint for a connection.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Revoke a fingerprint for a connection.",
         "schema_file": "open-api-definitions/connections/revoke_connection_fingerprint.json",
         "method": "DELETE",
         "endpoint": "/v1/connections/{connection_id}/fingerprints/{hash}",
@@ -454,7 +402,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_destination": {
-        "description": "Create a new destination. IMPORTANT: A group_id is required. Groups are 1:1 with destinations, so you should typically create a new group first using create_group, then use that group's ID here. Only ask the user about existing groups if they specifically mention having one.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new destination. IMPORTANT: A group_id is required. Groups are 1:1 with destinations, so you should typically create a new group first using create_group, then use that group's ID here. Only ask the user about existing groups if they specifically mention having one.",
         "schema_file": "open-api-definitions/destinations/create_destination.json",
         "method": "POST",
         "endpoint": "/v1/destinations",
@@ -468,21 +416,21 @@ TOOLS = {
         "params": ["destination_id"],
     },
     "modify_destination": {
-        "description": "Update an existing destination.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update an existing destination.",
         "schema_file": "open-api-definitions/destinations/modify_destination.json",
         "method": "PATCH",
         "endpoint": "/v1/destinations/{destination_id}",
         "params": ["destination_id", "request_body"],
     },
     "delete_destination": {
-        "description": "Delete a destination.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a destination permanently.",
         "schema_file": "open-api-definitions/destinations/delete_destination.json",
         "method": "DELETE",
         "endpoint": "/v1/destinations/{destination_id}",
         "params": ["destination_id"],
     },
     "run_destination_setup_tests": {
-        "description": "Run setup tests for a destination.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Run setup tests for a destination.",
         "schema_file": "open-api-definitions/destinations/run_destination_setup_tests.json",
         "method": "POST",
         "endpoint": "/v1/destinations/{destination_id}/test",
@@ -496,7 +444,7 @@ TOOLS = {
         "params": ["destination_id"],
     },
     "approve_destination_certificate": {
-        "description": "Approve a certificate for a destination.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Approve a certificate for a destination.",
         "schema_file": "open-api-definitions/destinations/approve_destination_certificate.json",
         "method": "POST",
         "endpoint": "/v1/destinations/{destination_id}/certificates",
@@ -510,7 +458,7 @@ TOOLS = {
         "params": ["destination_id", "hash"],
     },
     "revoke_destination_certificate": {
-        "description": "Revoke a certificate for a destination.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Revoke a certificate for a destination.",
         "schema_file": "open-api-definitions/destinations/revoke_destination_certificate.json",
         "method": "DELETE",
         "endpoint": "/v1/destinations/{destination_id}/certificates/{hash}",
@@ -524,7 +472,7 @@ TOOLS = {
         "params": ["destination_id"],
     },
     "approve_destination_fingerprint": {
-        "description": "Approve a fingerprint for a destination.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Approve a fingerprint for a destination.",
         "schema_file": "open-api-definitions/destinations/approve_destination_fingerprint.json",
         "method": "POST",
         "endpoint": "/v1/destinations/{destination_id}/fingerprints",
@@ -538,7 +486,7 @@ TOOLS = {
         "params": ["destination_id", "hash"],
     },
     "revoke_destination_fingerprint": {
-        "description": "Revoke a fingerprint for a destination.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Revoke a fingerprint for a destination.",
         "schema_file": "open-api-definitions/destinations/revoke_destination_fingerprint.json",
         "method": "DELETE",
         "endpoint": "/v1/destinations/{destination_id}/fingerprints/{hash}",
@@ -556,7 +504,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_log_service": {
-        "description": "Create a new log service.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new log service.",
         "schema_file": "open-api-definitions/external-logging/add_log_service.json",
         "method": "POST",
         "endpoint": "/v1/external-logging",
@@ -570,21 +518,21 @@ TOOLS = {
         "params": ["log_id"],
     },
     "update_log_service": {
-        "description": "Update a log service.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a log service.",
         "schema_file": "open-api-definitions/external-logging/update_log_service.json",
         "method": "PATCH",
         "endpoint": "/v1/external-logging/{log_id}",
         "params": ["log_id", "request_body"],
     },
     "delete_log_service": {
-        "description": "Delete a log service.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a log service permanently.",
         "schema_file": "open-api-definitions/external-logging/delete_log_service.json",
         "method": "DELETE",
         "endpoint": "/v1/external-logging/{log_id}",
         "params": ["log_id"],
     },
     "run_log_service_setup_tests": {
-        "description": "Run setup tests for a log service.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Run setup tests for a log service.",
         "schema_file": "open-api-definitions/external-logging/run_setup_tests_log_service.json",
         "method": "POST",
         "endpoint": "/v1/external-logging/{log_id}/test",
@@ -602,7 +550,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_group": {
-        "description": "Create a new group. Groups are containers that hold a destination and its connections. When creating a new destination, you should create a group first, then create the destination in that group.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new group. Groups are containers that hold a destination and its connections. When creating a new destination, you should create a group first, then create the destination in that group.",
         "schema_file": "open-api-definitions/groups/create_group.json",
         "method": "POST",
         "endpoint": "/v1/groups",
@@ -616,14 +564,14 @@ TOOLS = {
         "params": ["group_id"],
     },
     "modify_group": {
-        "description": "Update a group.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a group.",
         "schema_file": "open-api-definitions/groups/modify_group.json",
         "method": "PATCH",
         "endpoint": "/v1/groups/{group_id}",
         "params": ["group_id", "request_body"],
     },
     "delete_group": {
-        "description": "Delete a group.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a group permanently.",
         "schema_file": "open-api-definitions/groups/delete_group.json",
         "method": "DELETE",
         "endpoint": "/v1/groups/{group_id}",
@@ -646,14 +594,14 @@ TOOLS = {
         "auto_paginate": True,
     },
     "add_user_to_group": {
-        "description": "Add a user to a group.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Add a user to a group.",
         "schema_file": "open-api-definitions/groups/add_user_to_group.json",
         "method": "POST",
         "endpoint": "/v1/groups/{group_id}/users",
         "params": ["group_id", "request_body"],
     },
     "delete_user_from_group": {
-        "description": "Remove a user from a group.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Remove a user from a group.",
         "schema_file": "open-api-definitions/groups/delete_user_from_group.json",
         "method": "DELETE",
         "endpoint": "/v1/groups/{group_id}/users/{user_id}",
@@ -678,7 +626,7 @@ TOOLS = {
     # HVR
     # ============================================================================
     "hvr_register_hub": {
-        "description": "Register an HVR hub.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Register an HVR hub.",
         "schema_file": "open-api-definitions/hvr/hvr_register_hub.json",
         "method": "POST",
         "endpoint": "/v1/hvr/register-hub",
@@ -696,7 +644,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_hybrid_deployment_agent": {
-        "description": "Create a new hybrid deployment agent.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new hybrid deployment agent.",
         "schema_file": "open-api-definitions/hybrid-deployment-agents/create_hybrid_deployment_agent.json",
         "method": "POST",
         "endpoint": "/v1/hybrid-deployment-agents",
@@ -710,21 +658,21 @@ TOOLS = {
         "params": ["agent_id"],
     },
     "re_auth_hybrid_deployment_agent": {
-        "description": "Regenerate authentication keys for a hybrid deployment agent.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Regenerate authentication keys for a hybrid deployment agent.",
         "schema_file": "open-api-definitions/hybrid-deployment-agents/re_auth_hybrid_deployment_agent.json",
         "method": "PATCH",
         "endpoint": "/v1/hybrid-deployment-agents/{agent_id}/re-auth",
         "params": ["agent_id"],
     },
     "reset_hybrid_deployment_agent_credentials": {
-        "description": "Reset credentials for a hybrid deployment agent.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Reset credentials for a hybrid deployment agent.",
         "schema_file": "open-api-definitions/hybrid-deployment-agents/reset_hybrid_deployment_agent_credentials.json",
         "method": "POST",
         "endpoint": "/v1/hybrid-deployment-agents/{agent_id}/reset-credentials",
         "params": ["agent_id"],
     },
     "delete_hybrid_deployment_agent": {
-        "description": "Delete a hybrid deployment agent.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a hybrid deployment agent permanently.",
         "schema_file": "open-api-definitions/hybrid-deployment-agents/delete_hybrid_deployment_agent.json",
         "method": "DELETE",
         "endpoint": "/v1/hybrid-deployment-agents/{agent_id}",
@@ -759,7 +707,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_private_link": {
-        "description": "Create a new private link.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new private link.",
         "schema_file": "open-api-definitions/private-links/create_private_link.json",
         "method": "POST",
         "endpoint": "/v1/private-links",
@@ -773,14 +721,14 @@ TOOLS = {
         "params": ["private_link_id"],
     },
     "modify_private_link": {
-        "description": "Update a private link.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a private link.",
         "schema_file": "open-api-definitions/private-links/modify_private_link.json",
         "method": "PATCH",
         "endpoint": "/v1/private-links/{private_link_id}",
         "params": ["private_link_id", "request_body"],
     },
     "delete_private_link": {
-        "description": "Delete a private link.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a private link permanently.",
         "schema_file": "open-api-definitions/private-links/delete_private_link.json",
         "method": "DELETE",
         "endpoint": "/v1/private-links/{private_link_id}",
@@ -798,7 +746,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_proxy_agent": {
-        "description": "Create a new proxy agent.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new proxy agent.",
         "schema_file": "open-api-definitions/proxy/create_proxy_agent.json",
         "method": "POST",
         "endpoint": "/v1/proxy",
@@ -812,7 +760,7 @@ TOOLS = {
         "params": ["agent_id"],
     },
     "delete_proxy_agent": {
-        "description": "Delete a proxy agent.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a proxy agent permanently.",
         "schema_file": "open-api-definitions/proxy/delete_proxy_agent.json",
         "method": "DELETE",
         "endpoint": "/v1/proxy/{agent_id}",
@@ -826,7 +774,7 @@ TOOLS = {
         "params": ["agent_id"],
     },
     "regenerate_proxy_agent_secrets": {
-        "description": "Regenerate secrets for a proxy agent.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Regenerate secrets for a proxy agent.",
         "schema_file": "open-api-definitions/proxy/regenerate_secrets_proxy_agent.json",
         "method": "POST",
         "endpoint": "/v1/proxy/{agent_id}/regenerate-secrets",
@@ -864,7 +812,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_system_key": {
-        "description": "Create a new system key.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new system key.",
         "schema_file": "open-api-definitions/system-keys/create_system_key.json",
         "method": "POST",
         "endpoint": "/v1/system-keys",
@@ -878,21 +826,21 @@ TOOLS = {
         "params": ["key_id"],
     },
     "update_system_key": {
-        "description": "Update a system key.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a system key.",
         "schema_file": "open-api-definitions/system-keys/update_system_key.json",
         "method": "PATCH",
         "endpoint": "/v1/system-keys/{key_id}",
         "params": ["key_id", "request_body"],
     },
     "delete_system_key": {
-        "description": "Delete a system key.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a system key permanently.",
         "schema_file": "open-api-definitions/system-keys/delete_system_key.json",
         "method": "DELETE",
         "endpoint": "/v1/system-keys/{key_id}",
         "params": ["key_id"],
     },
     "rotate_system_key": {
-        "description": "Rotate a system key.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Rotate a system key.",
         "schema_file": "open-api-definitions/system-keys/rotate_system_key.json",
         "method": "POST",
         "endpoint": "/v1/system-keys/{key_id}/rotate",
@@ -910,7 +858,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_team": {
-        "description": "Create a new team.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new team.",
         "schema_file": "open-api-definitions/teams/create_team.json",
         "method": "POST",
         "endpoint": "/v1/teams",
@@ -924,21 +872,21 @@ TOOLS = {
         "params": ["team_id"],
     },
     "modify_team": {
-        "description": "Update a team.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a team.",
         "schema_file": "open-api-definitions/teams/modify_team.json",
         "method": "PATCH",
         "endpoint": "/v1/teams/{team_id}",
         "params": ["team_id", "request_body"],
     },
     "delete_team": {
-        "description": "Delete a team.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a team permanently.",
         "schema_file": "open-api-definitions/teams/delete_team.json",
         "method": "DELETE",
         "endpoint": "/v1/teams/{team_id}",
         "params": ["team_id"],
     },
     "delete_team_membership_in_account": {
-        "description": "Delete a team's account-level role.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a team's account-level role.",
         "schema_file": "open-api-definitions/teams/delete_team_membership_in_account.json",
         "method": "DELETE",
         "endpoint": "/v1/teams/{team_id}/role",
@@ -953,7 +901,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "add_user_to_team": {
-        "description": "Add a user to a team.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Add a user to a team.",
         "schema_file": "open-api-definitions/teams/add_user_to_team.json",
         "method": "POST",
         "endpoint": "/v1/teams/{team_id}/users",
@@ -967,14 +915,14 @@ TOOLS = {
         "params": ["team_id", "user_id"],
     },
     "update_user_membership_in_team": {
-        "description": "Update a user's membership in a team.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a user's membership in a team.",
         "schema_file": "open-api-definitions/teams/update_user_membership.json",
         "method": "PATCH",
         "endpoint": "/v1/teams/{team_id}/users/{user_id}",
         "params": ["team_id", "user_id", "request_body"],
     },
     "delete_user_from_team": {
-        "description": "Remove a user from a team.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Remove a user from a team.",
         "schema_file": "open-api-definitions/teams/delete_user_from_team.json",
         "method": "DELETE",
         "endpoint": "/v1/teams/{team_id}/users/{user_id}",
@@ -989,7 +937,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "add_team_membership_in_group": {
-        "description": "Add a team to a group.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Add a team to a group.",
         "schema_file": "open-api-definitions/teams/add_team_membership_in_group.json",
         "method": "POST",
         "endpoint": "/v1/teams/{team_id}/groups",
@@ -1003,14 +951,14 @@ TOOLS = {
         "params": ["team_id", "group_id"],
     },
     "update_team_membership_in_group": {
-        "description": "Update a team's membership in a group.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a team's membership in a group.",
         "schema_file": "open-api-definitions/teams/update_team_membership_in_group.json",
         "method": "PATCH",
         "endpoint": "/v1/teams/{team_id}/groups/{group_id}",
         "params": ["team_id", "group_id", "request_body"],
     },
     "delete_team_membership_in_group": {
-        "description": "Remove a team from a group.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Remove a team from a group.",
         "schema_file": "open-api-definitions/teams/delete_team_membership_in_group.json",
         "method": "DELETE",
         "endpoint": "/v1/teams/{team_id}/groups/{group_id}",
@@ -1025,7 +973,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "add_team_membership_in_connection": {
-        "description": "Add a team to a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Add a team to a connection.",
         "schema_file": "open-api-definitions/teams/add_team_membership_in_connection.json",
         "method": "POST",
         "endpoint": "/v1/teams/{team_id}/connections",
@@ -1039,14 +987,14 @@ TOOLS = {
         "params": ["team_id", "connection_id"],
     },
     "update_team_membership_in_connection": {
-        "description": "Update a team's membership in a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a team's membership in a connection.",
         "schema_file": "open-api-definitions/teams/update_team_membership_in_connection.json",
         "method": "PATCH",
         "endpoint": "/v1/teams/{team_id}/connections/{connection_id}",
         "params": ["team_id", "connection_id", "request_body"],
     },
     "delete_team_membership_in_connection": {
-        "description": "Remove a team from a connection.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Remove a team from a connection.",
         "schema_file": "open-api-definitions/teams/delete_team_membership_in_connection.json",
         "method": "DELETE",
         "endpoint": "/v1/teams/{team_id}/connections/{connection_id}",
@@ -1064,7 +1012,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_transformation_project": {
-        "description": "Create a new transformation project.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new transformation project.",
         "schema_file": "open-api-definitions/transformation-projects/create_transformation_project.json",
         "method": "POST",
         "endpoint": "/v1/transformation-projects",
@@ -1078,21 +1026,21 @@ TOOLS = {
         "params": ["project_id"],
     },
     "modify_transformation_project": {
-        "description": "Update a transformation project.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a transformation project.",
         "schema_file": "open-api-definitions/transformation-projects/modify_transformation_project.json",
         "method": "PATCH",
         "endpoint": "/v1/transformation-projects/{project_id}",
         "params": ["project_id", "request_body"],
     },
     "delete_transformation_project": {
-        "description": "Delete a transformation project.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a transformation project permanently.",
         "schema_file": "open-api-definitions/transformation-projects/delete_transformation_project.json",
         "method": "DELETE",
         "endpoint": "/v1/transformation-projects/{project_id}",
         "params": ["project_id"],
     },
     "test_transformation_project": {
-        "description": "Test a transformation project.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Test a transformation project.",
         "schema_file": "open-api-definitions/transformation-projects/test_transformation_project.json",
         "method": "POST",
         "endpoint": "/v1/transformation-projects/{project_id}/test",
@@ -1110,7 +1058,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_transformation": {
-        "description": "Create a new transformation.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new transformation.",
         "schema_file": "open-api-definitions/transformations/create_transformation.json",
         "method": "POST",
         "endpoint": "/v1/transformations",
@@ -1124,35 +1072,35 @@ TOOLS = {
         "params": ["transformation_id"],
     },
     "update_transformation": {
-        "description": "Update a transformation.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a transformation.",
         "schema_file": "open-api-definitions/transformations/update_transformation.json",
         "method": "PATCH",
         "endpoint": "/v1/transformations/{transformation_id}",
         "params": ["transformation_id", "request_body"],
     },
     "delete_transformation": {
-        "description": "Delete a transformation.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a transformation permanently.",
         "schema_file": "open-api-definitions/transformations/delete_transformation.json",
         "method": "DELETE",
         "endpoint": "/v1/transformations/{transformation_id}",
         "params": ["transformation_id"],
     },
     "run_transformation": {
-        "description": "Run a transformation.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Run a transformation.",
         "schema_file": "open-api-definitions/transformations/run_transformation.json",
         "method": "POST",
         "endpoint": "/v1/transformations/{transformation_id}/run",
         "params": ["transformation_id"],
     },
     "cancel_transformation": {
-        "description": "Cancel a running transformation.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Cancel a running transformation.",
         "schema_file": "open-api-definitions/transformations/cancel_transformation.json",
         "method": "POST",
         "endpoint": "/v1/transformations/{transformation_id}/cancel",
         "params": ["transformation_id"],
     },
     "upgrade_transformation_package": {
-        "description": "Upgrade a transformation's package version.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Upgrade a transformation's package version.",
         "schema_file": "open-api-definitions/transformations/upgrade_transformation_package.json",
         "method": "POST",
         "endpoint": "/v1/transformations/{transformation_id}/upgrade",
@@ -1184,7 +1132,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_user": {
-        "description": "Invite a new user to the account.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Invite a new user to the account.",
         "schema_file": "open-api-definitions/users/create_user.json",
         "method": "POST",
         "endpoint": "/v1/users",
@@ -1198,21 +1146,21 @@ TOOLS = {
         "params": ["user_id"],
     },
     "modify_user": {
-        "description": "Update a user.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a user.",
         "schema_file": "open-api-definitions/users/modify_user.json",
         "method": "PATCH",
         "endpoint": "/v1/users/{user_id}",
         "params": ["user_id", "request_body"],
     },
     "delete_user": {
-        "description": "Delete a user.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a user permanently.",
         "schema_file": "open-api-definitions/users/delete_user.json",
         "method": "DELETE",
         "endpoint": "/v1/users/{user_id}",
         "params": ["user_id"],
     },
     "delete_user_membership_in_account": {
-        "description": "Delete a user's account-level role.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a user's account-level role.",
         "schema_file": "open-api-definitions/users/delete_user_membership_in_account.json",
         "method": "DELETE",
         "endpoint": "/v1/users/{user_id}/role",
@@ -1227,7 +1175,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "add_user_membership_in_group": {
-        "description": "Add a user to a group.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Add a user to a group.",
         "schema_file": "open-api-definitions/users/add_user_membership_in_group.json",
         "method": "POST",
         "endpoint": "/v1/users/{user_id}/groups",
@@ -1241,14 +1189,14 @@ TOOLS = {
         "params": ["user_id", "group_id"],
     },
     "update_user_membership_in_group": {
-        "description": "Update a user's membership in a group.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a user's membership in a group.",
         "schema_file": "open-api-definitions/users/update_user_membership_in_group.json",
         "method": "PATCH",
         "endpoint": "/v1/users/{user_id}/groups/{group_id}",
         "params": ["user_id", "group_id", "request_body"],
     },
     "delete_user_membership_in_group": {
-        "description": "Remove a user from a group.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Remove a user from a group.",
         "schema_file": "open-api-definitions/users/delete_user_membership_in_group.json",
         "method": "DELETE",
         "endpoint": "/v1/users/{user_id}/groups/{group_id}",
@@ -1263,7 +1211,7 @@ TOOLS = {
         "auto_paginate": True,
     },
     "add_user_membership_in_connection": {
-        "description": "Add a user to a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Add a user to a connection.",
         "schema_file": "open-api-definitions/users/add_user_membership_in_connection.json",
         "method": "POST",
         "endpoint": "/v1/users/{user_id}/connections",
@@ -1277,14 +1225,14 @@ TOOLS = {
         "params": ["user_id", "connection_id"],
     },
     "update_user_membership_in_connection": {
-        "description": "Update a user's membership in a connection.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a user's membership in a connection.",
         "schema_file": "open-api-definitions/users/update_user_membership_in_connection.json",
         "method": "PATCH",
         "endpoint": "/v1/users/{user_id}/connections/{connection_id}",
         "params": ["user_id", "connection_id", "request_body"],
     },
     "delete_user_membership_in_connection": {
-        "description": "Remove a user from a connection.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Remove a user from a connection.",
         "schema_file": "open-api-definitions/users/delete_user_membership_in_connection.json",
         "method": "DELETE",
         "endpoint": "/v1/users/{user_id}/connections/{connection_id}",
@@ -1302,14 +1250,14 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_account_webhook": {
-        "description": "Create an account-level webhook.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create an account-level webhook.",
         "schema_file": "open-api-definitions/webhooks/create_account_webhook.json",
         "method": "POST",
         "endpoint": "/v1/webhooks/account",
         "params": ["request_body"],
     },
     "create_group_webhook": {
-        "description": "Create a group-level webhook.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a group-level webhook.",
         "schema_file": "open-api-definitions/webhooks/create_group_webhook.json",
         "method": "POST",
         "endpoint": "/v1/webhooks/group/{group_id}",
@@ -1323,21 +1271,21 @@ TOOLS = {
         "params": ["webhook_id"],
     },
     "modify_webhook": {
-        "description": "Update a webhook.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Update a webhook.",
         "schema_file": "open-api-definitions/webhooks/modify_webhook.json",
         "method": "PATCH",
         "endpoint": "/v1/webhooks/{webhook_id}",
         "params": ["webhook_id", "request_body"],
     },
     "delete_webhook": {
-        "description": "Delete a webhook.",
+        "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a webhook permanently.",
         "schema_file": "open-api-definitions/webhooks/delete_webhook.json",
         "method": "DELETE",
         "endpoint": "/v1/webhooks/{webhook_id}",
         "params": ["webhook_id"],
     },
     "test_webhook": {
-        "description": "Send a test event to a webhook.",
+        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Send a test event to a webhook.",
         "schema_file": "open-api-definitions/webhooks/test_webhook.json",
         "method": "POST",
         "endpoint": "/v1/webhooks/{webhook_id}/test",
@@ -1366,7 +1314,6 @@ PARAM_DEFINITIONS = {
     "column_name": {"type": "string", "description": "The name of the column"},
     "package_definition_id": {"type": "string", "description": "The unique identifier for the quickstart package"},
     "request_body": {"type": "string", "description": "JSON string containing the request body. Refer to the schema file for the expected structure."},
-    "confirmation_token": {"type": "string", "description": "Token from a previous call to confirm the write operation. Only provide this after the user has confirmed."},
 }
 
 
@@ -1427,33 +1374,6 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             )
 
         validate_and_read_schema(provided_schema)
-
-        # CONFIRMATION FLOW FOR WRITE OPERATIONS
-        if is_write_operation(name):
-            confirmation_token = arguments.get("confirmation_token")
-            
-            if not confirmation_token:
-                # First call: return confirmation request, DO NOT execute
-                args_preview = {k: v for k, v in arguments.items() 
-                               if k not in ("schema_file", "confirmation_token")}
-                token = generate_confirmation_token(name, arguments)
-                
-                return [TextContent(type="text", text=json.dumps({
-                    "status": "CONFIRMATION_REQUIRED",
-                    "message": "⚠️ This is a write operation that will modify your Fivetran account.",
-                    "tool": name,
-                    "method": tool_config["method"],
-                    "endpoint": tool_config["endpoint"],
-                    "parameters": args_preview,
-                    "instructions": "Please show this preview to the user and ask: 'Do you want to proceed with this action?' If they confirm, call this tool again with the same arguments PLUS confirmation_token.",
-                    "confirmation_token": token,
-                }, indent=2))]
-            
-            else:
-                # Second call: validate token, then execute
-                validated_args = validate_confirmation_token(confirmation_token, name)
-                # Remove confirmation_token before execution
-                arguments = {k: v for k, v in validated_args.items() if k != "confirmation_token"}
 
         # Execute the API call
         result = await execute_tool(name, arguments)
