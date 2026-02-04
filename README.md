@@ -1,4 +1,4 @@
-# 🚀 Fivetran MCP Server - Optimized
+# 🚀 Fivetran MCP Server
 
 **Natural Language Interface | 50+ Essential Tools | Easily Interact with your Data**
 
