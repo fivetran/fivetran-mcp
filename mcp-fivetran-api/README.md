@@ -1,25 +1,15 @@
 # 🚀 Fivetran MCP Server - Optimized
 
-**Zero Context Bloat | Natural Language Interface | 50+ Essential Tools**
+**Natural Language Interface | 50+ Essential Tools | Easily Interact with your Data**
 
 A Model Context Protocol (MCP) server that provides natural language access to Fivetran's data pipeline management API without requiring technical expertise.
 
 ## ✨ Key Features
 
 - 🗣️ **Natural Language Interface** - Just describe what you want to accomplish
-- ⚡ **Zero Context Bloat** - No schema file reads required, 90% token reduction  
 - 🛠️ **50+ Core Tools** - Complete coverage of essential Fivetran operations
-- 🔒 **Enterprise Security** - Role-based access control and write operation protection
+- 🔒 **Configurable Security** - Run it read-only or with read/write optios
 - 📊 **Smart Defaults** - Automatic parameter detection and intelligent error handling
-
-## 📈 Performance Comparison
-
-| Metric | Traditional MCP | Optimized MCP | Improvement |
-|--------|----------------|---------------|-------------|
-| **Schema Requirements** | Manual file reading | Automatic resolution | 100% eliminated |
-| **Token Usage** | 2-10KB per operation | Minimal overhead | 90% reduction |
-| **User Experience** | Technical complexity | Natural language | 10x better |
-| **Setup Time** | Complex workflows | Simple queries | 5x faster |
 
 ## 🚀 Quick Start
 
@@ -101,7 +91,7 @@ Add to `.cursor/mcp.json` (global) or `~/.cursor/mcp.json` (project):
 
 ## 💬 Natural Language Examples
 
-### ✅ New Way (Simple & Intuitive)
+### ✅ Talk to it like an intern
 
 ```
 "Show me all my connections and their status"
@@ -111,12 +101,6 @@ Add to `.cursor/mcp.json` (global) or `~/.cursor/mcp.json` (project):
 "Disable the logs table in my Salesforce connection"
 "Set up webhook monitoring for critical data pipelines"
 "Analyze my connection costs and suggest optimizations"
-```
-
-### ❌ Old Way (Complex & Technical)
-
-```
-"First, read the schema file at 'open-api-definitions/connections/list_connections.json', then use the list_connections tool to show me all connections in my account."
 ```
 
 ## 🛠️ Available Tools (50+ Core Operations)
