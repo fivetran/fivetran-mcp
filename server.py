@@ -55,7 +55,7 @@ def get_auth_header() -> dict[str, str]:
     return {
         "Authorization": f"Basic {encoded}",
         "Accept": "application/json",
-        "User-Agent": "fivetran-mcp-official-edrw",
+        "User-Agent": "fivetran-official-mcp",
     }
 
 
