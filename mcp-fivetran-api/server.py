@@ -134,11 +134,11 @@ def generate_smart_description(tool_name: str, method: str, endpoint: str, base_
     if method == "GET":
         description += " (Read-only operation)"
     elif method == "POST":
-        description += " ⚠️ WRITE OPERATION - Creates new resources"
+        description += " ⚠️ WRITE OPERATION - Confirm with user before calling. Creates new resources"
     elif method == "PATCH":
-        description += " ⚠️ WRITE OPERATION - Modifies existing resources"  
+        description += " ⚠️ WRITE OPERATION - Confirm with user before calling. Modifies existing resources"  
     elif method == "DELETE":
-        description += " ⚠️ DESTRUCTIVE OPERATION - Permanently removes resources"
+        description += " ⚠️ WRITE OPERATION - Confirm with user before calling. Permanently removes resources"
     
     # Add endpoint-specific context
     endpoint_contexts = {
