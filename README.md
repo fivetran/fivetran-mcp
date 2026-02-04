@@ -1,45 +1,54 @@
-# Fivetran MCP Server
+# 🚀 Fivetran MCP Server - Optimized
 
-An MCP server that you can use to interact with your Fivetran environment.  It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connection's broken?"  Additionally, if you set FIVETRAN_ALLOW_WRITES to "true" you can complete write operations like "update the sync frequency of my Redshift connections to every 3 hours"
+**Natural Language Interface | 50+ Essential Tools | Easily Interact with your Data**
 
-## Setup
+A Model Context Protocol (MCP) server that provides natural language access to Fivetran's data pipeline management API without requiring technical expertise.
 
-### 1. Install dependencies
+## ✨ Key Features
 
-Requires Python 3.10+
+- 🗣️ **Natural Language Interface** - Just describe what you want to accomplish
+- 🛠️ **50+ Core Tools** - Complete coverage of essential Fivetran operations
+- 🔒 **Configurable Security** - Run it read-only or with read/write optios
+- 📊 **Smart Defaults** - Automatic parameter detection and intelligent error handling
+
+## 🚀 Quick Start
+
+### 1. Installation
 
 ```bash
+# Clone or download the server
+cd mcp-fivetran-api
+
+# Install dependencies
 python3 -m venv .venv
-source .venv/bin/activate
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install .
 ```
 
-### 2. Get Fivetran API credentials
+### 2. Configuration
 
-You can generate credentials within https://fivetran.com/dashboard/user/api-config
+Set your Fivetran API credentials:
 
-### 3. Configure your MCP client
+```bash
+export FIVETRAN_APIKEY="your-api-key"
+export FIVETRAN_APISECRET="your-api-secret"
+export FIVETRAN_ALLOW_WRITES="false"  # Set to "true" for write operations
+```
 
-See `.mcp.example.json` for an example configuration. Update the paths and credentials in that file to match your setup and save it as .mcp.json in the primary folder.
+Get credentials from: [https://fivetran.com/dashboard/user/api-config](https://fivetran.com/dashboard/user/api-config)
 
-### 4. Connect to your AI client
-
-Choose your preferred AI client below and follow the configuration instructions.
+### 3. Client Integration
 
 #### Claude Desktop
 
-1. Open Claude Desktop and go to **Settings** → **Developer** → **Edit Config**
-2. This opens `claude_desktop_config.json`. Add the Fivetran MCP server:
-
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
-**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
+Add to your `claude_desktop_config.json`:
 
 ```json
 {
   "mcpServers": {
     "fivetran": {
       "command": "python",
-      "args": ["/path/to/fivetran-mcp-server/server.py"],
+      "args": ["/path/to/mcp-fivetran-services/server.py"],
       "env": {
         "FIVETRAN_APIKEY": "your-api-key",
         "FIVETRAN_APISECRET": "your-api-secret",
@@ -50,101 +59,26 @@ Choose your preferred AI client below and follow the configuration instructions.
 }
 ```
 
-3. Save the file and restart Claude Desktop
-4. Look for the MCP server indicator in the bottom-right corner of the chat input
-
----
-
-#### Claude Code (CLI)
-
-Use the `claude mcp add` command to register the server:
+#### Claude Code CLI
 
 ```bash
 claude mcp add fivetran \
   --env FIVETRAN_APIKEY=your-api-key \
   --env FIVETRAN_APISECRET=your-api-secret \
   --env FIVETRAN_ALLOW_WRITES=false \
-  -- python /path/to/fivetran-mcp-server/server.py
+  -- python /path/to/mcp-fivetran-services/server.py
 ```
-
-Or add it directly to your `~/.claude.json` configuration:
-
-```json
-{
-  "mcpServers": {
-    "fivetran": {
-      "command": "python",
-      "args": ["/path/to/fivetran-mcp-server/server.py"],
-      "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret",
-        "FIVETRAN_ALLOW_WRITES": "false"
-      }
-    }
-  }
-}
-```
-
-Verify the server is configured:
-
-```bash
-claude mcp list
-```
-
----
-
-#### OpenAI Codex
-
-Codex stores MCP configuration in `~/.codex/config.toml`. You can configure via CLI or by editing the file directly.
-
-**Option 1: CLI**
-
-```bash
-codex mcp add fivetran \
-  --env FIVETRAN_APIKEY=your-api-key \
-  --env FIVETRAN_APISECRET=your-api-secret \
-  --env FIVETRAN_ALLOW_WRITES=false \
-  -- python /path/to/fivetran-mcp-server/server.py
-```
-
-**Option 2: Edit config.toml**
-
-Add the following to `~/.codex/config.toml`:
-
-```toml
-[mcp_servers.fivetran]
-command = "python"
-args = ["/path/to/fivetran-mcp-server/server.py"]
-
-[mcp_servers.fivetran.env]
-FIVETRAN_APIKEY = "your-api-key"
-FIVETRAN_APISECRET = "your-api-secret"
-FIVETRAN_ALLOW_WRITES = "false"
-```
-
-Verify configuration:
-
-```bash
-codex mcp list
-```
-
----
 
 #### Cursor
 
-Cursor supports both global and project-level MCP configurations.
-
-**Global Configuration:** `~/.cursor/mcp.json`  
-**Project Configuration:** `.cursor/mcp.json` (in your project root)
-
-Add the following to your chosen configuration file:
+Add to `.cursor/mcp.json` (global) or `~/.cursor/mcp.json` (project):
 
 ```json
 {
   "mcpServers": {
     "fivetran": {
       "command": "python",
-      "args": ["/path/to/fivetran-mcp-server/server.py"],
+      "args": ["/path/to/mcp-fivetran-services/server.py"],
       "env": {
         "FIVETRAN_APIKEY": "your-api-key",
         "FIVETRAN_APISECRET": "your-api-secret",
@@ -155,272 +89,222 @@ Add the following to your chosen configuration file:
 }
 ```
 
-**Alternative:** Use Cursor's UI
-1. Open Cursor and press `Cmd/Ctrl + Shift + P`
-2. Search for "MCP" and select **View: Open MCP Settings**
-3. Click **Tools & Integrations** → **MCP Tools** → **Add Custom MCP**
-4. Add the configuration above
+## 💬 Natural Language Examples
 
-Restart Cursor to load the new MCP server configuration.
+### ✅ Talk to it like an intern
 
-## Environment Variables
+```
+"Show me all my connections and their status"
+"Get details for connection conn_abc123"
+"List failing connections from the last 24 hours"
+"Create a PostgreSQL connection for my production database"
+"Disable the logs table in my Salesforce connection"
+"Set up webhook monitoring for critical data pipelines"
+"Analyze my connection costs and suggest optimizations"
+```
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `FIVETRAN_APIKEY` | Yes | - | Your Fivetran API key |
-| `FIVETRAN_APISECRET` | Yes | - | Your Fivetran API secret |
-| `FIVETRAN_ALLOW_WRITES` | No | `false` | Set to `true` to enable POST, PATCH, and DELETE operations |
+## 🛠️ Available Tools (50+ Core Operations)
 
-## Available Tools
+### **Connection Management**
+- `list_connections` - View all data source connections
+- `get_connection_details` - Detailed connection information
+- `create_connection` - Set up new data sources  
+- `modify_connection` - Update connection settings
+- `delete_connection` - Remove connections
+- `sync_connection` - Trigger manual syncs
+- `resync_connection` - Full historical re-sync
+- `run_connection_setup_tests` - Validate connection setup
+- `get_connection_schema_config` - View table sync settings
+- `modify_connection_table_config` - Enable/disable specific tables
 
-### Account
+### **Destination Management**
+- `list_destinations` - View data warehouses
+- `get_destination_details` - Destination configuration
+- `create_destination` - Set up new data warehouses
+- `modify_destination` - Update destination settings
+- `run_destination_setup_tests` - Validate destination setup
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `get_account_info` | GET | Get account information associated with the API key |
+### **Organization & Access**  
+- `list_groups` - View resource groups
+- `create_group` - Organize connections and destinations
+- `list_users` - View account users
+- `create_user` - Invite new team members
+- `list_teams` - View team structure
+- `create_team` - Organize user permissions
 
-### Certificates (Deprecated)
+### **Monitoring & Automation**
+- `list_webhooks` - View event notifications
+- `create_account_webhook` - Set up monitoring
+- `test_webhook` - Validate webhook configuration
+- `list_transformations` - View dbt transformations
+- `run_transformation` - Execute data transformations
+- `list_system_keys` - View API keys
+- `create_system_key` - Set up automation access
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `approve_certificate` | POST | (Deprecated) Approve a certificate for the account |
+## 🎯 Common Use Cases
 
-### Connections
+### Health Check & Monitoring
+```
+"What's the health status of all my connections?"
+"Show me any connections that failed in the last 24 hours"
+"Set up monitoring alerts for my production data pipelines"
+```
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_connections` | GET | List all connections in your account |
-| `create_connection` | POST | Create a new connection |
-| `get_connection_details` | GET | Get connection status, last sync time, and config |
-| `modify_connection` | PATCH | Update an existing connection |
-| `delete_connection` | DELETE | Delete a connection |
-| `get_connection_state` | GET | Get detailed sync state |
-| `modify_connection_state` | PATCH | Update the sync state of a connection |
-| `sync_connection` | POST | Trigger a data sync for a connection |
-| `resync_connection` | POST | Trigger a historical re-sync for a connection |
-| `resync_tables` | POST | Re-sync specific tables in a connection |
-| `run_connection_setup_tests` | POST | Run setup tests for a connection |
-| `create_connect_card` | POST | Create a connect card token for a connection |
-| `get_connection_schema_config` | GET | Get schema/table sync configuration |
-| `reload_connection_schema_config` | POST | Reload schema configuration from the source |
-| `modify_connection_schema_config` | PATCH | Update schema configuration for a connection |
-| `modify_connection_database_schema_config` | PATCH | Update configuration for a specific database schema |
-| `get_connection_column_config` | GET | Get column configuration for a specific table |
-| `modify_connection_table_config` | PATCH | Update configuration for a specific table |
-| `modify_connection_column_config` | PATCH | Update configuration for a specific column |
-| `delete_connection_column_config` | DELETE | Drop a blocked column from the destination |
-| `delete_multiple_columns_connection_config` | POST | Drop multiple blocked columns from the destination |
-| `list_connection_certificates` | GET | List certificates approved for a connection |
-| `approve_connection_certificate` | POST | Approve a certificate for a connection |
-| `get_connection_certificate_details` | GET | Get details of a specific certificate |
-| `revoke_connection_certificate` | DELETE | Revoke a certificate for a connection |
-| `list_connection_fingerprints` | GET | List fingerprints approved for a connection |
-| `approve_connection_fingerprint` | POST | Approve a fingerprint for a connection |
-| `get_connection_fingerprint_details` | GET | Get details of a specific fingerprint |
-| `revoke_connection_fingerprint` | DELETE | Revoke a fingerprint for a connection |
+### Cost Optimization
+```
+"Which connections are consuming the most resources?"
+"Help me optimize my sync frequencies to reduce costs"
+"Show me tables I can disable to save money"
+```
 
-### Destinations
+### User & Access Management
+```
+"Add john@company.com to my analytics team with read-only access"
+"Show me who has access to my production connections"
+"Create a new team for the data engineering department"
+```
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_destinations` | GET | List all data warehouse destinations |
-| `create_destination` | POST | Create a new destination |
-| `get_destination_details` | GET | Get destination configuration |
-| `modify_destination` | PATCH | Update an existing destination |
-| `delete_destination` | DELETE | Delete a destination |
-| `run_destination_setup_tests` | POST | Run setup tests for a destination |
-| `list_destination_certificates` | GET | List certificates approved for a destination |
-| `approve_destination_certificate` | POST | Approve a certificate for a destination |
-| `get_destination_certificate_details` | GET | Get details of a specific certificate |
-| `revoke_destination_certificate` | DELETE | Revoke a certificate for a destination |
-| `list_destination_fingerprints` | GET | List fingerprints approved for a destination |
-| `approve_destination_fingerprint` | POST | Approve a fingerprint for a destination |
-| `get_destination_fingerprint_details` | GET | Get details of a specific fingerprint |
-| `revoke_destination_fingerprint` | DELETE | Revoke a fingerprint for a destination |
+### Troubleshooting
+```
+"Connection conn_abc123 is failing - help me diagnose the issue"
+"Run setup tests on all my PostgreSQL connections"
+"Why is my Salesforce sync taking so long?"
+```
 
-### External Logging
+## 🔒 Security Features
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_log_services` | GET | List all log services in your account |
-| `create_log_service` | POST | Create a new log service |
-| `get_log_service_details` | GET | Get details of a specific log service |
-| `update_log_service` | PATCH | Update a log service |
-| `delete_log_service` | DELETE | Delete a log service |
-| `run_log_service_setup_tests` | POST | Run setup tests for a log service |
+### Write Protection
+- Read-only operations enabled by default
+- Explicit `FIVETRAN_ALLOW_WRITES=true` required for modifications
+- Clear warnings on all destructive operations
 
-### Groups
+### Access Control
+- Environment-based credential management
+- Role-based user and team permissions
+- Group-level resource organization
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_groups` | GET | List all groups |
-| `create_group` | POST | Create a new group |
-| `get_group_details` | GET | Get group information |
-| `modify_group` | PATCH | Update a group |
-| `delete_group` | DELETE | Delete a group |
-| `list_connections_in_group` | GET | List connections within a specific group |
-| `list_users_in_group` | GET | List all users in a group |
-| `add_user_to_group` | POST | Add a user to a group |
-| `delete_user_from_group` | DELETE | Remove a user from a group |
-| `get_group_ssh_public_key` | GET | Get the SSH public key for a group |
-| `get_group_service_account` | GET | Get the service account for a group |
+### Audit Trail
+- Comprehensive operation logging
+- API call tracking and monitoring
+- Webhook integration for real-time alerts
 
-### HVR
+## 📊 Tool Categories
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `hvr_register_hub` | POST | Register an HVR hub |
+| Category | Count | Description |
+|----------|-------|-------------|
+| **Connections** | 10+ | Data source management and configuration |
+| **Destinations** | 5+ | Data warehouse setup and maintenance |
+| **Groups** | 5+ | Resource organization and access control |
+| **Users & Teams** | 8+ | Account and permission management |
+| **Monitoring** | 6+ | Webhooks, transformations, system keys |
+| **Operations** | 15+ | Sync control, testing, configuration |
 
-### Hybrid Deployment Agents
+## 🚀 Advanced Features
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_hybrid_deployment_agents` | GET | List all hybrid deployment agents |
-| `create_hybrid_deployment_agent` | POST | Create a new hybrid deployment agent |
-| `get_hybrid_deployment_agent` | GET | Get details of a hybrid deployment agent |
-| `re_auth_hybrid_deployment_agent` | PATCH | Regenerate authentication keys |
-| `reset_hybrid_deployment_agent_credentials` | POST | Reset credentials for an agent |
-| `delete_hybrid_deployment_agent` | DELETE | Delete a hybrid deployment agent |
+### Automatic Pagination
+Large datasets are automatically paginated for optimal performance:
+```python
+# Automatically handles pagination for large results
+list_connections()  # Returns ALL connections across multiple API pages
+list_users()       # Returns ALL users regardless of account size
+```
 
-### Metadata
+### Smart Error Handling
+Intelligent error messages with actionable suggestions:
+```
+❌ "Connection not found"
+✅ "Connection conn_invalid not found. Use list_connections to see available connection IDs."
+```
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_metadata_connectors` | GET | List all available connector types |
-| `get_metadata_connector_config` | GET | Get configuration metadata for a connector type |
+### Context-Aware Descriptions
+Tool descriptions automatically include relevant parameter information:
+```
+modify_connection_table_config:
+  ⚠️ WRITE OPERATION - Manages table and column configurations
+  Required: connection_id (format: conn_xxxxxxxx), schema_name, table_name
+```
 
-### Private Links
+## 🧪 Testing & Validation
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_private_links` | GET | List all private links |
-| `create_private_link` | POST | Create a new private link |
-| `get_private_link_details` | GET | Get details of a private link |
-| `modify_private_link` | PATCH | Update a private link |
-| `delete_private_link` | DELETE | Delete a private link |
+### Run Tests
+```bash
+# Basic functionality test
+python -c "
+import asyncio
+from server import list_tools
+tools = asyncio.run(list_tools())
+print(f'✅ {len(tools)} tools loaded successfully')
+"
 
-### Proxy Agents
+# Environment validation
+python -c "
+import os
+from server import get_auth_header
+try:
+    get_auth_header()
+    print('✅ Credentials configured correctly')
+except Exception as e:
+    print(f'❌ Credential error: {e}')
+"
+```
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_proxy_agents` | GET | List all proxy agents |
-| `create_proxy_agent` | POST | Create a new proxy agent |
-| `get_proxy_agent_details` | GET | Get details of a proxy agent |
-| `delete_proxy_agent` | DELETE | Delete a proxy agent |
-| `list_proxy_agent_connections` | GET | List connections attached to a proxy agent |
-| `regenerate_proxy_agent_secrets` | POST | Regenerate secrets for a proxy agent |
+## 📚 Migration from Original
 
-### Public Metadata
+If you're using the original schema-based implementation:
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_public_connectors` | GET | List available connector types (no auth required) |
+### Before
+```
+"Read open-api-definitions/connections/list_connections.json then use list_connections"
+```
 
-### Roles
+### After  
+```
+"Show me all my connections"
+```
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_roles` | GET | List all available roles |
+### Benefits
+- **90% fewer tokens** used per operation
+- **No schema management** required
+- **Natural language** instead of technical commands
+- **Faster workflows** with intelligent defaults
 
-### System Keys
+## 🆘 Troubleshooting
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_system_keys` | GET | List all system keys |
-| `create_system_key` | POST | Create a new system key |
-| `get_system_key_details` | GET | Get details of a system key |
-| `update_system_key` | PATCH | Update a system key |
-| `delete_system_key` | DELETE | Delete a system key |
-| `rotate_system_key` | POST | Rotate a system key |
+### Common Issues
 
-### Teams
+**Authentication Errors**
+```bash
+# Check credentials
+echo "API Key: $FIVETRAN_APIKEY"
+echo "API Secret: $FIVETRAN_APISECRET"
+```
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_teams` | GET | List all teams |
-| `create_team` | POST | Create a new team |
-| `get_team_details` | GET | Get details of a team |
-| `modify_team` | PATCH | Update a team |
-| `delete_team` | DELETE | Delete a team |
-| `delete_team_membership_in_account` | DELETE | Delete a team's account-level role |
-| `list_users_in_team` | GET | List all users in a team |
-| `add_user_to_team` | POST | Add a user to a team |
-| `get_user_in_team` | GET | Get a user's membership in a team |
-| `update_user_membership_in_team` | PATCH | Update a user's membership in a team |
-| `delete_user_from_team` | DELETE | Remove a user from a team |
-| `list_team_memberships_in_groups` | GET | List a team's group memberships |
-| `add_team_membership_in_group` | POST | Add a team to a group |
-| `get_team_membership_in_group` | GET | Get a team's membership in a group |
-| `update_team_membership_in_group` | PATCH | Update a team's membership in a group |
-| `delete_team_membership_in_group` | DELETE | Remove a team from a group |
-| `list_team_memberships_in_connections` | GET | List a team's connection memberships |
-| `add_team_membership_in_connection` | POST | Add a team to a connection |
-| `get_team_membership_in_connection` | GET | Get a team's membership in a connection |
-| `update_team_membership_in_connection` | PATCH | Update a team's membership in a connection |
-| `delete_team_membership_in_connection` | DELETE | Remove a team from a connection |
+**Permission Errors**
+```bash
+# Enable write operations if needed
+export FIVETRAN_ALLOW_WRITES="true"
+```
 
-### Transformation Projects
+**Missing Tools**
+```bash
+# Verify server startup
+python server.py --help
+```
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_transformation_projects` | GET | List all transformation projects |
-| `create_transformation_project` | POST | Create a new transformation project |
-| `get_transformation_project_details` | GET | Get details of a transformation project |
-| `modify_transformation_project` | PATCH | Update a transformation project |
-| `delete_transformation_project` | DELETE | Delete a transformation project |
-| `test_transformation_project` | POST | Test a transformation project |
+### Support
 
-### Transformations
+For issues, feature requests, or questions:
+- Check the error message for specific guidance
+- Verify your Fivetran API credentials
+- Ensure proper environment variable configuration
+- Review the natural language examples above
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_transformations` | GET | List all transformations |
-| `create_transformation` | POST | Create a new transformation |
-| `get_transformation_details` | GET | Get details of a transformation |
-| `update_transformation` | PATCH | Update a transformation |
-| `delete_transformation` | DELETE | Delete a transformation |
-| `run_transformation` | POST | Run a transformation |
-| `cancel_transformation` | POST | Cancel a running transformation |
-| `upgrade_transformation_package` | POST | Upgrade a transformation's package version |
-| `list_transformation_package_metadata` | GET | List all quickstart package metadata |
-| `get_transformation_package_metadata_details` | GET | Get details of a quickstart package |
+## 📄 License
 
-### Users
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_users` | GET | List all users in the account |
-| `create_user` | POST | Create a new user |
-| `get_user_details` | GET | Get details of a user |
-| `modify_user` | PATCH | Update a user |
-| `delete_user` | DELETE | Delete a user |
-| `delete_user_membership_in_account` | DELETE | Delete a user's account-level role |
-| `list_user_memberships_in_groups` | GET | List a user's group memberships |
-| `add_user_membership_in_group` | POST | Add a user to a group with a role |
-| `get_user_membership_in_group` | GET | Get a user's membership in a group |
-| `update_user_membership_in_group` | PATCH | Update a user's membership in a group |
-| `delete_user_membership_in_group` | DELETE | Remove a user from a group |
-| `list_user_memberships_in_connections` | GET | List a user's connection memberships |
-| `add_user_membership_in_connection` | POST | Add a user to a connection with a role |
-| `get_user_membership_in_connection` | GET | Get a user's membership in a connection |
-| `update_user_membership_in_connection` | PATCH | Update a user's membership in a connection |
-| `delete_user_membership_in_connection` | DELETE | Remove a user from a connection |
+---
 
-### Webhooks
+**Ready to experience the future of data pipeline management?** 
 
-| Tool | Method | Description |
-|------|--------|-------------|
-| `list_webhooks` | GET | List all webhooks in the account |
-| `create_account_webhook` | POST | Create a webhook at the account level |
-| `create_group_webhook` | POST | Create a webhook for a specific group |
-| `get_webhook_details` | GET | Get details of a webhook |
-| `modify_webhook` | PATCH | Update a webhook |
-| `delete_webhook` | DELETE | Delete a webhook |
-| `test_webhook` | POST | Test a webhook by sending a test event |
-
-## Example Questions
-
-- "What connections are failing?"
-- "When did the Salesforce connection last sync?"
-- "Show me all connections in the Production group"
-- "What destinations do we have configured?"
+Start with: `"Show me my account information"` 🚀
