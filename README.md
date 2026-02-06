@@ -27,7 +27,7 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 pip install .
 ```
 
-### 2. Configuration
+### 2. Get your credentials
 
 Get your Fivetran API credentials from: [https://fivetran.com/dashboard/user/api-config](https://fivetran.com/dashboard/user/api-config)
 
