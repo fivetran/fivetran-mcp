@@ -29,17 +29,34 @@ pip install .
 
 ### 2. Configuration
 
-Set your Fivetran API credentials:
+Get your Fivetran API credentials from: [https://fivetran.com/dashboard/user/api-config](https://fivetran.com/dashboard/user/api-config)
 
-```bash
-export FIVETRAN_APIKEY="your-api-key"
-export FIVETRAN_APISECRET="your-api-secret"
-export FIVETRAN_ALLOW_WRITES="false"  # Set to "true" for write operations
+### 3. Create your .mcp.json file in this directory.
+
+You can clone .mcp.example.json and update it with all your information.
+
+```json
+{
+  "mcpServers": {
+    "fivetran": {
+      "command": "python",
+      "args": ["/path/to/mcp-fivetran-services/server.py"],
+      "env": {
+        "FIVETRAN_APIKEY": "your-api-key",
+        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_ALLOW_WRITES": "false"
+      }
+    }
+  }
+}
 ```
+### 4. Point your AI agent to your .mcp.json file in this directory and start talking!
 
-Get credentials from: [https://fivetran.com/dashboard/user/api-config](https://fivetran.com/dashboard/user/api-config)
+Client Integration
 
-### 3. Client Integration
+#### Claude Code CLI
+
+Run the command `claude` in your CLI while in the main folder of this repository.  It will pick up the credentials .mcp.json file and start going.
 
 #### Claude Desktop
 
@@ -59,16 +76,6 @@ Add to your `claude_desktop_config.json`:
     }
   }
 }
-```
-
-#### Claude Code CLI
-
-```bash
-claude mcp add fivetran \
-  --env FIVETRAN_APIKEY=your-api-key \
-  --env FIVETRAN_APISECRET=your-api-secret \
-  --env FIVETRAN_ALLOW_WRITES=false \
-  -- python /path/to/mcp-fivetran-services/server.py
 ```
 
 #### Cursor
@@ -93,7 +100,7 @@ Add to `.cursor/mcp.json` (global) or `~/.cursor/mcp.json` (project):
 
 ## 💬 Natural Language Examples
 
-### ✅ Talk to it like an intern
+### ✅ Talk to it like a human (or more accurately...an intern?)
 
 ```
 "Show me all my connections and their status"
