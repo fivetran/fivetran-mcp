@@ -257,26 +257,6 @@ except Exception as e:
 "
 ```
 
-## 📚 Migration from Original
-
-If you're using the original schema-based implementation:
-
-### Before
-```
-"Read open-api-definitions/connections/list_connections.json then use list_connections"
-```
-
-### After  
-```
-"Show me all my connections"
-```
-
-### Benefits
-- **90% fewer tokens** used per operation
-- **No schema management** required
-- **Natural language** instead of technical commands
-- **Faster workflows** with intelligent defaults
-
 ## 🆘 Troubleshooting
 
 ### Common Issues
