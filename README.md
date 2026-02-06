@@ -2,7 +2,7 @@
 
 **Natural Language Interface | 50+ Essential Tools | Easily Interact with your Data**
 
-A Model Context Protocol (MCP) server that provides natural language access to Fivetran's data pipeline management API without requiring technical expertise.
+This is Fivetran's general purpose Model Context Protocol (MCP) server that provides natural language access to Fivetran's data pipeline management API without requiring technical expertise.
 
 ## ✨ Key Features
 
@@ -10,6 +10,8 @@ A Model Context Protocol (MCP) server that provides natural language access to F
 - 🛠️ **50+ Core Tools** - Complete coverage of essential Fivetran operations
 - 🔒 **Configurable Security** - Run it read-only or with read/write optios
 - 📊 **Smart Defaults** - Automatic parameter detection and intelligent error handling
+
+If you're interested in doing something more advanced like customizing your own Fivetran MCP server, see here.
 
 ## 🚀 Quick Start
 
