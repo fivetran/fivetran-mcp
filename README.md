@@ -18,8 +18,11 @@ If you're interested in doing something more advanced like customizing your own 
 ### 1. Installation
 
 ```bash
-# Clone or download the server
-cd mcp-fivetran-api
+# Clone the repository
+gh repo clone fivetran/fivetran-mcp
+
+# Navigate to the fivetran-mcp directory
+cd fivetran-mcp
 
 # Install dependencies
 python3 -m venv .venv
