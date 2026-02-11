@@ -42,8 +42,8 @@ You can clone .mcp.example.json and update it with all your information.
 {
   "mcpServers": {
     "fivetran": {
-      "command": "python",
-      "args": ["/path/to/mcp-fivetran-services/server.py"],
+      "command": "/path/to/.venv/bin/python3",
+      "args": ["/path/to/fivetran-mcp/server.py"],
       "env": {
         "FIVETRAN_APIKEY": "your-api-key",
         "FIVETRAN_APISECRET": "your-api-secret",
