@@ -45,8 +45,8 @@ You can clone .mcp.example.json and update it with all your information.
       "command": "/path/to/.venv/bin/python3",
       "args": ["/path/to/fivetran-mcp/server.py"],
       "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_ALLOW_WRITES": "false"
       }
     }
@@ -72,8 +72,8 @@ Add to your `claude_desktop_config.json`:
       "command": "python",
       "args": ["/path/to/mcp-fivetran-services/server.py"],
       "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_ALLOW_WRITES": "false"
       }
     }
@@ -92,8 +92,8 @@ Add to `.cursor/mcp.json` (global) or `~/.cursor/mcp.json` (project):
       "command": "python",
       "args": ["/path/to/mcp-fivetran-services/server.py"],
       "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_ALLOW_WRITES": "false"
       }
     }
@@ -267,8 +267,8 @@ except Exception as e:
 **Authentication Errors**
 ```bash
 # Check credentials
-echo "API Key: $FIVETRAN_APIKEY"
-echo "API Secret: $FIVETRAN_APISECRET"
+echo "API Key: $FIVETRAN_API_KEY"
+echo "API Secret: $FIVETRAN_API_SECRET"
 ```
 
 **Permission Errors**
