@@ -195,7 +195,7 @@ TOOLS = {
     
     # Connection Management (39 tools)
     "list_connections": {
-        "description": "List all data source connections with status and configuration details.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all data source connections with status and configuration details.",
         "method": "GET", 
         "endpoint": "/v1/connections",
         "auto_paginate": True,
@@ -298,7 +298,7 @@ TOOLS = {
     
     # Destination Management (14 tools)
     "list_destinations": {
-        "description": "List all data warehouse destinations configured in your account.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all data warehouse destinations configured in your account.",
         "method": "GET",
         "endpoint": "/v1/destinations", 
         "auto_paginate": True,
@@ -342,7 +342,7 @@ TOOLS = {
     
     # Group Management (21 tools)
     "list_groups": {
-        "description": "List all groups that organize connections and destinations.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all groups that organize connections and destinations.",
         "method": "GET",
         "endpoint": "/v1/groups",
         "auto_paginate": True,
@@ -375,7 +375,7 @@ TOOLS = {
         "params": ["group_id"],
     },
     "list_connections_in_group": {
-        "description": "List all connections within a specific group.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all connections within a specific group.",
         "method": "GET",
         "endpoint": "/v1/groups/{group_id}/connections", 
         "params": ["group_id"],
@@ -384,7 +384,7 @@ TOOLS = {
     
     # User Management (11 tools) 
     "list_users": {
-        "description": "List all users in your account with roles and status information.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all users in your account with roles and status information.",
         "method": "GET",
         "endpoint": "/v1/users",
         "auto_paginate": True,
@@ -422,7 +422,7 @@ TOOLS = {
     
     # Team Management (6 tools)
     "list_teams": {
-        "description": "List all teams and their configurations.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all teams and their configurations.",
         "method": "GET", 
         "endpoint": "/v1/teams",
         "auto_paginate": True,
@@ -446,7 +446,7 @@ TOOLS = {
     
     # Webhook Management (6 tools)
     "list_webhooks": {
-        "description": "List all webhook configurations for event monitoring.", 
+        "description": "ALERT! RESULTS ARE PAGINATED. List all webhook configurations for event monitoring.", 
         "method": "GET",
         "endpoint": "/v1/webhooks",
         "auto_paginate": True,
@@ -483,7 +483,7 @@ TOOLS = {
     
     # Transformation Management (16 tools)
     "list_transformations": {
-        "description": "List all dbt transformations and their execution status.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all dbt transformations and their execution status.",
         "method": "GET",
         "endpoint": "/v1/transformations",
         "auto_paginate": True,
@@ -495,7 +495,7 @@ TOOLS = {
         "params": ["transformation_id"],
     },
     "list_transformation_projects": {
-        "description": "List all dbt transformation projects in your account.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all dbt transformation projects in your account.",
         "method": "GET",
         "endpoint": "/v1/transformation-projects",
         "auto_paginate": True,
@@ -509,7 +509,7 @@ TOOLS = {
     
     # System Administration (6 tools)
     "list_system_keys": {
-        "description": "List all API keys for programmatic access.",
+        "description": "ALERT! RESULTS ARE PAGINATED. List all API keys for programmatic access.",
         "method": "GET",
         "endpoint": "/v1/system-keys",
         "auto_paginate": True,
