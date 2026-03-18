@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new private link in your Fivetran account.",
+  "description": "Creates a new private link in your Fivetran account. \n\n> NOTE: See the [Set Up a Connection With Private Links tutorial](/docs/rest-api/tutorials/set-up-connection-with-private-links) to learn how to use this endpoint to set up a [database connection](/docs/connectors/databases) with [private networking](/docs/using-fivetran/features#privatenetworking).\n",
   "path": "/v1/private-links",
   "method": "POST",
   "request_body_schema": {

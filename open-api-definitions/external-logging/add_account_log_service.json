@@ -1,0 +1,21 @@
+{
+  "description": "Creates an account-level [logging service](/docs/logs/external-logs).",
+  "path": "/v1/external-logging/account",
+  "method": "POST",
+  "request_body_schema": {
+    "type": "object",
+    "properties": {
+      "service": {
+        "type": "string",
+        "description": "The name of the log service type within the Fivetran system. We support the following log services: `azure_monitor_log`, `cloudwatch`, `datadog_log`, `grafana_loki`, `splunkLog`, `new_relic_log`, `stackdriver` (Google Cloud Logging)."
+      },
+      "enabled": {
+        "type": "boolean",
+        "description": "The boolean value specifying whether the log service is enabled."
+      },
+      "config": {
+        "type": "object"
+      }
+    }
+  }
+}

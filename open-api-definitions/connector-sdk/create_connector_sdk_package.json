@@ -1,0 +1,5 @@
+{
+  "description": "Uploads a new Connector SDK package to your Fivetran account. The package must be a ZIP file containing your custom connector code. You can create the package ZIP file using the [`fivetran package` command](/docs/connector-sdk/technical-reference/connector-sdk-commands#fivetranpackage).\n\nAfter creating a package, use the standard [Create a Connection endpoint](/docs/rest-api/api-reference/connections/create-connection) with the returned `id` as `package_id` in the config.\n\n> NOTE: Each package can only be associated with one connection at a time.\n",
+  "path": "/v1/connector-sdk/packages",
+  "method": "POST"
+}

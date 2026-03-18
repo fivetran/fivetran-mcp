@@ -1,0 +1,16 @@
+{
+  "description": "Returns details for a specific Connector SDK package.",
+  "path": "/v1/connector-sdk/packages/{package_id}",
+  "method": "GET",
+  "parameters": [
+    {
+      "name": "package_id",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier for the Connector SDK package.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "description": "Updates connection parameters for an existing connection within your Fivetran account.",
+  "description": "Updates connection parameters for an existing connection within your Fivetran account.\n\nThis endpoint requires at least one persistent configuration parameter to be specified (e.g., `sync_frequency`, `paused`, `config`, `auth`, `daily_sync_time`, `schema_status`).\n\n> IMPORTANT: Parameters like `trust_certificates`, `trust_fingerprints`, and `run_setup_tests` are test-control parameters that affect only the behavior of setup tests during the update and do not persist in the connection configuration; they cannot be used on their own. If you want to run setup tests without making configuration changes, use the POST `/v1/connections/{connectionId}/test` endpoint instead.\n",
   "path": "/v1/connections/{connectionId}",
   "method": "PATCH",
   "parameters": [
@@ -28,11 +28,11 @@
       },
       "trust_certificates": {
         "type": "boolean",
-        "description": "Specifies whether we should trust the certificate automatically. The default value is FALSE. If a certificate is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination certificate](https://fivetran.com/docs/rest-api/certificates#approveadestinationcertificate)."
+        "description": "Specifies whether we should trust the certificate automatically during setup tests. The default value is FALSE. This parameter only affects the behavior of setup tests and does not persist in the connection configuration. When using the PATCH endpoint to update a connection, this parameter must be combined with `run_setup_tests=true` and at least one persistent configuration parameter (e.g., `sync_frequency`, `paused`, `config`, `auth`). If you only want to run setup tests with automatic certificate trust, use the POST `/v1/connections/{connectionId}/test` endpoint instead. If a certificate is not trusted automatically during testing, it has to be approved with [Certificates Management API Approve a destination certificate](https://fivetran.com/docs/rest-api/certificates#approveadestinationcertificate)."
       },
       "trust_fingerprints": {
         "type": "boolean",
-        "description": "Specifies whether we should trust the SSH fingerprint automatically. The default value is FALSE. If a fingerprint is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination fingerprint](https://fivetran.com/docs/rest-api/certificates#approveadestinationfingerprint)."
+        "description": "Specifies whether we should trust the SSH fingerprint automatically during setup tests. The default value is FALSE. This parameter only affects the behavior of setup tests and does not persist in the connection configuration. When using the PATCH endpoint to update a connection, this parameter must be combined with `run_setup_tests=true` and at least one persistent configuration parameter (e.g., `sync_frequency`, `paused`, `config`, `auth`). If you only want to run setup tests with automatic fingerprint trust, use the POST `/v1/connections/{connectionId}/test` endpoint instead. If a fingerprint is not trusted automatically during testing, it has to be approved with [Certificates Management API Approve a destination fingerprint](https://fivetran.com/docs/rest-api/certificates#approveadestinationfingerprint)."
       },
       "networking_method": {
         "type": "string",
@@ -49,7 +49,7 @@
       },
       "run_setup_tests": {
         "type": "boolean",
-        "description": "Specifies whether the setup tests should be run automatically. The default value is TRUE."
+        "description": "Specifies whether the setup tests should be run automatically after updating the connection. The default value is TRUE. When using this parameter in a PATCH request, you must also include at least one persistent configuration parameter (e.g., `sync_frequency`, `paused`, `config`, `auth`). This parameter can be combined with `trust_certificates` or `trust_fingerprints` to automatically approve `certificates/fingerprints` during the test run. To run setup tests without making configuration changes, use the POST `/v1/connections/{connectionId}/test` endpoint instead."
       },
       "sync_frequency": {
         "type": "integer",

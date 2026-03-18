@@ -1,0 +1,16 @@
+{
+  "description": "Permanently deletes a Connector SDK package from your Fivetran account.\n\n> **Warning:** Packages that are associated with a connection cannot be deleted. You must first delete the connection before deleting the package.\n",
+  "path": "/v1/connector-sdk/packages/{package_id}",
+  "method": "DELETE",
+  "parameters": [
+    {
+      "name": "package_id",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier for the Connector SDK package.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

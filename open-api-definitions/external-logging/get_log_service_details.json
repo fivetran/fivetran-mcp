@@ -1,5 +1,5 @@
 {
-  "description": "Returns a logging service object if a valid identifier was provided.",
+  "description": "Returns a group-level [logging service](/docs/logs/external-logs) object if a valid identifier was provided.",
   "path": "/v1/external-logging/{logId}",
   "method": "GET",
   "parameters": [

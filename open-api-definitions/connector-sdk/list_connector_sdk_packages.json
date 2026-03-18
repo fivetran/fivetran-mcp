@@ -1,6 +1,6 @@
 {
-  "description": "Returns a list of all accessible [logging services](/docs/logs/external-logs) within your Fivetran account.",
-  "path": "/v1/external-logging",
+  "description": "Returns a list of all Connector SDK packages in your Fivetran account.",
+  "path": "/v1/connector-sdk/packages",
   "method": "GET",
   "parameters": [
     {

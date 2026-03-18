@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new logging service within a specified group in your Fivetran account.",
+  "description": "Creates a new group-level [logging service](/docs/logs/external-logs) within a specified group in your Fivetran account.",
   "path": "/v1/external-logging",
   "method": "POST",
   "request_body_schema": {
@@ -11,7 +11,7 @@
       },
       "service": {
         "type": "string",
-        "description": "The name of the log service type within the Fivetran system. We support the following log services: `azure_monitor_log`, `cloudwatch`, `datadog_log`, `splunkLog`, `new_relic_log`, `stackdriver` (Google Cloud Logging)."
+        "description": "The name of the log service type within the Fivetran system. We support the following log services: `azure_monitor_log`, `cloudwatch`, `datadog_log`, `grafana_loki`, `splunkLog`, `new_relic_log`, `stackdriver` (Google Cloud Logging)."
       },
       "enabled": {
         "type": "boolean",
@@ -24,6 +24,7 @@
         "azure_monitor_log": "#/components/schemas/azure_monitor_log_AddLogRequest",
         "cloudwatch": "#/components/schemas/cloudwatch_AddLogRequest",
         "datadog_log": "#/components/schemas/datadog_log_AddLogRequest",
+        "grafana_loki": "#/components/schemas/grafana_loki_AddLogRequest",
         "new_relic_log": "#/components/schemas/new_relic_log_AddLogRequest",
         "splunkLog": "#/components/schemas/splunkLog_AddLogRequest",
         "stackdriver": "#/components/schemas/stackdriver_AddLogRequest"

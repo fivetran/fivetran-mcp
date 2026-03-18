@@ -1,5 +1,5 @@
 {
-  "description": "Updates information for an existing logging service within your Fivetran account.",
+  "description": "Updates information for an existing group-level [logging service](/docs/logs/external-logs) within your Fivetran account.",
   "path": "/v1/external-logging/{logId}",
   "method": "PATCH",
   "parameters": [
@@ -21,7 +21,7 @@
         "description": "The boolean value specifying whether the log service is enabled."
       },
       "config": {
-        "description": "The setup configuration. Check possible config formats in [create method](/docs/rest-api/api-reference/log-service-management/add-log-service/)"
+        "type": "object"
       }
     }
   }

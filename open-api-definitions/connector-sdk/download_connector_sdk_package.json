@@ -1,0 +1,16 @@
+{
+  "description": "Downloads the connector code package file (code.zip) for a specific Connector SDK package.\n\nThis endpoint returns the raw ZIP file as an octet-stream.\n",
+  "path": "/v1/connector-sdk/packages/{package_id}/download",
+  "method": "GET",
+  "parameters": [
+    {
+      "name": "package_id",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier for the Connector SDK package.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

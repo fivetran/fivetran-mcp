@@ -1,0 +1,5 @@
+{
+  "description": "Returns the account-level [logging service](/docs/logs/external-logs) if it exists.",
+  "path": "/v1/external-logging/account",
+  "method": "GET"
+}

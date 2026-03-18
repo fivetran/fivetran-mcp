@@ -197,6 +197,44 @@
       "summary": "Run Connection Setup Tests"
     }
   },
+  "connector-sdk": {
+    "list_connector_sdk_packages": {
+      "file": "connector-sdk/list_connector_sdk_packages.json",
+      "path": "/v1/connector-sdk/packages",
+      "method": "GET",
+      "summary": "List All Connector SDK Packages"
+    },
+    "create_connector_sdk_package": {
+      "file": "connector-sdk/create_connector_sdk_package.json",
+      "path": "/v1/connector-sdk/packages",
+      "method": "POST",
+      "summary": "Create Connector SDK Package"
+    },
+    "get_connector_sdk_package": {
+      "file": "connector-sdk/get_connector_sdk_package.json",
+      "path": "/v1/connector-sdk/packages/{package_id}",
+      "method": "GET",
+      "summary": "Retrieve Connector SDK Package Details"
+    },
+    "update_connector_sdk_package": {
+      "file": "connector-sdk/update_connector_sdk_package.json",
+      "path": "/v1/connector-sdk/packages/{package_id}",
+      "method": "PATCH",
+      "summary": "Update Connector SDK Package"
+    },
+    "delete_connector_sdk_package": {
+      "file": "connector-sdk/delete_connector_sdk_package.json",
+      "path": "/v1/connector-sdk/packages/{package_id}",
+      "method": "DELETE",
+      "summary": "Delete Connector SDK Package"
+    },
+    "download_connector_sdk_package": {
+      "file": "connector-sdk/download_connector_sdk_package.json",
+      "path": "/v1/connector-sdk/packages/{package_id}/download",
+      "method": "GET",
+      "summary": "Download Connector SDK Package"
+    }
+  },
   "destinations": {
     "get_destination_fingerprints_list": {
       "file": "destinations/get_destination_fingerprints_list.json",
@@ -288,25 +326,49 @@
       "file": "external-logging/run_setup_tests_log_service.json",
       "path": "/v1/external-logging/{logId}/test",
       "method": "POST",
-      "summary": "Run Log Service Setup Tests"
+      "summary": "Run Group Log Service Setup Tests"
     },
     "get_log_service_details": {
       "file": "external-logging/get_log_service_details.json",
       "path": "/v1/external-logging/{logId}",
       "method": "GET",
-      "summary": "Retrieve Log Service Details"
+      "summary": "Retrieve Group Log Service Details"
     },
     "update_log_service": {
       "file": "external-logging/update_log_service.json",
       "path": "/v1/external-logging/{logId}",
       "method": "PATCH",
-      "summary": "Update a Log Service"
+      "summary": "Update a Group Log Service"
     },
     "delete_log_service": {
       "file": "external-logging/delete_log_service.json",
       "path": "/v1/external-logging/{logId}",
       "method": "DELETE",
-      "summary": "Delete a Log Service"
+      "summary": "Delete a Group Log Service"
+    },
+    "get_account_log_service_details": {
+      "file": "external-logging/get_account_log_service_details.json",
+      "path": "/v1/external-logging/account",
+      "method": "GET",
+      "summary": "Retrieve Account Log Service"
+    },
+    "add_account_log_service": {
+      "file": "external-logging/add_account_log_service.json",
+      "path": "/v1/external-logging/account",
+      "method": "POST",
+      "summary": "Create Account Log Service"
+    },
+    "update_account_log_service": {
+      "file": "external-logging/update_account_log_service.json",
+      "path": "/v1/external-logging/account",
+      "method": "PATCH",
+      "summary": "Update Account Log Service"
+    },
+    "delete_account_log_service": {
+      "file": "external-logging/delete_account_log_service.json",
+      "path": "/v1/external-logging/account",
+      "method": "DELETE",
+      "summary": "Delete Account Log Service"
     },
     "list_log_services": {
       "file": "external-logging/list_log_services.json",
@@ -318,7 +380,7 @@
       "file": "external-logging/add_log_service.json",
       "path": "/v1/external-logging",
       "method": "POST",
-      "summary": "Create a Log Service"
+      "summary": "Create a Group Log Service"
     }
   },
   "groups": {

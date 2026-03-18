@@ -129,7 +129,6 @@
     "discriminator": {
       "propertyName": "service",
       "mapping": {
-        "adls": "#/components/schemas/adls_NewDestinationRequest",
         "aiven_kafka_wh": "#/components/schemas/aiven_kafka_wh_NewDestinationRequest",
         "aurora_postgres_warehouse": "#/components/schemas/aurora_postgres_warehouse_NewDestinationRequest",
         "aurora_warehouse": "#/components/schemas/aurora_warehouse_NewDestinationRequest",
@@ -152,7 +151,6 @@
         "motherduck": "#/components/schemas/motherduck_NewDestinationRequest",
         "mysql_rds_warehouse": "#/components/schemas/mysql_rds_warehouse_NewDestinationRequest",
         "mysql_warehouse": "#/components/schemas/mysql_warehouse_NewDestinationRequest",
-        "new_s3_datalake": "#/components/schemas/new_s3_datalake_NewDestinationRequest",
         "onelake": "#/components/schemas/onelake_NewDestinationRequest",
         "oracle_rac_warehouse": "#/components/schemas/oracle_rac_warehouse_NewDestinationRequest",
         "oracle_rds_warehouse": "#/components/schemas/oracle_rds_warehouse_NewDestinationRequest",

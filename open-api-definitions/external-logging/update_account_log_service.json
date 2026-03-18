@@ -1,0 +1,17 @@
+{
+  "description": "Updates information for the account-level [logging service](/docs/logs/external-logs).",
+  "path": "/v1/external-logging/account",
+  "method": "PATCH",
+  "request_body_schema": {
+    "type": "object",
+    "properties": {
+      "enabled": {
+        "type": "boolean",
+        "description": "The boolean value specifying whether the log service is enabled."
+      },
+      "config": {
+        "description": "The setup configuration. Check possible config formats in [create method](/docs/rest-api/api-reference/log-service-management/add-log-service/)"
+      }
+    }
+  }
+}

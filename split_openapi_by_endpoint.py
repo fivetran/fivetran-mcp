@@ -140,6 +140,11 @@ def main():
         print(f'Error: {input_file} not found')
         return 1
 
+    # Clean out existing output directory so stale files don't linger
+    if output_dir.exists():
+        import shutil
+        shutil.rmtree(output_dir)
+        print(f'Cleaned existing {output_dir}/')
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print(f'Loading {input_file}...')

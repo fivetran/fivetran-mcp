@@ -30,14 +30,14 @@
           "connection_ids": {
             "uniqueItems": true,
             "type": "array",
-            "description": "The list of the connection identifiers to be used for the integrated schedule. Not expected for QUICKSTART transformations",
+            "description": "The list of connection IDs that the Transformation for dbt Core depends on when using the integrated schedule (`schedule_type: INTEGRATED`) or custom schedules (`schedule_type: TIME_OF_DAY` or `schedule_type: INTERVAL`)  with smart syncing enabled (`smart_syncing: true`). These connections must belong to the same group as the dbt project. This field should not be used for Quickstart transformations.",
             "items": {
               "type": "string"
             }
           },
           "schedule_type": {
             "type": "string",
-            "description": "The schedule type",
+            "description": "The schedule type. The following values are supported: 'INTEGRATED', 'TIME_OF_DAY', 'INTERVAL', 'CRON'",
             "enum": [
               "INTEGRATED",
               "TIME_OF_DAY",
@@ -60,6 +60,14 @@
                 "SATURDAY",
                 "SUNDAY"
               ]
+            }
+          },
+          "transformation_ids": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The list of the transformation identifiers to be used for the integrated schedule or custom scheduling with smart syncing enabled",
+            "items": {
+              "type": "string"
             }
           },
           "time_of_day": {

@@ -1,5 +1,5 @@
 {
-  "description": "Deletes a logging service from your Fivetran account.",
+  "description": "Deletes a group-level [logging service](/docs/logs/external-logs) from your Fivetran account.",
   "path": "/v1/external-logging/{logId}",
   "method": "DELETE",
   "parameters": [

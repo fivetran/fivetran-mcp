@@ -1,0 +1,5 @@
+{
+  "description": "Deletes the account-level [logging service](/docs/logs/external-logs).",
+  "path": "/v1/external-logging/account",
+  "method": "DELETE"
+}

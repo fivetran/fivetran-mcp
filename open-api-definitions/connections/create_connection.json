@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new connection within a specified group in your Fivetran account. Runs setup tests and returns testing results.",
+  "description": "Creates a new connection within a specified group in your Fivetran account. Runs setup tests and returns testing results. <br />\n> IMPORTANT: The `destination_schema_names` field will soon become a required field. Make sure to include it in your API requests when creating new connections to prevent future disruptions.\n ",
   "path": "/v1/connections",
   "method": "POST",
   "request_body_schema": {
@@ -19,15 +19,15 @@
       },
       "trust_certificates": {
         "type": "boolean",
-        "description": "Specifies whether we should trust the certificate automatically. The default value is FALSE. If a certificate is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination certificate](https://fivetran.com/docs/rest-api/certificates#approveadestinationcertificate)."
+        "description": "Specifies whether we should trust the certificate automatically during setup tests. The default value is FALSE. This parameter only affects the behavior of setup tests and does not persist in the connection configuration. When using the PATCH endpoint to update a connection, this parameter must be combined with `run_setup_tests=true` and at least one persistent configuration parameter (e.g., `sync_frequency`, `paused`, `config`, `auth`). If you only want to run setup tests with automatic certificate trust, use the POST `/v1/connections/{connectionId}/test` endpoint instead. If a certificate is not trusted automatically during testing, it has to be approved with [Certificates Management API Approve a destination certificate](https://fivetran.com/docs/rest-api/certificates#approveadestinationcertificate)."
       },
       "trust_fingerprints": {
         "type": "boolean",
-        "description": "Specifies whether we should trust the SSH fingerprint automatically. The default value is FALSE. If a fingerprint is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination fingerprint](https://fivetran.com/docs/rest-api/certificates#approveadestinationfingerprint)."
+        "description": "Specifies whether we should trust the SSH fingerprint automatically during setup tests. The default value is FALSE. This parameter only affects the behavior of setup tests and does not persist in the connection configuration. When using the PATCH endpoint to update a connection, this parameter must be combined with `run_setup_tests=true` and at least one persistent configuration parameter (e.g., `sync_frequency`, `paused`, `config`, `auth`). If you only want to run setup tests with automatic fingerprint trust, use the POST `/v1/connections/{connectionId}/test` endpoint instead. If a fingerprint is not trusted automatically during testing, it has to be approved with [Certificates Management API Approve a destination fingerprint](https://fivetran.com/docs/rest-api/certificates#approveadestinationfingerprint)."
       },
       "run_setup_tests": {
         "type": "boolean",
-        "description": "Specifies whether the setup tests should be run automatically. The default value is TRUE."
+        "description": "Specifies whether the setup tests should be run automatically after updating the connection. The default value is TRUE. When using this parameter in a PATCH request, you must also include at least one persistent configuration parameter (e.g., `sync_frequency`, `paused`, `config`, `auth`). This parameter can be combined with `trust_certificates` or `trust_fingerprints` to automatically approve `certificates/fingerprints` during the test run. To run setup tests without making configuration changes, use the POST `/v1/connections/{connectionId}/test` endpoint instead."
       },
       "paused": {
         "type": "boolean",
@@ -131,7 +131,7 @@
       },
       "destination_schema_names": {
         "type": "string",
-        "description": "Defines how you want the schema names to appear in your destination. <br /> The available values are:  <br /> - FIVETRAN_NAMING - Use Fivetran naming conventions to simplify and standardize the schema, table and column names in the destination. <br /> - SOURCE_NAMING - Preserve source schema table and column names in the destination. <br /> You can modify your selection only before the initial sync. Learn more in [our documentation](https://fivetran.com/docs/core-concepts#namingconventions)",
+        "description": "Defines how you want the schema names to appear in your destination. <br /> The available values are:  <br /> - FIVETRAN_NAMING - Use Fivetran naming conventions to simplify and standardize the schema, table and column names in the destination. <br /> - SOURCE_NAMING - Preserve source schema table and column names in the destination. <br /> You can modify your selection only before the initial sync. Learn more in [our documentation](https://fivetran.com/docs/core-concepts#namingconventions) <br />\n> IMPORTANT: This field will soon become a required field. Make sure to include it in your API requests when creating new connections to prevent future disruptions.",
         "enum": [
           "FIVETRAN_NAMING",
           "SOURCE_NAMING"
@@ -150,6 +150,7 @@
         "activecampaign": "#/components/schemas/activecampaign_NewConnectorRequestV1",
         "acumatica": "#/components/schemas/acumatica_NewConnectorRequestV1",
         "ada": "#/components/schemas/ada_NewConnectorRequestV1",
+        "adform": "#/components/schemas/adform_NewConnectorRequestV1",
         "adjust": "#/components/schemas/adjust_NewConnectorRequestV1",
         "adobe_analytics": "#/components/schemas/adobe_analytics_NewConnectorRequestV1",
         "adobe_analytics_data_feed": "#/components/schemas/adobe_analytics_data_feed_NewConnectorRequestV1",
@@ -166,6 +167,7 @@
         "airtable": "#/components/schemas/airtable_NewConnectorRequestV1",
         "akamai": "#/components/schemas/akamai_NewConnectorRequestV1",
         "akeneo": "#/components/schemas/akeneo_NewConnectorRequestV1",
+        "alation": "#/components/schemas/alation_NewConnectorRequestV1",
         "alchemer": "#/components/schemas/alchemer_NewConnectorRequestV1",
         "algolia": "#/components/schemas/algolia_NewConnectorRequestV1",
         "alida": "#/components/schemas/alida_NewConnectorRequestV1",
@@ -176,6 +178,7 @@
         "amplitude": "#/components/schemas/amplitude_NewConnectorRequestV1",
         "amqp": "#/components/schemas/amqp_NewConnectorRequestV1",
         "anaplan": "#/components/schemas/anaplan_NewConnectorRequestV1",
+        "anthropic_claude": "#/components/schemas/anthropic_claude_NewConnectorRequestV1",
         "anvyl": "#/components/schemas/anvyl_NewConnectorRequestV1",
         "apache_kafka": "#/components/schemas/apache_kafka_NewConnectorRequestV1",
         "apollo": "#/components/schemas/apollo_NewConnectorRequestV1",
@@ -293,7 +296,6 @@
         "coassemble": "#/components/schemas/coassemble_NewConnectorRequestV1",
         "cockroachdb": "#/components/schemas/cockroachdb_NewConnectorRequestV1",
         "codefresh": "#/components/schemas/codefresh_NewConnectorRequestV1",
-        "coheris": "#/components/schemas/coheris_NewConnectorRequestV1",
         "collibra": "#/components/schemas/collibra_NewConnectorRequestV1",
         "column": "#/components/schemas/column_NewConnectorRequestV1",
         "commercetools": "#/components/schemas/commercetools_NewConnectorRequestV1",
@@ -311,6 +313,7 @@
         "cornerstone": "#/components/schemas/cornerstone_NewConnectorRequestV1",
         "cosmos": "#/components/schemas/cosmos_NewConnectorRequestV1",
         "coupa": "#/components/schemas/coupa_NewConnectorRequestV1",
+        "credly": "#/components/schemas/credly_NewConnectorRequestV1",
         "criteo": "#/components/schemas/criteo_NewConnectorRequestV1",
         "criteo_retail_media": "#/components/schemas/criteo_retail_media_NewConnectorRequestV1",
         "crossbeam": "#/components/schemas/crossbeam_NewConnectorRequestV1",
@@ -463,6 +466,7 @@
         "hilti_ontrack": "#/components/schemas/hilti_ontrack_NewConnectorRequestV1",
         "hopin": "#/components/schemas/hopin_NewConnectorRequestV1",
         "hubspot": "#/components/schemas/hubspot_NewConnectorRequestV1",
+        "ibacos": "#/components/schemas/ibacos_NewConnectorRequestV1",
         "ilevel": "#/components/schemas/ilevel_NewConnectorRequestV1",
         "impact": "#/components/schemas/impact_NewConnectorRequestV1",
         "impact_partner": "#/components/schemas/impact_partner_NewConnectorRequestV1",
@@ -547,7 +551,6 @@
         "megaphone": "#/components/schemas/megaphone_NewConnectorRequestV1",
         "mention": "#/components/schemas/mention_NewConnectorRequestV1",
         "microsoft_dynamics_365_fno": "#/components/schemas/microsoft_dynamics_365_fno_NewConnectorRequestV1",
-        "microsoft_dynamics_365_fo": "#/components/schemas/microsoft_dynamics_365_fo_NewConnectorRequestV1",
         "microsoft_entra_id": "#/components/schemas/microsoft_entra_id_NewConnectorRequestV1",
         "microsoft_lists": "#/components/schemas/microsoft_lists_NewConnectorRequestV1",
         "microsoft_power_bi": "#/components/schemas/microsoft_power_bi_NewConnectorRequestV1",
@@ -567,6 +570,7 @@
         "mysql_azure": "#/components/schemas/mysql_azure_NewConnectorRequestV1",
         "mysql_rds": "#/components/schemas/mysql_rds_NewConnectorRequestV1",
         "namely": "#/components/schemas/namely_NewConnectorRequestV1",
+        "national_heavy_vehicle_regulator": "#/components/schemas/national_heavy_vehicle_regulator_NewConnectorRequestV1",
         "navan": "#/components/schemas/navan_NewConnectorRequestV1",
         "netsuite_suiteanalytics": "#/components/schemas/netsuite_suiteanalytics_NewConnectorRequestV1",
         "nice": "#/components/schemas/nice_NewConnectorRequestV1",
@@ -670,6 +674,7 @@
         "recurly": "#/components/schemas/recurly_NewConnectorRequestV1",
         "reddit_ads": "#/components/schemas/reddit_ads_NewConnectorRequestV1",
         "referralhero": "#/components/schemas/referralhero_NewConnectorRequestV1",
+        "refiner": "#/components/schemas/refiner_NewConnectorRequestV1",
         "reltio": "#/components/schemas/reltio_NewConnectorRequestV1",
         "replyio": "#/components/schemas/replyio_NewConnectorRequestV1",
         "resource_management_by_smartsheet": "#/components/schemas/resource_management_by_smartsheet_NewConnectorRequestV1",
@@ -767,7 +772,7 @@
         "sql_server_sap_ecc_hva": "#/components/schemas/sql_server_sap_ecc_hva_NewConnectorRequestV1",
         "square": "#/components/schemas/square_NewConnectorRequestV1",
         "squarespace": "#/components/schemas/squarespace_NewConnectorRequestV1",
-        "stackadapt": "#/components/schemas/stackadapt_NewConnectorRequestV1",
+        "stackadapt_graphql": "#/components/schemas/stackadapt_graphql_NewConnectorRequestV1",
         "standard_metrics": "#/components/schemas/standard_metrics_NewConnectorRequestV1",
         "starrez": "#/components/schemas/starrez_NewConnectorRequestV1",
         "statistics_netherlands_cbs": "#/components/schemas/statistics_netherlands_cbs_NewConnectorRequestV1",
@@ -798,6 +803,7 @@
         "ticket_tailor": "#/components/schemas/ticket_tailor_NewConnectorRequestV1",
         "tiktok_ads": "#/components/schemas/tiktok_ads_NewConnectorRequestV1",
         "tiktok_organic": "#/components/schemas/tiktok_organic_NewConnectorRequestV1",
+        "tiktok_organic_app": "#/components/schemas/tiktok_organic_app_NewConnectorRequestV1",
         "tive": "#/components/schemas/tive_NewConnectorRequestV1",
         "toggl_track": "#/components/schemas/toggl_track_NewConnectorRequestV1",
         "totango": "#/components/schemas/totango_NewConnectorRequestV1",

@@ -8,6 +8,16 @@ To keep context usage manageable for AI clients with smaller context windows, so
 
 To enable them, open `server.py` and uncomment the relevant tool definitions in the `TOOLS` dictionary.
 
+## Regenerating API Schema Files
+
+The `open-api-definitions/` directory contains lightweight per-endpoint schema files used by the server. To regenerate them from an updated OpenAPI spec:
+
+```bash
+python split_openapi_by_endpoint.py fivetran-open-api-definition.json open-api-definitions
+```
+
+This will replace the existing schema files with freshly generated ones.
+
 ## Setup
 
 ### 1. Install dependencies
