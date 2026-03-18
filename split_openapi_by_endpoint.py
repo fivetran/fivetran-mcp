@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
-"""Split OpenAPI schema files into one file per endpoint.
+"""Split OpenAPI schema into minimal per-endpoint files.
 
-Takes the resource-level OpenAPI files (e.g., connections.json) and splits them
-into individual endpoint files organized as:
-    open-api-definitions/resource-name/operation_id.json
+Takes the full OpenAPI spec and produces one lightweight file per endpoint,
+containing only what an agent needs to call the tool:
+  - description/summary
+  - path and method
+  - path/query parameters (no headers)
+  - request body schema (with $refs resolved inline)
+
+Response schemas, components, examples, and other metadata are stripped.
 
 Usage:
-    python split_openapi_by_endpoint.py
+    python split_openapi_by_endpoint.py <input_file> <output_dir>
+
+Example:
+    python split_openapi_by_endpoint.py fivetran-open-api-definition.json open-api-definitions
 """
 
 import json
@@ -14,156 +22,110 @@ import re
 from pathlib import Path
 
 
-def find_refs(obj: any, refs: set) -> None:
-    """Recursively find all $ref values in an object."""
+def resolve_ref(ref: str, components: dict) -> dict | None:
+    """Resolve a $ref string to its component schema."""
+    if not ref.startswith('#/components/'):
+        return None
+    parts = ref[len('#/components/'):].split('/')
+    if len(parts) != 2:
+        return None
+    component_type, component_name = parts
+    return components.get(component_type, {}).get(component_name)
+
+
+def resolve_refs_inline(obj, components: dict):
+    """Recursively resolve all $ref values inline, returning a new object."""
     if isinstance(obj, dict):
         if '$ref' in obj:
-            refs.add(obj['$ref'])
-        for value in obj.values():
-            find_refs(value, refs)
+            resolved = resolve_ref(obj['$ref'], components)
+            if resolved:
+                return resolve_refs_inline(resolved, components)
+            return obj
+        return {k: resolve_refs_inline(v, components) for k, v in obj.items()}
     elif isinstance(obj, list):
-        for item in obj:
-            find_refs(item, refs)
+        return [resolve_refs_inline(item, components) for item in obj]
+    return obj
 
 
-def resolve_component_refs(openapi_doc: dict, refs: set) -> dict:
-    """Resolve $ref paths to actual component schemas, recursively including dependencies."""
-    components = openapi_doc.get('components', {})
-    resolved = {}
-    processed_refs = set()
+def strip_examples(obj):
+    """Recursively remove 'example' and 'examples' keys to reduce size."""
+    if isinstance(obj, dict):
+        return {
+            k: strip_examples(v) for k, v in obj.items()
+            if k not in ('example', 'examples')
+        }
+    elif isinstance(obj, list):
+        return [strip_examples(item) for item in obj]
+    return obj
 
-    def resolve_ref(ref: str):
-        if ref in processed_refs:
-            return
-        processed_refs.add(ref)
 
-        # Parse ref like "#/components/schemas/ConnectionResponse"
-        if not ref.startswith('#/components/'):
-            return
+def extract_parameters(operation: dict) -> list[dict]:
+    """Extract path and query parameters, skipping headers."""
+    params = []
+    for param in operation.get('parameters', []):
+        if param.get('in') in ('path', 'query'):
+            clean_param = {
+                'name': param['name'],
+                'in': param['in'],
+                'required': param.get('required', False),
+            }
+            if 'description' in param:
+                clean_param['description'] = param['description']
+            if 'schema' in param:
+                schema = {k: v for k, v in param['schema'].items()
+                          if k not in ('example', 'examples')}
+                clean_param['schema'] = schema
+            params.append(clean_param)
+    return params
 
-        parts = ref[len('#/components/'):].split('/')
-        if len(parts) != 2:
-            return
 
-        component_type, component_name = parts
-        if component_type not in components:
-            return
-        if component_name not in components[component_type]:
-            return
+def extract_request_body(operation: dict, components: dict) -> dict | None:
+    """Extract and resolve the request body schema, stripping examples."""
+    request_body = operation.get('requestBody')
+    if not request_body:
+        return None
 
-        # Add to resolved
-        if component_type not in resolved:
-            resolved[component_type] = {}
-        resolved[component_type][component_name] = components[component_type][component_name]
+    content = request_body.get('content', {})
+    json_content = content.get('application/json', {})
+    schema = json_content.get('schema')
+    if not schema:
+        return None
 
-        # Find nested refs
-        nested_refs = set()
-        find_refs(components[component_type][component_name], nested_refs)
-        for nested_ref in nested_refs:
-            resolve_ref(nested_ref)
-
-    for ref in refs:
-        resolve_ref(ref)
-
-    return resolved
+    resolved = resolve_refs_inline(schema, components)
+    return strip_examples(resolved)
 
 
 def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
-    """Extract a single endpoint's schema into a standalone document."""
+    """Extract a minimal endpoint doc with only what's needed to call the API."""
     path_item = openapi_doc['paths'][path]
     operation = path_item[method]
+    components = openapi_doc.get('components', {})
 
-    # Build a minimal OpenAPI doc for this endpoint
     endpoint_doc = {
-        'openapi': openapi_doc.get('openapi', '3.0.1'),
-        'info': {
-            'title': operation.get('summary', f'{method.upper()} {path}'),
-            'description': operation.get('description', ''),
-        },
+        'description': operation.get('description', operation.get('summary', '')),
         'path': path,
         'method': method.upper(),
-        'operation': operation,
     }
 
-    # Only include referenced components (not all)
-    refs = set()
-    find_refs(operation, refs)
+    params = extract_parameters(operation)
+    if params:
+        endpoint_doc['parameters'] = params
 
-    if refs:
-        resolved_components = resolve_component_refs(openapi_doc, refs)
-        if resolved_components:
-            endpoint_doc['components'] = resolved_components
+    request_body = extract_request_body(operation, components)
+    if request_body:
+        endpoint_doc['request_body_schema'] = request_body
 
     return endpoint_doc
 
 
-def split_resource_file(resource_file: Path, output_dir: Path) -> dict:
-    """Split a resource's OpenAPI file into individual endpoint files.
-
-    Returns a mapping of operation_ids to their file paths.
-    """
-    with open(resource_file) as f:
-        openapi_doc = json.load(f)
-
-    resource_name = resource_file.stem  # e.g., 'connections' from 'connections.json'
-    resource_output_dir = output_dir / resource_name
-    resource_output_dir.mkdir(parents=True, exist_ok=True)
-
-    endpoint_mapping = {}
-
-    for path, path_item in openapi_doc.get('paths', {}).items():
-        for method in ['get', 'post', 'put', 'patch', 'delete']:
-            if method not in path_item:
-                continue
-
-            operation = path_item[method]
-            operation_id = operation.get('operationId')
-
-            if not operation_id:
-                print(f'  WARNING: No operationId for {method.upper()} {path}, skipping')
-                continue
-
-            endpoint_doc = extract_endpoint_schema(openapi_doc, path, method)
-
-            output_file = resource_output_dir / f'{operation_id}.json'
-            with open(output_file, 'w') as f:
-                json.dump(endpoint_doc, f, indent=2)
-
-            endpoint_mapping[operation_id] = {
-                'file': str(output_file.relative_to(output_dir.parent)),
-                'path': path,
-                'method': method.upper(),
-                'summary': operation.get('summary', ''),
-            }
-
-            print(f'  Created: {operation_id}.json')
-
-    return endpoint_mapping
-
-
 def get_resource_from_path(path: str) -> str:
-    """Extract the resource name from an API path.
-
-    Examples:
-        /v1/connections -> connections
-        /v1/connections/{connectionId} -> connections
-        /v1/groups/{groupId}/connections -> groups
-    """
-    # Remove version prefix
+    """Extract the resource name from an API path."""
     path = re.sub(r'^/v\d+/', '', path)
     parts = [p for p in path.split('/') if p and not p.startswith('{')]
     return parts[0] if parts else 'other'
 
 
 def main():
-    """Main entry point.
-
-    Usage:
-        python split_openapi_by_endpoint.py <input_file> <output_dir>
-
-    Example:
-        python split_openapi_by_endpoint.py fivetran-open-api-definition.json open-api-definitions
-    """
     import sys
 
     if len(sys.argv) != 3:
@@ -178,10 +140,8 @@ def main():
         print(f'Error: {input_file} not found')
         return 1
 
-    # Create output directory
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    # Load the full OpenAPI spec
     print(f'Loading {input_file}...')
     with open(input_file) as f:
         openapi_doc = json.load(f)
@@ -197,14 +157,13 @@ def main():
     print(f'Found {len(resources)} resources\n')
 
     all_mappings = {}
+    total_original_lines = 0
+    total_new_lines = 0
 
     for resource_name, resource_doc in sorted(resources.items()):
         print(f'Processing {resource_name}...')
 
-        # Create a minimal OpenAPI doc for this resource
         resource_openapi = {
-            'openapi': openapi_doc.get('openapi', '3.0.1'),
-            'info': openapi_doc.get('info', {}),
             'paths': resource_doc['paths'],
             'components': resource_doc['components'],
         }
@@ -229,8 +188,12 @@ def main():
                 endpoint_doc = extract_endpoint_schema(resource_openapi, path, method)
 
                 output_file = resource_output_dir / f'{operation_id}.json'
+                output_json = json.dumps(endpoint_doc, indent=2)
                 with open(output_file, 'w') as f:
-                    json.dump(endpoint_doc, f, indent=2)
+                    f.write(output_json)
+
+                new_lines = output_json.count('\n') + 1
+                total_new_lines += new_lines
 
                 endpoint_mapping[operation_id] = {
                     'file': str(output_file.relative_to(output_dir)),
@@ -239,20 +202,20 @@ def main():
                     'summary': operation.get('summary', ''),
                 }
 
-                print(f'  Created: {operation_id}.json')
+                print(f'  Created: {operation_id}.json ({new_lines} lines)')
 
         all_mappings[resource_name] = endpoint_mapping
         print()
 
-    # Write an index file for reference
+    # Write an index file
     index_file = output_dir / 'endpoint-index.json'
     with open(index_file, 'w') as f:
         json.dump(all_mappings, f, indent=2)
     print(f'Created endpoint index: {index_file}')
 
-    # Summary
     total_endpoints = sum(len(m) for m in all_mappings.values())
     print(f'\nDone! Split into {total_endpoints} endpoint files across {len(all_mappings)} resources.')
+    print(f'Total output: {total_new_lines} lines')
 
     return 0
 
