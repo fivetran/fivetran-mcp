@@ -2,6 +2,12 @@
 
 An MCP server that you can use to interact with your Fivetran environment.  It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connection's broken?"  Additionally, if you set FIVETRAN_ALLOW_WRITES to "true" you can complete write operations like "update the sync frequency of my Redshift connections to every 3 hours"
 
+## Enabling Additional Tools
+
+To keep context usage manageable for AI clients with smaller context windows, some tools are commented out in `server.py` by default. These include tools for managing users, teams, roles, system keys, private links, proxy agents, and certificates/fingerprints.
+
+To enable them, open `server.py` and uncomment the relevant tool definitions in the `TOOLS` dictionary.
+
 ## Setup
 
 ### 1. Install dependencies
