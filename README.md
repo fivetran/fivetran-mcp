@@ -41,8 +41,8 @@ Choose your preferred AI client below and follow the configuration instructions.
       "command": "python",
       "args": ["/path/to/fivetran-mcp-server/server.py"],
       "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_ALLOW_WRITES": "false"
       }
     }
@@ -61,8 +61,8 @@ Use the `claude mcp add` command to register the server:
 
 ```bash
 claude mcp add fivetran \
-  --env FIVETRAN_APIKEY=your-api-key \
-  --env FIVETRAN_APISECRET=your-api-secret \
+  --env FIVETRAN_API_KEY=your-api-key \
+  --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_ALLOW_WRITES=false \
   -- python /path/to/fivetran-mcp-server/server.py
 ```
@@ -76,8 +76,8 @@ Or add it directly to your `~/.claude.json` configuration:
       "command": "python",
       "args": ["/path/to/fivetran-mcp-server/server.py"],
       "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_ALLOW_WRITES": "false"
       }
     }
@@ -101,8 +101,8 @@ Codex stores MCP configuration in `~/.codex/config.toml`. You can configure via 
 
 ```bash
 codex mcp add fivetran \
-  --env FIVETRAN_APIKEY=your-api-key \
-  --env FIVETRAN_APISECRET=your-api-secret \
+  --env FIVETRAN_API_KEY=your-api-key \
+  --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_ALLOW_WRITES=false \
   -- python /path/to/fivetran-mcp-server/server.py
 ```
@@ -117,8 +117,8 @@ command = "python"
 args = ["/path/to/fivetran-mcp-server/server.py"]
 
 [mcp_servers.fivetran.env]
-FIVETRAN_APIKEY = "your-api-key"
-FIVETRAN_APISECRET = "your-api-secret"
+FIVETRAN_API_KEY = "your-api-key"
+FIVETRAN_API_SECRET = "your-api-secret"
 FIVETRAN_ALLOW_WRITES = "false"
 ```
 
@@ -146,8 +146,8 @@ Add the following to your chosen configuration file:
       "command": "python",
       "args": ["/path/to/fivetran-mcp-server/server.py"],
       "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_ALLOW_WRITES": "false"
       }
     }
@@ -167,8 +167,8 @@ Restart Cursor to load the new MCP server configuration.
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
-| `FIVETRAN_APIKEY` | Yes | - | Your Fivetran API key |
-| `FIVETRAN_APISECRET` | Yes | - | Your Fivetran API secret |
+| `FIVETRAN_API_KEY` | Yes | - | Your Fivetran API key |
+| `FIVETRAN_API_SECRET` | Yes | - | Your Fivetran API secret |
 | `FIVETRAN_ALLOW_WRITES` | No | `false` | Set to `true` to enable POST, PATCH, and DELETE operations |
 
 ## Available Tools

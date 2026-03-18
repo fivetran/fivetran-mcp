@@ -4,8 +4,8 @@
       "command": "/path/to/.venv/bin/python3",
       "args": ["/path/to/server.py"],
       "env": {
-        "FIVETRAN_APIKEY": "your-api-key",
-        "FIVETRAN_APISECRET": "your-api-secret",
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_ALLOW_WRITES": "false"
       }
     }

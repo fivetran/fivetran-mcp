@@ -16,8 +16,8 @@ from mcp.types import Tool, TextContent
 load_dotenv()
 
 # Credentials are configured in .mcp.json
-FIVETRAN_API_KEY = os.getenv("FIVETRAN_APIKEY")
-FIVETRAN_API_SECRET = os.getenv("FIVETRAN_APISECRET")
+FIVETRAN_API_KEY = os.getenv("FIVETRAN_API_KEY")
+FIVETRAN_API_SECRET = os.getenv("FIVETRAN_API_SECRET")
 FIVETRAN_ALLOW_WRITES = os.getenv("FIVETRAN_ALLOW_WRITES", "false").lower() == "true"
 BASE_URL = "https://api.fivetran.com"
 SERVER_DIR = Path(__file__).parent
@@ -34,7 +34,7 @@ def check_write_permission(method: str) -> None:
 def get_auth_header() -> dict[str, str]:
     """Create Basic Auth header for Fivetran API."""
     if not FIVETRAN_API_KEY or not FIVETRAN_API_SECRET:
-        raise ValueError("FIVETRAN_APIKEY and FIVETRAN_APISECRET must be set in environment")
+        raise ValueError("FIVETRAN_API_KEY and FIVETRAN_API_SECRET must be set in environment")
     credentials = f"{FIVETRAN_API_KEY}:{FIVETRAN_API_SECRET}"
     encoded = base64.b64encode(credentials.encode()).decode()
     return {

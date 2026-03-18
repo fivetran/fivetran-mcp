@@ -7,8 +7,8 @@ import httpx
 from unittest.mock import patch, AsyncMock
 
 # Set test environment variables before importing server
-os.environ["FIVETRAN_APIKEY"] = "test_api_key"
-os.environ["FIVETRAN_APISECRET"] = "test_api_secret"
+os.environ["FIVETRAN_API_KEY"] = "test_api_key"
+os.environ["FIVETRAN_API_SECRET"] = "test_api_secret"
 
 from server import (
     get_auth_header,
@@ -44,18 +44,18 @@ class TestAuthHeader:
 
     def test_get_auth_header_raises_without_credentials(self):
         """Test that missing credentials raises ValueError."""
-        with patch.dict(os.environ, {"FIVETRAN_APIKEY": "", "FIVETRAN_APISECRET": ""}):
+        with patch.dict(os.environ, {"FIVETRAN_API_KEY": "", "FIVETRAN_API_SECRET": ""}):
             # Need to reload the module to pick up new env vars
             import importlib
             import server
             importlib.reload(server)
 
-            with pytest.raises(ValueError, match="FIVETRAN_APIKEY and FIVETRAN_APISECRET must be set"):
+            with pytest.raises(ValueError, match="FIVETRAN_API_KEY and FIVETRAN_API_SECRET must be set"):
                 server.get_auth_header()
 
             # Restore original values
-            os.environ["FIVETRAN_APIKEY"] = "test_api_key"
-            os.environ["FIVETRAN_APISECRET"] = "test_api_secret"
+            os.environ["FIVETRAN_API_KEY"] = "test_api_key"
+            os.environ["FIVETRAN_API_SECRET"] = "test_api_secret"
             importlib.reload(server)
 
 
