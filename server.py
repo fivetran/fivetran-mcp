@@ -195,7 +195,11 @@ TOOLS = {
         "auto_paginate": True,
     },
     "create_connection": {
-        "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new connection.",
+        "description": (
+            "⚠️ WRITE OPERATION - Confirm with user before calling. Create a new connection. "
+            "Note: `destination_schema_names` is an enum string (\"FIVETRAN_NAMING\" or \"SOURCE_NAMING\"). "
+            "The schema prefix value goes in `config.schema_prefix`, not inside `destination_schema_names`."
+        ),
         "schema_file": "open-api-definitions/connections/create_connection.json",
         "method": "POST",
         "endpoint": "/v1/connections",
