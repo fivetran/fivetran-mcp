@@ -8,6 +8,12 @@ Not all tools are enabled by default. To keep context usage manageable for AI cl
 
 To enable additional tools, open `server.py` and uncomment the relevant tool definitions in the `TOOLS` dictionary. You can enable as many or as few as you need.
 
+## Plugins
+
+We have Claude Code plugins that use this MCP server to make complicated tasks easier.  Each plugin lives in its own subdirectory with its own README.
+
+- **[copy-connections](https://github.com/fivetran/copy-connections)** — Copy existing Fivetran connections to a new destination.  Keep their configs and schemas intact or modify them as you like.
+
 ## Regenerating API Schema Files
 
 The `open-api-definitions/` directory contains lightweight per-endpoint schema files used by the server. To regenerate them from an updated OpenAPI spec:
