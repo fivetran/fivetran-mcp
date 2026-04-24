@@ -10,7 +10,7 @@ To enable additional tools, open `server.py` and uncomment the relevant tool def
 
 ## Plugins
 
-We have Claude Code plugins that use this MCP server to make complicated tasks easier.  Each plugin lives in its own subdirectory with its own README.
+We have plugins that use this MCP server to make complicated tasks easier, compatible with Claude Code and Codex. Each plugin lives in its own repository with its own README.
 
 - **[copy-connections](https://github.com/fivetran/copy-connections)** — Copy existing Fivetran connections to a new destination.  Keep their configs and schemas intact or modify them as you like.
 
