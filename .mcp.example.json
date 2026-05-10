@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "fivetran": {
-      "command": "/path/to/.venv/bin/python3",
-      "args": ["/path/to/server.py"],
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"],
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",

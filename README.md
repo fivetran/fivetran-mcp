@@ -26,25 +26,41 @@ This will replace the existing schema files with freshly generated ones.
 
 ## Setup
 
-### 1. Install dependencies
+### 1. Choose how to run the server
 
-Requires Python 3.10+
+You have two options. Most users should use **uvx** — no clone required.
+
+#### Option A: Run with uvx (recommended)
+
+Requires [uv](https://docs.astral.sh/uv/) (which provides `uvx`) and Python 3.10+. uvx fetches and runs the server directly from this repository, so there is nothing to install or update manually.
+
+The command your MCP client will run is:
 
 ```bash
+uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
+```
+
+> Note: bare `uvx fivetran-mcp` (without `--from`) does not work — the `fivetran-mcp` and `mcp-fivetran` names on PyPI are owned by unrelated projects, so you must install from the git URL.
+
+#### Option B: Run from a local clone (for development)
+
+Use this if you want to modify `server.py` or regenerate schema files.
+
+```bash
+git clone https://github.com/fivetran/fivetran-mcp
+cd fivetran-mcp
 python3 -m venv .venv
 source .venv/bin/activate
 pip install .
 ```
 
+You can then point your MCP client at `python /path/to/fivetran-mcp/server.py`.
+
 ### 2. Get Fivetran API credentials
 
 You can generate credentials within https://fivetran.com/dashboard/user/api-config
 
-### 3. Configure your MCP client
-
-See `.mcp.example.json` for an example configuration. Update the paths and credentials in that file to match your setup and save it as .mcp.json in the primary folder.
-
-### 4. Connect to your AI client
+### 3. Connect to your AI client
 
 Choose your preferred AI client below and follow the configuration instructions.
 
@@ -56,12 +72,32 @@ Choose your preferred AI client below and follow the configuration instructions.
 **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
 **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 
+Using uvx (Option A):
+
+```json
+{
+  "mcpServers": {
+    "fivetran": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"],
+      "env": {
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
+        "FIVETRAN_ALLOW_WRITES": "false"
+      }
+    }
+  }
+}
+```
+
+Using a local clone (Option B):
+
 ```json
 {
   "mcpServers": {
     "fivetran": {
       "command": "python",
-      "args": ["/path/to/fivetran-mcp-server/server.py"],
+      "args": ["/path/to/fivetran-mcp/server.py"],
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
@@ -79,14 +115,26 @@ Choose your preferred AI client below and follow the configuration instructions.
 
 #### Claude Code (CLI)
 
-Use the `claude mcp add` command to register the server:
+Use the `claude mcp add` command to register the server.
+
+Using uvx (Option A):
 
 ```bash
 claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_ALLOW_WRITES=false \
-  -- python /path/to/fivetran-mcp-server/server.py
+  -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
+```
+
+Using a local clone (Option B):
+
+```bash
+claude mcp add fivetran \
+  --env FIVETRAN_API_KEY=your-api-key \
+  --env FIVETRAN_API_SECRET=your-api-secret \
+  --env FIVETRAN_ALLOW_WRITES=false \
+  -- python /path/to/fivetran-mcp/server.py
 ```
 
 Or add it directly to your `~/.claude.json` configuration:
@@ -95,8 +143,8 @@ Or add it directly to your `~/.claude.json` configuration:
 {
   "mcpServers": {
     "fivetran": {
-      "command": "python",
-      "args": ["/path/to/fivetran-mcp-server/server.py"],
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"],
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
@@ -121,22 +169,47 @@ Codex stores MCP configuration in `~/.codex/config.toml`. You can configure via 
 
 **Option 1: CLI**
 
+Using uvx (Option A):
+
 ```bash
 codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_ALLOW_WRITES=false \
-  -- python /path/to/fivetran-mcp-server/server.py
+  -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
+```
+
+Using a local clone (Option B):
+
+```bash
+codex mcp add fivetran \
+  --env FIVETRAN_API_KEY=your-api-key \
+  --env FIVETRAN_API_SECRET=your-api-secret \
+  --env FIVETRAN_ALLOW_WRITES=false \
+  -- python /path/to/fivetran-mcp/server.py
 ```
 
 **Option 2: Edit config.toml**
 
-Add the following to `~/.codex/config.toml`:
+Add the following to `~/.codex/config.toml`. Using uvx (Option A):
+
+```toml
+[mcp_servers.fivetran]
+command = "uvx"
+args = ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"]
+
+[mcp_servers.fivetran.env]
+FIVETRAN_API_KEY = "your-api-key"
+FIVETRAN_API_SECRET = "your-api-secret"
+FIVETRAN_ALLOW_WRITES = "false"
+```
+
+Using a local clone (Option B):
 
 ```toml
 [mcp_servers.fivetran]
 command = "python"
-args = ["/path/to/fivetran-mcp-server/server.py"]
+args = ["/path/to/fivetran-mcp/server.py"]
 
 [mcp_servers.fivetran.env]
 FIVETRAN_API_KEY = "your-api-key"
@@ -159,14 +232,34 @@ Cursor supports both global and project-level MCP configurations.
 **Global Configuration:** `~/.cursor/mcp.json`  
 **Project Configuration:** `.cursor/mcp.json` (in your project root)
 
-Add the following to your chosen configuration file:
+Add the following to your chosen configuration file.
+
+Using uvx (Option A):
+
+```json
+{
+  "mcpServers": {
+    "fivetran": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"],
+      "env": {
+        "FIVETRAN_API_KEY": "your-api-key",
+        "FIVETRAN_API_SECRET": "your-api-secret",
+        "FIVETRAN_ALLOW_WRITES": "false"
+      }
+    }
+  }
+}
+```
+
+Using a local clone (Option B):
 
 ```json
 {
   "mcpServers": {
     "fivetran": {
       "command": "python",
-      "args": ["/path/to/fivetran-mcp-server/server.py"],
+      "args": ["/path/to/fivetran-mcp/server.py"],
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
