@@ -7,6 +7,11 @@ venv/
 # macOS
 .DS_Store
 
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
 # Generated
 split/
 .env

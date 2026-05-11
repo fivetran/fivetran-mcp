@@ -1425,12 +1425,21 @@ async def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         return await fivetran_request(method, endpoint, json_body=json_body)
 
 
-async def main():
+async def async_main():
     """Run the MCP server."""
+    if not FIVETRAN_API_KEY or not FIVETRAN_API_SECRET:
+        raise ValueError(
+            "FIVETRAN_API_KEY and FIVETRAN_API_SECRET environment variables must be set. "
+            "Configure them in your .mcp.json or .env file."
+        )
     async with stdio_server() as (read_stream, write_stream):
         await server.run(read_stream, write_stream, server.create_initialization_options())
 
 
-if __name__ == "__main__":
+def main():
     import asyncio
-    asyncio.run(main())
+    asyncio.run(async_main())
+
+
+if __name__ == "__main__":
+    main()
