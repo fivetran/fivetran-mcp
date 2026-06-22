@@ -1,5 +1,5 @@
 {
-  "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields. \n\n> Note: This endpoint works only for an existing connection that is in a 'Connected' state.\n",
+  "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields. \n\n> NOTE: This endpoint works only for an existing connection that is in a 'Connected' state.\n",
   "path": "/v1/connections/{connectionId}/schemas/{schema}/tables/{table}/columns",
   "method": "GET",
   "parameters": [
@@ -7,7 +7,7 @@
       "name": "connectionId",
       "in": "path",
       "required": true,
-      "description": "The unique identifier for the connection within the Fivetran system.",
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
       "schema": {
         "type": "string"
       }
@@ -25,7 +25,7 @@
       "name": "table",
       "in": "path",
       "required": true,
-      "description": "The table name within your database schema",
+      "description": "The table name from the connection schema, using the original source system's naming conventions. This value is case-sensitive.",
       "schema": {
         "type": "string"
       }

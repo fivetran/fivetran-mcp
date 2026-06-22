@@ -1,0 +1,25 @@
+{
+  "description": "Returns a list of all source connections and destinations that are using any External Secrets Manager within your Fivetran account.",
+  "path": "/v1/external-secrets-managers-entities",
+  "method": "GET",
+  "parameters": [
+    {
+      "name": "esm_id",
+      "in": "query",
+      "required": false,
+      "description": "Filter by a specific External Secrets Manager ID.",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "type",
+      "in": "query",
+      "required": false,
+      "description": "Filter by entity type. Accepted values are source, destination, or all.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

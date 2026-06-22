@@ -18,3 +18,6 @@ split/
 
 .mcp.json
 split_openapi_by_endpoint.py
+
+local/
+

@@ -7,7 +7,7 @@
       "name": "connectionId",
       "in": "path",
       "required": true,
-      "description": "The unique identifier for the connection within the Fivetran system.",
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
       "schema": {
         "type": "string"
       }
@@ -16,7 +16,7 @@
       "name": "schemaName",
       "in": "path",
       "required": true,
-      "description": "The database schema name within your destination (different from the connection schema)",
+      "description": "The schema name as stored in the connection schema config. This value is case-sensitive; an incorrect case results in an HTTP 404 error.",
       "schema": {
         "type": "string"
       }
@@ -25,7 +25,7 @@
       "name": "tableName",
       "in": "path",
       "required": true,
-      "description": "The table name within your database schema",
+      "description": "The table name as stored in the connection schema config. This value is case-sensitive; an incorrect case results in an HTTP 404 error.",
       "schema": {
         "type": "string"
       }
@@ -34,7 +34,7 @@
       "name": "columnName",
       "in": "path",
       "required": true,
-      "description": "The column name within your table",
+      "description": "The column name as stored in the connection schema config. This value is case-sensitive; an incorrect case results in an HTTP 404 error.",
       "schema": {
         "type": "string"
       }

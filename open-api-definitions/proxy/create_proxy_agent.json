@@ -11,7 +11,7 @@
       },
       "group_region": {
         "type": "string",
-        "description": "Data processing location. This is where Fivetran will operate and run computation on data.",
+        "description": "Data processing location. This is where Fivetran will operate and run computation on data (optional).",
         "enum": [
           "GCP_US_EAST4",
           "GCP_US_WEST1",

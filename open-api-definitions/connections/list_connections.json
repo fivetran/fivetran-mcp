@@ -7,7 +7,7 @@
       "name": "group_id",
       "in": "query",
       "required": false,
-      "description": "Specify the group identifier to filter connections by group",
+      "description": "Filter the list to connections belonging to this group. Retrieve group IDs from the [List All Groups](https://fivetran.com/docs/rest-api/api-reference/groups/list-all-groups) endpoint.",
       "schema": {
         "type": "string"
       }
@@ -16,7 +16,7 @@
       "name": "schema",
       "in": "query",
       "required": false,
-      "description": "Specify the schema name to filter connections by schema",
+      "description": "Filter the list to connections whose schema name matches this value. Partial matches are not supported.",
       "schema": {
         "type": "string"
       }

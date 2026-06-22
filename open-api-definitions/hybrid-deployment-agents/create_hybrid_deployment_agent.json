@@ -10,17 +10,9 @@
     ],
     "type": "object",
     "properties": {
-      "accept_terms": {
-        "type": "boolean",
-        "description": "Boolean, must be true to indicate that the caller accepts the Fivetran On-Prem Software License Addendum."
-      },
-      "auth_type": {
+      "group_id": {
         "type": "string",
-        "description": "Agent Auth Mode. Defines how agent should be authorised.",
-        "enum": [
-          "AUTO",
-          "MANUAL"
-        ]
+        "description": "The unique identifier for the group within your Fivetran account."
       },
       "display_name": {
         "type": "string",
@@ -36,9 +28,17 @@
           "SNOWPARK"
         ]
       },
-      "group_id": {
+      "accept_terms": {
+        "type": "boolean",
+        "description": "Boolean, must be true to indicate that the caller accepts the Fivetran On-Prem Software License Addendum."
+      },
+      "auth_type": {
         "type": "string",
-        "description": "The unique identifier for the group within your Fivetran account."
+        "description": "Agent Auth Mode. Defines how agent should be authorised.",
+        "enum": [
+          "AUTO",
+          "MANUAL"
+        ]
       }
     }
   }

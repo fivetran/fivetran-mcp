@@ -1,5 +1,5 @@
 {
-  "description": "Returns a destination object if a valid identifier was provided.",
+  "description": "Returns a destination object if a valid identifier was provided.\n\nTo find a destination's unique identifier, call the [List All Groups](https://fivetran.com/docs/rest-api/groups#listallgroups) endpoint and search the response `items` for your target destination by its `name` field. The group's `id` value is also the destination's `id`, since groups and destinations are mapped 1:1.\n",
   "path": "/v1/destinations/{destinationId}",
   "method": "GET",
   "parameters": [

@@ -16,41 +16,17 @@
     }
   },
   "connections": {
-    "get_connection_fingerprints_list": {
-      "file": "connections/get_connection_fingerprints_list.json",
-      "path": "/v1/connections/{connectionId}/fingerprints",
+    "list_connections": {
+      "file": "connections/list_connections.json",
+      "path": "/v1/connections",
       "method": "GET",
-      "summary": "List Fingerprints Approved for the Connection"
+      "summary": "List All Connections"
     },
-    "approve_connection_fingerprint": {
-      "file": "connections/approve_connection_fingerprint.json",
-      "path": "/v1/connections/{connectionId}/fingerprints",
+    "create_connection": {
+      "file": "connections/create_connection.json",
+      "path": "/v1/connections",
       "method": "POST",
-      "summary": "Approve a Fingerprint for the Connection"
-    },
-    "connection_column_config": {
-      "file": "connections/connection_column_config.json",
-      "path": "/v1/connections/{connectionId}/schemas/{schema}/tables/{table}/columns",
-      "method": "GET",
-      "summary": "Retrieve Source Table Columns Config"
-    },
-    "modify_connection_table_config": {
-      "file": "connections/modify_connection_table_config.json",
-      "path": "/v1/connections/{connectionId}/schemas/{schemaName}/tables/{tableName}",
-      "method": "PATCH",
-      "summary": "Update a Connection Table Config"
-    },
-    "get_connection_certificate_details": {
-      "file": "connections/get_connection_certificate_details.json",
-      "path": "/v1/connections/{connectionId}/certificates/{hash}",
-      "method": "GET",
-      "summary": "Retrieve Connection Certificate Details"
-    },
-    "revoke_connection_certificate": {
-      "file": "connections/revoke_connection_certificate.json",
-      "path": "/v1/connections/{connectionId}/certificates/{hash}",
-      "method": "DELETE",
-      "summary": "Revoke Connection Certificate"
+      "summary": "Create a Connection"
     },
     "connection_details": {
       "file": "connections/connection_details.json",
@@ -70,11 +46,65 @@
       "method": "DELETE",
       "summary": "Delete a Connection"
     },
-    "delete_multiple_columns_connection_config": {
-      "file": "connections/delete_multiple_columns_connection_config.json",
-      "path": "/v1/connections/{connectionId}/schemas/drop-columns",
+    "get_connection_certificates_list": {
+      "file": "connections/get_connection_certificates_list.json",
+      "path": "/v1/connections/{connectionId}/certificates",
+      "method": "GET",
+      "summary": "List Certificates Approved for the Connection"
+    },
+    "approve_connection_certificate": {
+      "file": "connections/approve_connection_certificate.json",
+      "path": "/v1/connections/{connectionId}/certificates",
       "method": "POST",
-      "summary": "Drop Blocked Columns from the Destination."
+      "summary": "Approve a Certificate for the Connection"
+    },
+    "get_connection_certificate_details": {
+      "file": "connections/get_connection_certificate_details.json",
+      "path": "/v1/connections/{connectionId}/certificates/{hash}",
+      "method": "GET",
+      "summary": "Retrieve Connection Certificate Details"
+    },
+    "revoke_connection_certificate": {
+      "file": "connections/revoke_connection_certificate.json",
+      "path": "/v1/connections/{connectionId}/certificates/{hash}",
+      "method": "DELETE",
+      "summary": "Revoke Connection Certificate"
+    },
+    "connect_card": {
+      "file": "connections/connect_card.json",
+      "path": "/v1/connections/{connectionId}/connect-card",
+      "method": "POST",
+      "summary": "Create a Connect Card"
+    },
+    "get_connection_fingerprints_list": {
+      "file": "connections/get_connection_fingerprints_list.json",
+      "path": "/v1/connections/{connectionId}/fingerprints",
+      "method": "GET",
+      "summary": "List Fingerprints Approved for the Connection"
+    },
+    "approve_connection_fingerprint": {
+      "file": "connections/approve_connection_fingerprint.json",
+      "path": "/v1/connections/{connectionId}/fingerprints",
+      "method": "POST",
+      "summary": "Approve a Fingerprint for the Connection"
+    },
+    "get_connection_fingerprint_details": {
+      "file": "connections/get_connection_fingerprint_details.json",
+      "path": "/v1/connections/{connectionId}/fingerprints/{hash}",
+      "method": "GET",
+      "summary": "Retrieve Connection Fingerprint Details"
+    },
+    "revoke_connection_fingerprint": {
+      "file": "connections/revoke_connection_fingerprint.json",
+      "path": "/v1/connections/{connectionId}/fingerprints/{hash}",
+      "method": "DELETE",
+      "summary": "Revoke Connection Fingerprint"
+    },
+    "resync_connection": {
+      "file": "connections/resync_connection.json",
+      "path": "/v1/connections/{connectionId}/resync",
+      "method": "POST",
+      "summary": "Re-sync Connection Data (Historical Sync)"
     },
     "connection_schema_config": {
       "file": "connections/connection_schema_config.json",
@@ -94,17 +124,35 @@
       "method": "PATCH",
       "summary": "Update a Connection Schema Config"
     },
-    "list_connections": {
-      "file": "connections/list_connections.json",
-      "path": "/v1/connections",
-      "method": "GET",
-      "summary": "List All Connections"
-    },
-    "create_connection": {
-      "file": "connections/create_connection.json",
-      "path": "/v1/connections",
+    "delete_multiple_columns_connection_config": {
+      "file": "connections/delete_multiple_columns_connection_config.json",
+      "path": "/v1/connections/{connectionId}/schemas/drop-columns",
       "method": "POST",
-      "summary": "Create a Connection"
+      "summary": "Drop Blocked Columns from the Destination."
+    },
+    "reload_connection_schema_config": {
+      "file": "connections/reload_connection_schema_config.json",
+      "path": "/v1/connections/{connectionId}/schemas/reload",
+      "method": "POST",
+      "summary": "Reload a Connection Schema Config"
+    },
+    "resync_tables": {
+      "file": "connections/resync_tables.json",
+      "path": "/v1/connections/{connectionId}/schemas/tables/resync",
+      "method": "POST",
+      "summary": "Re-sync Connection Table Data"
+    },
+    "modify_connection_database_schema_config": {
+      "file": "connections/modify_connection_database_schema_config.json",
+      "path": "/v1/connections/{connectionId}/schemas/{schemaName}",
+      "method": "PATCH",
+      "summary": "Update a Connection Database Schema Config"
+    },
+    "modify_connection_table_config": {
+      "file": "connections/modify_connection_table_config.json",
+      "path": "/v1/connections/{connectionId}/schemas/{schemaName}/tables/{tableName}",
+      "method": "PATCH",
+      "summary": "Update a Connection Table Config"
     },
     "modify_connection_column_config": {
       "file": "connections/modify_connection_column_config.json",
@@ -118,53 +166,11 @@
       "method": "DELETE",
       "summary": "Drop a Blocked Column From the Destination"
     },
-    "get_connection_fingerprint_details": {
-      "file": "connections/get_connection_fingerprint_details.json",
-      "path": "/v1/connections/{connectionId}/fingerprints/{hash}",
+    "connection_column_config": {
+      "file": "connections/connection_column_config.json",
+      "path": "/v1/connections/{connectionId}/schemas/{schema}/tables/{table}/columns",
       "method": "GET",
-      "summary": "Retrieve Connection Fingerprint Details"
-    },
-    "revoke_connection_fingerprint": {
-      "file": "connections/revoke_connection_fingerprint.json",
-      "path": "/v1/connections/{connectionId}/fingerprints/{hash}",
-      "method": "DELETE",
-      "summary": "Revoke Connection Fingerprint"
-    },
-    "get_connection_certificates_list": {
-      "file": "connections/get_connection_certificates_list.json",
-      "path": "/v1/connections/{connectionId}/certificates",
-      "method": "GET",
-      "summary": "List Certificates Approved for the Connection"
-    },
-    "approve_connection_certificate": {
-      "file": "connections/approve_connection_certificate.json",
-      "path": "/v1/connections/{connectionId}/certificates",
-      "method": "POST",
-      "summary": "Approve a Certificate for the Connection"
-    },
-    "sync_connection": {
-      "file": "connections/sync_connection.json",
-      "path": "/v1/connections/{connectionId}/sync",
-      "method": "POST",
-      "summary": "Sync Connection Data"
-    },
-    "modify_connection_database_schema_config": {
-      "file": "connections/modify_connection_database_schema_config.json",
-      "path": "/v1/connections/{connectionId}/schemas/{schemaName}",
-      "method": "PATCH",
-      "summary": "Update a Connection Database Schema Config"
-    },
-    "resync_connection": {
-      "file": "connections/resync_connection.json",
-      "path": "/v1/connections/{connectionId}/resync",
-      "method": "POST",
-      "summary": "Re-sync Connection Data (Historical Sync)"
-    },
-    "connect_card": {
-      "file": "connections/connect_card.json",
-      "path": "/v1/connections/{connectionId}/connect-card",
-      "method": "POST",
-      "summary": "Create a Connect Card"
+      "summary": "Retrieve Source Table Columns Config"
     },
     "connection_state": {
       "file": "connections/connection_state.json",
@@ -178,17 +184,11 @@
       "method": "PATCH",
       "summary": "Update a Connection State"
     },
-    "resync_tables": {
-      "file": "connections/resync_tables.json",
-      "path": "/v1/connections/{connectionId}/schemas/tables/resync",
+    "sync_connection": {
+      "file": "connections/sync_connection.json",
+      "path": "/v1/connections/{connectionId}/sync",
       "method": "POST",
-      "summary": "Re-sync Connection Table Data"
-    },
-    "reload_connection_schema_config": {
-      "file": "connections/reload_connection_schema_config.json",
-      "path": "/v1/connections/{connectionId}/schemas/reload",
-      "method": "POST",
-      "summary": "Reload a Connection Schema Config"
+      "summary": "Sync Connection Data"
     },
     "run_setup_tests": {
       "file": "connections/run_setup_tests.json",
@@ -236,42 +236,6 @@
     }
   },
   "destinations": {
-    "get_destination_fingerprints_list": {
-      "file": "destinations/get_destination_fingerprints_list.json",
-      "path": "/v1/destinations/{destinationId}/fingerprints",
-      "method": "GET",
-      "summary": "List Fingerprints Approved for the Destination"
-    },
-    "approve_destination_fingerprint": {
-      "file": "destinations/approve_destination_fingerprint.json",
-      "path": "/v1/destinations/{destinationId}/fingerprints",
-      "method": "POST",
-      "summary": "Approve a Fingerprint for the Destination"
-    },
-    "get_destination_certificate_details": {
-      "file": "destinations/get_destination_certificate_details.json",
-      "path": "/v1/destinations/{destinationId}/certificates/{hash}",
-      "method": "GET",
-      "summary": "Retrieve Destination Certificate Details"
-    },
-    "revoke_destination_certificate": {
-      "file": "destinations/revoke_destination_certificate.json",
-      "path": "/v1/destinations/{destinationId}/certificates/{hash}",
-      "method": "DELETE",
-      "summary": "Revoke Destination Certificate"
-    },
-    "get_destination_certificates_list": {
-      "file": "destinations/get_destination_certificates_list.json",
-      "path": "/v1/destinations/{destinationId}/certificates",
-      "method": "GET",
-      "summary": "List Certificates Approved for the Destination"
-    },
-    "approve_destination_certificate": {
-      "file": "destinations/approve_destination_certificate.json",
-      "path": "/v1/destinations/{destinationId}/certificates",
-      "method": "POST",
-      "summary": "Approve a Certificate for the Destination"
-    },
     "list_destinations": {
       "file": "destinations/list_destinations.json",
       "path": "/v1/destinations",
@@ -283,24 +247,6 @@
       "path": "/v1/destinations",
       "method": "POST",
       "summary": "Create a Destination"
-    },
-    "get_destination_fingerprint_details": {
-      "file": "destinations/get_destination_fingerprint_details.json",
-      "path": "/v1/destinations/{destinationId}/fingerprints/{hash}",
-      "method": "GET",
-      "summary": "Retrieve Destination Fingerprint Details"
-    },
-    "revoke_destination_fingerprint": {
-      "file": "destinations/revoke_destination_fingerprint.json",
-      "path": "/v1/destinations/{destinationId}/fingerprints/{hash}",
-      "method": "DELETE",
-      "summary": "Revoke Destination Fingerprint"
-    },
-    "run_destination_setup_tests": {
-      "file": "destinations/run_destination_setup_tests.json",
-      "path": "/v1/destinations/{destinationId}/test",
-      "method": "POST",
-      "summary": "Run Destination Setup Tests"
     },
     "destination_details": {
       "file": "destinations/destination_details.json",
@@ -319,32 +265,74 @@
       "path": "/v1/destinations/{destinationId}",
       "method": "DELETE",
       "summary": "Delete a Destination"
+    },
+    "get_destination_certificates_list": {
+      "file": "destinations/get_destination_certificates_list.json",
+      "path": "/v1/destinations/{destinationId}/certificates",
+      "method": "GET",
+      "summary": "List Certificates Approved for the Destination"
+    },
+    "approve_destination_certificate": {
+      "file": "destinations/approve_destination_certificate.json",
+      "path": "/v1/destinations/{destinationId}/certificates",
+      "method": "POST",
+      "summary": "Approve a Certificate for the Destination"
+    },
+    "get_destination_certificate_details": {
+      "file": "destinations/get_destination_certificate_details.json",
+      "path": "/v1/destinations/{destinationId}/certificates/{hash}",
+      "method": "GET",
+      "summary": "Retrieve Destination Certificate Details"
+    },
+    "revoke_destination_certificate": {
+      "file": "destinations/revoke_destination_certificate.json",
+      "path": "/v1/destinations/{destinationId}/certificates/{hash}",
+      "method": "DELETE",
+      "summary": "Revoke Destination Certificate"
+    },
+    "get_destination_fingerprints_list": {
+      "file": "destinations/get_destination_fingerprints_list.json",
+      "path": "/v1/destinations/{destinationId}/fingerprints",
+      "method": "GET",
+      "summary": "List Fingerprints Approved for the Destination"
+    },
+    "approve_destination_fingerprint": {
+      "file": "destinations/approve_destination_fingerprint.json",
+      "path": "/v1/destinations/{destinationId}/fingerprints",
+      "method": "POST",
+      "summary": "Approve a Fingerprint for the Destination"
+    },
+    "get_destination_fingerprint_details": {
+      "file": "destinations/get_destination_fingerprint_details.json",
+      "path": "/v1/destinations/{destinationId}/fingerprints/{hash}",
+      "method": "GET",
+      "summary": "Retrieve Destination Fingerprint Details"
+    },
+    "revoke_destination_fingerprint": {
+      "file": "destinations/revoke_destination_fingerprint.json",
+      "path": "/v1/destinations/{destinationId}/fingerprints/{hash}",
+      "method": "DELETE",
+      "summary": "Revoke Destination Fingerprint"
+    },
+    "run_destination_setup_tests": {
+      "file": "destinations/run_destination_setup_tests.json",
+      "path": "/v1/destinations/{destinationId}/test",
+      "method": "POST",
+      "summary": "Run Destination Setup Tests"
     }
   },
   "external-logging": {
-    "run_setup_tests_log_service": {
-      "file": "external-logging/run_setup_tests_log_service.json",
-      "path": "/v1/external-logging/{logId}/test",
-      "method": "POST",
-      "summary": "Run Group Log Service Setup Tests"
-    },
-    "get_log_service_details": {
-      "file": "external-logging/get_log_service_details.json",
-      "path": "/v1/external-logging/{logId}",
+    "list_log_services": {
+      "file": "external-logging/list_log_services.json",
+      "path": "/v1/external-logging",
       "method": "GET",
-      "summary": "Retrieve Group Log Service Details"
+      "summary": "List All Log Services within Account"
     },
-    "update_log_service": {
-      "file": "external-logging/update_log_service.json",
-      "path": "/v1/external-logging/{logId}",
-      "method": "PATCH",
-      "summary": "Update a Group Log Service"
-    },
-    "delete_log_service": {
-      "file": "external-logging/delete_log_service.json",
-      "path": "/v1/external-logging/{logId}",
-      "method": "DELETE",
-      "summary": "Delete a Group Log Service"
+    "add_log_service": {
+      "file": "external-logging/add_log_service.json",
+      "path": "/v1/external-logging",
+      "method": "POST",
+      "summary": "Create a Group Log Service"
     },
     "get_account_log_service_details": {
       "file": "external-logging/get_account_log_service_details.json",
@@ -370,20 +358,90 @@
       "method": "DELETE",
       "summary": "Delete Account Log Service"
     },
-    "list_log_services": {
-      "file": "external-logging/list_log_services.json",
-      "path": "/v1/external-logging",
+    "get_log_service_details": {
+      "file": "external-logging/get_log_service_details.json",
+      "path": "/v1/external-logging/{logId}",
       "method": "GET",
-      "summary": "List All Log Services within Account"
+      "summary": "Retrieve Group Log Service Details"
     },
-    "add_log_service": {
-      "file": "external-logging/add_log_service.json",
-      "path": "/v1/external-logging",
+    "update_log_service": {
+      "file": "external-logging/update_log_service.json",
+      "path": "/v1/external-logging/{logId}",
+      "method": "PATCH",
+      "summary": "Update a Group Log Service"
+    },
+    "delete_log_service": {
+      "file": "external-logging/delete_log_service.json",
+      "path": "/v1/external-logging/{logId}",
+      "method": "DELETE",
+      "summary": "Delete a Group Log Service"
+    },
+    "run_setup_tests_log_service": {
+      "file": "external-logging/run_setup_tests_log_service.json",
+      "path": "/v1/external-logging/{logId}/test",
       "method": "POST",
-      "summary": "Create a Group Log Service"
+      "summary": "Run Group Log Service Setup Tests"
+    }
+  },
+  "external-secrets-managers": {
+    "list_esms": {
+      "file": "external-secrets-managers/list_esms.json",
+      "path": "/v1/external-secrets-managers",
+      "method": "GET",
+      "summary": "List all External Secrets Managers"
+    },
+    "create_esm": {
+      "file": "external-secrets-managers/create_esm.json",
+      "path": "/v1/external-secrets-managers",
+      "method": "POST",
+      "summary": "Create an External Secrets Manager"
+    },
+    "get_esm_details": {
+      "file": "external-secrets-managers/get_esm_details.json",
+      "path": "/v1/external-secrets-managers/{esmId}",
+      "method": "GET",
+      "summary": "Retrieve External Secrets Manager Details"
+    },
+    "modify_esm": {
+      "file": "external-secrets-managers/modify_esm.json",
+      "path": "/v1/external-secrets-managers/{esmId}",
+      "method": "PATCH",
+      "summary": "Update an External Secrets Manager"
+    },
+    "delete_esm": {
+      "file": "external-secrets-managers/delete_esm.json",
+      "path": "/v1/external-secrets-managers/{esmId}",
+      "method": "DELETE",
+      "summary": "Delete an External Secrets Manager"
+    },
+    "get_esm_entities": {
+      "file": "external-secrets-managers/get_esm_entities.json",
+      "path": "/v1/external-secrets-managers/{esmId}/entities",
+      "method": "GET",
+      "summary": "List Entities Using an External Secrets Manager"
+    }
+  },
+  "external-secrets-managers-entities": {
+    "list_esm_entities": {
+      "file": "external-secrets-managers-entities/list_esm_entities.json",
+      "path": "/v1/external-secrets-managers-entities",
+      "method": "GET",
+      "summary": "List All Entities Using External Secrets Managers"
     }
   },
   "groups": {
+    "list_all_groups": {
+      "file": "groups/list_all_groups.json",
+      "path": "/v1/groups",
+      "method": "GET",
+      "summary": "List All Destinations within Account"
+    },
+    "create_group": {
+      "file": "groups/create_group.json",
+      "path": "/v1/groups",
+      "method": "POST",
+      "summary": "Create a Group"
+    },
     "group_details": {
       "file": "groups/group_details.json",
       "path": "/v1/groups/{groupId}",
@@ -402,12 +460,6 @@
       "method": "DELETE",
       "summary": "Delete a Group"
     },
-    "delete_user_from_group": {
-      "file": "groups/delete_user_from_group.json",
-      "path": "/v1/groups/{groupId}/users/{userId}",
-      "method": "DELETE",
-      "summary": "Remove a User from a Group"
-    },
     "list_all_connections_in_group": {
       "file": "groups/list_all_connections_in_group.json",
       "path": "/v1/groups/{groupId}/connections",
@@ -420,17 +472,11 @@
       "method": "GET",
       "summary": "Retrieve Group Public SSH Key"
     },
-    "list_all_groups": {
-      "file": "groups/list_all_groups.json",
-      "path": "/v1/groups",
+    "group_service_account": {
+      "file": "groups/group_service_account.json",
+      "path": "/v1/groups/{groupId}/service-account",
       "method": "GET",
-      "summary": "List All Destinations within Account"
-    },
-    "create_group": {
-      "file": "groups/create_group.json",
-      "path": "/v1/groups",
-      "method": "POST",
-      "summary": "Create a Group"
+      "summary": "Retrieve Group Service Account"
     },
     "list_all_users_in_group": {
       "file": "groups/list_all_users_in_group.json",
@@ -444,11 +490,11 @@
       "method": "POST",
       "summary": "Add a User to a Group"
     },
-    "group_service_account": {
-      "file": "groups/group_service_account.json",
-      "path": "/v1/groups/{groupId}/service-account",
-      "method": "GET",
-      "summary": "Retrieve Group Service Account"
+    "delete_user_from_group": {
+      "file": "groups/delete_user_from_group.json",
+      "path": "/v1/groups/{groupId}/users/{userId}",
+      "method": "DELETE",
+      "summary": "Remove a User from a Group"
     }
   },
   "hvr": {
@@ -472,18 +518,6 @@
       "method": "POST",
       "summary": "Create a Hybrid Deployment Agent"
     },
-    "re_auth_hybrid_deployment_agent": {
-      "file": "hybrid-deployment-agents/re_auth_hybrid_deployment_agent.json",
-      "path": "/v1/hybrid-deployment-agents/{agentId}/re-auth",
-      "method": "PATCH",
-      "summary": "Regenerate Authentication Keys"
-    },
-    "reset_hybrid_deployment_agent_credentials": {
-      "file": "hybrid-deployment-agents/reset_hybrid_deployment_agent_credentials.json",
-      "path": "/v1/hybrid-deployment-agents/{agentId}/reset-credentials",
-      "method": "POST",
-      "summary": "Reset Agent Credentials"
-    },
     "get_hybrid_deployment_agent": {
       "file": "hybrid-deployment-agents/get_hybrid_deployment_agent.json",
       "path": "/v1/hybrid-deployment-agents/{agentId}",
@@ -495,6 +529,18 @@
       "path": "/v1/hybrid-deployment-agents/{agentId}",
       "method": "DELETE",
       "summary": "Delete a Hybrid Deployment Agent"
+    },
+    "re_auth_hybrid_deployment_agent": {
+      "file": "hybrid-deployment-agents/re_auth_hybrid_deployment_agent.json",
+      "path": "/v1/hybrid-deployment-agents/{agentId}/re-auth",
+      "method": "PATCH",
+      "summary": "Regenerate Authentication Keys"
+    },
+    "reset_hybrid_deployment_agent_credentials": {
+      "file": "hybrid-deployment-agents/reset_hybrid_deployment_agent_credentials.json",
+      "path": "/v1/hybrid-deployment-agents/{agentId}/reset-credentials",
+      "method": "POST",
+      "summary": "Reset Agent Credentials"
     }
   },
   "metadata": {
@@ -512,6 +558,18 @@
     }
   },
   "private-links": {
+    "get_private_links": {
+      "file": "private-links/get_private_links.json",
+      "path": "/v1/private-links",
+      "method": "GET",
+      "summary": "List All Private Links"
+    },
+    "create_private_link": {
+      "file": "private-links/create_private_link.json",
+      "path": "/v1/private-links",
+      "method": "POST",
+      "summary": "Create a Private Link"
+    },
     "get_private_link_details": {
       "file": "private-links/get_private_link_details.json",
       "path": "/v1/private-links/{privateLinkId}",
@@ -529,32 +587,20 @@
       "path": "/v1/private-links/{privateLinkId}",
       "method": "DELETE",
       "summary": "Delete a Private Link"
-    },
-    "get_private_links": {
-      "file": "private-links/get_private_links.json",
-      "path": "/v1/private-links",
-      "method": "GET",
-      "summary": "List All Private Links"
-    },
-    "create_private_link": {
-      "file": "private-links/create_private_link.json",
-      "path": "/v1/private-links",
-      "method": "POST",
-      "summary": "Create a Private Link"
     }
   },
   "proxy": {
-    "regenerate_secrets_proxy_agent": {
-      "file": "proxy/regenerate_secrets_proxy_agent.json",
-      "path": "/v1/proxy/{agentId}/regenerate-secrets",
-      "method": "POST",
-      "summary": "Regenerate Secrets for Proxy Agent"
-    },
-    "get_proxy_agent_connections": {
-      "file": "proxy/get_proxy_agent_connections.json",
-      "path": "/v1/proxy/{agentId}/connections",
+    "get_proxy_agent": {
+      "file": "proxy/get_proxy_agent.json",
+      "path": "/v1/proxy",
       "method": "GET",
-      "summary": "List All Connections Attached to the Proxy Agent"
+      "summary": "List all Proxy Agents"
+    },
+    "create_proxy_agent": {
+      "file": "proxy/create_proxy_agent.json",
+      "path": "/v1/proxy",
+      "method": "POST",
+      "summary": "Create a Proxy Agent"
     },
     "get_proxy_agent_details": {
       "file": "proxy/get_proxy_agent_details.json",
@@ -568,17 +614,17 @@
       "method": "DELETE",
       "summary": "Delete a Proxy Agent"
     },
-    "get_proxy_agent": {
-      "file": "proxy/get_proxy_agent.json",
-      "path": "/v1/proxy",
+    "get_proxy_agent_connections": {
+      "file": "proxy/get_proxy_agent_connections.json",
+      "path": "/v1/proxy/{agentId}/connections",
       "method": "GET",
-      "summary": "List all Proxy Agents"
+      "summary": "List All Connections Attached to the Proxy Agent"
     },
-    "create_proxy_agent": {
-      "file": "proxy/create_proxy_agent.json",
-      "path": "/v1/proxy",
+    "regenerate_secrets_proxy_agent": {
+      "file": "proxy/regenerate_secrets_proxy_agent.json",
+      "path": "/v1/proxy/{agentId}/regenerate-secrets",
       "method": "POST",
-      "summary": "Create a Proxy Agent"
+      "summary": "Regenerate Secrets for Proxy Agent"
     }
   },
   "public": {
@@ -598,12 +644,6 @@
     }
   },
   "system-keys": {
-    "rotate_system_key": {
-      "file": "system-keys/rotate_system_key.json",
-      "path": "/v1/system-keys/{keyId}/rotate",
-      "method": "POST",
-      "summary": "Rotate a System Key"
-    },
     "get_system_keys": {
       "file": "system-keys/get_system_keys.json",
       "path": "/v1/system-keys",
@@ -633,9 +673,75 @@
       "path": "/v1/system-keys/{keyId}",
       "method": "DELETE",
       "summary": "Delete a System Key"
+    },
+    "rotate_system_key": {
+      "file": "system-keys/rotate_system_key.json",
+      "path": "/v1/system-keys/{keyId}/rotate",
+      "method": "POST",
+      "summary": "Rotate a System Key"
     }
   },
   "teams": {
+    "list_all_teams": {
+      "file": "teams/list_all_teams.json",
+      "path": "/v1/teams",
+      "method": "GET",
+      "summary": "List All Teams"
+    },
+    "create_team": {
+      "file": "teams/create_team.json",
+      "path": "/v1/teams",
+      "method": "POST",
+      "summary": "Create a Team"
+    },
+    "team_details": {
+      "file": "teams/team_details.json",
+      "path": "/v1/teams/{teamId}",
+      "method": "GET",
+      "summary": "Retrieve Team Details"
+    },
+    "modify_team": {
+      "file": "teams/modify_team.json",
+      "path": "/v1/teams/{teamId}",
+      "method": "PATCH",
+      "summary": "Update a Team"
+    },
+    "delete_team": {
+      "file": "teams/delete_team.json",
+      "path": "/v1/teams/{teamId}",
+      "method": "DELETE",
+      "summary": "Delete a Team"
+    },
+    "get_team_memberships_in_connections": {
+      "file": "teams/get_team_memberships_in_connections.json",
+      "path": "/v1/teams/{teamId}/connections",
+      "method": "GET",
+      "summary": "List All Connection Memberships"
+    },
+    "add_team_membership_in_connection": {
+      "file": "teams/add_team_membership_in_connection.json",
+      "path": "/v1/teams/{teamId}/connections",
+      "method": "POST",
+      "summary": "Add Connection Membership"
+    },
+    "get_team_membership_in_connection": {
+      "file": "teams/get_team_membership_in_connection.json",
+      "path": "/v1/teams/{teamId}/connections/{connectionId}",
+      "method": "GET",
+      "summary": "Retrieve Connection Membership"
+    },
+    "update_team_membership_in_connection": {
+      "file": "teams/update_team_membership_in_connection.json",
+      "path": "/v1/teams/{teamId}/connections/{connectionId}",
+      "method": "PATCH",
+      "summary": "Update Connection Membership"
+    },
+    "delete_team_membership_in_connection": {
+      "file": "teams/delete_team_membership_in_connection.json",
+      "path": "/v1/teams/{teamId}/connections/{connectionId}",
+      "method": "DELETE",
+      "summary": "Delete Connection Membership"
+    },
     "get_team_memberships_in_groups": {
       "file": "teams/get_team_memberships_in_groups.json",
       "path": "/v1/teams/{teamId}/groups",
@@ -666,23 +772,23 @@
       "method": "DELETE",
       "summary": "Delete Group Membership"
     },
-    "get_team_membership_in_connection": {
-      "file": "teams/get_team_membership_in_connection.json",
-      "path": "/v1/teams/{teamId}/connections/{connectionId}",
-      "method": "GET",
-      "summary": "Retrieve Connection Membership"
-    },
-    "update_team_membership_in_connection": {
-      "file": "teams/update_team_membership_in_connection.json",
-      "path": "/v1/teams/{teamId}/connections/{connectionId}",
-      "method": "PATCH",
-      "summary": "Update Connection Membership"
-    },
-    "delete_team_membership_in_connection": {
-      "file": "teams/delete_team_membership_in_connection.json",
-      "path": "/v1/teams/{teamId}/connections/{connectionId}",
+    "delete_team_membership_in_account": {
+      "file": "teams/delete_team_membership_in_account.json",
+      "path": "/v1/teams/{teamId}/role",
       "method": "DELETE",
-      "summary": "Delete Connection Membership"
+      "summary": "Delete Team from Account"
+    },
+    "list_users_in_team": {
+      "file": "teams/list_users_in_team.json",
+      "path": "/v1/teams/{teamId}/users",
+      "method": "GET",
+      "summary": "List All User Memberships"
+    },
+    "add_user_to_team": {
+      "file": "teams/add_user_to_team.json",
+      "path": "/v1/teams/{teamId}/users",
+      "method": "POST",
+      "summary": "Add a User to the Team"
     },
     "get_user_in_team": {
       "file": "teams/get_user_in_team.json",
@@ -701,75 +807,9 @@
       "path": "/v1/teams/{teamId}/users/{userId}",
       "method": "DELETE",
       "summary": "Delete a User from a Team"
-    },
-    "team_details": {
-      "file": "teams/team_details.json",
-      "path": "/v1/teams/{teamId}",
-      "method": "GET",
-      "summary": "Retrieve Team Details"
-    },
-    "modify_team": {
-      "file": "teams/modify_team.json",
-      "path": "/v1/teams/{teamId}",
-      "method": "PATCH",
-      "summary": "Update a Team"
-    },
-    "delete_team": {
-      "file": "teams/delete_team.json",
-      "path": "/v1/teams/{teamId}",
-      "method": "DELETE",
-      "summary": "Delete a Team"
-    },
-    "list_all_teams": {
-      "file": "teams/list_all_teams.json",
-      "path": "/v1/teams",
-      "method": "GET",
-      "summary": "List All Teams"
-    },
-    "create_team": {
-      "file": "teams/create_team.json",
-      "path": "/v1/teams",
-      "method": "POST",
-      "summary": "Create a Team"
-    },
-    "get_team_memberships_in_connections": {
-      "file": "teams/get_team_memberships_in_connections.json",
-      "path": "/v1/teams/{teamId}/connections",
-      "method": "GET",
-      "summary": "List All Connection Memberships"
-    },
-    "add_team_membership_in_connection": {
-      "file": "teams/add_team_membership_in_connection.json",
-      "path": "/v1/teams/{teamId}/connections",
-      "method": "POST",
-      "summary": "Add Connection Membership"
-    },
-    "list_users_in_team": {
-      "file": "teams/list_users_in_team.json",
-      "path": "/v1/teams/{teamId}/users",
-      "method": "GET",
-      "summary": "List All User Memberships"
-    },
-    "add_user_to_team": {
-      "file": "teams/add_user_to_team.json",
-      "path": "/v1/teams/{teamId}/users",
-      "method": "POST",
-      "summary": "Add a User to the Team"
-    },
-    "delete_team_membership_in_account": {
-      "file": "teams/delete_team_membership_in_account.json",
-      "path": "/v1/teams/{teamId}/role",
-      "method": "DELETE",
-      "summary": "Delete Team from Account"
     }
   },
   "transformation-projects": {
-    "test_transformation_project": {
-      "file": "transformation-projects/test_transformation_project.json",
-      "path": "/v1/transformation-projects/{projectId}/test",
-      "method": "POST",
-      "summary": "Test Transformation Project"
-    },
     "list_all_transformation_projects": {
       "file": "transformation-projects/list_all_transformation_projects.json",
       "path": "/v1/transformation-projects",
@@ -799,9 +839,27 @@
       "path": "/v1/transformation-projects/{projectId}",
       "method": "DELETE",
       "summary": "Delete Transformation Project"
+    },
+    "test_transformation_project": {
+      "file": "transformation-projects/test_transformation_project.json",
+      "path": "/v1/transformation-projects/{projectId}/test",
+      "method": "POST",
+      "summary": "Test Transformation Project"
     }
   },
   "transformations": {
+    "transformations_list": {
+      "file": "transformations/transformations_list.json",
+      "path": "/v1/transformations",
+      "method": "GET",
+      "summary": "List all Transformations"
+    },
+    "create_transformation": {
+      "file": "transformations/create_transformation.json",
+      "path": "/v1/transformations",
+      "method": "POST",
+      "summary": "Create a Transformation"
+    },
     "transformation_package_metadata_list": {
       "file": "transformations/transformation_package_metadata_list.json",
       "path": "/v1/transformations/package-metadata",
@@ -832,11 +890,11 @@
       "method": "DELETE",
       "summary": "Delete a Transformation"
     },
-    "upgrade_transformation_package": {
-      "file": "transformations/upgrade_transformation_package.json",
-      "path": "/v1/transformations/{transformationId}/upgrade",
+    "cancel_transformation": {
+      "file": "transformations/cancel_transformation.json",
+      "path": "/v1/transformations/{transformationId}/cancel",
       "method": "POST",
-      "summary": "Upgrade Transformation Package"
+      "summary": "Cancel Running Transformation"
     },
     "run_transformation": {
       "file": "transformations/run_transformation.json",
@@ -844,43 +902,43 @@
       "method": "POST",
       "summary": "Run Transformation"
     },
-    "transformations_list": {
-      "file": "transformations/transformations_list.json",
-      "path": "/v1/transformations",
-      "method": "GET",
-      "summary": "List all Transformations"
-    },
-    "create_transformation": {
-      "file": "transformations/create_transformation.json",
-      "path": "/v1/transformations",
+    "upgrade_transformation_package": {
+      "file": "transformations/upgrade_transformation_package.json",
+      "path": "/v1/transformations/{transformationId}/upgrade",
       "method": "POST",
-      "summary": "Create a Transformation"
-    },
-    "cancel_transformation": {
-      "file": "transformations/cancel_transformation.json",
-      "path": "/v1/transformations/{transformationId}/cancel",
-      "method": "POST",
-      "summary": "Cancel Running Transformation"
+      "summary": "Upgrade Transformation Package"
     }
   },
   "users": {
+    "list_all_users": {
+      "file": "users/list_all_users.json",
+      "path": "/v1/users",
+      "method": "GET",
+      "summary": "List All Users"
+    },
+    "create_user": {
+      "file": "users/create_user.json",
+      "path": "/v1/users",
+      "method": "POST",
+      "summary": "Invite a User"
+    },
     "delete_user": {
       "file": "users/delete_user.json",
       "path": "/v1/users/{id}",
       "method": "DELETE",
       "summary": "Delete a User"
     },
-    "get_user_memberships_in_groups": {
-      "file": "users/get_user_memberships_in_groups.json",
-      "path": "/v1/users/{userId}/groups",
+    "user_details": {
+      "file": "users/user_details.json",
+      "path": "/v1/users/{userId}",
       "method": "GET",
-      "summary": "List All Group Memberships"
+      "summary": "Retrieve User Details"
     },
-    "add_user_membership_in_group": {
-      "file": "users/add_user_membership_in_group.json",
-      "path": "/v1/users/{userId}/groups",
-      "method": "POST",
-      "summary": "Add Group Membership"
+    "modify_user": {
+      "file": "users/modify_user.json",
+      "path": "/v1/users/{userId}",
+      "method": "PATCH",
+      "summary": "Update a User"
     },
     "get_user_memberships_in_connections": {
       "file": "users/get_user_memberships_in_connections.json",
@@ -894,35 +952,35 @@
       "method": "POST",
       "summary": "Add a Connection Membership"
     },
-    "user_details": {
-      "file": "users/user_details.json",
-      "path": "/v1/users/{userId}",
+    "get_user_membership_in_connections": {
+      "file": "users/get_user_membership_in_connections.json",
+      "path": "/v1/users/{userId}/connections/{connectionId}",
       "method": "GET",
-      "summary": "Retrieve a User Details"
+      "summary": "Retrieve Connection Membership"
     },
-    "modify_user": {
-      "file": "users/modify_user.json",
-      "path": "/v1/users/{userId}",
+    "update_user_membership_in_connection": {
+      "file": "users/update_user_membership_in_connection.json",
+      "path": "/v1/users/{userId}/connections/{connectionId}",
       "method": "PATCH",
-      "summary": "Update a User"
+      "summary": "Update Connection Membership"
     },
-    "list_all_users": {
-      "file": "users/list_all_users.json",
-      "path": "/v1/users",
-      "method": "GET",
-      "summary": "List All Users"
-    },
-    "create_user": {
-      "file": "users/create_user.json",
-      "path": "/v1/users",
-      "method": "POST",
-      "summary": "Invite a User"
-    },
-    "delete_user_membership_in_account": {
-      "file": "users/delete_user_membership_in_account.json",
-      "path": "/v1/users/{userId}/role",
+    "delete_user_membership_in_connection": {
+      "file": "users/delete_user_membership_in_connection.json",
+      "path": "/v1/users/{userId}/connections/{connectionId}",
       "method": "DELETE",
-      "summary": "Delete Account Role"
+      "summary": "Delete Connection Membership"
+    },
+    "get_user_memberships_in_groups": {
+      "file": "users/get_user_memberships_in_groups.json",
+      "path": "/v1/users/{userId}/groups",
+      "method": "GET",
+      "summary": "List All Group Memberships"
+    },
+    "add_user_membership_in_group": {
+      "file": "users/add_user_membership_in_group.json",
+      "path": "/v1/users/{userId}/groups",
+      "method": "POST",
+      "summary": "Add Group Membership"
     },
     "get_user_membership_in_group": {
       "file": "users/get_user_membership_in_group.json",
@@ -942,32 +1000,14 @@
       "method": "DELETE",
       "summary": "Delete Group Membership"
     },
-    "get_user_membership_in_connections": {
-      "file": "users/get_user_membership_in_connections.json",
-      "path": "/v1/users/{userId}/connections/{connectionId}",
-      "method": "GET",
-      "summary": "Retrieve Connection Membership"
-    },
-    "update_user_membership_in_connection": {
-      "file": "users/update_user_membership_in_connection.json",
-      "path": "/v1/users/{userId}/connections/{connectionId}",
-      "method": "PATCH",
-      "summary": "Update Connection Membership"
-    },
-    "delete_user_membership_in_connection": {
-      "file": "users/delete_user_membership_in_connection.json",
-      "path": "/v1/users/{userId}/connections/{connectionId}",
+    "delete_user_membership_in_account": {
+      "file": "users/delete_user_membership_in_account.json",
+      "path": "/v1/users/{userId}/role",
       "method": "DELETE",
-      "summary": "Delete Connection Membership"
+      "summary": "Delete Account Role"
     }
   },
   "webhooks": {
-    "create_group_webhook": {
-      "file": "webhooks/create_group_webhook.json",
-      "path": "/v1/webhooks/group/{groupId}",
-      "method": "POST",
-      "summary": "Create a Group Webhook"
-    },
     "list_all_webhooks": {
       "file": "webhooks/list_all_webhooks.json",
       "path": "/v1/webhooks",
@@ -980,11 +1020,11 @@
       "method": "POST",
       "summary": "Create an Account Webhook"
     },
-    "test_webhook": {
-      "file": "webhooks/test_webhook.json",
-      "path": "/v1/webhooks/{webhookId}/test",
+    "create_group_webhook": {
+      "file": "webhooks/create_group_webhook.json",
+      "path": "/v1/webhooks/group/{groupId}",
       "method": "POST",
-      "summary": "Test a Webhook"
+      "summary": "Create a Group Webhook"
     },
     "webhook_details": {
       "file": "webhooks/webhook_details.json",
@@ -1003,6 +1043,12 @@
       "path": "/v1/webhooks/{webhookId}",
       "method": "DELETE",
       "summary": "Delete a Webhook"
+    },
+    "test_webhook": {
+      "file": "webhooks/test_webhook.json",
+      "path": "/v1/webhooks/{webhookId}/test",
+      "method": "POST",
+      "summary": "Test a Webhook"
     }
   }
 }

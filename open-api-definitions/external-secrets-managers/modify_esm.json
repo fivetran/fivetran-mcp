@@ -1,0 +1,27 @@
+{
+  "description": "Updates the configuration of an existing External Secrets Manager instance.",
+  "path": "/v1/external-secrets-managers/{esmId}",
+  "method": "PATCH",
+  "parameters": [
+    {
+      "name": "esmId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the External Secrets Manager instance.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "request_body_schema": {
+    "required": [
+      "config"
+    ],
+    "type": "object",
+    "properties": {
+      "config": {
+        "type": "object"
+      }
+    }
+  }
+}

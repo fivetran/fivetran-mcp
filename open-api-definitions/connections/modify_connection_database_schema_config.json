@@ -7,7 +7,7 @@
       "name": "connectionId",
       "in": "path",
       "required": true,
-      "description": "The unique identifier for the connection within the Fivetran system.",
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
       "schema": {
         "type": "string"
       }
@@ -16,7 +16,7 @@
       "name": "schemaName",
       "in": "path",
       "required": true,
-      "description": "The database schema name within your destination (different from the connection schema)",
+      "description": "The schema name as stored in the connection schema config. This value is case-sensitive; an incorrect case results in an HTTP 404 error.",
       "schema": {
         "type": "string"
       }
@@ -33,58 +33,52 @@
         "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
       },
       "tables": {
-        "title": "Tables",
         "type": "object",
-        "properties": {
-          "table": {
-            "required": [
-              "enabled"
-            ],
-            "type": "object",
-            "properties": {
-              "enabled": {
-                "type": "boolean",
-                "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
-              },
-              "columns": {
-                "title": "Columns",
+        "additionalProperties": {
+          "required": [
+            "enabled"
+          ],
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+            },
+            "columns": {
+              "type": "object",
+              "additionalProperties": {
+                "required": [
+                  "enabled"
+                ],
                 "type": "object",
                 "properties": {
-                  "column": {
-                    "required": [
-                      "enabled"
-                    ],
-                    "type": "object",
-                    "properties": {
-                      "enabled": {
-                        "type": "boolean",
-                        "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
-                      },
-                      "hashed": {
-                        "type": "boolean",
-                        "description": "The boolean value specifying whether a column should be hashed"
-                      },
-                      "is_primary_key": {
-                        "type": "boolean"
-                      }
-                    }
+                  "enabled": {
+                    "type": "boolean",
+                    "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                  },
+                  "hashed": {
+                    "type": "boolean",
+                    "description": "The boolean value specifying whether a column should be hashed"
+                  },
+                  "is_primary_key": {
+                    "type": "boolean"
                   }
-                },
-                "description": "The set of columns within your table schema config. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync."
+                }
               },
-              "sync_mode": {
-                "type": "string",
-                "description": "This field appears in the response if the connection supports switching sync modes for tables",
-                "enum": [
-                  "SOFT_DELETE",
-                  "HISTORY",
-                  "LIVE"
-                ]
-              }
+              "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync."
+            },
+            "sync_mode": {
+              "type": "string",
+              "description": "This field appears in the response if the connection supports switching sync modes for tables",
+              "enum": [
+                "SOFT_DELETE",
+                "HISTORY",
+                "LIVE"
+              ]
             }
           }
         },
-        "description": "The set of tables within your database schema config."
+        "description": "The set of tables within your database schema config. Each key is the table name as stored in the connection schema config. Table names are case-sensitive; an incorrect case results in an HTTP 404 error."
       }
     }
   }

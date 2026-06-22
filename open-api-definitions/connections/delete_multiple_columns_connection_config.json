@@ -7,7 +7,7 @@
       "name": "connectionId",
       "in": "path",
       "required": true,
-      "description": "The unique identifier for the connection within the Fivetran system.",
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
       "schema": {
         "type": "string"
       }
@@ -41,7 +41,7 @@
                     "properties": {
                       "columns": {
                         "type": "array",
-                        "description": "The set of columns within your table schema config. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync.",
+                        "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync.",
                         "items": {
                           "type": "string"
                         }
@@ -49,12 +49,12 @@
                     }
                   }
                 },
-                "description": "The set of tables within your database schema config."
+                "description": "The set of tables within your database schema config. Each key is the table name as stored in the connection schema config. Table names are case-sensitive; an incorrect case results in an HTTP 404 error."
               }
             }
           }
         },
-        "description": "The set of schemas within your connection schema config."
+        "description": "The set of schemas within your connection schema config. Each key is the schema name as stored in the connection schema config. Schema names are case-sensitive; an incorrect case results in an HTTP 404 error."
       }
     }
   }

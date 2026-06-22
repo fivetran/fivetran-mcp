@@ -1,5 +1,5 @@
 {
-  "description": "Returns the connection state. This endpoint is only supported for Function and Connection SDK connectors.",
+  "description": "Returns the connection state. This endpoint is only supported for Function and Connection SDK connectors. To update the connection state, use [Update Connection State](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection-state).",
   "path": "/v1/connections/{connectionId}/state",
   "method": "GET",
   "parameters": [
@@ -7,7 +7,7 @@
       "name": "connectionId",
       "in": "path",
       "required": true,
-      "description": "The unique identifier for the connection within the Fivetran system.",
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
       "schema": {
         "type": "string"
       }

@@ -64,32 +64,11 @@
       },
       "trust_certificates": {
         "type": "boolean",
-        "description": "Specifies whether we should trust the certificate automatically. The default value is FALSE. If a certificate is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination certificate](https://fivetran.com/docs/rest-api/certificates#approveadestinationcertificate)."
+        "description": "Specifies whether we should trust the certificate automatically. The default value is FALSE. If a certificate is not trusted automatically, it has to be approved by calling the [Approve destination certificate endpoint](/docs/rest-api/api-reference/certificates/approve-destination-certificate).\n\n> IMPORTANT: To capture the `hash` and `encoded_cert` values needed for approval, omit this field or set it to `false`.\n"
       },
       "trust_fingerprints": {
         "type": "boolean",
-        "description": "Specifies whether we should trust the SSH fingerprint automatically. The default value is FALSE. If a fingerprint is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination fingerprint](https://fivetran.com/docs/rest-api/certificates#approveadestinationfingerprint)."
-      },
-      "networking_method": {
-        "type": "string",
-        "enum": [
-          "Directly",
-          "PrivateLink",
-          "SshTunnel",
-          "ProxyAgent"
-        ]
-      },
-      "run_setup_tests": {
-        "type": "boolean",
-        "description": "Specifies whether setup tests should be run automatically."
-      },
-      "daylight_saving_time_enabled": {
-        "type": "boolean",
-        "description": "Shift my UTC offset with daylight savings time (US Only)"
-      },
-      "private_link_id": {
-        "type": "string",
-        "description": "The unique identifier for the self-served private link that is used by the connection"
+        "description": "Specifies whether we should trust the SSH fingerprint automatically. The default value is FALSE. If a fingerprint is not trusted automatically, it has to be approved by calling the [Approve destination fingerprint endpoint](/docs/rest-api/api-reference/certificates/approve-destination-fingerprint).\n\n> IMPORTANT: To capture the `hash` and `public_key` values needed for approval, omit this field or set it to `false`.\n"
       },
       "time_zone_offset": {
         "type": "string",
@@ -121,12 +100,33 @@
           "+12"
         ]
       },
-      "proxy_agent_id": {
-        "type": "string",
-        "description": "The unique identifier for the proxy agent within the Fivetran system"
+      "run_setup_tests": {
+        "type": "boolean",
+        "description": "Specifies whether setup tests should be run automatically."
+      },
+      "daylight_saving_time_enabled": {
+        "type": "boolean",
+        "description": "Shift my UTC offset with daylight savings time (US Only)"
       },
       "hybrid_deployment_agent_id": {
         "type": "string"
+      },
+      "private_link_id": {
+        "type": "string",
+        "description": "The unique identifier for the self-served private link that is used by the connection"
+      },
+      "networking_method": {
+        "type": "string",
+        "enum": [
+          "Directly",
+          "PrivateLink",
+          "SshTunnel",
+          "ProxyAgent"
+        ]
+      },
+      "proxy_agent_id": {
+        "type": "string",
+        "description": "The unique identifier for the proxy agent within the Fivetran system"
       }
     }
   }

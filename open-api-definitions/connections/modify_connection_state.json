@@ -1,5 +1,5 @@
 {
-  "description": "Updates the connection state. To update the state, you should pause your connection first. \n\nTo update the connection state, do the following:\n\n  1. Pause connection using [Update a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection) endpoint (set 'paused' to 'true'). \n  2. Update the state by using the [Update Connection State](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection-state) endpoint.\n  3. Unpause the connection by setting the 'paused' parameter to 'false' in the [Update a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection) endpoint request.\n\nThis endpoint is only supported for [Function](https://fivetran.com/docs/connectors/functions) and [Connection SDK](https://fivetran.com/docs/connectors/connector-sdk) connectors.\n",
+  "description": "Updates the connection state. To update the state, you should pause your connection first.\n\nTo update the connection state, do the following:\n\n  1. Pause connection using [Update a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection) endpoint (set 'paused' to 'true').\n  2. Update the state by using the [Update Connection State](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection-state) endpoint.\n  3. Unpause the connection by setting the 'paused' parameter to 'false' in the [Update a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection) endpoint request.\n\nThis endpoint is only supported for [Function](https://fivetran.com/docs/connectors/functions) and [Connection SDK](https://fivetran.com/docs/connectors/connector-sdk) connectors.\n",
   "path": "/v1/connections/{connectionId}/state",
   "method": "PATCH",
   "parameters": [
@@ -7,10 +7,18 @@
       "name": "connectionId",
       "in": "path",
       "required": true,
-      "description": "The unique identifier for the connection within the Fivetran system.",
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
       "schema": {
         "type": "string"
       }
     }
-  ]
+  ],
+  "request_body_schema": {
+    "type": "object",
+    "properties": {
+      "state": {
+        "type": "object"
+      }
+    }
+  }
 }

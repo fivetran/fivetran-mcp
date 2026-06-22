@@ -7,7 +7,7 @@
       "name": "connectionId",
       "in": "path",
       "required": true,
-      "description": "The unique identifier for the connection within the Fivetran system.",
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
       "schema": {
         "type": "string"
       }
@@ -29,7 +29,7 @@
             }
           }
         },
-        "description": "A map containing an array of tables to re-sync for each schema.\n\nIt is an optional parameter that must be non-empty if provided. If not provided, all schemas and tables of the connection are re-synced.\n"
+        "description": "A map where each key is a schema name and each value is a non-empty array of table names to re-sync within that schema.\nBoth the scope object and each schema's table array must be non-empty \u2014 an empty scope object or an empty table array returns 400.\nIf omitted or set to null, all schemas and tables of the connection are re-synced.\nThis parameter is only supported for connectors that support table-level re-sync (typically database connectors such as PostgreSQL, MySQL, and Oracle). Sending scope to an unsupported connector type (for example, Salesforce or Google Sheets) returns 400.\nRetrieve valid schema and table names from GET /v1/connections/{connectionId}/schemas.\n"
       }
     }
   }

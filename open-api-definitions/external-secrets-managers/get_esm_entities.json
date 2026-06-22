@@ -1,0 +1,25 @@
+{
+  "description": "Returns a list of source connections and destinations that are using a specific External Secrets Manager.",
+  "path": "/v1/external-secrets-managers/{esmId}/entities",
+  "method": "GET",
+  "parameters": [
+    {
+      "name": "esmId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the External Secrets Manager instance.",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "type",
+      "in": "query",
+      "required": false,
+      "description": "Filter by entity type. Accepted values are source, destination, or all.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ]
+}

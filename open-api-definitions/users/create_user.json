@@ -28,7 +28,7 @@
       },
       "picture": {
         "type": "string",
-        "description": "The user's avatar as a URL link (for example, 'http://mycompany.com/avatars/john_white.png') or base64 data URI (for example, 'data:image/png;base64,aHR0cDovL215Y29tcGFueS5jb20vYXZhdGFycy9qb2huX3doaXRlLnBuZw==')"
+        "description": "The user's avatar as a URL link (for example, 'http:<!-- -->//mycompany.com/avatars/john_white.png') or base64 data URI (for example, 'data:image/png;base64,aHR0cDovL215Y29tcGFueS5jb20vYXZhdGFycy9qb2huX3doaXRlLnBuZw==')"
       },
       "role": {
         "type": "string",

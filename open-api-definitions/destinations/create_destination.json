@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new destination within a specified group in your Fivetran account. \n\n> IMPORTANT: Groups and destinations are mapped 1:1 to each other. We do this mapping using the group's `id` value that we automatically generate when you create a group, and the destination's `group_id` value that you specify when you create a destination. This means that you must create a group in your Fivetran account before you can create a destination in it.\n",
+  "description": "Creates a new destination within a specified group in your Fivetran account.\n\n> IMPORTANT: Groups and destinations are mapped 1:1 to each other. We do this mapping using the group's `id` value that we automatically generate when you create a group, and the destination's `group_id` value that you specify when you create a destination. This means that you must create a group in your Fivetran account before you can create a destination in it.\n\n> IMPORTANT: If you want to get the certificate details, do not set `trust_certificates` to `true` when you create a destination with our REST API. We can only provide the certificate details through the failed Validate Certificate setup test. For a full walkthrough, see [Get Destination Certificate Details](https://fivetran.com/docs/rest-api/tutorials/get-destination-certificate-details).\n",
   "path": "/v1/destinations",
   "method": "POST",
   "request_body_schema": {
@@ -90,11 +90,11 @@
       },
       "trust_certificates": {
         "type": "boolean",
-        "description": "Specifies whether we should trust the certificate automatically. The default value is FALSE. If a certificate is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination certificate](https://fivetran.com/docs/rest-api/certificates#approveadestinationcertificate)."
+        "description": "Specifies whether we should trust the certificate automatically. The default value is FALSE. If a certificate is not trusted automatically, it has to be approved by calling the [Approve destination certificate endpoint](/docs/rest-api/api-reference/certificates/approve-destination-certificate).\n\n> IMPORTANT: To capture the `hash` and `encoded_cert` values needed for approval, omit this field or set it to `false`.\n"
       },
       "trust_fingerprints": {
         "type": "boolean",
-        "description": "Specifies whether we should trust the SSH fingerprint automatically. The default value is FALSE. If a fingerprint is not trusted automatically, it has to be approved with [Certificates Management API Approve a destination fingerprint](https://fivetran.com/docs/rest-api/certificates#approveadestinationfingerprint)."
+        "description": "Specifies whether we should trust the SSH fingerprint automatically. The default value is FALSE. If a fingerprint is not trusted automatically, it has to be approved by calling the [Approve destination fingerprint endpoint](/docs/rest-api/api-reference/certificates/approve-destination-fingerprint).\n\n> IMPORTANT: To capture the `hash` and `public_key` values needed for approval, omit this field or set it to `false`.\n"
       },
       "run_setup_tests": {
         "type": "boolean",
@@ -142,6 +142,7 @@
         "clickhouse": "#/components/schemas/clickhouse_NewDestinationRequest",
         "confluent_cloud_wh": "#/components/schemas/confluent_cloud_wh_NewDestinationRequest",
         "databricks": "#/components/schemas/databricks_NewDestinationRequest",
+        "databricks_via_managed_data_lake": "#/components/schemas/databricks_via_managed_data_lake_NewDestinationRequest",
         "managed_big_query": "#/components/schemas/managed_big_query_NewDestinationRequest",
         "managed_data_lake": "#/components/schemas/managed_data_lake_NewDestinationRequest",
         "maria_rds_warehouse": "#/components/schemas/maria_rds_warehouse_NewDestinationRequest",
@@ -151,7 +152,6 @@
         "motherduck": "#/components/schemas/motherduck_NewDestinationRequest",
         "mysql_rds_warehouse": "#/components/schemas/mysql_rds_warehouse_NewDestinationRequest",
         "mysql_warehouse": "#/components/schemas/mysql_warehouse_NewDestinationRequest",
-        "onelake": "#/components/schemas/onelake_NewDestinationRequest",
         "oracle_rac_warehouse": "#/components/schemas/oracle_rac_warehouse_NewDestinationRequest",
         "oracle_rds_warehouse": "#/components/schemas/oracle_rds_warehouse_NewDestinationRequest",
         "oracle_warehouse": "#/components/schemas/oracle_warehouse_NewDestinationRequest",

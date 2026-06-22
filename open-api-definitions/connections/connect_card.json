@@ -7,13 +7,16 @@
       "name": "connectionId",
       "in": "path",
       "required": true,
-      "description": "The unique identifier for the connection within the Fivetran system.",
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
       "schema": {
         "type": "string"
       }
     }
   ],
   "request_body_schema": {
+    "required": [
+      "connect_card_config"
+    ],
     "type": "object",
     "properties": {
       "connect_card_config": {
@@ -24,11 +27,15 @@
         "properties": {
           "redirect_uri": {
             "type": "string",
-            "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix. "
+            "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix."
           },
           "hide_setup_guide": {
             "type": "boolean",
             "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card."
+          },
+          "all_fields": {
+            "type": "boolean",
+            "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
           }
         }
       }
