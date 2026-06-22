@@ -395,6 +395,13 @@ TOOLS = {
     #     "params": ["connection_id", "hash"],
     # },
 
+    # "pre_create_connection_schema_config": {
+    #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Configures a Connection Schema for a new connection before the schema is captured from the source. > NOTE: The response returns the exact settings provided in the request. After the initial sync, when the connection captures the schema from the source, Fivetran attempts to apply the specified settings to the actual schema. If certain tables or columns cannot be excluded, the settings for those entities are ignored.",
+    #     "schema_file": "open-api-definitions/connections/pre_create_connection_schema_config.json",
+    #     "method": "POST",
+    #     "endpoint": "/v1/connections/{connectionId}/schemas",
+    #     "params": ["connectionId", "request_body"],
+    # },
     # ============================================================================
     # DESTINATIONS
     # ============================================================================
@@ -543,6 +550,32 @@ TOOLS = {
         "params": ["log_id"],
     },
 
+    # "get_account_log_service_details": {
+    #     "description": "Returns the account-level [logging service](/docs/logs/external-logs) if it exists.",
+    #     "schema_file": "open-api-definitions/external-logging/get_account_log_service_details.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/external-logging/account",
+    # },
+    # "add_account_log_service": {
+    #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates an account-level [logging service](/docs/logs/external-logs).",
+    #     "schema_file": "open-api-definitions/external-logging/add_account_log_service.json",
+    #     "method": "POST",
+    #     "endpoint": "/v1/external-logging/account",
+    #     "params": ["request_body"],
+    # },
+    # "update_account_log_service": {
+    #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates information for the account-level [logging service](/docs/logs/external-logs).",
+    #     "schema_file": "open-api-definitions/external-logging/update_account_log_service.json",
+    #     "method": "PATCH",
+    #     "endpoint": "/v1/external-logging/account",
+    #     "params": ["request_body"],
+    # },
+    # "delete_account_log_service": {
+    #     "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes the account-level [logging service](/docs/logs/external-logs).",
+    #     "schema_file": "open-api-definitions/external-logging/delete_account_log_service.json",
+    #     "method": "DELETE",
+    #     "endpoint": "/v1/external-logging/account",
+    # },
     # ============================================================================
     # GROUPS
     # ============================================================================
@@ -1295,6 +1328,109 @@ TOOLS = {
         "endpoint": "/v1/webhooks/{webhook_id}/test",
         "params": ["webhook_id", "request_body"],
     },
+
+    # ============================================================================
+    # CONNECTOR SDK
+    # ============================================================================
+    # "list_connector_sdk_packages": {
+    #     "description": "Returns a list of all Connector SDK packages in your Fivetran account.",
+    #     "schema_file": "open-api-definitions/connector-sdk/list_connector_sdk_packages.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/connector-sdk/packages",
+    #     "auto_paginate": True,
+    # },
+    # "create_connector_sdk_package": {
+    #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Uploads a new Connector SDK package to your Fivetran account. The package must be a ZIP file containing your custom connector code. You can create the package ZIP file using the [`fivetran package` command](/docs/connector-sdk/connector-development-and-configuration/connector-sdk-commands#fivetranpackage). After creating a package, use the standard [Create a Connection endpoint](/docs/rest-api/api-reference/connections/create-connection) with the returned `id` as `package_id` in the config. > NOTE: Each package can only be associated with one connection at a time.",
+    #     "schema_file": "open-api-definitions/connector-sdk/create_connector_sdk_package.json",
+    #     "method": "POST",
+    #     "endpoint": "/v1/connector-sdk/packages",
+    #     "params": ["request_body"],
+    # },
+    # "get_connector_sdk_package": {
+    #     "description": "Returns details for a specific Connector SDK package.",
+    #     "schema_file": "open-api-definitions/connector-sdk/get_connector_sdk_package.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/connector-sdk/packages/{package_id}",
+    #     "params": ["package_id"],
+    # },
+    # "update_connector_sdk_package": {
+    #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates an existing Connector SDK package by uploading a new version of the connector code. All connections using this package will automatically use the updated code on their next sync.",
+    #     "schema_file": "open-api-definitions/connector-sdk/update_connector_sdk_package.json",
+    #     "method": "PATCH",
+    #     "endpoint": "/v1/connector-sdk/packages/{package_id}",
+    #     "params": ["package_id", "request_body"],
+    # },
+    # "delete_connector_sdk_package": {
+    #     "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Permanently deletes a Connector SDK package from your Fivetran account. > **Warning:** Packages that are associated with a connection cannot be deleted. You must first delete the connection before deleting the package.",
+    #     "schema_file": "open-api-definitions/connector-sdk/delete_connector_sdk_package.json",
+    #     "method": "DELETE",
+    #     "endpoint": "/v1/connector-sdk/packages/{package_id}",
+    #     "params": ["package_id"],
+    # },
+    # "download_connector_sdk_package": {
+    #     "description": "Downloads the connector code package file (code.zip) for a specific Connector SDK package. This endpoint returns the raw ZIP file as an octet-stream.",
+    #     "schema_file": "open-api-definitions/connector-sdk/download_connector_sdk_package.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/connector-sdk/packages/{package_id}/download",
+    #     "params": ["package_id"],
+    # },
+
+    # ============================================================================
+    # EXTERNAL SECRETS MANAGERS
+    # ============================================================================
+    # "list_esms": {
+    #     "description": "Returns a list of all External Secrets Manager instances within your Fivetran account.",
+    #     "schema_file": "open-api-definitions/external-secrets-managers/list_esms.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/external-secrets-managers",
+    #     "auto_paginate": True,
+    # },
+    # "create_esm": {
+    #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new External Secrets Manager instance within your Fivetran account.",
+    #     "schema_file": "open-api-definitions/external-secrets-managers/create_esm.json",
+    #     "method": "POST",
+    #     "endpoint": "/v1/external-secrets-managers",
+    #     "params": ["request_body"],
+    # },
+    # "get_esm_details": {
+    #     "description": "Returns the details of an existing External Secrets Manager instance.",
+    #     "schema_file": "open-api-definitions/external-secrets-managers/get_esm_details.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/external-secrets-managers/{esmId}",
+    #     "params": ["esmId"],
+    # },
+    # "modify_esm": {
+    #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates the configuration of an existing External Secrets Manager instance.",
+    #     "schema_file": "open-api-definitions/external-secrets-managers/modify_esm.json",
+    #     "method": "PATCH",
+    #     "endpoint": "/v1/external-secrets-managers/{esmId}",
+    #     "params": ["esmId", "request_body"],
+    # },
+    # "delete_esm": {
+    #     "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes an External Secrets Manager instance from your Fivetran account. The instance must not be in use by any source connections or destinations.",
+    #     "schema_file": "open-api-definitions/external-secrets-managers/delete_esm.json",
+    #     "method": "DELETE",
+    #     "endpoint": "/v1/external-secrets-managers/{esmId}",
+    #     "params": ["esmId"],
+    # },
+    # "get_esm_entities": {
+    #     "description": "Returns a list of source connections and destinations that are using a specific External Secrets Manager.",
+    #     "schema_file": "open-api-definitions/external-secrets-managers/get_esm_entities.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/external-secrets-managers/{esmId}/entities",
+    #     "params": ["esmId"],
+    # },
+
+    # ============================================================================
+    # EXTERNAL SECRETS MANAGERS ENTITIES
+    # ============================================================================
+    # "list_esm_entities": {
+    #     "description": "Returns a list of all source connections and destinations that are using any External Secrets Manager within your Fivetran account.",
+    #     "schema_file": "open-api-definitions/external-secrets-managers-entities/list_esm_entities.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/external-secrets-managers-entities",
+    #     "auto_paginate": True,
+    # },
 }
 
 

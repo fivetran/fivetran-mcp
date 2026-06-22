@@ -19,6 +19,7 @@ Example:
 
 import json
 import re
+from collections import defaultdict
 from pathlib import Path
 
 
@@ -125,6 +126,117 @@ def get_resource_from_path(path: str) -> str:
     return parts[0] if parts else 'other'
 
 
+def get_referenced_schema_files(server_file: Path) -> set[str]:
+    """Return all schema_file paths already referenced in server.py (active or commented)."""
+    pattern = re.compile(r'"schema_file":\s*"([^"]+)"')
+    return {m.group(1) for m in pattern.finditer(server_file.read_text())}
+
+
+def build_tool_entry(operation_id: str, schema_file_rel: str, endpoint_doc: dict) -> str:
+    """Generate a commented-out TOOLS entry string for a new endpoint."""
+    method = endpoint_doc['method']
+    path = endpoint_doc['path']
+    # Collapse multi-line descriptions and escape quotes for use in a Python string literal
+    raw_desc = endpoint_doc.get('description', '')
+    description = ' '.join(raw_desc.split()).replace('"', '\\"')
+
+    if method == 'DELETE':
+        description = f'⚠️ DESTRUCTIVE - Confirm with user before calling. {description}'
+    elif method in ('POST', 'PATCH', 'PUT'):
+        description = f'⚠️ WRITE OPERATION - Confirm with user before calling. {description}'
+
+    path_params = [p['name'] for p in endpoint_doc.get('parameters', []) if p.get('in') == 'path']
+    has_body = 'request_body_schema' in endpoint_doc or method in ('POST', 'PATCH', 'PUT')
+    params = path_params + (['request_body'] if has_body else [])
+    auto_paginate = method == 'GET' and operation_id.startswith('list_')
+
+    lines = [f'    # "{operation_id}": {{']
+    lines.append(f'    #     "description": "{description}",')
+    lines.append(f'    #     "schema_file": "{schema_file_rel}",')
+    lines.append(f'    #     "method": "{method}",')
+    lines.append(f'    #     "endpoint": "{path}",')
+    if params:
+        lines.append(f'    #     "params": {json.dumps(params)},')
+    if auto_paginate:
+        lines.append(f'    #     "auto_paginate": True,')
+    lines.append(f'    # }},')
+    return '\n'.join(lines)
+
+
+def inject_new_tools(output_dir: Path, all_mappings: dict, server_file: Path) -> None:
+    """Detect schema files not yet in server.py and inject commented-out tool entries."""
+    referenced = get_referenced_schema_files(server_file)
+    lines = server_file.read_text().splitlines()
+
+    SEP = '    # ' + '=' * 76
+
+    # Map section title -> line index of its first separator line
+    sections = {}
+    for i in range(len(lines) - 2):
+        if lines[i] == SEP and lines[i + 2] == SEP:
+            title = lines[i + 1].strip().lstrip('#').strip()
+            sections[title] = i
+
+    # Find line index of the TOOLS dict closing brace
+    tools_start = next(i for i, l in enumerate(lines) if l.startswith('TOOLS = {'))
+    tools_end = next(i for i in range(tools_start, len(lines)) if lines[i].rstrip() == '}')
+
+    # Collect new tools grouped by resource
+    new_by_resource: dict[str, list] = {}
+    for resource_name, endpoint_mapping in all_mappings.items():
+        for operation_id, info in endpoint_mapping.items():
+            schema_file_rel = f"{output_dir.name}/{info['file'].replace(chr(92), '/')}"
+            if schema_file_rel in referenced:
+                continue
+            schema_path = output_dir / info['file']
+            if not schema_path.exists():
+                continue
+            with open(schema_path) as f:
+                endpoint_doc = json.load(f)
+            new_by_resource.setdefault(resource_name, []).append(
+                (operation_id, schema_file_rel, endpoint_doc)
+            )
+
+    if not new_by_resource:
+        print('\nserver.py is up to date — no new endpoints to add.')
+        return
+
+    # Build insertion map: line_index -> list of lines to insert before that line
+    insertion_map: dict[int, list[str]] = defaultdict(list)
+
+    for resource_name, tools in new_by_resource.items():
+        section_title = resource_name.upper().replace('-', ' ')
+        entry_lines = []
+        for op_id, sf, doc in tools:
+            entry_lines.extend(build_tool_entry(op_id, sf, doc).splitlines())
+
+        if section_title in sections:
+            # Find the next section separator after this section's header, or tools_end
+            insert_at = tools_end
+            for i in range(sections[section_title] + 3, tools_end):
+                if lines[i] == SEP:
+                    insert_at = i
+                    break
+            insertion_map[insert_at].extend(entry_lines)
+        else:
+            # New section: insert block before the TOOLS closing brace
+            new_section = ['', SEP, f'    # {section_title}', SEP] + entry_lines
+            insertion_map[tools_end].extend(new_section)
+
+    # Apply insertions from bottom to top so earlier indices stay valid
+    for insert_at in sorted(insertion_map.keys(), reverse=True):
+        lines[insert_at:insert_at] = insertion_map[insert_at]
+
+    server_file.write_text('\n'.join(lines) + '\n')
+
+    total = sum(len(v) for v in new_by_resource.values())
+    print(f'\nAdded {total} new tool entr{"y" if total == 1 else "ies"} to server.py (commented out):')
+    for resource_name, tools in sorted(new_by_resource.items()):
+        for op_id, _, _ in tools:
+            print(f'  + {op_id} ({resource_name})')
+    print('Uncomment entries in server.py to enable them.')
+
+
 def main():
     import sys
 
@@ -221,6 +333,11 @@ def main():
     total_endpoints = sum(len(m) for m in all_mappings.values())
     print(f'\nDone! Split into {total_endpoints} endpoint files across {len(all_mappings)} resources.')
     print(f'Total output: {total_new_lines} lines')
+
+    # Inject any new endpoints into server.py
+    server_file = Path(__file__).parent / 'server.py'
+    if server_file.exists():
+        inject_new_tools(output_dir, all_mappings, server_file)
 
     return 0
 
