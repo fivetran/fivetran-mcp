@@ -66,55 +66,6 @@ async def fivetran_request(
         return response.json()
 
 
-async def fivetran_request_all_pages(
-    endpoint: str,
-    params: dict[str, Any] | None = None,
-) -> dict[str, Any]:
-    """Make paginated GET requests to the Fivetran API and return all results.
-
-    Automatically follows next_cursor until all pages are fetched.
-    Note: This is always a GET request, so no write permission check needed.
-    """
-    all_items = []
-    params = params or {}
-    params["limit"] = 1000  # Use max limit for efficiency
-
-    async with httpx.AsyncClient() as client:
-        while True:
-            url = f"{BASE_URL}{endpoint}"
-            response = await client.request(
-                method="GET",
-                url=url,
-                headers=get_auth_header(),
-                params=params,
-                timeout=30.0,
-            )
-            response.raise_for_status()
-            result = response.json()
-
-            # Extract items from response
-            data = result.get("data", {})
-            items = data.get("items", [])
-            all_items.extend(items)
-
-            # Check for next page
-            next_cursor = data.get("next_cursor")
-            if not next_cursor:
-                break
-
-            params["cursor"] = next_cursor
-
-    # Return in same format as single-page response
-    return {
-        "code": "Success",
-        "data": {
-            "items": all_items,
-            "_auto_paginated": True,
-            "_total_items": len(all_items),
-        }
-    }
-
-
 def validate_and_read_schema(schema_file: str) -> dict[str, Any]:
     """Read and validate the schema file before allowing API call.
 
@@ -188,11 +139,11 @@ TOOLS = {
     # CONNECTIONS
     # ============================================================================
     "list_connections": {
-        "description": "List ALL Fivetran connections in your account. Automatically fetches all pages.",
+        "description": "⚠️ Response is paginated. List all Fivetran connections in your account.",
         "schema_file": "open-api-definitions/connections/list_connections.json",
         "method": "GET",
         "endpoint": "/v1/connections",
-        "auto_paginate": True,
+        "query_params": ["group_id", "schema", "cursor", "limit"],
     },
     "create_connection": {
         "description": (
@@ -1161,13 +1112,7 @@ TOOLS = {
     # ============================================================================
     # USERS
     # ============================================================================
-    # "list_users": {
-    #     "description": "List all users in your account.",
-    #     "schema_file": "open-api-definitions/users/list_all_users.json",
-    #     "method": "GET",
-    #     "endpoint": "/v1/users",
-    #     "auto_paginate": True,
-    # },
+
     # "create_user": {
     #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Invite a new user to the account.",
     #     "schema_file": "open-api-definitions/users/create_user.json",
@@ -1276,6 +1221,12 @@ TOOLS = {
     #     "params": ["user_id", "connection_id"],
     # },
 
+    # "list_all_users": {
+    #     "description": "Returns a list of all users within your Fivetran account.",
+    #     "schema_file": "open-api-definitions/users/list_all_users.json",
+    #     "method": "GET",
+    #     "endpoint": "/v1/users",
+    # },
     # ============================================================================
     # WEBHOOKS
     # ============================================================================
@@ -1454,11 +1405,30 @@ PARAM_DEFINITIONS = {
     "column_name": {"type": "string", "description": "The name of the column"},
     "package_definition_id": {"type": "string", "description": "The unique identifier for the quickstart package"},
     "request_body": {"type": "string", "description": "JSON string containing the request body. Refer to the schema file for the expected structure."},
+    
+    "cursor": {"type": "string", "description": "Paging cursor id."},
+    "limit": {"type": "integer", "description": "Number of records to return"},
+    "schema": {"type": "string", "description": "Filter on schema."},
+
+    "active": {"type": "boolean", "description": "Filter on active."},
+    "esm_id": {"type": "string", "description": "The unique identifier for the External Secrets Manager."},
+    "groupId": {"type": "string", "description": "The unique identifier for the group."},
+    "name": {"type": "string", "description": "The package name."},
+    "type": {"type": "string", "description": "Filter on type."},
+
+    "table": {"type": "string", "description": "The table name from the connection schema."},  # needs audit
+    "package_id": {"type": "string", "description": "The unique identifier for the Connector SDK package."},  # needs audit
+    "id": {"type": "string", "description": "The unique identifier for the user within the account."},  # needs audit
 }
 
-
 def build_tool_schema(tool_name: str, tool_config: dict) -> Tool:
-    """Build a Tool object with schema_file as a required parameter."""
+    """Build the MCP Tool definition (the input schema the agent sees) for one tool.
+
+    Three kinds of input are advertised:
+      - schema_file : always required (the mandatory read-then-confirm gate)
+      - params      : required path params + request_body (from tool_config["params"])
+      - query_params: OPTIONAL query-string params (from tool_config["query_params"])
+    """
     properties = {
         "schema_file": {
             "type": "string",
@@ -1468,11 +1438,21 @@ def build_tool_schema(tool_name: str, tool_config: dict) -> Tool:
 
     required = ["schema_file"]
 
-    # Add tool-specific required parameters
+    # Required params: path params (connection_id, schema_name, ...) and request_body.
+    # All mandatory. The .get() fallback means a param missing from PARAM_DEFINITIONS
+    # still gets a valid definition instead of becoming a required-but-undefined field.
     for param in tool_config.get("params", []):
-        if param in PARAM_DEFINITIONS:
-            properties[param] = PARAM_DEFINITIONS[param].copy()
+        properties[param] = PARAM_DEFINITIONS.get(
+            param, {"type": "string", "description": param}
+        ).copy()
         required.append(param)
+
+    # Optional query params: added to properties so the agent MAY send them,
+    # but deliberately NOT added to `required`.
+    for param in tool_config.get("query_params", []):
+        properties[param] = PARAM_DEFINITIONS.get(
+            param, {"type": "string", "description": param}
+        ).copy()
 
     return Tool(
         name=tool_name,
@@ -1483,7 +1463,6 @@ def build_tool_schema(tool_name: str, tool_config: dict) -> Tool:
             "required": required,
         },
     )
-
 
 # Create the MCP server
 server = Server("fivetran")
@@ -1532,21 +1511,38 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
 
 async def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
-    """Execute the actual API call after validation."""
+    """Execute the API call after schema validation.
+
+    Splits the incoming arguments into three kinds of input:
+      - path params : declared in tool_config["params"] (minus request_body);
+                      fill the {connection_id}, {schema_name}, ... placeholders in the URL
+      - query params: declared in tool_config["query_params"]; sent as the URL
+                      query string, but ONLY when the agent actually supplied them
+      - request body: the "request_body" argument, a JSON string, for POST/PATCH calls
+    """
     tool_config = TOOLS[name]
     method = tool_config["method"]
     endpoint_template = tool_config["endpoint"]
 
-    # Build path parameters dict (exclude schema_file and request_body)
-    path_params = {
-        k: v for k, v in arguments.items()
-        if k not in ("schema_file", "request_body")
-    }
-
-    # Format endpoint with path parameters
+    # --- Path parameters -----------------------------------------------------
+    # Everything in "params" except request_body is a path param. Pull only the
+    # declared ones out of arguments, then substitute them into the endpoint URL.
+    path_param_names = [p for p in tool_config.get("params", []) if p != "request_body"]
+    path_params = {k: arguments[k] for k in path_param_names if k in arguments}
     endpoint = endpoint_template.format(**path_params)
 
-    # Parse request body if present
+    # --- Query parameters ----------------------------------------------------
+    # Optional. Include only the ones the agent provided (and that aren't None),
+    # so omitted params never get appended to the query string.
+    query_param_names = tool_config.get("query_params", [])
+    query_params = {
+        k: arguments[k]
+        for k in query_param_names
+        if k in arguments and arguments[k] is not None
+    }
+
+    # --- Request body --------------------------------------------------------
+    # Write operations send the body as a JSON string; parse it into a dict.
     json_body = None
     if "request_body" in arguments:
         try:
@@ -1554,11 +1550,14 @@ async def execute_tool(name: str, arguments: dict[str, Any]) -> dict[str, Any]:
         except json.JSONDecodeError as e:
             raise ValueError(f"Invalid JSON in request_body: {e}")
 
-    # Execute request
-    if tool_config.get("auto_paginate"):
-        return await fivetran_request_all_pages(endpoint)
-    else:
-        return await fivetran_request(method, endpoint, json_body=json_body)
+    # --- Fire the request ----------------------------------------------------
+    # Pass params only when non-empty so omitted query params leave the URL clean.
+    return await fivetran_request(
+        method,
+        endpoint,
+        params=query_params or None,
+        json_body=json_body,
+    )
 
 
 async def async_main():

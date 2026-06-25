@@ -17,6 +17,7 @@ Example:
     python split_openapi_by_endpoint.py fivetran-open-api-definition.json open-api-definitions
 """
 
+import ast
 import json
 import re
 from collections import defaultdict
@@ -145,23 +146,125 @@ def build_tool_entry(operation_id: str, schema_file_rel: str, endpoint_doc: dict
     elif method in ('POST', 'PATCH', 'PUT'):
         description = f'⚠️ WRITE OPERATION - Confirm with user before calling. {description}'
 
-    path_params = [p['name'] for p in endpoint_doc.get('parameters', []) if p.get('in') == 'path']
+    # Path params are URL placeholders (the API never sees the name), so normalize
+    # them to snake_case to match the PARAM_DEFINITIONS convention. The endpoint
+    # template's {placeholders} MUST be rewritten to the same names, or .format()
+    # won't find them at call time.
+    raw_path_params = [p['name'] for p in endpoint_doc.get('parameters', []) if p.get('in') == 'path']
+    path_params = [_to_snake(n) for n in raw_path_params]
+
+    endpoint_path = path
+    for raw in raw_path_params:
+        endpoint_path = endpoint_path.replace('{' + raw + '}', '{' + _to_snake(raw) + '}')
+
     has_body = 'request_body_schema' in endpoint_doc or method in ('POST', 'PATCH', 'PUT')
     params = path_params + (['request_body'] if has_body else [])
-    auto_paginate = method == 'GET' and operation_id.startswith('list_')
+
+    # Query params go in their own list, OPTIONAL at call time. Names are emitted
+    # verbatim (NO snake_case normalization) because a query param name is the
+    # literal wire format — ?groupId= and ?group_id= are different requests.
+    query_params = [p['name'] for p in endpoint_doc.get('parameters', []) if p.get('in') == 'query']
 
     lines = [f'    # "{operation_id}": {{']
     lines.append(f'    #     "description": "{description}",')
     lines.append(f'    #     "schema_file": "{schema_file_rel}",')
     lines.append(f'    #     "method": "{method}",')
-    lines.append(f'    #     "endpoint": "{path}",')
+    lines.append(f'    #     "endpoint": "{endpoint_path}",')
     if params:
         lines.append(f'    #     "params": {json.dumps(params)},')
-    if auto_paginate:
-        lines.append(f'    #     "auto_paginate": True,')
+    if query_params:
+        lines.append(f'    #     "query_params": {json.dumps(query_params)},')
     lines.append(f'    # }},')
     return '\n'.join(lines)
 
+def _clean_desc(s: str) -> str:
+    """Collapse whitespace/newlines so a spec description fits on one comment-free line."""
+    return ' '.join((s or '').split())
+
+def _to_snake(name: str) -> str:
+    """camelCase -> snake_case. Used for PATH param names only (they're URL
+    placeholders, not wire-visible). Never apply this to query param names."""
+    return re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+
+def sync_param_definitions(output_dir: Path, server_file: Path) -> None:
+    """Append PARAM_DEFINITIONS entries for any PATH params not already keyed there.
+
+    - "new" == the param name is not currently a key in PARAM_DEFINITIONS.
+    - Only PATH params are scanned for now. Query params are intentionally left
+      out; flip the `in` filter below to extend this later (same logic).
+    - Append-only: existing keys are never read for content, edited, or removed.
+    - New entries are tagged with a trailing `# needs audit` marker.
+    """
+    source = server_file.read_text()
+    tree = ast.parse(source)
+
+    # Locate the PARAM_DEFINITIONS dict literal and its existing keys via AST,
+    # so we get exact line numbers and never disturb formatting/comments.
+    param_defs_node = None
+    for node in tree.body:
+        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Dict):
+            if any(isinstance(t, ast.Name) and t.id == 'PARAM_DEFINITIONS'
+                   for t in node.targets):
+                param_defs_node = node.value
+                break
+
+    if param_defs_node is None:
+        print('\n  WARNING: PARAM_DEFINITIONS not found; skipping param-definition sync.')
+        return
+
+    existing_keys = {
+        k.value for k in param_defs_node.keys
+        if isinstance(k, ast.Constant) and isinstance(k.value, str)
+    }
+
+    # Collect undefined path params across every generated schema file.
+    # name -> (type, description) from the first file that introduces it.
+    discovered: dict[str, tuple[str, str]] = {}
+    for schema_path in sorted(output_dir.rglob('*.json')):
+        if schema_path.name == 'endpoint-index.json':
+            continue
+        try:
+            endpoint_doc = json.loads(schema_path.read_text())
+        except json.JSONDecodeError:
+            continue
+        for p in endpoint_doc.get('parameters', []):
+            kind = p.get('in')
+            if kind not in ('path', 'query'):
+                continue
+            raw = p.get('name')
+            if not raw:
+                continue
+            # Path params are URL placeholders -> normalize to snake_case to match
+            # the convention and collapse camelCase twins (connectionId -> connection_id).
+            # Query params are the literal wire format -> keep them VERBATIM, because
+            # ?groupId= and ?group_id= are different requests.
+            name = _to_snake(raw) if kind == 'path' else raw
+            if name in existing_keys or name in discovered:
+                continue
+            ptype = (p.get('schema') or {}).get('type', 'string')
+            pdesc = _clean_desc(p.get('description', '')) or name
+            discovered[name] = (ptype, pdesc)
+
+    if not discovered:
+        print('\nPARAM_DEFINITIONS already covers every path param — nothing to add.')
+        return
+
+    # Build the new source lines.
+    new_lines = []
+    for name in discovered:                       # insertion order = discovery order
+        ptype, pdesc = discovered[name]
+        entry = {"type": ptype, "description": pdesc}
+        new_lines.append(f'    {json.dumps(name)}: {json.dumps(entry)},  # needs audit')
+
+    # Insert just before the dict's closing brace line (end_lineno is 1-indexed).
+    lines = source.splitlines()
+    insert_idx = param_defs_node.end_lineno - 1   # 0-indexed line of the closing "}"
+    lines[insert_idx:insert_idx] = new_lines
+    server_file.write_text('\n'.join(lines) + '\n')
+
+    print(f'\nAdded {len(discovered)} param definition(s) to PARAM_DEFINITIONS (marked # needs audit):')
+    for name in discovered:
+        print(f'  + {name}')
 
 def inject_new_tools(output_dir: Path, all_mappings: dict, server_file: Path) -> None:
     """Detect schema files not yet in server.py and inject commented-out tool entries."""
@@ -337,10 +440,12 @@ def main():
     # Inject any new endpoints into server.py
     server_file = Path(__file__).parent / 'server.py'
     if server_file.exists():
+        sync_param_definitions(output_dir, server_file)
         inject_new_tools(output_dir, all_mappings, server_file)
 
     return 0
 
 
 if __name__ == '__main__':
+    
     exit(main())
