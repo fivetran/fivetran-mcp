@@ -157,7 +157,57 @@ python3 /tmp/ft_restore_tools.py '<JSON_ARRAY_OF_ACTIVE_SCHEMA_FILES>'
 
 ---
 
-### 5. Verify and clean up
+### 5. Add pagination prefix to paginated tools
+
+For every active tool entry that has `cursor` in its `query_params`, prepend `⚠️ RESULTS ARE PAGINATED. ` to its description (skip if the prefix is already there).
+
+```python
+import re
+
+with open('server.py') as f:
+    lines = f.read().splitlines()
+
+tools_start = next(i for i, l in enumerate(lines) if l.startswith('TOOLS = {'))
+tools_end = next(i for i in range(tools_start + 1, len(lines)) if lines[i].rstrip() == '}')
+
+PREFIX = '⚠️ RESULTS ARE PAGINATED. '
+modified = 0
+
+i = tools_start
+while i < tools_end:
+    if re.match(r'^    "[^"]+": \{', lines[i]):
+        depth = 0
+        entry_lines = []
+        j = i
+        while j < tools_end:
+            depth += lines[j].count('{') - lines[j].count('}')
+            entry_lines.append((j, lines[j]))
+            j += 1
+            if depth == 0:
+                break
+
+        entry_text = '\n'.join(l for _, l in entry_lines)
+        qp_match = re.search(r'"query_params":\s*\[([^\]]+)\]', entry_text)
+        if qp_match and 'cursor' in qp_match.group(1):
+            for idx, line in entry_lines:
+                m = re.match(r'^(        "description": ")(.*?)(",\s*)$', line)
+                if m and not m.group(2).startswith(PREFIX):
+                    lines[idx] = m.group(1) + PREFIX + m.group(2) + m.group(3)
+                    modified += 1
+                    break
+
+        i = j
+        continue
+    i += 1
+
+with open('server.py', 'w') as f:
+    f.write('\n'.join(lines) + '\n')
+print(f'Added pagination prefix to {modified} tool descriptions')
+```
+
+---
+
+### 6. Verify and clean up
 
 Confirm the file is valid Python:
 ```
@@ -169,4 +219,4 @@ Delete temp files:
 rm /tmp/ft_clean_tools.py /tmp/ft_restore_tools.py
 ```
 
-Report a summary: how many tools were refreshed total, how many were restored as active, and any orphaned actives.
+Report a summary: how many tools were refreshed total, how many were restored as active, how many got the pagination prefix, and any orphaned actives (previously active tools whose schema_file no longer exists in the new spec — skipped).
