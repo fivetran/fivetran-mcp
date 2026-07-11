@@ -1,5 +1,5 @@
 {
-  "description": "Regenerate authentication for a Hybrid Deployment Agent.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Regenerate authentication for a Hybrid Deployment Agent.",
   "path": "/v1/hybrid-deployment-agents/{agentId}/re-auth",
   "method": "PATCH",
   "parameters": [

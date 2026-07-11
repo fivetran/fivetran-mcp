@@ -1,5 +1,5 @@
 {
-  "description": "Invites a new user to your Fivetran account. The invited user will have access to the account only after accepting the invitation. Invited user details are still accessible through the API.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Invites a new user to your Fivetran account. The invited user will have access to the account only after accepting the invitation. Invited user details are still accessible through the API.",
   "path": "/v1/users",
   "method": "POST",
   "request_body_schema": {

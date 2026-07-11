@@ -1,5 +1,5 @@
 {
-  "description": "Deletes a destination from your Fivetran account.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes a destination from your Fivetran account.",
   "path": "/v1/destinations/{destinationId}",
   "method": "DELETE",
   "parameters": [

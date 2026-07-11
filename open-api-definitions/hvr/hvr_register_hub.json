@@ -1,5 +1,5 @@
 {
-  "description": "Register a new hub within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Register a new hub within your Fivetran account.",
   "path": "/v1/hvr/register-hub",
   "method": "POST",
   "request_body_schema": {

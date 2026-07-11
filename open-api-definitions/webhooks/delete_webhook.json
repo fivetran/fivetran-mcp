@@ -1,5 +1,5 @@
 {
-  "description": "This endpoint allows you to delete an existing webhook with a given identifier",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. This endpoint allows you to delete an existing webhook with a given identifier",
   "path": "/v1/webhooks/{webhookId}",
   "method": "DELETE",
   "parameters": [

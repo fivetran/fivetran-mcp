@@ -1,5 +1,5 @@
 {
-  "description": "Approves a fingerprint, enabling Fivetran to trust it for a source database and establish connections via an SSH tunnel.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Approves a fingerprint, enabling Fivetran to trust it for a source database and establish connections via an SSH tunnel.",
   "path": "/v1/connections/{connectionId}/fingerprints",
   "method": "POST",
   "parameters": [

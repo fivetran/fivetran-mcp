@@ -1,5 +1,5 @@
 {
-  "description": "Assigns a role for a user in a team.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Assigns a role for a user in a team.",
   "path": "/v1/teams/{teamId}/users",
   "method": "POST",
   "parameters": [

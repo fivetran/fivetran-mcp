@@ -1,5 +1,5 @@
 {
-  "description": "Updates connection parameters for an existing connection within your Fivetran account.\n\nThis endpoint requires at least one persistent configuration parameter to be specified (e.g., `sync_frequency`, `paused`, `config`, `auth`, `daily_sync_time`, `schema_status`).\n\n> IMPORTANT: Parameters like `trust_certificates`, `trust_fingerprints`, and `run_setup_tests` are test-control parameters that affect only the behavior of setup tests during the update and do not persist in the connection configuration; they cannot be used on their own. If you want to run setup tests without making configuration changes, use the POST `/v1/connections/{connectionId}/test` endpoint instead.\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates connection parameters for an existing connection within your Fivetran account.\n\nThis endpoint requires at least one persistent configuration parameter to be specified (e.g., `sync_frequency`, `paused`, `config`, `auth`, `daily_sync_time`, `schema_status`).\n\n> IMPORTANT: Parameters like `trust_certificates`, `trust_fingerprints`, and `run_setup_tests` are test-control parameters that affect only the behavior of setup tests during the update and do not persist in the connection configuration; they cannot be used on their own. If you want to run setup tests without making configuration changes, use the POST `/v1/connections/{connectionId}/test` endpoint instead.\n",
   "path": "/v1/connections/{connectionId}",
   "method": "PATCH",
   "parameters": [
@@ -17,7 +17,12 @@
     "type": "object",
     "properties": {
       "config": {
-        "description": "The setup configuration. Check possible config formats in [create method](/docs/rest-api/api-reference/connections/create-connection/)"
+        "description": "The setup configuration. Check possible config formats in [create method](/docs/rest-api/api-reference/connections/create-connection/)",
+        "allOf": [
+          {
+            "type": "object"
+          }
+        ]
       },
       "auth": {
         "description": "The connector authorization settings. Check possible config formats in [create method](/docs/rest-api/api-reference/connections/create-connection/)"
@@ -127,6 +132,13 @@
             "description": "Snowflake's virtual warehouse used in the connection"
           }
         }
+      },
+      "external_secrets_manager_id": {
+        "type": "string",
+        "description": "The unique identifier of the [External Secrets Manager](/docs/rest-api/api-reference/external-secrets-managers) instance. Connector service must [support](/docs/core-concepts/features/external-secret-managers#connectors) External Secrets Manager feature to use this field."
+      },
+      "external_secrets_keys_config": {
+        "description": "The setup configuration keys to be stored in external secrets manager. Check possible config formats in [create method](/docs/rest-api/api-reference/connections/create-connection/)"
       }
     }
   }

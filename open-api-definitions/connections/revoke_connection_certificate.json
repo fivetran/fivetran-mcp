@@ -1,5 +1,5 @@
 {
-  "description": "Revokes a certificate, so Fivetran no longer trusts it while connecting to the source database.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Revokes a certificate, so Fivetran no longer trusts it while connecting to the source database.",
   "path": "/v1/connections/{connectionId}/certificates/{hash}",
   "method": "DELETE",
   "parameters": [

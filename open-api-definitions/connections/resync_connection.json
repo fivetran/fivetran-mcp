@@ -1,5 +1,5 @@
 {
-  "description": "Triggers a full historical sync of a connection or multiple schema tables within a connection. If the connection is paused, the table sync will be scheduled to be performed when the connection is re-enabled. If there is a data sync already in progress, we will try to complete it. If it fails, the request will be declined and the HTTP 409 Conflict error will be returned.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Triggers a full historical sync of a connection or multiple schema tables within a connection. If the connection is paused, the table sync will be scheduled to be performed when the connection is re-enabled. If there is a data sync already in progress, we will try to complete it. If it fails, the request will be declined and the HTTP 409 Conflict error will be returned.",
   "path": "/v1/connections/{connectionId}/resync",
   "method": "POST",
   "parameters": [
@@ -29,7 +29,7 @@
             }
           }
         },
-        "description": "A map where each key is a schema name and each value is a non-empty array of table names to re-sync within that schema.\nBoth the scope object and each schema's table array must be non-empty \u2014 an empty scope object or an empty table array returns 400.\nIf omitted or set to null, all schemas and tables of the connection are re-synced.\nThis parameter is only supported for connectors that support table-level re-sync (typically database connectors such as PostgreSQL, MySQL, and Oracle). Sending scope to an unsupported connector type (for example, Salesforce or Google Sheets) returns 400.\nRetrieve valid schema and table names from GET /v1/connections/{connectionId}/schemas.\n"
+        "description": "A map where each key is a schema name and each value is a non-empty array of table names to re-sync within that schema.\nBoth the scope object and each schema's table array must be non-empty — an empty scope object or an empty table array returns 400.\nIf omitted or set to null, all schemas and tables of the connection are re-synced.\nThis parameter is only supported for connectors that support table-level re-sync (typically database connectors such as PostgreSQL, MySQL, and Oracle). Sending scope to an unsupported connector type (for example, Google Sheets) returns 400.\nRetrieve valid schema and table names from GET /v1/connections/{connectionId}/schemas.\n"
       }
     }
   }

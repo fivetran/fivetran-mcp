@@ -1,0 +1,5 @@
+{
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Runs the setup tests for the account-level [logging service](/docs/logs/external-logs).",
+  "path": "/v1/external-logging/account/test",
+  "method": "POST"
+}

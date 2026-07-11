@@ -1,5 +1,5 @@
 {
-  "description": "Adds a team as a member of a group.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Adds a team as a member of a group.",
   "path": "/v1/teams/{teamId}/groups",
   "method": "POST",
   "parameters": [

@@ -1,5 +1,5 @@
 {
-  "description": "Removes user from a group.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Removes user from a group.",
   "path": "/v1/users/{userId}/groups/{groupId}",
   "method": "DELETE",
   "parameters": [

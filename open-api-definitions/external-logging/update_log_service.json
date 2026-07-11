@@ -1,5 +1,5 @@
 {
-  "description": "Updates information for an existing group-level [logging service](/docs/logs/external-logs) within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates information for an existing group-level [logging service](/docs/logs/external-logs) within your Fivetran account.",
   "path": "/v1/external-logging/{logId}",
   "method": "PATCH",
   "parameters": [
@@ -22,6 +22,10 @@
       },
       "config": {
         "type": "object"
+      },
+      "run_setup_tests": {
+        "type": "boolean",
+        "description": "When `true`, Fivetran runs setup tests immediately after creating or updating the log service and returns the results in the `setup_tests` field of the response. Defaults to `false`."
       }
     }
   }

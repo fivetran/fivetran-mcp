@@ -1,5 +1,5 @@
 {
-  "description": "Triggers a data sync for an existing connection within your Fivetran account without waiting for the next scheduled sync. This action does not override the standard sync frequency you defined in the Fivetran dashboard.\n\nWhen `schedule_type` is set to `manual`, this endpoint is the only way syncs occur \u2014 including syncs in a `rescheduled` state. For a full walkthrough, see [Trigger Manual Syncs](https://fivetran.com/docs/rest-api/tutorials/trigger-syncs-manually).\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Triggers a data sync for an existing connection within your Fivetran account without waiting for the next scheduled sync. This action does not override the standard sync frequency you defined in the Fivetran dashboard.\n\nWhen `schedule_type` is set to `manual`, this endpoint is the only way syncs occur — including syncs in a `rescheduled` state. For a full walkthrough, see [Trigger Manual Syncs](https://fivetran.com/docs/rest-api/tutorials/trigger-syncs-manually).\n",
   "path": "/v1/connections/{connectionId}/sync",
   "method": "POST",
   "parameters": [

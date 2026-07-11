@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new proxy agent within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new proxy agent within your Fivetran account.",
   "path": "/v1/proxy",
   "method": "POST",
   "request_body_schema": {

@@ -515,6 +515,13 @@ TOOLS = {
         "endpoint": "/v1/external-logging/{log_id}/test",
         "params": ["log_id", "request_body"],
     },
+    # "run_setup_tests_account_log_service": {
+    #     "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Runs the setup tests for the account-level [logging service](/docs/logs/external-logs).",
+    #     "schema_file": "open-api-definitions/external-logging/run_setup_tests_account_log_service.json",
+    #     "method": "POST",
+    #     "endpoint": "/v1/external-logging/account/test",
+    #     "params": ["request_body"],
+    # },
     # ============================================================================
     # GROUPS
     # ============================================================================

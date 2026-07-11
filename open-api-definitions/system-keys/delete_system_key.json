@@ -1,5 +1,5 @@
 {
-  "description": "Deletes a system key from your Fivetran account.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes a system key from your Fivetran account.",
   "path": "/v1/system-keys/{keyId}",
   "method": "DELETE",
   "parameters": [

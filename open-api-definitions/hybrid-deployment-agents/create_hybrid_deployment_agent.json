@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new Hybrid Deployment Agent in a group.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new Hybrid Deployment Agent in a group.",
   "path": "/v1/hybrid-deployment-agents",
   "method": "POST",
   "request_body_schema": {

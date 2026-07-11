@@ -1,5 +1,5 @@
 {
-  "description": "Approves a certificate, so Fivetran trusts this certificate for a source database connection. \nThe connection setup tests will fail if a non-approved certificate is provided.\n\n> NOTE: This is only required for source connections based on the following databases: \n>  - [MySQL](https://fivetran.com/docs/connectors/databases/mysql#supportedservices)\n>  - [PostgreSQL](https://fivetran.com/docs/connectors/databases/postgresql#supportedservices)\n>  - [SQLServer](https://fivetran.com/docs/connectors/databases/sql-server#supportedservices)\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Approves a certificate, so Fivetran trusts this certificate for a source database connection. \nThe connection setup tests will fail if a non-approved certificate is provided.\n\n> NOTE: This is only required for source connections based on the following databases: \n>  - [MySQL](https://fivetran.com/docs/connectors/databases/mysql#supportedservices)\n>  - [PostgreSQL](https://fivetran.com/docs/connectors/databases/postgresql#supportedservices)\n>  - [SQLServer](https://fivetran.com/docs/connectors/databases/sql-server#supportedservices)\n",
   "path": "/v1/connections/{connectionId}/certificates",
   "method": "POST",
   "parameters": [

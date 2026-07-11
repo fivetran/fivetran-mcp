@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new group in your Fivetran account. \n\n> IMPORTANT: Groups and destinations are mapped 1:1 to each other. We do this mapping using the group's `id` value that we automatically generate when you create a group, and the destination's `group_id` value that you specify when you create a destination. This means that you must create a group in your Fivetran account before you can create a destination in it.\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new group in your Fivetran account. \n\n> IMPORTANT: Groups and destinations are mapped 1:1 to each other. We do this mapping using the group's `id` value that we automatically generate when you create a group, and the destination's `group_id` value that you specify when you create a destination. This means that you must create a group in your Fivetran account before you can create a destination in it.\n",
   "path": "/v1/groups",
   "method": "POST",
   "request_body_schema": {

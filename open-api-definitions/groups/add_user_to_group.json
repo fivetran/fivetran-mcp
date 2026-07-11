@@ -1,5 +1,5 @@
 {
-  "description": "Adds an existing user to a group in your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Adds an existing user to a group in your Fivetran account.",
   "path": "/v1/groups/{groupId}/users",
   "method": "POST",
   "parameters": [
@@ -22,7 +22,7 @@
       },
       "role": {
         "type": "string",
-        "description": "The group role that you would like to assign this new user to. Supported group roles: \u2018Manage Destination\u2018, \u2018View Destination\u2018, \u2018Edit Destination\u2018, \u2018Create Connection\u2018, or a custom destination role"
+        "description": "The group role that you would like to assign this new user to. Supported group roles: ‘Manage Destination‘, ‘View Destination‘, ‘Edit Destination‘, ‘Create Connection‘, or a custom destination role"
       }
     }
   }

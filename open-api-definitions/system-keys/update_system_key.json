@@ -1,5 +1,5 @@
 {
-  "description": "Updates an existing system key within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates an existing system key within your Fivetran account.",
   "path": "/v1/system-keys/{keyId}",
   "method": "PATCH",
   "parameters": [

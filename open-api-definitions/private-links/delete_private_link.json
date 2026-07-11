@@ -1,5 +1,5 @@
 {
-  "description": "Deletes a private link from your Fivetran account.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes a private link from your Fivetran account.",
   "path": "/v1/private-links/{privateLinkId}",
   "method": "DELETE",
   "parameters": [

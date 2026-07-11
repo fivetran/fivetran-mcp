@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new transformation.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new transformation.",
   "path": "/v1/transformations",
   "method": "POST",
   "request_body_schema": {

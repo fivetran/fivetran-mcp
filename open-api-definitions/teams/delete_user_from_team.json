@@ -1,5 +1,5 @@
 {
-  "description": "Removes a user from a team.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Removes a user from a team.",
   "path": "/v1/teams/{teamId}/users/{userId}",
   "method": "DELETE",
   "parameters": [

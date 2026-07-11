@@ -1,5 +1,5 @@
 {
-  "description": "Mark multiple blocked columns for deletion from your destination tables. The columns will be dropped during the next sync.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Mark multiple blocked columns for deletion from your destination tables. The columns will be dropped during the next sync.",
   "path": "/v1/connections/{connectionId}/schemas/drop-columns",
   "method": "POST",
   "parameters": [

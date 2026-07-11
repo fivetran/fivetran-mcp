@@ -1,5 +1,5 @@
 {
-  "description": "Triggers tests for an existing transformation project.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Triggers tests for an existing transformation project.",
   "path": "/v1/transformation-projects/{projectId}/test",
   "method": "POST",
   "parameters": [

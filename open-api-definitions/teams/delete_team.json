@@ -1,5 +1,5 @@
 {
-  "description": "Deletes a team from your Fivetran account",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes a team from your Fivetran account",
   "path": "/v1/teams/{teamId}",
   "method": "DELETE",
   "parameters": [

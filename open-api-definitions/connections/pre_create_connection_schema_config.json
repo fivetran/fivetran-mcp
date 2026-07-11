@@ -1,5 +1,5 @@
 {
-  "description": "Configures a Connection Schema for a new connection before the schema is captured from the source.\n\n> NOTE: The response returns the exact settings provided in the request.\n\nAfter the initial sync, when the connection captures the schema from the source, Fivetran attempts to apply the specified settings to the actual schema.\nIf certain tables or columns cannot be excluded, the settings for those entities are ignored.\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Configures a Connection Schema for a new connection before the schema is captured from the source.\n\n> NOTE: The response returns the exact settings provided in the request.\n\nAfter the initial sync, when the connection captures the schema from the source, Fivetran attempts to apply the specified settings to the actual schema.\nIf certain tables or columns cannot be excluded, the settings for those entities are ignored.\n",
   "path": "/v1/connections/{connectionId}/schemas",
   "method": "POST",
   "parameters": [

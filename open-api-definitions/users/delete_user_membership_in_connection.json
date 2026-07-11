@@ -1,5 +1,5 @@
 {
-  "description": "Removes user membership in a connection.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Removes user membership in a connection.",
   "path": "/v1/users/{userId}/connections/{connectionId}",
   "method": "DELETE",
   "parameters": [

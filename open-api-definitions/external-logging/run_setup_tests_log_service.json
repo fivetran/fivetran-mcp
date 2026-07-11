@@ -1,5 +1,5 @@
 {
-  "description": "Runs the setup tests for an existing group-level [logging service](/docs/logs/external-logs) within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Runs the setup tests for an existing group-level [logging service](/docs/logs/external-logs) within your Fivetran account.",
   "path": "/v1/external-logging/{logId}/test",
   "method": "POST",
   "parameters": [

@@ -1,5 +1,5 @@
 {
-  "description": "This endpoint allows you to create a new webhook for a given group",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. This endpoint allows you to create a new webhook for a given group",
   "path": "/v1/webhooks/group/{groupId}",
   "method": "POST",
   "parameters": [

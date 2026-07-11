@@ -1,5 +1,5 @@
 {
-  "description": "Removes a user's role from an account, but the user remains a member of the account.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Removes a user's role from an account, but the user remains a member of the account.",
   "path": "/v1/users/{userId}/role",
   "method": "DELETE",
   "parameters": [

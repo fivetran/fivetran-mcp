@@ -1,5 +1,5 @@
 {
-  "description": "The endpoint allows you to test an existing webhook. It sends a webhook with a given identifier for a dummy connection with identifier _connection_1",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. The endpoint allows you to test an existing webhook. It sends a webhook with a given identifier for a dummy connection with identifier _connection_1",
   "path": "/v1/webhooks/{webhookId}/test",
   "method": "POST",
   "parameters": [

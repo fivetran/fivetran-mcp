@@ -1,5 +1,5 @@
 {
-  "description": "Delete a Hybrid Deployment Agent.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Delete a Hybrid Deployment Agent.",
   "path": "/v1/hybrid-deployment-agents/{agentId}",
   "method": "DELETE",
   "parameters": [

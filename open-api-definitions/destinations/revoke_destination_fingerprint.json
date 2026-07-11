@@ -1,5 +1,5 @@
 {
-  "description": "Revokes a fingerprint, so Fivetran no longer trusts it while connecting to the destination database through an SSH tunnel.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Revokes a fingerprint, so Fivetran no longer trusts it while connecting to the destination database through an SSH tunnel.",
   "path": "/v1/destinations/{destinationId}/fingerprints/{hash}",
   "method": "DELETE",
   "parameters": [

@@ -1,5 +1,5 @@
 {
-  "description": "Approves a certificate for a connection/destination, so Fivetran trusts this certificate for a source/destination database. The connection/destination setup tests will fail if a non-approved certificate is provided.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Approves a certificate for a connection/destination, so Fivetran trusts this certificate for a source/destination database. The connection/destination setup tests will fail if a non-approved certificate is provided.",
   "path": "/v1/certificates",
   "method": "POST",
   "request_body_schema": {

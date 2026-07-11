@@ -1,5 +1,5 @@
 {
-  "description": "Updates the connection state. To update the state, you should pause your connection first.\n\nTo update the connection state, do the following:\n\n  1. Pause connection using [Update a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection) endpoint (set 'paused' to 'true').\n  2. Update the state by using the [Update Connection State](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection-state) endpoint.\n  3. Unpause the connection by setting the 'paused' parameter to 'false' in the [Update a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection) endpoint request.\n\nThis endpoint is only supported for [Function](https://fivetran.com/docs/connectors/functions) and [Connection SDK](https://fivetran.com/docs/connectors/connector-sdk) connectors.\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates the connection state. To update the state, you should pause your connection first.\n\nTo update the connection state, do the following:\n\n  1. Pause connection using [Update a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection) endpoint (set 'paused' to 'true').\n  2. Update the state by using the [Update Connection State](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection-state) endpoint.\n  3. Unpause the connection by setting the 'paused' parameter to 'false' in the [Update a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection) endpoint request.\n\nThis endpoint is only supported for [Function](https://fivetran.com/docs/connectors/functions) and [Connection SDK](https://fivetran.com/docs/connectors/connector-sdk) connectors.\n",
   "path": "/v1/connections/{connectionId}/state",
   "method": "PATCH",
   "parameters": [
@@ -17,7 +17,12 @@
     "type": "object",
     "properties": {
       "state": {
-        "type": "object"
+        "description": "A freeform JSON object representing the connector's cursor or internal state to write. The structure is defined by the connector implementation and varies by connector type. If omitted or set to null, the existing state is preserved and the response returns 200 without modification.",
+        "allOf": [
+          {
+            "type": "object"
+          }
+        ]
       }
     }
   }

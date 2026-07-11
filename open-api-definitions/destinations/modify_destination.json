@@ -1,5 +1,5 @@
 {
-  "description": "Updates information for an existing destination within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates information for an existing destination within your Fivetran account.",
   "path": "/v1/destinations/{destinationId}",
   "method": "PATCH",
   "parameters": [
@@ -60,7 +60,12 @@
         ]
       },
       "config": {
-        "description": "The setup configuration. Check possible config formats in [create method](/docs/rest-api/api-reference/destinations/create-destination/)"
+        "description": "The setup configuration. Check possible config formats in [create method](/docs/rest-api/api-reference/destinations/create-destination/)",
+        "allOf": [
+          {
+            "type": "object"
+          }
+        ]
       },
       "trust_certificates": {
         "type": "boolean",
@@ -127,6 +132,13 @@
       "proxy_agent_id": {
         "type": "string",
         "description": "The unique identifier for the proxy agent within the Fivetran system"
+      },
+      "external_secrets_manager_id": {
+        "type": "string",
+        "description": "The unique identifier of the [External Secrets Manager](/docs/rest-api/api-reference/external-secrets-managers) instance. Destination service must [support](/docs/core-concepts/features/external-secret-managers#destinations) External Secrets Manager feature to use this field."
+      },
+      "external_secrets_keys_config": {
+        "description": "The setup configuration keys to be stored in external secrets manager. Check possible config formats in [create method](/docs/rest-api/api-reference/destinations/create-destination/)"
       }
     }
   }

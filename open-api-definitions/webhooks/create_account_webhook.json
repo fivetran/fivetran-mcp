@@ -1,5 +1,5 @@
 {
-  "description": "This endpoint allows you to create a new webhook for the current account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. This endpoint allows you to create a new webhook for the current account.",
   "path": "/v1/webhooks/account",
   "method": "POST",
   "request_body_schema": {

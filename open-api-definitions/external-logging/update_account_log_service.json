@@ -1,5 +1,5 @@
 {
-  "description": "Updates information for the account-level [logging service](/docs/logs/external-logs).",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates information for the account-level [logging service](/docs/logs/external-logs).",
   "path": "/v1/external-logging/account",
   "method": "PATCH",
   "request_body_schema": {
@@ -11,6 +11,10 @@
       },
       "config": {
         "description": "The setup configuration. Check possible config formats in [create method](/docs/rest-api/api-reference/log-service-management/add-log-service/)"
+      },
+      "run_setup_tests": {
+        "type": "boolean",
+        "description": "When `true`, Fivetran runs setup tests immediately after creating or updating the log service and returns the results in the `setup_tests` field of the response. Defaults to `false`."
       }
     }
   }

@@ -1,5 +1,5 @@
 {
-  "description": "Creates an account-level [logging service](/docs/logs/external-logs).",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates an account-level [logging service](/docs/logs/external-logs).",
   "path": "/v1/external-logging/account",
   "method": "POST",
   "request_body_schema": {
@@ -7,7 +7,7 @@
     "properties": {
       "service": {
         "type": "string",
-        "description": "The name of the log service type within the Fivetran system. We support the following log services: `azure_monitor_log`, `cloudwatch`, `datadog_log`, `grafana_loki`, `splunkLog`, `new_relic_log`, `stackdriver` (Google Cloud Logging)."
+        "description": "The name of the log service type within the Fivetran system. We support the following log services: `azure_monitor_log`, `cloudwatch`, `datadog_log`, `dynatrace`, `grafana_loki`, `splunkLog`, `new_relic_log`, `stackdriver` (Google Cloud Logging)."
       },
       "enabled": {
         "type": "boolean",
@@ -15,6 +15,10 @@
       },
       "config": {
         "type": "object"
+      },
+      "run_setup_tests": {
+        "type": "boolean",
+        "description": "When `true`, Fivetran runs setup tests immediately after creating or updating the log service and returns the results in the `setup_tests` field of the response. Defaults to `false`."
       }
     }
   }

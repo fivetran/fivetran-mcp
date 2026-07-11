@@ -358,6 +358,12 @@
       "method": "DELETE",
       "summary": "Delete Account Log Service"
     },
+    "run_setup_tests_account_log_service": {
+      "file": "external-logging/run_setup_tests_account_log_service.json",
+      "path": "/v1/external-logging/account/test",
+      "method": "POST",
+      "summary": "Run Account Log Service Setup Tests"
+    },
     "get_log_service_details": {
       "file": "external-logging/get_log_service_details.json",
       "path": "/v1/external-logging/{logId}",

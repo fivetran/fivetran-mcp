@@ -1,5 +1,5 @@
 {
-  "description": "Returns all available source types. This endpoint provides metadata including the proper source name (\u2018Facebook Ads\u2019 instead of facebook_ads), the source icon, feature tables, information about the Hybrid deployment support, information about the Authorization via API support, and links to Fivetran resources. As we update source names and icons, that metadata will automatically update within this endpoint.",
+  "description": "Returns all available source types. This endpoint provides metadata including the proper source name (‘Facebook Ads’ instead of facebook_ads), the source icon, feature tables, information about the Hybrid deployment support, information about the Authorization via API support, and links to Fivetran resources. As we update source names and icons, that metadata will automatically update within this endpoint.",
   "path": "/public/connector-types",
   "method": "GET"
 }

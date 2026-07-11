@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new External Secrets Manager instance within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new External Secrets Manager instance within your Fivetran account.",
   "path": "/v1/external-secrets-managers",
   "method": "POST",
   "request_body_schema": {
@@ -24,7 +24,12 @@
         "description": "The name of the External Secrets Manager instance. Must be unique within the account."
       },
       "config": {
-        "type": "object"
+        "description": "Provider-specific configuration object. For AWS_SECRET_MANAGER: role_arn (required). For AZURE_KEY_VAULT: vault_url (required), tenant_id (required for SaaS). For HASHICORP_VAULT: vault_address (required), role_id and secret_id (required for SaaS), namespace (optional).",
+        "allOf": [
+          {
+            "type": "object"
+          }
+        ]
       },
       "is_hybrid_deployment": {
         "type": "boolean",

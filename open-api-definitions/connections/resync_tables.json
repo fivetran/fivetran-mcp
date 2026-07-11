@@ -1,5 +1,5 @@
 {
-  "description": "Triggers a historical sync of all data for multiple schema tables within a connection. This action does not override the standard sync frequency you defined in the Fivetran dashboard.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Triggers a historical sync of all data for multiple schema tables within a connection. This action does not override the standard sync frequency you defined in the Fivetran dashboard.",
   "path": "/v1/connections/{connectionId}/schemas/tables/resync",
   "method": "POST",
   "parameters": [

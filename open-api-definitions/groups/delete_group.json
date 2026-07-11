@@ -1,5 +1,5 @@
 {
-  "description": "Deletes a group from your Fivetran account.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes a group from your Fivetran account.",
   "path": "/v1/groups/{groupId}",
   "method": "DELETE",
   "parameters": [

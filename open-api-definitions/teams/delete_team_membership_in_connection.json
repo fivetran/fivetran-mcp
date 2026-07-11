@@ -1,5 +1,5 @@
 {
-  "description": "Removes team membership in a connection.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Removes team membership in a connection.",
   "path": "/v1/teams/{teamId}/connections/{connectionId}",
   "method": "DELETE",
   "parameters": [

@@ -1,5 +1,5 @@
 {
-  "description": "Removes an existing user from a group in your Fivetran account.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Removes an existing user from a group in your Fivetran account.",
   "path": "/v1/groups/{groupId}/users/{userId}",
   "method": "DELETE",
   "parameters": [

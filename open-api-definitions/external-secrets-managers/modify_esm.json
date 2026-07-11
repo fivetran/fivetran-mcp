@@ -1,5 +1,5 @@
 {
-  "description": "Updates the configuration of an existing External Secrets Manager instance.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates the configuration of an existing External Secrets Manager instance.",
   "path": "/v1/external-secrets-managers/{esmId}",
   "method": "PATCH",
   "parameters": [
@@ -20,7 +20,12 @@
     "type": "object",
     "properties": {
       "config": {
-        "type": "object"
+        "description": "Provider-specific configuration object. For AWS_SECRET_MANAGER: role_arn (required). For AZURE_KEY_VAULT: vault_url (required), tenant_id (required for SaaS). For HASHICORP_VAULT: vault_address (required), role_id and secret_id (required for SaaS), namespace (optional).",
+        "allOf": [
+          {
+            "type": "object"
+          }
+        ]
       }
     }
   }

@@ -1,5 +1,5 @@
 {
-  "description": "Updates transformation project if a valid identifier was provided.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates transformation project if a valid identifier was provided.",
   "path": "/v1/transformation-projects/{projectId}",
   "method": "PATCH",
   "parameters": [

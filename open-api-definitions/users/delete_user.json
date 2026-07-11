@@ -1,5 +1,5 @@
 {
-  "description": "Deletes a user from your Fivetran account. You will be unable to delete an account owner user if there is only one remaining.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes a user from your Fivetran account. You will be unable to delete an account owner user if there is only one remaining.",
   "path": "/v1/users/{id}",
   "method": "DELETE",
   "parameters": [

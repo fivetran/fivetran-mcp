@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new system key with your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new system key with your Fivetran account.",
   "path": "/v1/system-keys",
   "method": "POST",
   "request_body_schema": {

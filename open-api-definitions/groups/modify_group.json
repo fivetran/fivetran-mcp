@@ -1,5 +1,5 @@
 {
-  "description": "Updates information for an existing group within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates information for an existing group within your Fivetran account.",
   "path": "/v1/groups/{groupId}",
   "method": "PATCH",
   "parameters": [

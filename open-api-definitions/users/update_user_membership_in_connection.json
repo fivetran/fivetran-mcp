@@ -1,5 +1,5 @@
 {
-  "description": "Updates user membership in a connection.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates user membership in a connection.",
   "path": "/v1/users/{userId}/connections/{connectionId}",
   "method": "PATCH",
   "parameters": [

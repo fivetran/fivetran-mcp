@@ -1,5 +1,5 @@
 {
-  "description": "Removes a team's membership in a group.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Removes a team's membership in a group.",
   "path": "/v1/teams/{teamId}/groups/{groupId}",
   "method": "DELETE",
   "parameters": [

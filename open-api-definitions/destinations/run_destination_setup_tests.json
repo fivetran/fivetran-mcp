@@ -1,5 +1,5 @@
 {
-  "description": "Runs the setup tests for an existing destination within your Fivetran account.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Runs the setup tests for an existing destination within your Fivetran account.",
   "path": "/v1/destinations/{destinationId}/test",
   "method": "POST",
   "parameters": [

@@ -1,5 +1,5 @@
 {
-  "description": "Updates team membership in a connection",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates team membership in a connection",
   "path": "/v1/teams/{teamId}/connections/{connectionId}",
   "method": "PATCH",
   "parameters": [

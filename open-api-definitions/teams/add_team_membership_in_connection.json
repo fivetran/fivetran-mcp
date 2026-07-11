@@ -1,5 +1,5 @@
 {
-  "description": "Adds a team as a member of a connection.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Adds a team as a member of a connection.",
   "path": "/v1/teams/{teamId}/connections",
   "method": "POST",
   "parameters": [

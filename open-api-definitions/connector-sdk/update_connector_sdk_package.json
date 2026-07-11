@@ -1,5 +1,5 @@
 {
-  "description": "Updates an existing Connector SDK package by uploading a new version of the connector code.\n\nAll connections using this package will automatically use the updated code on their next sync.\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates an existing Connector SDK package by uploading a new version of the connector code.\n\nAll connections using this package will automatically use the updated code on their next sync.\n",
   "path": "/v1/connector-sdk/packages/{package_id}",
   "method": "PATCH",
   "parameters": [

@@ -1,5 +1,5 @@
 {
-  "description": "Generates the Connect Card URI for the connection",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Generates the Connect Card URI for the connection",
   "path": "/v1/connections/{connectionId}/connect-card",
   "method": "POST",
   "parameters": [
@@ -20,24 +20,29 @@
     "type": "object",
     "properties": {
       "connect_card_config": {
-        "required": [
-          "redirect_uri"
-        ],
-        "type": "object",
-        "properties": {
-          "redirect_uri": {
-            "type": "string",
-            "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix."
-          },
-          "hide_setup_guide": {
-            "type": "boolean",
-            "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card."
-          },
-          "all_fields": {
-            "type": "boolean",
-            "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
+        "description": "Configuration for the Connect Card flow. Connect Card is a Fivetran-hosted UI that allows your end users to authorize a connection without accessing the Fivetran dashboard. Use `redirect_uri` to control where users land after completing setup.",
+        "allOf": [
+          {
+            "required": [
+              "redirect_uri"
+            ],
+            "type": "object",
+            "properties": {
+              "redirect_uri": {
+                "type": "string",
+                "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix."
+              },
+              "hide_setup_guide": {
+                "type": "boolean",
+                "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card."
+              },
+              "all_fields": {
+                "type": "boolean",
+                "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
+              }
+            }
           }
-        }
+        ]
       }
     }
   }

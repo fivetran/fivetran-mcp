@@ -1,5 +1,5 @@
 {
-  "description": "Updates the transformation if a valid identifier is provided.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates the transformation if a valid identifier is provided.",
   "path": "/v1/transformations/{transformationId}",
   "method": "PATCH",
   "parameters": [

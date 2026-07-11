@@ -1,5 +1,5 @@
 {
-  "description": "Adds a connection membership",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Adds a connection membership",
   "path": "/v1/users/{userId}/connections",
   "method": "POST",
   "parameters": [

@@ -1,5 +1,5 @@
 {
-  "description": "Marks a blocked column for deletion from your destination table. The column will be dropped during the next sync.\n\nFor the NetSuite SuiteAnalytics and Salesforce and Salesforce Sandbox connectors, the 'schemas' map field will always have a single entry with the 'netsuite' or 'salesforce' key, respectively.\n",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Marks a blocked column for deletion from your destination table. The column will be dropped during the next sync.\n\nFor the NetSuite SuiteAnalytics and Salesforce and Salesforce Sandbox connectors, the 'schemas' map field will always have a single entry with the 'netsuite' or 'salesforce' key, respectively.\n",
   "path": "/v1/connections/{connectionId}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}",
   "method": "DELETE",
   "parameters": [

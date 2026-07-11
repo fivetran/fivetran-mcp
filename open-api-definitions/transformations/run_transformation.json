@@ -1,5 +1,5 @@
 {
-  "description": "Runs the transformation if a valid identifier is provided.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Runs the transformation if a valid identifier is provided.",
   "path": "/v1/transformations/{transformationId}/run",
   "method": "POST",
   "parameters": [

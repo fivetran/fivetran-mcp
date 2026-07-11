@@ -1,5 +1,5 @@
 {
-  "description": "Creates a new destination within a specified group in your Fivetran account.\n\n> IMPORTANT: Groups and destinations are mapped 1:1 to each other. We do this mapping using the group's `id` value that we automatically generate when you create a group, and the destination's `group_id` value that you specify when you create a destination. This means that you must create a group in your Fivetran account before you can create a destination in it.\n\n> IMPORTANT: If you want to get the certificate details, do not set `trust_certificates` to `true` when you create a destination with our REST API. We can only provide the certificate details through the failed Validate Certificate setup test. For a full walkthrough, see [Get Destination Certificate Details](https://fivetran.com/docs/rest-api/tutorials/get-destination-certificate-details).\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new destination within a specified group in your Fivetran account.\n\n> IMPORTANT: Groups and destinations are mapped 1:1 to each other. We do this mapping using the group's `id` value that we automatically generate when you create a group, and the destination's `group_id` value that you specify when you create a destination. This means that you must create a group in your Fivetran account before you can create a destination in it.\n\n> IMPORTANT: If you want to get the certificate details, do not set `trust_certificates` to `true` when you create a destination with our REST API. We can only provide the certificate details through the failed Validate Certificate setup test. For a full walkthrough, see [Get Destination Certificate Details](https://fivetran.com/docs/rest-api/tutorials/get-destination-certificate-details).\n",
   "path": "/v1/destinations",
   "method": "POST",
   "request_body_schema": {
@@ -124,6 +124,10 @@
       "proxy_agent_id": {
         "type": "string",
         "description": "The unique identifier for the proxy agent within the Fivetran system"
+      },
+      "external_secrets_manager_id": {
+        "type": "string",
+        "description": "The unique identifier of the [External Secrets Manager](/docs/rest-api/api-reference/external-secrets-managers) instance. Destination service must [support](/docs/core-concepts/features/external-secret-managers#destinations) External Secrets Manager feature to use this field."
       }
     },
     "discriminator": {

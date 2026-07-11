@@ -1,5 +1,5 @@
 {
-  "description": "Runs the setup tests for an existing connection within your Fivetran account. Use this parameter to test the connection without making any configuration changes. You can optionally include `trust_certificates` or `trust_fingerprints` parameters to automatically approve certificates or fingerprints during the test run.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Runs the setup tests for an existing connection within your Fivetran account. Use this parameter to test the connection without making any configuration changes. You can optionally include `trust_certificates` or `trust_fingerprints` parameters to automatically approve certificates or fingerprints during the test run.",
   "path": "/v1/connections/{connectionId}/test",
   "method": "POST",
   "parameters": [

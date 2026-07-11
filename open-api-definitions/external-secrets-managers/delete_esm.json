@@ -1,5 +1,5 @@
 {
-  "description": "Deletes an External Secrets Manager instance from your Fivetran account. The instance must not be in use by any source connections or destinations.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes an External Secrets Manager instance from your Fivetran account. The instance must not be in use by any source connections or destinations.",
   "path": "/v1/external-secrets-managers/{esmId}",
   "method": "DELETE",
   "parameters": [

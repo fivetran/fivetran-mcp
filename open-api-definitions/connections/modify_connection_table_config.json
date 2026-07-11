@@ -1,5 +1,5 @@
 {
-  "description": "Updates the table config within your database schema for an existing connection within your Fivetran account.\n\nFor the NetSuite SuiteAnalytics and Salesforce and Salesforce Sandbox connectors, the 'schemas' map field will always have a single entry with the 'netsuite' or 'salesforce' key, respectively.\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates the table config within your database schema for an existing connection within your Fivetran account.\n\nFor the NetSuite SuiteAnalytics and Salesforce and Salesforce Sandbox connectors, the 'schemas' map field will always have a single entry with the 'netsuite' or 'salesforce' key, respectively.\n",
   "path": "/v1/connections/{connectionId}/schemas/{schemaName}/tables/{tableName}",
   "method": "PATCH",
   "parameters": [

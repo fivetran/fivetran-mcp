@@ -1,5 +1,5 @@
 {
-  "description": "Deletes transformation project if a valid identifier was provided.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes transformation project if a valid identifier was provided.",
   "path": "/v1/transformation-projects/{projectId}",
   "method": "DELETE",
   "parameters": [

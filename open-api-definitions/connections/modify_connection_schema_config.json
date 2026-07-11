@@ -1,5 +1,5 @@
 {
-  "description": "Updates the schema config for an existing connection within your Fivetran account.\n\n> NOTE: For backward compatibility, the response may contain the 'enable_new_by_default' boolean field. It defines whether new schemas and tables discovered in the source are synced. The value is 'true' if you specify 'ALLOW_ALL' as a value of 'schema_change_handling'. In the future API versions, we may remove this field.\n>\n> The response contains all known schemas and tables. Also, it contains columns whose state has ever been set by the user. For more information, see also the [Connection Schema config](https://fivetran.com/docs/rest-api/tutorials/connection-schema-configuration-use-cases) tutorial.\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates the schema config for an existing connection within your Fivetran account.\n\n> NOTE: For backward compatibility, the response may contain the 'enable_new_by_default' boolean field. It defines whether new schemas and tables discovered in the source are synced. The value is 'true' if you specify 'ALLOW_ALL' as a value of 'schema_change_handling'. In the future API versions, we may remove this field.\n>\n> The response contains all known schemas and tables. Also, it contains columns whose state has ever been set by the user. For more information, see also the [Connection Schema config](https://fivetran.com/docs/rest-api/tutorials/connection-schema-configuration-use-cases) tutorial.\n",
   "path": "/v1/connections/{connectionId}/schemas",
   "method": "PATCH",
   "parameters": [
@@ -91,7 +91,7 @@
       },
       "is_type_locked": {
         "type": "boolean",
-        "description": "The boolean value specifying whether the connection\u2019s destination data types are locked to the types determined from the source. If enabled before or immediately after the initial sync, the [type lock](https://fivetran.com/docs/using-fivetran/features/type-locking) captures the types determined at the initial sync; if enabled later, it captures the types determined on the first sync after enabling. Re-enabling an already-enabled lock does not change previously locked types."
+        "description": "The boolean value specifying whether the connection’s destination data types are locked to the types determined from the source. If enabled before or immediately after the initial sync, the [type lock](https://fivetran.com/docs/using-fivetran/features/type-locking) captures the types determined at the initial sync; if enabled later, it captures the types determined on the first sync after enabling. Re-enabling an already-enabled lock does not change previously locked types."
       }
     }
   }

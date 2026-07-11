@@ -1,5 +1,5 @@
 {
-  "description": "Deletes the specified proxy agent from your Fivetran account.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes the specified proxy agent from your Fivetran account.",
   "path": "/v1/proxy/{agentId}",
   "method": "DELETE",
   "parameters": [

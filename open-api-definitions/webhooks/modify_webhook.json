@@ -1,5 +1,5 @@
 {
-  "description": "The endpoint allows you to update the existing webhook with a given identifier",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. The endpoint allows you to update the existing webhook with a given identifier",
   "path": "/v1/webhooks/{webhookId}",
   "method": "PATCH",
   "parameters": [
