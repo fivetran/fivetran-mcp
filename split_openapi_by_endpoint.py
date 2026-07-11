@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
-"""Split OpenAPI schema into minimal per-endpoint files.
+"""Split OpenAPI schema into per-endpoint files.
 
-Takes the full OpenAPI spec and produces one lightweight file per endpoint,
-containing only what an agent needs to call the tool:
-  - description/summary
+Takes the full OpenAPI spec and produces one file per endpoint containing:
+  - description (with ⚠️ warning prefix on write/delete methods)
   - path and method
-  - path/query parameters (no headers)
-  - request body schema (with $refs resolved inline)
+  - deprecated flag (only if true)
+  - path/query parameters (headers stripped)
+  - request_body: required, description, and schemas keyed by content type
+  - response: description and success (2xx) schemas keyed by content type
 
-Response schemas, components, examples, and other metadata are stripped.
+All $refs are resolved inline. Examples, tags, security, servers, non-JSON
+component metadata, and error response schemas are stripped.
 
 Usage:
     python split_openapi_by_endpoint.py <input_file> <output_dir>
@@ -82,19 +84,50 @@ def extract_parameters(operation: dict) -> list[dict]:
 
 
 def extract_request_body(operation: dict, components: dict) -> dict | None:
-    """Extract and resolve the request body schema, stripping examples."""
+    """Extract request body: required flag, description, and schemas by content type."""
     request_body = operation.get('requestBody')
     if not request_body:
         return None
 
     content = request_body.get('content', {})
-    json_content = content.get('application/json', {})
-    schema = json_content.get('schema')
-    if not schema:
+    schemas_by_type = {}
+    for content_type, content_obj in content.items():
+        schema = content_obj.get('schema')
+        if schema:
+            schemas_by_type[content_type] = strip_examples(resolve_refs_inline(schema, components))
+
+    if not schemas_by_type:
         return None
 
-    resolved = resolve_refs_inline(schema, components)
-    return strip_examples(resolved)
+    result = {'content': schemas_by_type}
+    if request_body.get('required'):
+        result['required'] = True
+    if 'description' in request_body:
+        result['description'] = request_body['description']
+    return result
+
+
+def extract_response(operation: dict, components: dict) -> dict | None:
+    """Extract success response schemas keyed by content type."""
+    responses = operation.get('responses', {})
+    success_response = responses.get('200') or responses.get('201')
+    if not success_response:
+        return None
+
+    content = success_response.get('content', {})
+    schemas_by_type = {}
+    for content_type, content_obj in content.items():
+        schema = content_obj.get('schema')
+        if schema:
+            schemas_by_type[content_type] = strip_examples(resolve_refs_inline(schema, components))
+
+    if not schemas_by_type:
+        return None
+
+    result = {'content': schemas_by_type}
+    if 'description' in success_response:
+        result['description'] = success_response['description']
+    return result
 
 
 def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
@@ -116,13 +149,20 @@ def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
         'method': method_upper,
     }
 
+    if operation.get('deprecated'):
+        endpoint_doc['deprecated'] = True
+
     params = extract_parameters(operation)
     if params:
         endpoint_doc['parameters'] = params
 
     request_body = extract_request_body(operation, components)
     if request_body:
-        endpoint_doc['request_body_schema'] = request_body
+        endpoint_doc['request_body'] = request_body
+
+    response = extract_response(operation, components)
+    if response:
+        endpoint_doc['response'] = response
 
     return endpoint_doc
 
@@ -159,7 +199,7 @@ def build_tool_entry(operation_id: str, schema_file_rel: str, endpoint_doc: dict
     for raw in raw_path_params:
         endpoint_path = endpoint_path.replace('{' + raw + '}', '{' + _to_snake(raw) + '}')
 
-    has_body = 'request_body_schema' in endpoint_doc or method in ('POST', 'PATCH', 'PUT')
+    has_body = 'request_body' in endpoint_doc or method in ('POST', 'PATCH', 'PUT')
     params = path_params + (['request_body'] if has_body else [])
 
     # Query params go in their own list, OPTIONAL at call time. Names are emitted
@@ -342,6 +382,62 @@ def inject_new_tools(output_dir: Path, all_mappings: dict, server_file: Path) ->
     print('Uncomment entries in server.py to enable them.')
 
 
+def apply_description_overrides(output_dir: Path) -> None:
+    """Apply description overrides from CSV to generated JSON schema files."""
+    import csv
+
+    csv_file = Path(__file__).parent / 'fivetran-open-api-description-overrides.csv'
+    if not csv_file.exists():
+        return
+
+    overrides: dict[tuple[str, str], str] = {}
+    with open(csv_file, newline='', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        next(reader)  # skip header
+        for row in reader:
+            if len(row) < 5:
+                continue
+            endpoint = row[0].strip()
+            new_desc = row[4].strip()
+            if not new_desc:
+                continue
+            parts = endpoint.split(' ', 1)
+            if len(parts) != 2:
+                continue
+            method, path = parts[0].upper(), parts[1].strip()
+            overrides[(method, path)] = new_desc
+
+    if not overrides:
+        return
+
+    applied = 0
+    for schema_path in sorted(output_dir.rglob('*.json')):
+        if schema_path.name == 'endpoint-index.json':
+            continue
+        try:
+            doc = json.loads(schema_path.read_text())
+        except json.JSONDecodeError:
+            continue
+
+        method = doc.get('method', '').upper()
+        path = doc.get('path', '')
+        new_desc = overrides.get((method, path))
+        if not new_desc:
+            continue
+
+        if method == 'DELETE':
+            new_desc = f'⚠️ DESTRUCTIVE - Confirm with user before calling. {new_desc}'
+        elif method in ('POST', 'PATCH', 'PUT'):
+            new_desc = f'⚠️ WRITE OPERATION - Confirm with user before calling. {new_desc}'
+
+        doc['description'] = new_desc
+        schema_path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + '\n')
+        applied += 1
+        print(f'  Overrode: {method} {path}')
+
+    print(f'\nApplied {applied} description override(s) from {csv_file.name}.')
+
+
 def main():
     import sys
 
@@ -438,6 +534,10 @@ def main():
     total_endpoints = sum(len(m) for m in all_mappings.values())
     print(f'\nDone! Split into {total_endpoints} endpoint files across {len(all_mappings)} resources.')
     print(f'Total output: {total_new_lines} lines')
+
+    # Apply description overrides from CSV
+    print('\nApplying description overrides...')
+    apply_description_overrides(output_dir)
 
     # Inject any new endpoints into server.py
     server_file = Path(__file__).parent / 'server.py'
