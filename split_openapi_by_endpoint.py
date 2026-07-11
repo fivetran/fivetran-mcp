@@ -103,10 +103,17 @@ def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
     operation = path_item[method]
     components = openapi_doc.get('components', {})
 
+    method_upper = method.upper()
+    description = operation.get('description', operation.get('summary', ''))
+    if method_upper == 'DELETE':
+        description = f'⚠️ DESTRUCTIVE - Confirm with user before calling. {description}'
+    elif method_upper in ('POST', 'PATCH', 'PUT'):
+        description = f'⚠️ WRITE OPERATION - Confirm with user before calling. {description}'
+
     endpoint_doc = {
-        'description': operation.get('description', operation.get('summary', '')),
+        'description': description,
         'path': path,
-        'method': method.upper(),
+        'method': method_upper,
     }
 
     params = extract_parameters(operation)
@@ -140,11 +147,6 @@ def build_tool_entry(operation_id: str, schema_file_rel: str, endpoint_doc: dict
     # Collapse multi-line descriptions and escape quotes for use in a Python string literal
     raw_desc = endpoint_doc.get('description', '')
     description = ' '.join(raw_desc.split()).replace('"', '\\"')
-
-    if method == 'DELETE':
-        description = f'⚠️ DESTRUCTIVE - Confirm with user before calling. {description}'
-    elif method in ('POST', 'PATCH', 'PUT'):
-        description = f'⚠️ WRITE OPERATION - Confirm with user before calling. {description}'
 
     # Path params are URL placeholders (the API never sees the name), so normalize
     # them to snake_case to match the PARAM_DEFINITIONS convention. The endpoint
@@ -408,7 +410,7 @@ def main():
                 endpoint_doc = extract_endpoint_schema(resource_openapi, path, method)
 
                 output_file = resource_output_dir / f'{operation_id}.json'
-                output_json = json.dumps(endpoint_doc, indent=2)
+                output_json = json.dumps(endpoint_doc, indent=2, ensure_ascii=False)
                 with open(output_file, 'w') as f:
                     f.write(output_json)
 
