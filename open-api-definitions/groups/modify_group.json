@@ -13,13 +13,61 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "name": {
-        "type": "string",
-        "description": "The name of the group within your account."
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the group within your account."
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "created_at",
+              "id",
+              "name"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the group within the Fivetran system."
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the group within your account."
+              },
+              "created_at": {
+                "type": "string",
+                "description": "The timestamp of when the group was created in your account.",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

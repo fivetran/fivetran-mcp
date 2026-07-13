@@ -13,18 +13,43 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "schema": {
-        "title": "Schema name",
-        "uniqueItems": true,
-        "type": "array",
-        "description": "Schema name",
-        "items": {
-          "type": "string"
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "schema": {
+            "title": "Schema name",
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Schema name",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

@@ -13,20 +13,88 @@
       }
     }
   ],
-  "request_body_schema": {
-    "required": [
-      "config"
-    ],
-    "type": "object",
-    "properties": {
-      "config": {
-        "description": "Provider-specific configuration object. For AWS_SECRET_MANAGER: role_arn (required). For AZURE_KEY_VAULT: vault_url (required), tenant_id (required for SaaS). For HASHICORP_VAULT: vault_address (required), role_id and secret_id (required for SaaS), namespace (optional).",
-        "allOf": [
-          {
-            "type": "object"
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "config"
+        ],
+        "type": "object",
+        "properties": {
+          "config": {
+            "description": "Provider-specific configuration object. For AWS_SECRET_MANAGER: role_arn (required). For AZURE_KEY_VAULT: vault_url (required), tenant_id (required for SaaS). For HASHICORP_VAULT: vault_address (required), role_id and secret_id (required for SaaS), namespace (optional).",
+            "allOf": [
+              {
+                "type": "object"
+              }
+            ]
           }
-        ]
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier of the External Secrets Manager instance."
+              },
+              "type": {
+                "type": "string",
+                "description": "The ESM provider type",
+                "enum": [
+                  "AWS_SECRET_MANAGER",
+                  "AZURE_KEY_VAULT",
+                  "HASHICORP_VAULT"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the ESM instance"
+              },
+              "config": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object"
+                },
+                "description": "Provider-specific configuration."
+              },
+              "is_hybrid_deployment": {
+                "type": "boolean",
+                "description": "Whether this External Secrets Manager instance is compatible with Hybrid Deployment environments."
+              },
+              "created_at": {
+                "type": "string",
+                "description": "The timestamp when the ESM instance was created.",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "description": "The timestamp when the ESM instance was last updated.",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

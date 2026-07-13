@@ -1,5 +1,49 @@
 {
   "description": "Returns information about current account from API key.",
   "path": "/v1/account/info",
-  "method": "GET"
+  "method": "GET",
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "account_id"
+            ],
+            "type": "object",
+            "properties": {
+              "account_id": {
+                "type": "string",
+                "description": "The unique identifier for the account within the Fivetran system."
+              },
+              "account_name": {
+                "type": "string"
+              },
+              "user_id": {
+                "type": "string",
+                "description": "The user ID from the API key. Returned if the user API key is used to authenticate the request."
+              },
+              "system_key_id": {
+                "type": "string",
+                "description": "The system ID from the API key. Returned if the system API key is used to authenticate the request."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

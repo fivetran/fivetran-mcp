@@ -12,5 +12,68 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "created_at",
+              "created_by",
+              "id",
+              "last_updated_by",
+              "updated_at"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the Connector SDK package."
+              },
+              "connection_id": {
+                "type": "string",
+                "description": "The connection identifier associated with this package. Each package can only be associated with one connection at a time. Returns null if the package is not yet associated with any connection."
+              },
+              "created_by": {
+                "type": "string",
+                "description": "The unique identifier of the user who created the package."
+              },
+              "last_updated_by": {
+                "type": "string",
+                "description": "The unique identifier of the user who last updated the package."
+              },
+              "created_at": {
+                "type": "string",
+                "description": "The timestamp when the package was created.",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "description": "The timestamp when the package was last updated.",
+                "format": "date-time"
+              },
+              "file_sha256_hash": {
+                "type": "string",
+                "description": "The SHA-256 hash of the uploaded package file. Used for integrity verification and change detection."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

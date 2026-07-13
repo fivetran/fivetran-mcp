@@ -1,5 +1,5 @@
 {
-  "description": "Returns a list of information about all connections within a group in your Fivetran account.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of information about all connections within a group in your Fivetran account.",
   "path": "/v1/groups/{groupId}/connections",
   "method": "GET",
   "parameters": [
@@ -40,5 +40,342 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "required": [
+                    "connected_by",
+                    "created_at",
+                    "group_id",
+                    "id",
+                    "pause_after_trial",
+                    "paused",
+                    "schedule_type",
+                    "schema",
+                    "service",
+                    "status",
+                    "sync_frequency"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier for the group within the Fivetran system."
+                    },
+                    "service": {
+                      "type": "string",
+                      "description": "The name for the connector type within the Fivetran system."
+                    },
+                    "schema": {
+                      "type": "string",
+                      "description": "The name used both as the connection's name within the Fivetran system and as the source schema's name within your destination."
+                    },
+                    "paused": {
+                      "type": "boolean",
+                      "description": "Specifies whether the connection is paused."
+                    },
+                    "status": {
+                      "description": "The current state of the connection. ",
+                      "allOf": [
+                        {
+                          "required": [
+                            "is_historical_sync",
+                            "setup_state",
+                            "sync_state",
+                            "update_state"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "tasks": {
+                              "type": "array",
+                              "description": "The collection of tasks for the connection",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string",
+                                    "description": "A machine-readable identifier for the condition type. Use this value to programmatically detect and respond to specific connection conditions."
+                                  },
+                                  "message": {
+                                    "type": "string",
+                                    "description": "A human-readable label describing the condition. For example: Reconnect, Resync Table Warning."
+                                  },
+                                  "details": {
+                                    "type": "string",
+                                    "description": "Additional context about this condition beyond the message field."
+                                  }
+                                }
+                              }
+                            },
+                            "warnings": {
+                              "type": "array",
+                              "description": "The collection of warnings for the connection",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string",
+                                    "description": "A machine-readable identifier for the condition type. Use this value to programmatically detect and respond to specific connection conditions."
+                                  },
+                                  "message": {
+                                    "type": "string",
+                                    "description": "A human-readable label describing the condition. For example: Reconnect, Resync Table Warning."
+                                  },
+                                  "details": {
+                                    "type": "string",
+                                    "description": "Additional context about this condition beyond the message field."
+                                  }
+                                }
+                              }
+                            },
+                            "setup_state": {
+                              "type": "string",
+                              "description": "The current setup state of the connection. The available values are: <br /> - incomplete - the setup config is incomplete, the setup tests never succeeded <br /> - connected - the connection is properly set up <br /> - broken - the connection setup config is broken."
+                            },
+                            "schema_status": {
+                              "type": "string",
+                              "description": "Schema status. Returned only for connectors that support [Universal Column Masking flow](https://fivetran.com/docs/rest-api/tutorials/schema-status)."
+                            },
+                            "sync_state": {
+                              "type": "string",
+                              "description": "The current sync state of the connection. The available values are: <br /> - scheduled - the sync is waiting to be run <br /> - syncing - the sync is currently running <br /> - paused - the sync is currently paused <br /> - rescheduled - the sync is waiting until more API calls are available in the source service."
+                            },
+                            "update_state": {
+                              "type": "string",
+                              "description": "The current data update state of the connection. The available values are: <br /> - on_schedule - the sync is running smoothly, no delays <br /> - delayed - the data is delayed for a longer time than expected for the update."
+                            },
+                            "is_historical_sync": {
+                              "type": "boolean",
+                              "description": "The boolean specifying whether the connection should be triggered to re-sync all historical data. If you set this parameter to TRUE, a [historical sync](https://fivetran.com/docs/getting-started/glossary#historicalsync) starts immediately. If a sync is currently running, it's canceled and restarted as a historical sync. All subsequent syncs after the historical sync completes will be incremental. If the value is FALSE or not specified, the connection doesn't re-sync historical data. This parameter is automatically reset to FALSE once the historical sync is completed."
+                            },
+                            "rescheduled_for": {
+                              "type": "string",
+                              "description": "The UTC timestamp of the next scheduled sync attempt. Non-null only when `sync_state` is `\"rescheduled\"`. If `schedule_type` is `manual`, the connection expects the sync to be triggered at the designated time through the [Sync Connection Data](https://fivetran.com/docs/rest-api/api-reference/connections/sync-connection) endpoint.",
+                              "format": "date-time"
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "config": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object"
+                      },
+                      "description": "The connection setup configuration."
+                    },
+                    "group_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the group within the Fivetran system."
+                    },
+                    "service_version": {
+                      "type": "integer",
+                      "description": "The connector type version within the Fivetran system.",
+                      "format": "int32"
+                    },
+                    "connected_by": {
+                      "type": "string",
+                      "description": "The unique identifier of the user who has created the connection in your account."
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "The timestamp of when the group was created in your account.",
+                      "format": "date-time"
+                    },
+                    "succeeded_at": {
+                      "type": "string",
+                      "description": "The timestamp of the time the connection sync succeeded last time.",
+                      "format": "date-time"
+                    },
+                    "failed_at": {
+                      "type": "string",
+                      "description": "The timestamp of the time the connection sync failed last time.",
+                      "format": "date-time"
+                    },
+                    "pause_after_trial": {
+                      "type": "boolean",
+                      "description": "Specifies whether the connection should be paused after the free trial period has ended."
+                    },
+                    "sync_frequency": {
+                      "type": "integer",
+                      "description": "The connection sync frequency in minutes",
+                      "format": "int32"
+                    },
+                    "data_delay_threshold": {
+                      "type": "integer",
+                      "format": "int32"
+                    },
+                    "data_delay_sensitivity": {
+                      "type": "string",
+                      "enum": [
+                        "LOW",
+                        "NORMAL",
+                        "HIGH",
+                        "CUSTOM",
+                        "SYNC_FREQUENCY"
+                      ]
+                    },
+                    "daily_sync_time": {
+                      "type": "string",
+                      "description": "The optional parameter that defines the sync start time when the sync frequency is already set or being set by the current request to 1440. It can be specified in one hour increments starting from 00:00 to 23:00. If not specified, we will use the baseline sync start time. This parameter has no effect on the 0 to 60 minutes offset used to determine the actual sync start time."
+                    },
+                    "schedule_type": {
+                      "type": "string",
+                      "description": "The connection schedule config type. Supported values: auto, manual. Lets you disable or enable an automatic data sync on a schedule."
+                    },
+                    "setup_tests": {
+                      "type": "array",
+                      "description": "Setup tests results",
+                      "items": {
+                        "required": [
+                          "status",
+                          "title"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "title": {
+                            "type": "string",
+                            "description": "A human-readable name for the setup test step. For example: Validate Login, Test Connection, Check Permissions."
+                          },
+                          "status": {
+                            "type": "string",
+                            "description": "The result of the individual setup test step. Possible values: PASSED, FAILED, SKIPPED.",
+                            "enum": [
+                              "PASSED",
+                              "SKIPPED",
+                              "WARNING",
+                              "FAILED",
+                              "JOB_FAILED"
+                            ]
+                          },
+                          "message": {
+                            "type": "string",
+                            "description": "The result message for the setup test step. For example: Invalid login credentials."
+                          },
+                          "details": {
+                            "type": "object",
+                            "description": "Additional diagnostic information about the setup test result. Populated when the status is FAILED and more context is available beyond the message."
+                          }
+                        }
+                      }
+                    },
+                    "private_link_id": {
+                      "type": "string"
+                    },
+                    "networking_method": {
+                      "type": "string",
+                      "enum": [
+                        "Directly",
+                        "SshTunnel",
+                        "PrivateLink",
+                        "ProxyAgent",
+                        "UnmanagedProxyAgent",
+                        "Unknown"
+                      ]
+                    },
+                    "proxy_agent_id": {
+                      "type": "string"
+                    },
+                    "source_sync_details": {
+                      "type": "object",
+                      "description": "The additional information about the connection's state. The format of this parameter is specific for each connector type."
+                    },
+                    "hybrid_deployment_agent_id": {
+                      "type": "string"
+                    },
+                    "connect_card": {
+                      "type": "object",
+                      "properties": {
+                        "token": {
+                          "type": "string",
+                          "description": "A short-lived JWT that authorizes the end user to configure this connection via the Connect Card interface. Use the `uri` field directly to redirect users — it already embeds this token. If you need to construct your own URL, pass this value as the `auth` query parameter to `https://fivetran.com/connect-card/setup`."
+                        },
+                        "uri": {
+                          "type": "string",
+                          "description": "The complete URL to redirect the end user to in order to authorize the connection. It embeds the auth token, redirect URI, and setup guide visibility as query parameters. Redirect the user directly to this address."
+                        }
+                      }
+                    },
+                    "connect_card_config": {
+                      "required": [
+                        "redirect_uri"
+                      ],
+                      "type": "object",
+                      "properties": {
+                        "redirect_uri": {
+                          "type": "string",
+                          "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix."
+                        },
+                        "hide_setup_guide": {
+                          "type": "boolean",
+                          "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card."
+                        },
+                        "all_fields": {
+                          "type": "boolean",
+                          "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
+                        }
+                      }
+                    },
+                    "destination_configuration": {
+                      "type": "object",
+                      "properties": {
+                        "virtual_warehouse": {
+                          "type": "string",
+                          "description": "Snowflake's virtual warehouse used in the connection"
+                        }
+                      }
+                    },
+                    "destination_schema_names": {
+                      "type": "string",
+                      "enum": [
+                        "FIVETRAN_NAMING",
+                        "SOURCE_NAMING"
+                      ]
+                    },
+                    "external_secrets_manager_id": {
+                      "type": "string"
+                    },
+                    "external_secrets_keys_config": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

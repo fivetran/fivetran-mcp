@@ -13,28 +13,111 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "url": {
-        "type": "string",
-        "description": "The endpoint URL where webhook events will be delivered."
-      },
-      "events": {
-        "type": "array",
-        "description": "List of event types that trigger the webhook.",
-        "items": {
-          "type": "string"
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "url": {
+            "type": "string",
+            "description": "The endpoint URL where webhook events will be delivered."
+          },
+          "events": {
+            "type": "array",
+            "description": "List of event types that trigger the webhook.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "active": {
+            "type": "boolean",
+            "description": "Indicates if the webhook is enabled to send events immediately upon occurrence."
+          },
+          "secret": {
+            "type": "string",
+            "description": "A secret string used to sign webhook payloads for verification."
+          }
         }
-      },
-      "active": {
-        "type": "boolean",
-        "description": "Indicates if the webhook is enabled to send events immediately upon occurrence."
-      },
-      "secret": {
-        "type": "string",
-        "description": "A secret string used to sign webhook payloads for verification."
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "active",
+              "created_at",
+              "created_by",
+              "events",
+              "id",
+              "type",
+              "url"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for the webhook."
+              },
+              "type": {
+                "type": "string",
+                "description": "The type of the webhook. Specifies whether the webhook is associated with a group or an account.",
+                "enum": [
+                  "group",
+                  "account"
+                ]
+              },
+              "url": {
+                "type": "string",
+                "description": "The endpoint URL where webhook events will be delivered."
+              },
+              "events": {
+                "type": "array",
+                "description": "List of event types that trigger the webhook.",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "active": {
+                "type": "boolean",
+                "description": "Indicates if the webhook is enabled to send events immediately upon occurrence."
+              },
+              "secret": {
+                "type": "string",
+                "description": "A secret string used to sign webhook payloads for verification."
+              },
+              "group_id": {
+                "type": "string",
+                "description": "Unique identifier for the group associated with the webhook."
+              },
+              "created_at": {
+                "type": "string",
+                "description": "Timestamp indicating when the webhook was created.",
+                "format": "date-time"
+              },
+              "created_by": {
+                "type": "string",
+                "description": "Identifier of the user who created the webhook setting."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

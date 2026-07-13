@@ -30,5 +30,92 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "columns"
+            ],
+            "type": "object",
+            "properties": {
+              "columns": {
+                "title": "Columns",
+                "type": "object",
+                "properties": {
+                  "column": {
+                    "required": [
+                      "enabled",
+                      "enabled_patch_settings",
+                      "hashed",
+                      "name_in_destination"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "name_in_destination": {
+                        "type": "string",
+                        "description": "The schema name within your destination in accordance with Fivetran conventional rules"
+                      },
+                      "enabled": {
+                        "type": "boolean",
+                        "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                      },
+                      "hashed": {
+                        "type": "boolean",
+                        "description": "The boolean value specifying whether a column should be hashed"
+                      },
+                      "enabled_patch_settings": {
+                        "required": [
+                          "allowed"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "allowed": {
+                            "type": "boolean",
+                            "description": "The boolean value specifying whether the enabled property can be updated"
+                          },
+                          "reason": {
+                            "type": "string",
+                            "description": "The additional message indicating the reason why the enabled property cannot be updated. This field appears in the response only when the reason_code value is OTHER"
+                          },
+                          "reason_code": {
+                            "type": "string",
+                            "description": "The reason code indicating the reason why the enabled property cannot be updated: <br /> SYSTEM_TABLE - the table is a system table <br /> DELETED - the table was deleted in the source <br /> OTHER - the table was excluded by the system for some reason <br /> This field appears in the response when the allowed property value is FALSE",
+                            "enum": [
+                              "SYSTEM_COLUMN",
+                              "DELETED",
+                              "OTHER"
+                            ]
+                          }
+                        }
+                      },
+                      "is_primary_key": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                },
+                "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

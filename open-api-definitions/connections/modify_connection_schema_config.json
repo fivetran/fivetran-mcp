@@ -13,86 +13,286 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "schemas": {
+  "request_body": {
+    "content": {
+      "application/json": {
         "type": "object",
-        "additionalProperties": {
-          "required": [
-            "enabled"
-          ],
-          "type": "object",
-          "properties": {
-            "enabled": {
-              "type": "boolean",
-              "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
-            },
-            "tables": {
+        "properties": {
+          "schemas": {
+            "type": "object",
+            "additionalProperties": {
+              "required": [
+                "enabled"
+              ],
               "type": "object",
-              "additionalProperties": {
-                "required": [
-                  "enabled"
-                ],
-                "type": "object",
-                "properties": {
-                  "enabled": {
-                    "type": "boolean",
-                    "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
-                  },
-                  "columns": {
+              "properties": {
+                "enabled": {
+                  "type": "boolean",
+                  "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                },
+                "tables": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "required": [
+                      "enabled"
+                    ],
                     "type": "object",
-                    "additionalProperties": {
-                      "required": [
-                        "enabled"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "enabled": {
-                          "type": "boolean",
-                          "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean",
+                        "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                      },
+                      "columns": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "required": [
+                            "enabled"
+                          ],
+                          "type": "object",
+                          "properties": {
+                            "enabled": {
+                              "type": "boolean",
+                              "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                            },
+                            "hashed": {
+                              "type": "boolean",
+                              "description": "The boolean value specifying whether a column should be hashed"
+                            },
+                            "is_primary_key": {
+                              "type": "boolean"
+                            }
+                          }
                         },
-                        "hashed": {
-                          "type": "boolean",
-                          "description": "The boolean value specifying whether a column should be hashed"
-                        },
-                        "is_primary_key": {
-                          "type": "boolean"
-                        }
+                        "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync."
+                      },
+                      "sync_mode": {
+                        "type": "string",
+                        "description": "This field appears in the response if the connection supports switching sync modes for tables",
+                        "enum": [
+                          "SOFT_DELETE",
+                          "HISTORY",
+                          "LIVE"
+                        ]
                       }
-                    },
-                    "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync."
+                    }
                   },
-                  "sync_mode": {
-                    "type": "string",
-                    "description": "This field appears in the response if the connection supports switching sync modes for tables",
-                    "enum": [
-                      "SOFT_DELETE",
-                      "HISTORY",
-                      "LIVE"
-                    ]
-                  }
+                  "description": "The set of tables within your database schema config. Each key is the table name as stored in the connection schema config. Table names are case-sensitive; an incorrect case results in an HTTP 404 error."
                 }
-              },
-              "description": "The set of tables within your database schema config. Each key is the table name as stored in the connection schema config. Table names are case-sensitive; an incorrect case results in an HTTP 404 error."
-            }
+              }
+            },
+            "description": "The set of schemas within your connection schema config. Each key is the schema name as stored in the connection schema config. Schema names are case-sensitive; an incorrect case results in an HTTP 404 error."
+          },
+          "schema_change_handling": {
+            "type": "string",
+            "description": "The possible values for the schema_change_handling parameter are as follows: <br /> ALLOW_ALL - all new schemas, tables, and columns which appear in the source after the initial setup are included in syncs <br /> ALLOW_COLUMNS - all new schemas and tables which appear in the source after the initial setup are excluded from syncs, but new columns are included <br /> BLOCK_ALL - all new schemas, tables, and columns which appear in the source after the initial setup are excluded from syncs",
+            "enum": [
+              "ALLOW_ALL",
+              "ALLOW_COLUMNS",
+              "BLOCK_ALL"
+            ]
+          },
+          "is_type_locked": {
+            "type": "boolean",
+            "description": "The boolean value specifying whether the connection’s destination data types are locked to the types determined from the source. If enabled before or immediately after the initial sync, the [type lock](https://fivetran.com/docs/using-fivetran/features/type-locking) captures the types determined at the initial sync; if enabled later, it captures the types determined on the first sync after enabling. Re-enabling an already-enabled lock does not change previously locked types."
           }
-        },
-        "description": "The set of schemas within your connection schema config. Each key is the schema name as stored in the connection schema config. Schema names are case-sensitive; an incorrect case results in an HTTP 404 error."
-      },
-      "schema_change_handling": {
-        "type": "string",
-        "description": "The possible values for the schema_change_handling parameter are as follows: <br /> ALLOW_ALL - all new schemas, tables, and columns which appear in the source after the initial setup are included in syncs <br /> ALLOW_COLUMNS - all new schemas and tables which appear in the source after the initial setup are excluded from syncs, but new columns are included <br /> BLOCK_ALL - all new schemas, tables, and columns which appear in the source after the initial setup are excluded from syncs",
-        "enum": [
-          "ALLOW_ALL",
-          "ALLOW_COLUMNS",
-          "BLOCK_ALL"
-        ]
-      },
-      "is_type_locked": {
-        "type": "boolean",
-        "description": "The boolean value specifying whether the connection’s destination data types are locked to the types determined from the source. If enabled before or immediately after the initial sync, the [type lock](https://fivetran.com/docs/using-fivetran/features/type-locking) captures the types determined at the initial sync; if enabled later, it captures the types determined on the first sync after enabling. Re-enabling an already-enabled lock does not change previously locked types."
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "schema_change_handling",
+              "schemas"
+            ],
+            "type": "object",
+            "properties": {
+              "enable_new_by_default": {
+                "type": "boolean",
+                "description": "The boolean value specifying whether to enable new schemas, tables, and columns by default"
+              },
+              "schemas": {
+                "title": "Schemas",
+                "type": "object",
+                "properties": {
+                  "schema": {
+                    "required": [
+                      "enabled",
+                      "name_in_destination",
+                      "tables"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "name_in_destination": {
+                        "type": "string",
+                        "description": "The schema name within your destination in accordance with Fivetran conventional rules"
+                      },
+                      "enabled": {
+                        "type": "boolean",
+                        "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                      },
+                      "tables": {
+                        "title": "Tables",
+                        "type": "object",
+                        "properties": {
+                          "table": {
+                            "required": [
+                              "columns",
+                              "enabled",
+                              "enabled_patch_settings",
+                              "name_in_destination",
+                              "supports_columns_config",
+                              "supports_history_mode"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "sync_mode": {
+                                "type": "string",
+                                "description": "This field appears in the response if the connection supports switching sync modes for tables",
+                                "enum": [
+                                  "SOFT_DELETE",
+                                  "HISTORY",
+                                  "LIVE"
+                                ]
+                              },
+                              "name_in_destination": {
+                                "type": "string",
+                                "description": "The schema name within your destination in accordance with Fivetran conventional rules"
+                              },
+                              "enabled": {
+                                "type": "boolean",
+                                "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                              },
+                              "columns": {
+                                "title": "Columns",
+                                "type": "object",
+                                "properties": {
+                                  "column": {
+                                    "required": [
+                                      "enabled",
+                                      "enabled_patch_settings",
+                                      "hashed",
+                                      "name_in_destination"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "name_in_destination": {
+                                        "type": "string",
+                                        "description": "The schema name within your destination in accordance with Fivetran conventional rules"
+                                      },
+                                      "enabled": {
+                                        "type": "boolean",
+                                        "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                                      },
+                                      "hashed": {
+                                        "type": "boolean",
+                                        "description": "The boolean value specifying whether a column should be hashed"
+                                      },
+                                      "enabled_patch_settings": {
+                                        "required": [
+                                          "allowed"
+                                        ],
+                                        "type": "object",
+                                        "properties": {
+                                          "allowed": {
+                                            "type": "boolean",
+                                            "description": "The boolean value specifying whether the enabled property can be updated"
+                                          },
+                                          "reason": {
+                                            "type": "string",
+                                            "description": "The additional message indicating the reason why the enabled property cannot be updated. This field appears in the response only when the reason_code value is OTHER"
+                                          },
+                                          "reason_code": {
+                                            "type": "string",
+                                            "description": "The reason code indicating the reason why the enabled property cannot be updated: <br /> SYSTEM_TABLE - the table is a system table <br /> DELETED - the table was deleted in the source <br /> OTHER - the table was excluded by the system for some reason <br /> This field appears in the response when the allowed property value is FALSE",
+                                            "enum": [
+                                              "SYSTEM_COLUMN",
+                                              "DELETED",
+                                              "OTHER"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "is_primary_key": {
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                },
+                                "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync."
+                              },
+                              "enabled_patch_settings": {
+                                "required": [
+                                  "allowed"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "allowed": {
+                                    "type": "boolean",
+                                    "description": "The boolean value specifying whether the enabled property can be updated"
+                                  },
+                                  "reason": {
+                                    "type": "string",
+                                    "description": "The additional message indicating the reason why the enabled property cannot be updated. This field appears in the response only when the reason_code value is OTHER"
+                                  },
+                                  "reason_code": {
+                                    "type": "string",
+                                    "description": "The reason code indicating the reason why the enabled property cannot be updated: <br /> SYSTEM_TABLE - the table is a system table <br /> DELETED - the table was deleted in the source <br /> OTHER - the table was excluded by the system for some reason <br /> This field appears in the response when the allowed property value is FALSE",
+                                    "enum": [
+                                      "SYSTEM_TABLE",
+                                      "DELETED",
+                                      "OTHER"
+                                    ]
+                                  }
+                                }
+                              },
+                              "supports_columns_config": {
+                                "type": "boolean",
+                                "description": "A boolean value that specifies if the table supports a column-level configuration."
+                              },
+                              "supports_history_mode": {
+                                "type": "boolean",
+                                "description": "The boolean value that specifies if the table supports history mode."
+                              }
+                            }
+                          }
+                        },
+                        "description": "The set of tables within your database schema config. Each key is the table name as stored in the connection schema config. Table names are case-sensitive; an incorrect case results in an HTTP 404 error."
+                      }
+                    }
+                  }
+                },
+                "description": "The set of schemas within your connection schema config. Each key is the schema name as stored in the connection schema config. Schema names are case-sensitive; an incorrect case results in an HTTP 404 error."
+              },
+              "schema_change_handling": {
+                "type": "string",
+                "description": "The possible values for the schema_change_handling parameter are as follows: <br /> ALLOW_ALL - all new schemas, tables, and columns which appear in the source after the initial setup are included in syncs <br /> ALLOW_COLUMNS - all new schemas and tables which appear in the source after the initial setup are excluded from syncs, but new columns are included <br /> BLOCK_ALL - all new schemas, tables, and columns which appear in the source after the initial setup are excluded from syncs",
+                "enum": [
+                  "ALLOW_ALL",
+                  "ALLOW_COLUMNS",
+                  "BLOCK_ALL"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

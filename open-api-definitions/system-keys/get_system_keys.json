@@ -1,5 +1,5 @@
 {
-  "description": "Returns a list of system keys within your Fivetran account.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of system keys within your Fivetran account.",
   "path": "/v1/system-keys",
   "method": "GET",
   "parameters": [
@@ -22,5 +22,133 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier for the system key within the Fivetran system"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The system key name within the account"
+                    },
+                    "key": {
+                      "type": "string",
+                      "description": "The key value of the system key"
+                    },
+                    "secret": {
+                      "type": "string",
+                      "description": "The secret value of rotated system key"
+                    },
+                    "permissions": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "resource_type": {
+                            "type": "string",
+                            "description": "The resource type for the permission",
+                            "enum": [
+                              "ACCOUNT",
+                              "USER",
+                              "WEBHOOK",
+                              "TEAM",
+                              "ROLES",
+                              "DESTINATION",
+                              "TRANSFORMATION",
+                              "REMOTE_EXECUTION_AGENT",
+                              "CONNECTOR"
+                            ]
+                          },
+                          "access_level": {
+                            "type": "string",
+                            "description": "The access level for the permission",
+                            "enum": [
+                              "NONE",
+                              "READ",
+                              "MANAGE"
+                            ]
+                          },
+                          "resource_filter": {
+                            "type": "object",
+                            "properties": {
+                              "ids": {
+                                "type": "array",
+                                "description": "The IDs of managed entities",
+                                "items": {
+                                  "type": "string"
+                                }
+                              },
+                              "group_ids": {
+                                "type": "array",
+                                "description": "The IDs of managed groups",
+                                "items": {
+                                  "type": "string"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "The system key creation timestamp",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "description": "The system key update timestamp",
+                      "format": "date-time"
+                    },
+                    "expired_at": {
+                      "type": "string",
+                      "description": "The system key expiration timestamp",
+                      "format": "date-time"
+                    },
+                    "last_used_at": {
+                      "type": "string",
+                      "description": "The timestamp of last usage",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

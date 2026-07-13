@@ -1,5 +1,5 @@
 {
-  "description": "Returns a list of all proxy agents within your Fivetran account.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all proxy agents within your Fivetran account.",
   "path": "/v1/proxy",
   "method": "GET",
   "parameters": [
@@ -22,5 +22,138 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier for the proxy agent within the Fivetran system."
+                    },
+                    "account_id": {
+                      "type": "string",
+                      "description": "Fivetran Account ID."
+                    },
+                    "registered_at": {
+                      "type": "string",
+                      "description": "The timestamp of the time the proxy agent was created in your account.",
+                      "format": "date-time"
+                    },
+                    "region": {
+                      "type": "string",
+                      "description": "Data processing location. This is where Fivetran will operate and run computation on data.",
+                      "enum": [
+                        "GCP_US_EAST4",
+                        "GCP_US_WEST1",
+                        "GCP_US_CENTRAL1",
+                        "GCP_EUROPE_WEST3",
+                        "GCP_AUSTRALIA_SOUTHEAST1",
+                        "GCP_NORTHAMERICA_NORTHEAST1",
+                        "GCP_EUROPE_WEST2",
+                        "GCP_ASIA_SOUTHEAST1",
+                        "GCP_ASIA_SOUTHEAST2",
+                        "GCP_ASIA_SOUTH1",
+                        "GCP_ASIA_NORTHEAST1",
+                        "GCP_ASIA_NORTHEAST3",
+                        "GCP_ME_CENTRAL2",
+                        "AWS_US_EAST_1",
+                        "AWS_US_EAST_2",
+                        "AWS_US_WEST_2",
+                        "AWS_AP_NORTHEAST_1",
+                        "AWS_AP_NORTHEAST_2",
+                        "AWS_AP_SOUTHEAST_1",
+                        "AWS_AP_SOUTHEAST_2",
+                        "AWS_EU_CENTRAL_1",
+                        "AWS_EU_NORTH_1",
+                        "AWS_EU_WEST_1",
+                        "AWS_EU_WEST_2",
+                        "AWS_AP_SOUTH_1",
+                        "AWS_CA_CENTRAL_1",
+                        "AWS_US_GOV_WEST_1",
+                        "AZURE_EASTUS2",
+                        "AZURE_AUSTRALIAEAST",
+                        "AZURE_UKSOUTH",
+                        "AZURE_WESTEUROPE",
+                        "AZURE_CENTRALUS",
+                        "AZURE_CANADACENTRAL",
+                        "AZURE_UAENORTH",
+                        "AZURE_SOUTHEASTASIA",
+                        "AZURE_EASTUS",
+                        "AZURE_JAPANEAST",
+                        "AZURE_CENTRALINDIA",
+                        "AZURE_GERMANYWESTCENTRAL",
+                        "AZURE_WESTUS3",
+                        "AZURE_SWITZERLANDNORTH",
+                        "AZURE_KOREACENTRAL"
+                      ]
+                    },
+                    "created_by": {
+                      "type": "string",
+                      "description": "The actor who created the proxy agent."
+                    },
+                    "display_name": {
+                      "type": "string",
+                      "description": "Proxy agent name."
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "The version of the proxy agent."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "The connection status of the proxy agent.",
+                      "enum": [
+                        "NOT_FOUND",
+                        "CONNECTED",
+                        "NOT_CONNECTED"
+                      ]
+                    },
+                    "connector_count": {
+                      "type": "integer",
+                      "description": "The number of source connections using the proxy agent.",
+                      "format": "int32"
+                    },
+                    "destination_count": {
+                      "type": "integer",
+                      "description": "The number of destinations using the proxy agent.",
+                      "format": "int32"
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

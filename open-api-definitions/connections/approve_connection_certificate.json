@@ -13,21 +13,99 @@
       }
     }
   ],
-  "request_body_schema": {
-    "required": [
-      "encoded_cert",
-      "hash"
-    ],
-    "type": "object",
-    "properties": {
-      "hash": {
-        "type": "string",
-        "description": "Hash of the certificate."
-      },
-      "encoded_cert": {
-        "type": "string",
-        "description": "The certificate encoded in base64."
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "encoded_cert",
+          "hash"
+        ],
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string",
+            "description": "Hash of the certificate."
+          },
+          "encoded_cert": {
+            "type": "string",
+            "description": "The certificate encoded in base64."
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "hash",
+              "id",
+              "name",
+              "public_key",
+              "sha1",
+              "sha256",
+              "type",
+              "validated_by",
+              "validated_date"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier of the certificate (Base64URL encoded hash of the certificate)."
+              },
+              "name": {
+                "type": "string",
+                "description": "The certificate name."
+              },
+              "hash": {
+                "type": "string",
+                "description": "Hash of the certificate."
+              },
+              "type": {
+                "type": "string",
+                "description": "Type of the certificate."
+              },
+              "sha1": {
+                "type": "string",
+                "description": "SHA1 of certificate."
+              },
+              "sha256": {
+                "type": "string",
+                "description": "SHA256 of certificate."
+              },
+              "public_key": {
+                "type": "string",
+                "description": "The certificate decoded public key."
+              },
+              "validated_date": {
+                "type": "string",
+                "description": "Date when certificate has been validated and approved.",
+                "format": "date-time"
+              },
+              "validated_by": {
+                "type": "string",
+                "description": "The unique identified for the user who has approved the certificate."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

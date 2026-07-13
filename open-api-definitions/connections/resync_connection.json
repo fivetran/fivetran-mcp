@@ -13,24 +13,49 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "scope": {
+  "request_body": {
+    "content": {
+      "application/json": {
         "type": "object",
         "properties": {
-          "schema": {
-            "title": "Schema name",
-            "uniqueItems": true,
-            "type": "array",
-            "description": "Schema name",
-            "items": {
-              "type": "string"
-            }
+          "scope": {
+            "type": "object",
+            "properties": {
+              "schema": {
+                "title": "Schema name",
+                "uniqueItems": true,
+                "type": "array",
+                "description": "Schema name",
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "A map where each key is a schema name and each value is a non-empty array of table names to re-sync within that schema.\nBoth the scope object and each schema's table array must be non-empty — an empty scope object or an empty table array returns 400.\nIf omitted or set to null, all schemas and tables of the connection are re-synced.\nThis parameter is only supported for connectors that support table-level re-sync (typically database connectors such as PostgreSQL, MySQL, and Oracle). Sending scope to an unsupported connector type (for example, Google Sheets) returns 400.\nRetrieve valid schema and table names from GET /v1/connections/{connectionId}/schemas.\n"
           }
-        },
-        "description": "A map where each key is a schema name and each value is a non-empty array of table names to re-sync within that schema.\nBoth the scope object and each schema's table array must be non-empty — an empty scope object or an empty table array returns 400.\nIf omitted or set to null, all schemas and tables of the connection are re-synced.\nThis parameter is only supported for connectors that support table-level re-sync (typically database connectors such as PostgreSQL, MySQL, and Oracle). Sending scope to an unsupported connector type (for example, Google Sheets) returns 400.\nRetrieve valid schema and table names from GET /v1/connections/{connectionId}/schemas.\n"
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

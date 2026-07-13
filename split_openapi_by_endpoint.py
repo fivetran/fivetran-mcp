@@ -130,6 +130,20 @@ def extract_response(operation: dict, components: dict) -> dict | None:
     return result
 
 
+def _response_is_paginated(operation: dict, components: dict) -> bool:
+    """Return True if the success response schema has a next_cursor property under data."""
+    responses = operation.get('responses', {})
+    success = responses.get('200') or responses.get('201')
+    if not success:
+        return False
+    for content_obj in success.get('content', {}).values():
+        schema = resolve_refs_inline(content_obj.get('schema', {}), components)
+        data_props = schema.get('properties', {}).get('data', {}).get('properties', {})
+        if 'next_cursor' in data_props:
+            return True
+    return False
+
+
 def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
     """Extract a minimal endpoint doc with only what's needed to call the API."""
     path_item = openapi_doc['paths'][path]
@@ -142,6 +156,8 @@ def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
         description = f'⚠️ DESTRUCTIVE - Confirm with user before calling. {description}'
     elif method_upper in ('POST', 'PATCH', 'PUT'):
         description = f'⚠️ WRITE OPERATION - Confirm with user before calling. {description}'
+    if _response_is_paginated(operation, components):
+        description = f'⚠️ RESULTS ARE PAGINATED. {description}'
 
     endpoint_doc = {
         'description': description,
@@ -382,6 +398,48 @@ def inject_new_tools(output_dir: Path, all_mappings: dict, server_file: Path) ->
     print('Uncomment entries in server.py to enable them.')
 
 
+def sync_tool_descriptions(output_dir: Path, server_file: Path) -> None:
+    """Update descriptions of all TOOLS entries in server.py (active and commented) to match schema files."""
+    lines = server_file.read_text().splitlines()
+    changed = 0
+
+    # Matches both active ("        ") and commented ("    #     ") schema_file lines
+    sf_re = re.compile(r'^(        |    #     )"schema_file":\s+"([^"]+)"')
+    desc_re = re.compile(r'^((?:        |    #     )"description":\s+")(.+)(",\s*)$')
+
+    for i, line in enumerate(lines):
+        sf_match = sf_re.match(line)
+        if not sf_match:
+            continue
+        schema_path = Path(__file__).parent / sf_match.group(2)
+        if not schema_path.exists():
+            continue
+        try:
+            doc = json.loads(schema_path.read_text())
+        except json.JSONDecodeError:
+            continue
+
+        new_desc = doc.get('description', '')
+        if not new_desc:
+            continue
+        new_desc_escaped = ' '.join(new_desc.split()).replace('"', '\\"')
+
+        # Find the description line just before schema_file (within 4 lines)
+        for j in range(i - 1, max(i - 5, -1), -1):
+            dm = desc_re.match(lines[j])
+            if dm:
+                if dm.group(2) != new_desc_escaped:
+                    lines[j] = f'{dm.group(1)}{new_desc_escaped}{dm.group(3)}'
+                    changed += 1
+                break
+
+    if changed:
+        server_file.write_text('\n'.join(lines) + '\n')
+        print(f'\nSynced {changed} tool description(s) in server.py.')
+    else:
+        print('\nTool descriptions in server.py are already up to date.')
+
+
 def apply_description_overrides(output_dir: Path) -> None:
     """Apply description overrides from CSV to generated JSON schema files."""
     import csv
@@ -539,11 +597,12 @@ def main():
     print('\nApplying description overrides...')
     apply_description_overrides(output_dir)
 
-    # Inject any new endpoints into server.py
+    # Inject any new endpoints into server.py and sync descriptions of existing ones
     server_file = Path(__file__).parent / 'server.py'
     if server_file.exists():
         sync_param_definitions(output_dir, server_file)
         inject_new_tools(output_dir, all_mappings, server_file)
+        sync_tool_descriptions(output_dir, server_file)
 
     return 0
 

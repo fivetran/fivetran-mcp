@@ -1,5 +1,5 @@
 {
-  "description": "Returns a list of all accessible destinations within your Fivetran account.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all accessible destinations within your Fivetran account.",
   "path": "/v1/destinations",
   "method": "GET",
   "parameters": [
@@ -22,5 +22,178 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "required": [
+                    "group_id",
+                    "id",
+                    "region",
+                    "service",
+                    "setup_status",
+                    "time_zone_offset"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier for the destination within the Fivetran system"
+                    },
+                    "service": {
+                      "type": "string",
+                      "description": "The name for the destination type within the Fivetran system."
+                    },
+                    "region": {
+                      "type": "string",
+                      "description": "Data processing location. This is where Fivetran will operate and run computation on data.",
+                      "enum": [
+                        "GCP_US_EAST4",
+                        "GCP_US_WEST1",
+                        "GCP_US_CENTRAL1",
+                        "GCP_EUROPE_WEST3",
+                        "GCP_AUSTRALIA_SOUTHEAST1",
+                        "GCP_NORTHAMERICA_NORTHEAST1",
+                        "GCP_EUROPE_WEST2",
+                        "GCP_ASIA_SOUTHEAST1",
+                        "GCP_ASIA_SOUTHEAST2",
+                        "GCP_ASIA_SOUTH1",
+                        "GCP_ASIA_NORTHEAST1",
+                        "AWS_US_EAST_1",
+                        "AWS_US_EAST_2",
+                        "AWS_US_WEST_2",
+                        "AWS_AP_NORTHEAST_1",
+                        "AWS_AP_SOUTHEAST_1",
+                        "AWS_AP_SOUTHEAST_2",
+                        "AWS_EU_CENTRAL_1",
+                        "AWS_EU_WEST_1",
+                        "AWS_EU_WEST_2",
+                        "AWS_AP_SOUTH_1",
+                        "AWS_CA_CENTRAL_1",
+                        "AWS_US_GOV_WEST_1",
+                        "AZURE_EASTUS2",
+                        "AZURE_AUSTRALIAEAST",
+                        "AZURE_UKSOUTH",
+                        "AZURE_WESTEUROPE",
+                        "AZURE_CENTRALUS",
+                        "AZURE_CANADACENTRAL",
+                        "AZURE_UAENORTH",
+                        "AZURE_SOUTHEASTASIA",
+                        "AZURE_EASTUS",
+                        "AZURE_JAPANEAST",
+                        "AZURE_CENTRALINDIA"
+                      ]
+                    },
+                    "group_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the group within the Fivetran system."
+                    },
+                    "time_zone_offset": {
+                      "type": "string",
+                      "description": "Determines the time zone for the Fivetran sync schedule.",
+                      "enum": [
+                        "-11",
+                        "-10",
+                        "-9",
+                        "-8",
+                        "-7",
+                        "-6",
+                        "-5",
+                        "-4",
+                        "-3",
+                        "-2",
+                        "-1",
+                        "0",
+                        "+1",
+                        "+2",
+                        "+3",
+                        "+4",
+                        "+5",
+                        "+6",
+                        "+7",
+                        "+8",
+                        "+9",
+                        "+10",
+                        "+11",
+                        "+12"
+                      ]
+                    },
+                    "setup_status": {
+                      "type": "string",
+                      "description": "Destination setup status",
+                      "enum": [
+                        "INCOMPLETE",
+                        "CONNECTED",
+                        "BROKEN"
+                      ]
+                    },
+                    "daylight_saving_time_enabled": {
+                      "type": "boolean",
+                      "description": "Shift my UTC offset with daylight savings time (US Only)"
+                    },
+                    "private_link_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the self-served private link that is used by the connection"
+                    },
+                    "networking_method": {
+                      "type": "string",
+                      "enum": [
+                        "Directly",
+                        "PrivateLink",
+                        "SshTunnel",
+                        "ProxyAgent"
+                      ]
+                    },
+                    "local_processing_agent_id": {
+                      "type": "string",
+                      "description": "(Deprecated) The unique identifier for the hybrid deployment agent within the Fivetran system"
+                    },
+                    "hybrid_deployment_agent_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the hybrid deployment agent within the Fivetran system"
+                    },
+                    "proxy_agent_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the proxy agent within the Fivetran system"
+                    },
+                    "external_secrets_manager_id": {
+                      "type": "string",
+                      "description": "The unique identifier of the [External Secrets Manager](/docs/rest-api/api-reference/external-secrets-managers) instance. Destination service must [support](/docs/core-concepts/features/external-secret-managers#destinations) External Secrets Manager feature to use this field."
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

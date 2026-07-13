@@ -13,19 +13,131 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "run_tests": {
-        "type": "boolean",
-        "description": "The boolean flag specifies if the project should be tested after creation or update operation"
-      }
-    },
-    "discriminator": {
-      "propertyName": "type",
-      "mapping": {
-        "DBT_CORE": "#/components/schemas/DBT_CORE_UpdateTransformationProjectRequest"
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "run_tests": {
+            "type": "boolean",
+            "description": "The boolean flag specifies if the project should be tested after creation or update operation"
+          }
+        },
+        "discriminator": {
+          "propertyName": "type",
+          "mapping": {
+            "DBT_CORE": "#/components/schemas/DBT_CORE_UpdateTransformationProjectRequest"
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the transformation project within the Fivetran system"
+              },
+              "type": {
+                "type": "string",
+                "description": "Transformation project type",
+                "enum": [
+                  "DBT_CORE"
+                ]
+              },
+              "status": {
+                "type": "string",
+                "description": "The status of transformation project",
+                "enum": [
+                  "NOT_READY",
+                  "READY",
+                  "ERROR"
+                ]
+              },
+              "errors": {
+                "type": "array",
+                "description": "The list of errors occurred during project processing and setup",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "created_at": {
+                "type": "string",
+                "description": "The timestamp when the transformation project was created",
+                "format": "date-time"
+              },
+              "created_by_id": {
+                "type": "string",
+                "description": "The unique identifier for the actor (user or system key) within the Fivetran system"
+              },
+              "group_id": {
+                "type": "string",
+                "description": "The unique identifier for the group within the Fivetran system"
+              },
+              "setup_tests": {
+                "type": "array",
+                "description": "The setup tests results",
+                "items": {
+                  "required": [
+                    "status",
+                    "title"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "A human-readable name for the setup test step. For example: Validate Login, Test Connection, Check Permissions."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "The result of the individual setup test step. Possible values: PASSED, FAILED, SKIPPED.",
+                      "enum": [
+                        "PASSED",
+                        "SKIPPED",
+                        "WARNING",
+                        "FAILED",
+                        "JOB_FAILED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "The result message for the setup test step. For example: Invalid login credentials."
+                    },
+                    "details": {
+                      "type": "object",
+                      "description": "Additional diagnostic information about the setup test result. Populated when the status is FAILED and more context is available beyond the message."
+                    }
+                  }
+                }
+              }
+            },
+            "discriminator": {
+              "propertyName": "type",
+              "mapping": {
+                "DBT_CORE": "#/components/schemas/DBT_CORE_TransformationProjectDetailsResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

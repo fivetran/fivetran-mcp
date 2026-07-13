@@ -1,5 +1,5 @@
 {
-  "description": "Returns a list of all transformation projects available via API within your Fivetran account.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all transformation projects available via API within your Fivetran account.",
   "path": "/v1/transformation-projects",
   "method": "GET",
   "parameters": [
@@ -22,5 +22,70 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier for the transformation project within the Fivetran system"
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "Transformation project type",
+                      "enum": [
+                        "DBT_CORE"
+                      ]
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "The timestamp when the transformation project was created",
+                      "format": "date-time"
+                    },
+                    "created_by_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the actor (user or system key) within the Fivetran system"
+                    },
+                    "group_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the group within the Fivetran system"
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

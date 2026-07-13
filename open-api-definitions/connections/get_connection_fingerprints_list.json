@@ -1,5 +1,5 @@
 {
-  "description": "Returns the list of approved SSH fingerprints for specified connection",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns the list of approved SSH fingerprints for specified connection",
   "path": "/v1/connections/{connectionId}/fingerprints",
   "method": "GET",
   "parameters": [
@@ -31,5 +31,74 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "required": [
+                    "hash",
+                    "id",
+                    "public_key",
+                    "validated_by",
+                    "validated_date"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier of the fingerprint (Base64URL encoded hash of the fingerprint)."
+                    },
+                    "hash": {
+                      "type": "string",
+                      "description": "Hash of the fingerprint."
+                    },
+                    "public_key": {
+                      "type": "string",
+                      "description": "The SSH public key."
+                    },
+                    "validated_date": {
+                      "type": "string",
+                      "description": "Date when fingerprint has been validated and approved.",
+                      "format": "date-time"
+                    },
+                    "validated_by": {
+                      "type": "string",
+                      "description": "The unique identified for the user who has approved the fingerprint."
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

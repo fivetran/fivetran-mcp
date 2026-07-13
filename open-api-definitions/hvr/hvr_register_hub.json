@@ -2,22 +2,60 @@
   "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Register a new hub within your Fivetran account.",
   "path": "/v1/hvr/register-hub",
   "method": "POST",
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "fingerprint": {
-        "type": "string",
-        "description": "Installation fingerprint."
-      },
-      "port": {
-        "type": "integer",
-        "description": "Installation port.",
-        "format": "int32"
-      },
-      "hub_server_url": {
-        "type": "string",
-        "description": "URL of Hub server."
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "fingerprint": {
+            "type": "string",
+            "description": "Installation fingerprint."
+          },
+          "port": {
+            "type": "integer",
+            "description": "Installation port.",
+            "format": "int32"
+          },
+          "hub_server_url": {
+            "type": "string",
+            "description": "URL of Hub server."
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "access_token": {
+                "type": "string",
+                "description": "Access token."
+              },
+              "registration_id": {
+                "type": "string",
+                "description": "Registration identifier."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

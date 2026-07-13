@@ -12,5 +12,122 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "created_by",
+              "deployment_type",
+              "display_name",
+              "enabled",
+              "group_id",
+              "id",
+              "last_used_at",
+              "online",
+              "registered_at",
+              "updated_at",
+              "version"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the hybrid deployment agent within the Fivetran system."
+              },
+              "version": {
+                "type": "string",
+                "description": "Version of the Hybrid Deployment Agent"
+              },
+              "enabled": {
+                "type": "boolean",
+                "description": "The boolean value specifying whether the Hybrid Deployment Agent is enabled."
+              },
+              "online": {
+                "type": "boolean",
+                "description": "The boolean value specifying whether the Hybrid Deployment Agent is online."
+              },
+              "usage": {
+                "type": "array",
+                "items": {
+                  "required": [
+                    "connection_id",
+                    "schema",
+                    "service"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "schema": {
+                      "type": "string",
+                      "description": "The name used both as the connection's name within the Fivetran system and as the source schema's name within your group."
+                    },
+                    "service": {
+                      "type": "string",
+                      "description": "The connector type name within the Fivetran system."
+                    },
+                    "connection_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the connection within the Fivetran"
+                    }
+                  }
+                }
+              },
+              "display_name": {
+                "type": "string",
+                "description": "Hybrid Deployment Agent display name."
+              },
+              "group_id": {
+                "type": "string",
+                "description": "The unique identifier for the group within your Fivetran account."
+              },
+              "registered_at": {
+                "type": "string",
+                "description": "Time when this Hybrid Deployment Agent was created.",
+                "format": "date-time"
+              },
+              "created_by": {
+                "type": "string",
+                "description": "The actor who created the Hybrid Deployment Agent"
+              },
+              "deployment_type": {
+                "type": "string",
+                "description": "Environment type.",
+                "enum": [
+                  "DOCKER",
+                  "PODMAN",
+                  "KUBERNETES",
+                  "SNOWPARK"
+                ]
+              },
+              "updated_at": {
+                "type": "string",
+                "description": "Time when this Hybrid Deployment Agent was updated.",
+                "format": "date-time"
+              },
+              "last_used_at": {
+                "type": "string",
+                "description": "The time this Hybrid Deployment Agent was last used.",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

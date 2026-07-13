@@ -1,5 +1,5 @@
 {
-  "description": "Returns a list of source connections and destinations that are using a specific External Secrets Manager.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of source connections and destinations that are using a specific External Secrets Manager.",
   "path": "/v1/external-secrets-managers/{esmId}/entities",
   "method": "GET",
   "parameters": [
@@ -21,5 +21,76 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier of the source connection or destination."
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The schema name of the source connection, or the name of the destination group."
+                    },
+                    "enabled": {
+                      "type": "boolean",
+                      "description": "Whether the source connection or destination is currently active and connected."
+                    },
+                    "type": {
+                      "type": "string",
+                      "description": "The type of entity using this External Secrets Manager. Possible values: SOURCE, DESTINATION.",
+                      "enum": [
+                        "SOURCE",
+                        "DESTINATION"
+                      ]
+                    },
+                    "secret_manager_id": {
+                      "type": "string",
+                      "description": "The unique identifier of the External Secrets Manager instance."
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "description": "Timestamp when the entity was created",
+                      "format": "date-time"
+                    }
+                  },
+                  "description": "An entity (connection or destination) that uses an External Secrets Manager"
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

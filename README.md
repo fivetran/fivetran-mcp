@@ -22,7 +22,7 @@ The `open-api-definitions/` directory contains lightweight per-endpoint schema f
 python split_openapi_by_endpoint.py fivetran-open-api-definition.json open-api-definitions
 ```
 
-This will replace the existing schema files with freshly generated ones.
+This will replace the existing schema files with freshly generated ones. Description overrides from `fivetran-open-api-description-overrides.csv` are applied automatically.
 
 ## Setup
 

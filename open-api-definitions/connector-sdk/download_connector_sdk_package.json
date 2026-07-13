@@ -12,5 +12,13 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "type": "object"
+      }
+    },
+    "description": "Package file downloaded successfully"
+  }
 }

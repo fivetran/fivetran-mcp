@@ -13,13 +13,213 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "exclude_mode": {
-        "type": "string",
-        "description": "Specifies whether all schemas and tables will be enabled or disabled in the standard config. By specifying the `exclude_mode` parameter value, you can enable or disable syncing for all schemas and tables when reloading the connection schema config.\n\nWhen the default `PRESERVE` value is set, all selected schemas and tables in the standard config preserve their state.\n\nWhen the `EXCLUDE` value is set, the columns that haven't been updated by user yet are not excluded from the sync. Such columns may be present in the source and not displayed in the response, but they are considered to be included in the sync by default. If you enable syncing of their table, then all of these columns from the source will be synced in the next sync cycle. See also [Troubleshooting: How to enable syncs only for the columns you need](https://fivetran.com/docs/rest-api/tutorials/enable-sync-for-columns-you-need).\n"
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "exclude_mode": {
+            "type": "string",
+            "description": "Specifies whether all schemas and tables will be enabled or disabled in the standard config. By specifying the `exclude_mode` parameter value, you can enable or disable syncing for all schemas and tables when reloading the connection schema config.\n\nWhen the default `PRESERVE` value is set, all selected schemas and tables in the standard config preserve their state.\n\nWhen the `EXCLUDE` value is set, the columns that haven't been updated by user yet are not excluded from the sync. Such columns may be present in the source and not displayed in the response, but they are considered to be included in the sync by default. If you enable syncing of their table, then all of these columns from the source will be synced in the next sync cycle. See also [Troubleshooting: How to enable syncs only for the columns you need](https://fivetran.com/docs/rest-api/tutorials/enable-sync-for-columns-you-need).\n"
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "schema_change_handling",
+              "schemas"
+            ],
+            "type": "object",
+            "properties": {
+              "enable_new_by_default": {
+                "type": "boolean",
+                "description": "The boolean value specifying whether to enable new schemas, tables, and columns by default"
+              },
+              "schemas": {
+                "title": "Schemas",
+                "type": "object",
+                "properties": {
+                  "schema": {
+                    "required": [
+                      "enabled",
+                      "name_in_destination",
+                      "tables"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "name_in_destination": {
+                        "type": "string",
+                        "description": "The schema name within your destination in accordance with Fivetran conventional rules"
+                      },
+                      "enabled": {
+                        "type": "boolean",
+                        "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                      },
+                      "tables": {
+                        "title": "Tables",
+                        "type": "object",
+                        "properties": {
+                          "table": {
+                            "required": [
+                              "columns",
+                              "enabled",
+                              "enabled_patch_settings",
+                              "name_in_destination",
+                              "supports_columns_config",
+                              "supports_history_mode"
+                            ],
+                            "type": "object",
+                            "properties": {
+                              "sync_mode": {
+                                "type": "string",
+                                "description": "This field appears in the response if the connection supports switching sync modes for tables",
+                                "enum": [
+                                  "SOFT_DELETE",
+                                  "HISTORY",
+                                  "LIVE"
+                                ]
+                              },
+                              "name_in_destination": {
+                                "type": "string",
+                                "description": "The schema name within your destination in accordance with Fivetran conventional rules"
+                              },
+                              "enabled": {
+                                "type": "boolean",
+                                "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                              },
+                              "columns": {
+                                "title": "Columns",
+                                "type": "object",
+                                "properties": {
+                                  "column": {
+                                    "required": [
+                                      "enabled",
+                                      "enabled_patch_settings",
+                                      "hashed",
+                                      "name_in_destination"
+                                    ],
+                                    "type": "object",
+                                    "properties": {
+                                      "name_in_destination": {
+                                        "type": "string",
+                                        "description": "The schema name within your destination in accordance with Fivetran conventional rules"
+                                      },
+                                      "enabled": {
+                                        "type": "boolean",
+                                        "description": "The boolean value specifying whether the sync for the table into the destination is enabled."
+                                      },
+                                      "hashed": {
+                                        "type": "boolean",
+                                        "description": "The boolean value specifying whether a column should be hashed"
+                                      },
+                                      "enabled_patch_settings": {
+                                        "required": [
+                                          "allowed"
+                                        ],
+                                        "type": "object",
+                                        "properties": {
+                                          "allowed": {
+                                            "type": "boolean",
+                                            "description": "The boolean value specifying whether the enabled property can be updated"
+                                          },
+                                          "reason": {
+                                            "type": "string",
+                                            "description": "The additional message indicating the reason why the enabled property cannot be updated. This field appears in the response only when the reason_code value is OTHER"
+                                          },
+                                          "reason_code": {
+                                            "type": "string",
+                                            "description": "The reason code indicating the reason why the enabled property cannot be updated: <br /> SYSTEM_TABLE - the table is a system table <br /> DELETED - the table was deleted in the source <br /> OTHER - the table was excluded by the system for some reason <br /> This field appears in the response when the allowed property value is FALSE",
+                                            "enum": [
+                                              "SYSTEM_COLUMN",
+                                              "DELETED",
+                                              "OTHER"
+                                            ]
+                                          }
+                                        }
+                                      },
+                                      "is_primary_key": {
+                                        "type": "boolean"
+                                      }
+                                    }
+                                  }
+                                },
+                                "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync."
+                              },
+                              "enabled_patch_settings": {
+                                "required": [
+                                  "allowed"
+                                ],
+                                "type": "object",
+                                "properties": {
+                                  "allowed": {
+                                    "type": "boolean",
+                                    "description": "The boolean value specifying whether the enabled property can be updated"
+                                  },
+                                  "reason": {
+                                    "type": "string",
+                                    "description": "The additional message indicating the reason why the enabled property cannot be updated. This field appears in the response only when the reason_code value is OTHER"
+                                  },
+                                  "reason_code": {
+                                    "type": "string",
+                                    "description": "The reason code indicating the reason why the enabled property cannot be updated: <br /> SYSTEM_TABLE - the table is a system table <br /> DELETED - the table was deleted in the source <br /> OTHER - the table was excluded by the system for some reason <br /> This field appears in the response when the allowed property value is FALSE",
+                                    "enum": [
+                                      "SYSTEM_TABLE",
+                                      "DELETED",
+                                      "OTHER"
+                                    ]
+                                  }
+                                }
+                              },
+                              "supports_columns_config": {
+                                "type": "boolean",
+                                "description": "A boolean value that specifies if the table supports a column-level configuration."
+                              },
+                              "supports_history_mode": {
+                                "type": "boolean",
+                                "description": "The boolean value that specifies if the table supports history mode."
+                              }
+                            }
+                          }
+                        },
+                        "description": "The set of tables within your database schema config. Each key is the table name as stored in the connection schema config. Table names are case-sensitive; an incorrect case results in an HTTP 404 error."
+                      }
+                    }
+                  }
+                },
+                "description": "The set of schemas within your connection schema config. Each key is the schema name as stored in the connection schema config. Schema names are case-sensitive; an incorrect case results in an HTTP 404 error."
+              },
+              "schema_change_handling": {
+                "type": "string",
+                "description": "The possible values for the schema_change_handling parameter are as follows: <br /> ALLOW_ALL - all new schemas, tables, and columns which appear in the source after the initial setup are included in syncs <br /> ALLOW_COLUMNS - all new schemas and tables which appear in the source after the initial setup are excluded from syncs, but new columns are included <br /> BLOCK_ALL - all new schemas, tables, and columns which appear in the source after the initial setup are excluded from syncs",
+                "enum": [
+                  "ALLOW_ALL",
+                  "ALLOW_COLUMNS",
+                  "BLOCK_ALL"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

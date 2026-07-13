@@ -21,5 +21,59 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "hash",
+              "id",
+              "public_key",
+              "validated_by",
+              "validated_date"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier of the fingerprint (Base64URL encoded hash of the fingerprint)."
+              },
+              "hash": {
+                "type": "string",
+                "description": "Hash of the fingerprint."
+              },
+              "public_key": {
+                "type": "string",
+                "description": "The SSH public key."
+              },
+              "validated_date": {
+                "type": "string",
+                "description": "Date when fingerprint has been validated and approved.",
+                "format": "date-time"
+              },
+              "validated_by": {
+                "type": "string",
+                "description": "The unique identified for the user who has approved the fingerprint."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

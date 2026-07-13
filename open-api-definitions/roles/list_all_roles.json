@@ -1,5 +1,5 @@
 {
-  "description": "Returns a list of all predefined and custom roles within your Fivetran account.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all predefined and custom roles within your Fivetran account.",
   "path": "/v1/roles",
   "method": "GET",
   "parameters": [
@@ -22,5 +22,87 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "required": [
+                    "is_custom",
+                    "is_deprecated",
+                    "name",
+                    "replacement_role_name",
+                    "scope"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The role name"
+                    },
+                    "description": {
+                      "type": "string",
+                      "description": "The role description"
+                    },
+                    "scope": {
+                      "uniqueItems": true,
+                      "type": "array",
+                      "description": "Defines the list of resources the role manages",
+                      "items": {
+                        "type": "string"
+                      },
+                      "enum": [
+                        "ACCOUNT",
+                        "DESTINATION",
+                        "CONNECTOR",
+                        "TEAM"
+                      ]
+                    },
+                    "is_custom": {
+                      "type": "boolean",
+                      "description": "Defines whether the role is standard or custom"
+                    },
+                    "is_deprecated": {
+                      "type": "boolean",
+                      "description": "Defines whether the role is deprecated"
+                    },
+                    "replacement_role_name": {
+                      "type": "string",
+                      "description": "The name of the new role replacing the deprecated role"
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

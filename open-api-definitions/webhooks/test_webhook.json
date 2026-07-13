@@ -13,16 +13,63 @@
       }
     }
   ],
-  "request_body_schema": {
-    "required": [
-      "event"
-    ],
-    "type": "object",
-    "properties": {
-      "event": {
-        "type": "string",
-        "description": "Type of event to be sent during webhook testing."
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "event"
+        ],
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string",
+            "description": "Type of event to be sent during webhook testing."
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "status",
+              "succeed"
+            ],
+            "type": "object",
+            "properties": {
+              "succeed": {
+                "type": "boolean",
+                "description": "Indicates whether the webhook test was successful."
+              },
+              "status": {
+                "type": "integer",
+                "description": "HTTP status code returned by the webhook test.",
+                "format": "int32"
+              },
+              "message": {
+                "type": "string",
+                "description": "Additional information or result message from the webhook test."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

@@ -2,29 +2,55 @@
   "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Approves a certificate for a connection/destination, so Fivetran trusts this certificate for a source/destination database. The connection/destination setup tests will fail if a non-approved certificate is provided.",
   "path": "/v1/certificates",
   "method": "POST",
-  "request_body_schema": {
-    "required": [
-      "encoded_cert",
-      "hash"
-    ],
-    "type": "object",
-    "properties": {
-      "hash": {
-        "type": "string",
-        "description": "Hash of the certificate."
-      },
-      "encoded_cert": {
-        "type": "string",
-        "description": "The certificate encoded in base64."
-      },
-      "connection_id": {
-        "type": "string",
-        "description": "The unique identifier for the connection within the Fivetran system."
-      },
-      "destination_id": {
-        "type": "string",
-        "description": "The unique identifier for the destination within the Fivetran system."
+  "deprecated": true,
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "encoded_cert",
+          "hash"
+        ],
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string",
+            "description": "Hash of the certificate."
+          },
+          "encoded_cert": {
+            "type": "string",
+            "description": "The certificate encoded in base64."
+          },
+          "connection_id": {
+            "type": "string",
+            "description": "The unique identifier for the connection within the Fivetran system."
+          },
+          "destination_id": {
+            "type": "string",
+            "description": "The unique identifier for the destination within the Fivetran system."
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

@@ -13,49 +13,74 @@
       }
     }
   ],
-  "request_body_schema": {
-    "required": [
-      "schemas"
-    ],
-    "type": "object",
-    "properties": {
-      "schemas": {
-        "title": "Schemas",
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "schemas"
+        ],
         "type": "object",
         "properties": {
-          "schema": {
-            "required": [
-              "tables"
-            ],
+          "schemas": {
+            "title": "Schemas",
             "type": "object",
             "properties": {
-              "tables": {
-                "title": "Tables",
+              "schema": {
+                "required": [
+                  "tables"
+                ],
                 "type": "object",
                 "properties": {
-                  "table": {
-                    "required": [
-                      "columns"
-                    ],
+                  "tables": {
+                    "title": "Tables",
                     "type": "object",
                     "properties": {
-                      "columns": {
-                        "type": "array",
-                        "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync.",
-                        "items": {
-                          "type": "string"
+                      "table": {
+                        "required": [
+                          "columns"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "columns": {
+                            "type": "array",
+                            "description": "The set of columns within your table schema config. Each key is the column name as stored in the connection schema config. Column names are case-sensitive; an incorrect case results in an HTTP 404 error. The `columns` object in the response contains the columns whose `enabled` value has been set by the user after the initial sync.",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
                         }
                       }
-                    }
+                    },
+                    "description": "The set of tables within your database schema config. Each key is the table name as stored in the connection schema config. Table names are case-sensitive; an incorrect case results in an HTTP 404 error."
                   }
-                },
-                "description": "The set of tables within your database schema config. Each key is the table name as stored in the connection schema config. Table names are case-sensitive; an incorrect case results in an HTTP 404 error."
+                }
               }
-            }
+            },
+            "description": "The set of schemas within your connection schema config. Each key is the schema name as stored in the connection schema config. Schema names are case-sensitive; an incorrect case results in an HTTP 404 error."
           }
-        },
-        "description": "The set of schemas within your connection schema config. Each key is the schema name as stored in the connection schema config. Schema names are case-sensitive; an incorrect case results in an HTTP 404 error."
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

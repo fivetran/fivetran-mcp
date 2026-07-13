@@ -13,20 +13,24 @@
       }
     }
   ],
-  "request_body_schema": {
-    "required": [
-      "hash",
-      "public_key"
-    ],
-    "type": "object",
-    "properties": {
-      "hash": {
-        "type": "string",
-        "description": "Hash of the fingerprint."
-      },
-      "public_key": {
-        "type": "string",
-        "description": "The SSH public key."
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "hash",
+          "public_key"
+        ],
+        "type": "object",
+        "properties": {
+          "hash": {
+            "type": "string",
+            "description": "Hash of the fingerprint."
+          },
+          "public_key": {
+            "type": "string",
+            "description": "The SSH public key."
+          }
+        }
       }
     }
   }

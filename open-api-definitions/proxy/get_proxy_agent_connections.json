@@ -1,5 +1,5 @@
 {
-  "description": "Returns all connections attached to the specified proxy agent within your Fivetran account.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns all connections attached to the specified proxy agent within your Fivetran account.",
   "path": "/v1/proxy/{agentId}/connections",
   "method": "GET",
   "parameters": [
@@ -31,5 +31,50 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "connection_id": {
+                      "type": "string",
+                      "description": "The unique identifier for the connection within the Fivetran system."
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

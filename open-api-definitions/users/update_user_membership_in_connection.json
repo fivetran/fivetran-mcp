@@ -22,16 +22,64 @@
       }
     }
   ],
-  "request_body_schema": {
-    "required": [
-      "role"
-    ],
-    "type": "object",
-    "properties": {
-      "role": {
-        "type": "string",
-        "description": "The role that you would like to assign to the user "
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "The role that you would like to assign to the user "
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "created_at",
+              "id",
+              "role"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The membership entity unique identifier"
+              },
+              "role": {
+                "type": "string",
+                "description": "The role the user has within the entity"
+              },
+              "created_at": {
+                "type": "string",
+                "description": "The timestamp that the user created their Fivetran account",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

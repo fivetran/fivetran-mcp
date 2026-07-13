@@ -13,20 +13,151 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "enabled": {
-        "type": "boolean",
-        "description": "The boolean value specifying whether the log service is enabled."
-      },
-      "config": {
-        "type": "object"
-      },
-      "run_setup_tests": {
-        "type": "boolean",
-        "description": "When `true`, Fivetran runs setup tests immediately after creating or updating the log service and returns the results in the `setup_tests` field of the response. Defaults to `false`."
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "The boolean value specifying whether the log service is enabled."
+          },
+          "config": {
+            "type": "object"
+          },
+          "run_setup_tests": {
+            "type": "boolean",
+            "description": "When `true`, Fivetran runs setup tests immediately after creating or updating the log service and returns the results in the `setup_tests` field of the response. Defaults to `false`."
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "enabled",
+              "id",
+              "service"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the log service within the Fivetran system."
+              },
+              "service": {
+                "type": "string",
+                "description": "The name of the log service type within the Fivetran system. We support the following log services: `azure_monitor_log`, `cloudwatch`, `datadog_log`, `dynatrace`, `grafana_loki`, `splunkLog`, `new_relic_log`, `stackdriver` (Google Cloud Logging)."
+              },
+              "enabled": {
+                "type": "boolean",
+                "description": "The boolean value specifying whether the log service is enabled."
+              },
+              "status": {
+                "description": "Setup status of the log service. Present when a setup status exists for the log service.",
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "tasks": {
+                        "type": "array",
+                        "description": "List of alerts describing issues with the log service configuration.",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string",
+                              "description": "Alert code identifying the type of issue."
+                            },
+                            "message": {
+                              "type": "string",
+                              "description": "Human-readable description of the issue."
+                            },
+                            "details": {
+                              "type": "string",
+                              "description": "Additional context or details for the alert."
+                            }
+                          }
+                        }
+                      },
+                      "setup_state": {
+                        "type": "string",
+                        "description": "Current setup state of the log service. Possible values: `connected` — log service is reachable and forwarding events; `broken` — configuration errors prevent log delivery; `incomplete` — setup has not been completed and log delivery is paused. Example: `connected`."
+                      }
+                    }
+                  }
+                ]
+              },
+              "setup_tests": {
+                "type": "array",
+                "description": "Results of the most recent setup test run.",
+                "items": {
+                  "required": [
+                    "status",
+                    "title"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "A human-readable name for the setup test step. For example: Validate Login, Test Connection, Check Permissions."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "The result of the individual setup test step. Possible values: PASSED, FAILED, SKIPPED.",
+                      "enum": [
+                        "PASSED",
+                        "SKIPPED",
+                        "WARNING",
+                        "FAILED",
+                        "JOB_FAILED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "The result message for the setup test step. For example: Invalid login credentials."
+                    },
+                    "details": {
+                      "type": "object",
+                      "description": "Additional diagnostic information about the setup test result. Populated when the status is FAILED and more context is available beyond the message."
+                    }
+                  }
+                }
+              }
+            },
+            "discriminator": {
+              "propertyName": "service",
+              "mapping": {
+                "azure_monitor_log": "#/components/schemas/azure_monitor_log_LogExtendedResponse",
+                "cloudwatch": "#/components/schemas/cloudwatch_LogExtendedResponse",
+                "datadog_log": "#/components/schemas/datadog_log_LogExtendedResponse",
+                "dynatrace": "#/components/schemas/dynatrace_LogExtendedResponse",
+                "grafana_loki": "#/components/schemas/grafana_loki_LogExtendedResponse",
+                "new_relic_log": "#/components/schemas/new_relic_log_LogExtendedResponse",
+                "splunkLog": "#/components/schemas/splunkLog_LogExtendedResponse",
+                "stackdriver": "#/components/schemas/stackdriver_LogExtendedResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

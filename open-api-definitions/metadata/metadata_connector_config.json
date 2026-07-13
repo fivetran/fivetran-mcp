@@ -12,5 +12,157 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "id",
+              "name",
+              "type"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The connector type identifier within the Fivetran system"
+              },
+              "name": {
+                "type": "string",
+                "description": "The connector service name within the Fivetran system"
+              },
+              "type": {
+                "type": "string",
+                "description": "The connector service type",
+                "enum": [
+                  "API",
+                  "Dbt",
+                  "Marketing",
+                  "HumanResources",
+                  "Finance",
+                  "Productivity",
+                  "Engineering",
+                  "Support",
+                  "Sales",
+                  "Security",
+                  "SuperConnectorTest",
+                  "Free",
+                  "File",
+                  "Database",
+                  "Events",
+                  "Function",
+                  "BITool",
+                  "Warehouse",
+                  "Log",
+                  "Hvr"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "description": "The description characterizing the purpose of the connector"
+              },
+              "icons": {
+                "type": "array",
+                "description": "The set of additional icon resource URLs in different formats (.svg, .png). Updating this list is not a breaking change. The set of icon URLs or the icons themselves may be changed",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "config": {
+                "type": "object",
+                "description": "Metadata for configuration fields"
+              },
+              "auth": {
+                "type": "object",
+                "description": "Metadata for authorization fields (optional)"
+              },
+              "icon_url": {
+                "type": "string",
+                "description": "The icon resource URL"
+              },
+              "link_to_docs": {
+                "type": "string",
+                "description": "The link to the connector documentation"
+              },
+              "connector_class": {
+                "type": "string",
+                "enum": [
+                  "standard",
+                  "lite"
+                ]
+              },
+              "supported_features": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier of a feature supported by the connector",
+                      "enum": [
+                        "CUSTOM_DATA",
+                        "CAPTURE_DELETES",
+                        "DATA_BLOCKING",
+                        "COLUMN_HASHING",
+                        "RE_SYNC",
+                        "HISTORY",
+                        "API_CONFIGURABLE",
+                        "PRIORITY_FIRST_SYNC",
+                        "FIVETRAN_DATA_MODELS",
+                        "PRIVATE_NETWORKING",
+                        "AUTHORIZATION_VIA_API",
+                        "ROW_FILTERING"
+                      ]
+                    },
+                    "notes": {
+                      "type": "string",
+                      "description": "Additional information about the feature support of a specific connector"
+                    }
+                  }
+                }
+              },
+              "link_to_erd": {
+                "type": "string",
+                "description": "The link to the connector ERD (entity–relationship diagram)"
+              },
+              "service_status": {
+                "type": "string",
+                "description": "The current availability status of the connector",
+                "enum": [
+                  "general_availability",
+                  "beta",
+                  "private_preview",
+                  "sunset",
+                  "development"
+                ]
+              },
+              "service_status_updated_at": {
+                "type": "string",
+                "description": "The date (yyyy-MM-dd) the connector status was updated to the current availability status",
+                "format": "date-time"
+              },
+              "external_secrets_keys_config": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

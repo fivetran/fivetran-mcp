@@ -4,10 +4,16 @@
 import json
 import os
 import base64
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
 
 import httpx
+
+try:
+    __version__ = version("fivetran-mcp")
+except PackageNotFoundError:
+    __version__ = "unknown"
 from dotenv import load_dotenv
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
@@ -40,7 +46,7 @@ def get_auth_header() -> dict[str, str]:
     return {
         "Authorization": f"Basic {encoded}",
         "Accept": "application/json",
-        "User-Agent": "fivetran-official-mcp",
+        "User-Agent": f"fivetran-official-mcp/{__version__}",
     }
 
 
@@ -165,7 +171,7 @@ TOOLS = {
         "params": ["connection_id"],
     },
     # "get_connection_certificates_list": {
-    #     "description": "Returns the list of approved certificates for the specified connection.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns the list of approved certificates for the specified connection.",
     #     "schema_file": "open-api-definitions/connections/get_connection_certificates_list.json",
     #     "method": "GET",
     #     "endpoint": "/v1/connections/{connection_id}/certificates",
@@ -201,7 +207,7 @@ TOOLS = {
         "params": ["connection_id", "request_body"],
     },
     # "get_connection_fingerprints_list": {
-    #     "description": "Returns the list of approved SSH fingerprints for specified connection",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns the list of approved SSH fingerprints for specified connection",
     #     "schema_file": "open-api-definitions/connections/get_connection_fingerprints_list.json",
     #     "method": "GET",
     #     "endpoint": "/v1/connections/{connection_id}/fingerprints",
@@ -237,7 +243,7 @@ TOOLS = {
         "params": ["connection_id", "request_body"],
     },
     "connection_schema_config": {
-        "description": "⚠️ IMPORTANT - If a table's parent schema is not enabled, the table will not be replicated. Check before telling the table the column is enabled. Returns the top-level schema configuration for an existing connection within your Fivetran account. The response includes global flags, every schema, each table, and only the columns that were explicitly overridden. Use this endpoint to read the current data-selection tree for a connection, to back up the schema before making edits, or to copy the configuration to another connection. > NOTE: To restore a backed-up schema or copy the configuration to another connection, use the [Update a Connection Schema Config](/docs/rest-api/api-reference/connection-schema/modify-connection-schema-config) endpoint. For more information, see the [Connection Schema config](https://fivetran.com/docs/rest-api/tutorials/connection-schema-configuration-use-cases) tutorial. > NOTE: Unedited columns (those following table defaults) are omitted from the response. For a real-time, exhaustive column list for a specific table, call the [Retrieve Source Table Columns Config](/docs/rest-api/api-reference/connection-schema/connection-column-config) endpoint. For the NetSuite SuiteAnalytics, and Salesforce and Salesforce Sandbox connectors, the 'schemas' map field contains a single entry with the 'netsuite' or 'salesforce' key, respectively. For the 'schema.name_in_destination` name field, these connectors always return the destination schema name you set in the connection setup form. For more information on using this API endpoint with the the Oracle Fusion Cloud Applications connectors, see the [Schema information documentation](https://fivetran.com/docs/connectors/applications/oracle-fusion-cloud-applications#schemainformation). > IMPORTANT: This endpoint does not apply to [Magic Folder](/docs/connectors/files#magicfolder) connectors.",
+        "description": "Returns the top-level schema configuration for an existing connection within your Fivetran account. The response includes global flags, every schema, each table, and only the columns that were explicitly overridden. Use this endpoint to read the current data-selection tree for a connection, to back up the schema before making edits, or to copy the configuration to another connection. > NOTE: To restore a backed-up schema or copy the configuration to another connection, use the [Update a Connection Schema Config](/docs/rest-api/api-reference/connection-schema/modify-connection-schema-config) endpoint. For more information, see the [Connection Schema config](https://fivetran.com/docs/rest-api/tutorials/connection-schema-configuration-use-cases) tutorial. > NOTE: Unedited columns (those following table defaults) are omitted from the response. For a real-time, exhaustive column list for a specific table, call the [Retrieve Source Table Columns Config](/docs/rest-api/api-reference/connection-schema/connection-column-config) endpoint. For the NetSuite SuiteAnalytics, and Salesforce and Salesforce Sandbox connectors, the 'schemas' map field contains a single entry with the 'netsuite' or 'salesforce' key, respectively. For the 'schema.name_in_destination` name field, these connectors always return the destination schema name you set in the connection setup form. For more information on using this API endpoint with the the Oracle Fusion Cloud Applications connectors, see the [Schema information documentation](https://fivetran.com/docs/connectors/applications/oracle-fusion-cloud-applications#schemainformation). > IMPORTANT: This endpoint does not apply to [Magic Folder](/docs/connectors/files#magicfolder) connectors.",
         "schema_file": "open-api-definitions/connections/connection_schema_config.json",
         "method": "GET",
         "endpoint": "/v1/connections/{connection_id}/schemas",
@@ -307,7 +313,7 @@ TOOLS = {
         "params": ["connection_id", "schema_name", "table_name", "column_name"],
     },
     "connection_column_config": {
-        "description": "⚠️ IMPORTANT - If a column's parent table or schema is not enabled, the column's data will not be replicated. Check before telling the user the column is enabled. Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields. > NOTE: This endpoint works only for an existing connection that is in a 'Connected' state.",
+        "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields. > NOTE: This endpoint works only for an existing connection that is in a 'Connected' state.",
         "schema_file": "open-api-definitions/connections/connection_column_config.json",
         "method": "GET",
         "endpoint": "/v1/connections/{connection_id}/schemas/{schema}/tables/{table}/columns",
@@ -380,7 +386,7 @@ TOOLS = {
         "params": ["destination_id"],
     },
     # "get_destination_certificates_list": {
-    #     "description": "Returns the list of approved certificates for the specified destination.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns the list of approved certificates for the specified destination.",
     #     "schema_file": "open-api-definitions/destinations/get_destination_certificates_list.json",
     #     "method": "GET",
     #     "endpoint": "/v1/destinations/{destination_id}/certificates",
@@ -409,7 +415,7 @@ TOOLS = {
     #     "params": ["destination_id", "hash"],
     # },
     # "get_destination_fingerprints_list": {
-    #     "description": "Returns the list of approved SSH fingerprints for specified destination",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns the list of approved SSH fingerprints for specified destination",
     #     "schema_file": "open-api-definitions/destinations/get_destination_fingerprints_list.json",
     #     "method": "GET",
     #     "endpoint": "/v1/destinations/{destination_id}/fingerprints",
@@ -680,7 +686,7 @@ TOOLS = {
     # PRIVATE LINKS
     # ============================================================================
     # "get_private_links": {
-    #     "description": "Returns a list of all private links.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all private links.",
     #     "schema_file": "open-api-definitions/private-links/get_private_links.json",
     #     "method": "GET",
     #     "endpoint": "/v1/private-links",
@@ -727,7 +733,7 @@ TOOLS = {
     # # SYSTEM KEYS
     # # ============================================================================
     # "list_all_roles": {
-    #     "description": "Returns a list of all predefined and custom roles within your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all predefined and custom roles within your Fivetran account.",
     #     "schema_file": "open-api-definitions/roles/list_all_roles.json",
     #     "method": "GET",
     #     "endpoint": "/v1/roles",
@@ -737,7 +743,7 @@ TOOLS = {
     # TEAMS
     # ============================================================================
     # "list_all_teams": {
-    #     "description": "Returns a list of all teams within your Fivetran account",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all teams within your Fivetran account",
     #     "schema_file": "open-api-definitions/teams/list_all_teams.json",
     #     "method": "GET",
     #     "endpoint": "/v1/teams",
@@ -772,7 +778,7 @@ TOOLS = {
     #     "params": ["team_id"],
     # },
     # "get_team_memberships_in_connections": {
-    #     "description": "Returns all connections a team has membership in.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns all connections a team has membership in.",
     #     "schema_file": "open-api-definitions/teams/get_team_memberships_in_connections.json",
     #     "method": "GET",
     #     "endpoint": "/v1/teams/{team_id}/connections",
@@ -808,7 +814,7 @@ TOOLS = {
     #     "params": ["team_id", "connection_id"],
     # },
     # "get_team_memberships_in_groups": {
-    #     "description": "Returns all groups in which a team has membership.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns all groups in which a team has membership.",
     #     "schema_file": "open-api-definitions/teams/get_team_memberships_in_groups.json",
     #     "method": "GET",
     #     "endpoint": "/v1/teams/{team_id}/groups",
@@ -851,7 +857,7 @@ TOOLS = {
     #     "params": ["team_id"],
     # },
     # "list_users_in_team": {
-    #     "description": "Returns a list of users and their roles within a team in your Fivetran account",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of users and their roles within a team in your Fivetran account",
     #     "schema_file": "open-api-definitions/teams/list_users_in_team.json",
     #     "method": "GET",
     #     "endpoint": "/v1/teams/{team_id}/users",
@@ -1009,7 +1015,7 @@ TOOLS = {
     # ============================================================================
 
     # "list_all_users": {
-    #     "description": "Returns a list of all users within your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all users within your Fivetran account.",
     #     "schema_file": "open-api-definitions/users/list_all_users.json",
     #     "method": "GET",
     #     "endpoint": "/v1/users",
@@ -1044,7 +1050,7 @@ TOOLS = {
     #     "params": ["user_id", "request_body"],
     # },
     # "get_user_memberships_in_connections": {
-    #     "description": "Returns all connection membership for a user within your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns all connection membership for a user within your Fivetran account.",
     #     "schema_file": "open-api-definitions/users/get_user_memberships_in_connections.json",
     #     "method": "GET",
     #     "endpoint": "/v1/users/{user_id}/connections",
@@ -1080,7 +1086,7 @@ TOOLS = {
     #     "params": ["user_id", "connection_id"],
     # },
     # "get_user_memberships_in_groups": {
-    #     "description": "Returns the membership details for all groups a user belongs to.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns the membership details for all groups a user belongs to.",
     #     "schema_file": "open-api-definitions/users/get_user_memberships_in_groups.json",
     #     "method": "GET",
     #     "endpoint": "/v1/users/{user_id}/groups",
@@ -1178,7 +1184,7 @@ TOOLS = {
     # CONNECTOR SDK
     # ============================================================================
     # "list_connector_sdk_packages": {
-    #     "description": "Returns a list of all Connector SDK packages in your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all Connector SDK packages in your Fivetran account.",
     #     "schema_file": "open-api-definitions/connector-sdk/list_connector_sdk_packages.json",
     #     "method": "GET",
     #     "endpoint": "/v1/connector-sdk/packages",
@@ -1223,7 +1229,7 @@ TOOLS = {
     # EXTERNAL SECRETS MANAGERS
     # ============================================================================
     # "list_esms": {
-    #     "description": "Returns a list of all External Secrets Manager instances within your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all External Secrets Manager instances within your Fivetran account.",
     #     "schema_file": "open-api-definitions/external-secrets-managers/list_esms.json",
     #     "method": "GET",
     #     "endpoint": "/v1/external-secrets-managers",
@@ -1258,7 +1264,7 @@ TOOLS = {
     #     "params": ["esm_id"],
     # },
     # "get_esm_entities": {
-    #     "description": "Returns a list of source connections and destinations that are using a specific External Secrets Manager.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of source connections and destinations that are using a specific External Secrets Manager.",
     #     "schema_file": "open-api-definitions/external-secrets-managers/get_esm_entities.json",
     #     "method": "GET",
     #     "endpoint": "/v1/external-secrets-managers/{esm_id}/entities",
@@ -1270,7 +1276,7 @@ TOOLS = {
     # ============================================================================
 
     # "list_esm_entities": {
-    #     "description": "Returns a list of all source connections and destinations that are using any External Secrets Manager within your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all source connections and destinations that are using any External Secrets Manager within your Fivetran account.",
     #     "schema_file": "open-api-definitions/external-secrets-managers-entities/list_esm_entities.json",
     #     "method": "GET",
     #     "endpoint": "/v1/external-secrets-managers-entities",
@@ -1290,7 +1296,7 @@ TOOLS = {
     # PROXY
     # ============================================================================
     # "get_proxy_agent": {
-    #     "description": "Returns a list of all proxy agents within your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of all proxy agents within your Fivetran account.",
     #     "schema_file": "open-api-definitions/proxy/get_proxy_agent.json",
     #     "method": "GET",
     #     "endpoint": "/v1/proxy",
@@ -1318,7 +1324,7 @@ TOOLS = {
     #     "params": ["agent_id"],
     # },
     # "get_proxy_agent_connections": {
-    #     "description": "Returns all connections attached to the specified proxy agent within your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns all connections attached to the specified proxy agent within your Fivetran account.",
     #     "schema_file": "open-api-definitions/proxy/get_proxy_agent_connections.json",
     #     "method": "GET",
     #     "endpoint": "/v1/proxy/{agent_id}/connections",
@@ -1345,7 +1351,7 @@ TOOLS = {
     # SYSTEM KEYS
     # ============================================================================
     # "get_system_keys": {
-    #     "description": "Returns a list of system keys within your Fivetran account.",
+    #     "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of system keys within your Fivetran account.",
     #     "schema_file": "open-api-definitions/system-keys/get_system_keys.json",
     #     "method": "GET",
     #     "endpoint": "/v1/system-keys",

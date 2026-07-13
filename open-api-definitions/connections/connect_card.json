@@ -13,37 +13,107 @@
       }
     }
   ],
-  "request_body_schema": {
-    "required": [
-      "connect_card_config"
-    ],
-    "type": "object",
-    "properties": {
-      "connect_card_config": {
-        "description": "Configuration for the Connect Card flow. Connect Card is a Fivetran-hosted UI that allows your end users to authorize a connection without accessing the Fivetran dashboard. Use `redirect_uri` to control where users land after completing setup.",
-        "allOf": [
-          {
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "connect_card_config"
+        ],
+        "type": "object",
+        "properties": {
+          "connect_card_config": {
+            "description": "Configuration for the Connect Card flow. Connect Card is a Fivetran-hosted UI that allows your end users to authorize a connection without accessing the Fivetran dashboard. Use `redirect_uri` to control where users land after completing setup.",
+            "allOf": [
+              {
+                "required": [
+                  "redirect_uri"
+                ],
+                "type": "object",
+                "properties": {
+                  "redirect_uri": {
+                    "type": "string",
+                    "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix."
+                  },
+                  "hide_setup_guide": {
+                    "type": "boolean",
+                    "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card."
+                  },
+                  "all_fields": {
+                    "type": "boolean",
+                    "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
             "required": [
-              "redirect_uri"
+              "connector_id"
             ],
             "type": "object",
             "properties": {
-              "redirect_uri": {
+              "connector_id": {
                 "type": "string",
-                "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix."
+                "description": "The unique identifier of the connection for which this Connect Card token was issued. This is the same value as the `connectionId` path parameter."
               },
-              "hide_setup_guide": {
-                "type": "boolean",
-                "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card."
+              "connect_card": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "A short-lived JWT that authorizes the end user to configure this connection via the Connect Card interface. Use the `uri` field directly to redirect users — it already embeds this token. If you need to construct your own URL, pass this value as the `auth` query parameter to `https://fivetran.com/connect-card/setup`."
+                  },
+                  "uri": {
+                    "type": "string",
+                    "description": "The complete URL to redirect the end user to in order to authorize the connection. It embeds the auth token, redirect URI, and setup guide visibility as query parameters. Redirect the user directly to this address."
+                  }
+                }
               },
-              "all_fields": {
-                "type": "boolean",
-                "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
+              "connect_card_config": {
+                "required": [
+                  "redirect_uri"
+                ],
+                "type": "object",
+                "properties": {
+                  "redirect_uri": {
+                    "type": "string",
+                    "description": "The URI on your site we redirect the end user to after successful setup. The URI must start with the `https` or `http` prefix."
+                  },
+                  "hide_setup_guide": {
+                    "type": "boolean",
+                    "description": "An optional parameter that lets you hide the embedded setup guide in the Connect Card."
+                  },
+                  "all_fields": {
+                    "type": "boolean",
+                    "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
+                  }
+                }
               }
             }
           }
-        ]
+        }
       }
-    }
+    },
+    "description": "Successful response"
   }
 }

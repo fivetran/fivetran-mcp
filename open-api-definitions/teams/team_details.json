@@ -12,5 +12,51 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "id",
+              "role"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier for the team within your account"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the team within your account"
+              },
+              "description": {
+                "type": "string",
+                "description": "The description of the team within your account"
+              },
+              "role": {
+                "type": "string",
+                "description": "The account role of the team"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

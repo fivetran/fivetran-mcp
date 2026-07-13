@@ -1,5 +1,66 @@
 {
   "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Runs the setup tests for the account-level [logging service](/docs/logs/external-logs).",
   "path": "/v1/external-logging/account/test",
-  "method": "POST"
+  "method": "POST",
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "setup_tests": {
+                "type": "array",
+                "items": {
+                  "required": [
+                    "status",
+                    "title"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "title": {
+                      "type": "string",
+                      "description": "A human-readable name for the setup test step. For example: Validate Login, Test Connection, Check Permissions."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "The result of the individual setup test step. Possible values: PASSED, FAILED, SKIPPED.",
+                      "enum": [
+                        "PASSED",
+                        "SKIPPED",
+                        "WARNING",
+                        "FAILED",
+                        "JOB_FAILED"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "The result message for the setup test step. For example: Invalid login credentials."
+                    },
+                    "details": {
+                      "type": "object",
+                      "description": "Additional diagnostic information about the setup test result. Populated when the status is FAILED and more context is available beyond the message."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

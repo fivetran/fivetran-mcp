@@ -22,13 +22,38 @@
       }
     }
   ],
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "role": {
-        "type": "string",
-        "description": "The role that you would like to assign to the user "
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "The role that you would like to assign to the user "
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

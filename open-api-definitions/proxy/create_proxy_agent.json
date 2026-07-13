@@ -2,61 +2,124 @@
   "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new proxy agent within your Fivetran account.",
   "path": "/v1/proxy",
   "method": "POST",
-  "request_body_schema": {
-    "type": "object",
-    "properties": {
-      "display_name": {
-        "type": "string",
-        "description": "Proxy agent name."
-      },
-      "group_region": {
-        "type": "string",
-        "description": "Data processing location. This is where Fivetran will operate and run computation on data (optional).",
-        "enum": [
-          "GCP_US_EAST4",
-          "GCP_US_WEST1",
-          "GCP_US_CENTRAL1",
-          "GCP_EUROPE_WEST3",
-          "GCP_AUSTRALIA_SOUTHEAST1",
-          "GCP_NORTHAMERICA_NORTHEAST1",
-          "GCP_EUROPE_WEST2",
-          "GCP_ASIA_SOUTHEAST1",
-          "GCP_ASIA_SOUTHEAST2",
-          "GCP_ASIA_SOUTH1",
-          "GCP_ASIA_NORTHEAST1",
-          "GCP_ASIA_NORTHEAST3",
-          "GCP_ME_CENTRAL2",
-          "AWS_US_EAST_1",
-          "AWS_US_EAST_2",
-          "AWS_US_WEST_2",
-          "AWS_AP_NORTHEAST_1",
-          "AWS_AP_NORTHEAST_2",
-          "AWS_AP_SOUTHEAST_1",
-          "AWS_AP_SOUTHEAST_2",
-          "AWS_EU_CENTRAL_1",
-          "AWS_EU_NORTH_1",
-          "AWS_EU_WEST_1",
-          "AWS_EU_WEST_2",
-          "AWS_AP_SOUTH_1",
-          "AWS_CA_CENTRAL_1",
-          "AWS_US_GOV_WEST_1",
-          "AZURE_EASTUS2",
-          "AZURE_AUSTRALIAEAST",
-          "AZURE_UKSOUTH",
-          "AZURE_WESTEUROPE",
-          "AZURE_CENTRALUS",
-          "AZURE_CANADACENTRAL",
-          "AZURE_UAENORTH",
-          "AZURE_SOUTHEASTASIA",
-          "AZURE_EASTUS",
-          "AZURE_JAPANEAST",
-          "AZURE_CENTRALINDIA",
-          "AZURE_GERMANYWESTCENTRAL",
-          "AZURE_WESTUS3",
-          "AZURE_SWITZERLANDNORTH",
-          "AZURE_KOREACENTRAL"
-        ]
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "description": "Proxy agent name."
+          },
+          "group_region": {
+            "type": "string",
+            "description": "Data processing location. This is where Fivetran will operate and run computation on data (optional).",
+            "enum": [
+              "GCP_US_EAST4",
+              "GCP_US_WEST1",
+              "GCP_US_CENTRAL1",
+              "GCP_EUROPE_WEST3",
+              "GCP_AUSTRALIA_SOUTHEAST1",
+              "GCP_NORTHAMERICA_NORTHEAST1",
+              "GCP_EUROPE_WEST2",
+              "GCP_ASIA_SOUTHEAST1",
+              "GCP_ASIA_SOUTHEAST2",
+              "GCP_ASIA_SOUTH1",
+              "GCP_ASIA_NORTHEAST1",
+              "GCP_ASIA_NORTHEAST3",
+              "GCP_ME_CENTRAL2",
+              "AWS_US_EAST_1",
+              "AWS_US_EAST_2",
+              "AWS_US_WEST_2",
+              "AWS_AP_NORTHEAST_1",
+              "AWS_AP_NORTHEAST_2",
+              "AWS_AP_SOUTHEAST_1",
+              "AWS_AP_SOUTHEAST_2",
+              "AWS_EU_CENTRAL_1",
+              "AWS_EU_NORTH_1",
+              "AWS_EU_WEST_1",
+              "AWS_EU_WEST_2",
+              "AWS_AP_SOUTH_1",
+              "AWS_CA_CENTRAL_1",
+              "AWS_US_GOV_WEST_1",
+              "AZURE_EASTUS2",
+              "AZURE_AUSTRALIAEAST",
+              "AZURE_UKSOUTH",
+              "AZURE_WESTEUROPE",
+              "AZURE_CENTRALUS",
+              "AZURE_CANADACENTRAL",
+              "AZURE_UAENORTH",
+              "AZURE_SOUTHEASTASIA",
+              "AZURE_EASTUS",
+              "AZURE_JAPANEAST",
+              "AZURE_CENTRALINDIA",
+              "AZURE_GERMANYWESTCENTRAL",
+              "AZURE_WESTUS3",
+              "AZURE_SWITZERLANDNORTH",
+              "AZURE_KOREACENTRAL"
+            ]
+          }
+        }
       }
     }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "agent_id",
+              "auth_token",
+              "client_cert",
+              "client_private_key",
+              "orchestrator_host",
+              "orchestrator_port"
+            ],
+            "type": "object",
+            "properties": {
+              "agent_id": {
+                "type": "string",
+                "description": "The unique identifier for the proxy agent within the Fivetran system."
+              },
+              "auth_token": {
+                "type": "string",
+                "description": "The auth token."
+              },
+              "client_cert": {
+                "type": "string",
+                "description": "Client certificate."
+              },
+              "client_private_key": {
+                "type": "string",
+                "description": "Client private key."
+              },
+              "orchestrator_host": {
+                "type": "string",
+                "description": "The hostname that the Proxy Agent uses to connect to the Fivetran orchestrator."
+              },
+              "orchestrator_port": {
+                "type": "integer",
+                "description": "The port that the Proxy Agent uses to connect to the Fivetran orchestrator.",
+                "format": "int32"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
   }
 }

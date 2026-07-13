@@ -1,5 +1,5 @@
 {
-  "description": "Returns a list of available Quickstart transformation package metadata details.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of available Quickstart transformation package metadata details.",
   "path": "/v1/transformations/package-metadata",
   "method": "GET",
   "parameters": [
@@ -40,5 +40,82 @@
         "format": "int32"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "required": [
+                    "id",
+                    "name",
+                    "version"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "The unique identifier for the Quickstart transformation package definition within the Fivetran system"
+                    },
+                    "name": {
+                      "type": "string",
+                      "description": "The Quickstart transformation package name"
+                    },
+                    "version": {
+                      "type": "string",
+                      "description": "The Quickstart package definition version"
+                    },
+                    "connector_types": {
+                      "uniqueItems": true,
+                      "type": "array",
+                      "description": "The set of connector types",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "output_model_names": {
+                      "type": "array",
+                      "description": "The list of transformation output models",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "configurable_variables": {
+                      "type": "object",
+                      "description": "The map of configurable variable values keyed by variable name."
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }

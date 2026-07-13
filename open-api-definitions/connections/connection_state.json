@@ -12,5 +12,38 @@
         "type": "string"
       }
     }
-  ]
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "state"
+            ],
+            "type": "object",
+            "properties": {
+              "state": {
+                "type": "object",
+                "description": "A freeform JSON object representing the connector's cursor or internal state. The structure is defined by the connector implementation and varies by connector type. Returns 400 if no state has been written yet."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
 }
