@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-"""Fivetran MCP Server - Read-only access to Fivetran connections, destinations, and groups."""
-
 import json
 import os
 import base64
