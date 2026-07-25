@@ -88,13 +88,6 @@
           "paused": {
             "type": "boolean"
           }
-        },
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "DBT_CORE": "#/components/schemas/DBT_CORE_NewTransformationRequest",
-            "QUICKSTART": "#/components/schemas/QUICKSTART_NewTransformationRequest"
-          }
         }
       }
     }
@@ -260,13 +253,6 @@
                 "items": {
                   "type": "string"
                 }
-              }
-            },
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "DBT_CORE": "#/components/schemas/DBT_CORE_TransformationResponse",
-                "QUICKSTART": "#/components/schemas/QUICKSTART_TransformationResponse"
               }
             }
           }

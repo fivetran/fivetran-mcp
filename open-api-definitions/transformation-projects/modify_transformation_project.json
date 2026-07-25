@@ -22,12 +22,6 @@
             "type": "boolean",
             "description": "The boolean flag specifies if the project should be tested after creation or update operation"
           }
-        },
-        "discriminator": {
-          "propertyName": "type",
-          "mapping": {
-            "DBT_CORE": "#/components/schemas/DBT_CORE_UpdateTransformationProjectRequest"
-          }
         }
       }
     }
@@ -126,12 +120,6 @@
                     }
                   }
                 }
-              }
-            },
-            "discriminator": {
-              "propertyName": "type",
-              "mapping": {
-                "DBT_CORE": "#/components/schemas/DBT_CORE_TransformationProjectDetailsResponse"
               }
             }
           }

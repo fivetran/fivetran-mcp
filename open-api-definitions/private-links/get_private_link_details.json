@@ -151,24 +151,6 @@
                 "type": "string",
                 "description": "The upstream status of the PrivateLink resource as reported by the cloud provider."
               }
-            },
-            "discriminator": {
-              "propertyName": "service",
-              "mapping": {
-                "DATABRICKS_AWS": "#/components/schemas/databricks_aws_PrivateLinkResponse",
-                "SNOWFLAKE_AWS": "#/components/schemas/snowflake_aws_PrivateLinkResponse",
-                "REDSHIFT_AWS": "#/components/schemas/redshift_aws_PrivateLinkResponse",
-                "SOURCE_AWS": "#/components/schemas/source_aws_PrivateLinkResponse",
-                "DATABRICKS_AZURE": "#/components/schemas/databricks_azure_PrivateLinkResponse",
-                "SNOWFLAKE_AZURE": "#/components/schemas/snowflake_azure_PrivateLinkResponse",
-                "ONELAKE_AZURE": "#/components/schemas/onelake_azure_PrivateLinkResponse",
-                "POSTGRES_WAREHOUSE_AZURE": "#/components/schemas/postgres_warehouse_azure_PrivateLinkResponse",
-                "SQL_DATA_WAREHOUSE_AZURE": "#/components/schemas/sql_data_warehouse_azure_PrivateLinkResponse",
-                "SOURCE_AZURE": "#/components/schemas/source_azure_PrivateLinkResponse",
-                "SNOWFLAKE_GCP": "#/components/schemas/snowflake_gcp_PrivateLinkResponse",
-                "SOURCE_GCP": "#/components/schemas/source_gcp_PrivateLinkResponse",
-                "DATABRICKS_GCP": "#/components/schemas/databricks_gcp_PrivateLinkResponse"
-              }
             }
           }
         }

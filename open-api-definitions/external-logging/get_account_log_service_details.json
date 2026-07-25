@@ -32,7 +32,17 @@
               },
               "service": {
                 "type": "string",
-                "description": "The name of the log service type within the Fivetran system. We support the following log services: `azure_monitor_log`, `cloudwatch`, `datadog_log`, `dynatrace`, `grafana_loki`, `splunkLog`, `new_relic_log`, `stackdriver` (Google Cloud Logging)."
+                "description": "The name of the log service type within the Fivetran system. We support the following log services: `azure_monitor_log`, `cloudwatch`, `datadog_log`, `dynatrace`, `grafana_loki`, `splunkLog`, `new_relic_log`, `stackdriver` (Google Cloud Logging).",
+                "enum": [
+                  "azure_monitor_log",
+                  "cloudwatch",
+                  "datadog_log",
+                  "dynatrace",
+                  "grafana_loki",
+                  "new_relic_log",
+                  "splunkLog",
+                  "stackdriver"
+                ]
               },
               "enabled": {
                 "type": "boolean",
@@ -108,19 +118,6 @@
                     }
                   }
                 }
-              }
-            },
-            "discriminator": {
-              "propertyName": "service",
-              "mapping": {
-                "azure_monitor_log": "#/components/schemas/azure_monitor_log_LogExtendedResponse",
-                "cloudwatch": "#/components/schemas/cloudwatch_LogExtendedResponse",
-                "datadog_log": "#/components/schemas/datadog_log_LogExtendedResponse",
-                "dynatrace": "#/components/schemas/dynatrace_LogExtendedResponse",
-                "grafana_loki": "#/components/schemas/grafana_loki_LogExtendedResponse",
-                "new_relic_log": "#/components/schemas/new_relic_log_LogExtendedResponse",
-                "splunkLog": "#/components/schemas/splunkLog_LogExtendedResponse",
-                "stackdriver": "#/components/schemas/stackdriver_LogExtendedResponse"
               }
             }
           }

@@ -63,6 +63,43 @@ def strip_examples(obj):
     return obj
 
 
+def strip_discriminator_mappings(obj):
+    """Remove discriminator blocks; hoist mapping keys onto the propertyName property as enum.
+
+    Per the OpenAPI spec a discriminator is only meaningful alongside oneOf/anyOf/allOf,
+    which none of these schemas have — and the mapping values are dangling refs into
+    components (which we strip). The mapping keys are the one load-bearing piece: they
+    enumerate valid values for the property named by propertyName.
+    """
+    if isinstance(obj, dict):
+        disc = obj.get('discriminator')
+        if isinstance(disc, dict) and isinstance(disc.get('mapping'), dict):
+            pn = disc.get('propertyName')
+            keys = sorted(disc['mapping'].keys())
+            new = {
+                k: strip_discriminator_mappings(v)
+                for k, v in obj.items() if k != 'discriminator'
+            }
+            props = new.get('properties')
+            if isinstance(props, dict) and pn in props and isinstance(props[pn], dict):
+                target = props[pn]
+                existing = target.get('enum')
+                if existing is None:
+                    target['enum'] = keys
+                elif isinstance(existing, list) and set(existing) != set(keys):
+                    print(
+                        f"WARNING: discriminator mapping keys diverge from existing "
+                        f"enum on property {pn!r}: "
+                        f"mapping_only={sorted(set(keys) - set(existing))}, "
+                        f"enum_only={sorted(set(existing) - set(keys))}"
+                    )
+            return new
+        return {k: strip_discriminator_mappings(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [strip_discriminator_mappings(item) for item in obj]
+    return obj
+
+
 def extract_parameters(operation: dict) -> list[dict]:
     """Extract path and query parameters, skipping headers."""
     params = []
@@ -94,7 +131,9 @@ def extract_request_body(operation: dict, components: dict) -> dict | None:
     for content_type, content_obj in content.items():
         schema = content_obj.get('schema')
         if schema:
-            schemas_by_type[content_type] = strip_examples(resolve_refs_inline(schema, components))
+            schemas_by_type[content_type] = strip_discriminator_mappings(
+                strip_examples(resolve_refs_inline(schema, components))
+            )
 
     if not schemas_by_type:
         return None
@@ -119,7 +158,9 @@ def extract_response(operation: dict, components: dict) -> dict | None:
     for content_type, content_obj in content.items():
         schema = content_obj.get('schema')
         if schema:
-            schemas_by_type[content_type] = strip_examples(resolve_refs_inline(schema, components))
+            schemas_by_type[content_type] = strip_discriminator_mappings(
+                strip_examples(resolve_refs_inline(schema, components))
+            )
 
     if not schemas_by_type:
         return None

@@ -224,13 +224,6 @@
                         "type": "string"
                       }
                     }
-                  },
-                  "discriminator": {
-                    "propertyName": "type",
-                    "mapping": {
-                      "DBT_CORE": "#/components/schemas/DBT_CORE_TransformationResponse",
-                      "QUICKSTART": "#/components/schemas/QUICKSTART_TransformationResponse"
-                    }
                   }
                 }
               },
