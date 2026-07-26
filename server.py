@@ -35,16 +35,25 @@ SERVER_DIR = Path(__file__).parent
 OPENAPI_DIR = SERVER_DIR / "open-api-definitions"
 
 
-def _load_manifest() -> tuple[list[dict], dict[str, dict], dict[str, list[dict]]]:
-    entries = json.loads((OPENAPI_DIR / "endpoints.json").read_text())["endpoints"]
+def _load_manifest() -> tuple[
+    list[dict], dict[str, dict], dict[str, list[dict]], list[dict]
+]:
+    doc = json.loads((OPENAPI_DIR / "endpoints.json").read_text())
+    entries = doc["endpoints"]
+    tools = doc.get("tools", [])
     by_name = {e["name"]: e for e in entries}
     by_resource: dict[str, list[dict]] = defaultdict(list)
     for e in entries:
         by_resource[e["resource"]].append(e)
-    return entries, by_name, dict(by_resource)
+    return entries, by_name, dict(by_resource), tools
 
 
-ENDPOINTS, ENDPOINTS_BY_NAME, ENDPOINTS_BY_RESOURCE = _load_manifest()
+ENDPOINTS, ENDPOINTS_BY_NAME, ENDPOINTS_BY_RESOURCE, TOOLS_INDEX = _load_manifest()
+
+# (resource, action) pairs that correspond to at least one live tool.
+# Used to validate directly-written DISALLOWED_ACTIONS tokens (cascade-expanded
+# pairs are inert if they don't exist, so we only strict-check what the user typed).
+TOOL_PAIRS: set[tuple[str, str]] = {(t["resource"], t["action"]) for t in TOOLS_INDEX}
 
 
 SCOPE_TIERS: dict[str, tuple[str, ...]] = {
@@ -110,6 +119,14 @@ def _parse_disallowed_actions(all_resources: set[str]) -> set[tuple[str, str]]:
             raise ValueError(
                 f"Invalid action in DISALLOWED_ACTIONS token {token!r}: {action!r}. "
                 f"Valid: ['read', 'write', 'delete']."
+            )
+        # Directly-written pairs must correspond to a real tool. A typo like
+        # `hvr:delete` (HVR has no DELETE endpoints) fails loudly here rather
+        # than silently disallowing something that never existed.
+        if (resource, action) not in TOOL_PAIRS:
+            raise ValueError(
+                f"DISALLOWED_ACTIONS token {token!r} does not correspond to any tool. "
+                f"Available pairs: {sorted(f'{r}:{a}' for r, a in TOOL_PAIRS)}."
             )
         for cascaded in ACTION_CASCADE[action]:
             denies.add((resource, cascaded))
@@ -257,10 +274,23 @@ async def do_call(
     path_params: dict[str, Any] | None = None,
     query: dict[str, Any] | None = None,
     body: Any = None,
+    expected_pair: tuple[str, str] | None = None,
 ) -> dict[str, Any]:
     ep = ENDPOINTS_BY_NAME.get(name)
     if not ep:
         raise ValueError(f"Unknown endpoint: {name!r}")
+
+    # The tool name is the boundary — reject if the caller invoked
+    # `metadata_read(name="delete_connection")`. Without this check the tool
+    # namespace is decorative.
+    if expected_pair is not None and (ep["resource"], ep["scope"]) != expected_pair:
+        expected_tool = f"{expected_pair[0].replace('-', '_')}_{expected_pair[1]}"
+        actual_tool = f"{ep['resource'].replace('-', '_')}_{ep['scope']}"
+        raise ValueError(
+            f"{name!r} is {ep['resource']}:{ep['scope']}, "
+            f"not {expected_pair[0]}:{expected_pair[1]}. "
+            f"Call this endpoint via {actual_tool!r}, not {expected_tool!r}."
+        )
 
     required = (ep["resource"], ep["scope"])
     if required not in ALLOWED_GRANTS:
@@ -360,40 +390,78 @@ _TOOLS = [
             "required": ["name"],
         },
     ),
-    Tool(
-        name="call",
-        description=(
-            "Execute a Fivetran API endpoint. Path parameters (like {connectionId}) go "
-            "in `path_params`, query strings in `query`, request body (POST/PATCH) in "
-            "`body` (dict or JSON string).\n\n"
-            "DESTRUCTIVE AND WRITE CALLS ARE DANGEROUS. CONFIRM WITH THE USER EVERY "
-            "TIME BEFORE EXECUTING. Endpoints whose summary begins with DESTRUCTIVE "
-            "or WRITE OPERATION change or delete data — do not call them without "
-            "user confirmation in this session."
-        ),
-        inputSchema={
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": "Endpoint name (from list_endpoints).",
-                },
-                "path_params": {
-                    "type": "object",
-                    "description": "Values for path placeholders like {connectionId}, {groupId}.",
-                },
-                "query": {
-                    "type": "object",
-                    "description": "Query-string parameters.",
-                },
-                "body": {
-                    "description": "Request body — dict or JSON string. Required for POST/PATCH endpoints.",
-                },
-            },
-            "required": ["name"],
-        },
-    ),
 ]
+
+
+_ACTION_WARNING = {
+    "read": "",
+    "write": "WRITE OPERATIONS - confirm with user before calling. ",
+    "delete": "DESTRUCTIVE - confirm with user before calling. ",
+}
+
+
+def _tool_description(tool: dict) -> str:
+    """Generate a tool description at import time from the manifest."""
+    live = [
+        e for e in ENDPOINTS_BY_RESOURCE.get(tool["resource"], [])
+        if e["scope"] == tool["action"] and not e.get("deprecated")
+    ]
+    names = ", ".join(e["name"] for e in live[:8])
+    more = f", + {len(live) - 8} more" if len(live) > 8 else ""
+    resource_human = tool["resource"].replace("-", " ")
+    return (
+        f"{_ACTION_WARNING[tool['action']]}"
+        f"{tool['action'].capitalize()} operations on Fivetran {resource_human} "
+        f"({len(live)} endpoints: {names}{more}). "
+        f"Pass the endpoint name in `name`. "
+        f"Call list_endpoints(category='{tool['resource']}') for the full list."
+    )
+
+
+_RESOURCE_ACTION_INPUT_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "description": "Endpoint name within this resource:action group (from list_endpoints).",
+        },
+        "path_params": {
+            "type": "object",
+            "description": "Values for path placeholders like {connectionId}, {groupId}.",
+        },
+        "query": {
+            "type": "object",
+            "description": "Query-string parameters.",
+        },
+        "body": {
+            "description": "Request body — dict or JSON string. Required for POST/PATCH endpoints.",
+        },
+    },
+    "required": ["name"],
+}
+
+
+# Generate one Tool per surviving (resource, action) pair. Grant filter applied here
+# so the exposed tool list is exactly the reachable surface — the host can then
+# narrow further within the ceiling by hiding individual tools client-side.
+GENERATED_TOOLS = [
+    t for t in TOOLS_INDEX
+    if (t["resource"], t["action"]) in ALLOWED_GRANTS
+]
+
+for _t in GENERATED_TOOLS:
+    _TOOLS.append(
+        Tool(
+            name=_t["name"],
+            description=_tool_description(_t),
+            inputSchema=_RESOURCE_ACTION_INPUT_SCHEMA,
+        )
+    )
+
+# tool_name -> (resource, action) for dispatch.
+TOOLS_BY_NAME: dict[str, tuple[str, str]] = {
+    t["name"]: (t["resource"], t["action"]) for t in GENERATED_TOOLS
+}
 
 
 mcp_server = Server("fivetran")
@@ -418,12 +486,13 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                 name=arguments["name"],
                 service=arguments.get("service"),
             )
-        elif name == "call":
+        elif name in TOOLS_BY_NAME:
             result = await do_call(
                 name=arguments["name"],
                 path_params=arguments.get("path_params"),
                 query=arguments.get("query"),
                 body=arguments.get("body"),
+                expected_pair=TOOLS_BY_NAME[name],
             )
         else:
             raise ValueError(f"Unknown tool: {name}")

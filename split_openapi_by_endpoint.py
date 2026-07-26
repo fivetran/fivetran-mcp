@@ -22,6 +22,7 @@ Example:
 import ast
 import json
 import re
+from collections import defaultdict
 from pathlib import Path
 
 
@@ -408,13 +409,39 @@ def _summary_with_prefix(method: str, summary: str, description: str) -> str:
     return summary
 
 
-def write_manifest(all_mappings: dict, output_dir: Path) -> None:
-    """Emit endpoints.json — one flat row per endpoint for the Step 4 router.
+def _build_tools_index(entries: list[dict]) -> list[dict]:
+    """One row per (resource, action) pair that has ≥1 non-deprecated endpoint.
 
-    `summary` is the short OpenAPI summary with an all-caps category prefix. The
-    full description lives only in the per-endpoint split file and is reached via
-    get_schema — the router's `call` tool carries a blanket warning that applies
-    to every DESTRUCTIVE / WRITE OPERATION so it doesn't need per-endpoint text.
+    A pair whose every endpoint is deprecated (today: `certificates:write` — only
+    `approve_certificate`, deprecated) gets no tool: it would exist solely to expose
+    a dead endpoint. Tool name normalizes `-` to `_` so `system-keys` becomes
+    `system_keys_delete` rather than `system-keys_delete`.
+    """
+    groups: dict[tuple[str, str], list[dict]] = defaultdict(list)
+    for e in entries:
+        groups[(e['resource'], e['scope'])].append(e)
+    tools = []
+    for (resource, action), members in groups.items():
+        live = [m for m in members if not m.get('deprecated')]
+        if not live:
+            continue
+        prefix = resource.replace('-', '_')
+        tools.append({
+            'name': f'{prefix}_{action}',
+            'resource': resource,
+            'action': action,
+            'endpoints': len(live),
+        })
+    return sorted(tools, key=lambda t: t['name'])
+
+
+def write_manifest(all_mappings: dict, output_dir: Path) -> None:
+    """Emit endpoints.json — {tools, endpoints} for the resource:action router.
+
+    `summary` is the short OpenAPI summary with an all-caps category prefix. Each
+    entry also carries `tool_prefix` (resource with `-` → `_`) so the server can
+    build tool names without re-normalizing. A top-level `tools` array lists every
+    (resource, action) pair with ≥1 non-deprecated endpoint.
     """
     entries = []
     for resource in sorted(all_mappings):
@@ -425,6 +452,7 @@ def write_manifest(all_mappings: dict, output_dir: Path) -> None:
             entries.append({
                 'name': name,
                 'resource': resource,
+                'tool_prefix': resource.replace('-', '_'),
                 'method': info['method'],
                 'path': info['path'],
                 'summary': _summary_with_prefix(
@@ -435,10 +463,12 @@ def write_manifest(all_mappings: dict, output_dir: Path) -> None:
                 'deprecated': doc.get('deprecated', False),
             })
 
+    tools = _build_tools_index(entries)
+
     (output_dir / 'endpoints.json').write_text(
-        json.dumps({'endpoints': entries}, indent=2)
+        json.dumps({'tools': tools, 'endpoints': entries}, indent=2)
     )
-    print(f'  Wrote endpoints.json with {len(entries)} entries')
+    print(f'  Wrote endpoints.json with {len(entries)} endpoints, {len(tools)} tools')
 
 
 def _clean_desc(s: str) -> str:
