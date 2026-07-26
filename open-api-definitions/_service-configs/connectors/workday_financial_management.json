@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication Mode",
+          "enum": [
+            "BASIC",
+            "OAUTH"
+          ]
+        },
+        "domain_host_name": {
+          "title": "",
+          "type": "string",
+          "description": "Workday host name."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Workday password.",
+          "format": "password"
+        },
+        "tenant": {
+          "title": "",
+          "type": "string",
+          "description": "Workday tenant name"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Workday username."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ID of your Workday Client App"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Secret of your Workday Client App"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "workday_financial_management_config_V1",
+    "workday_financial_management_auth_V1"
+  ]
+}

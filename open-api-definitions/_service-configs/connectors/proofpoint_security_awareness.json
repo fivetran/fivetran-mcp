@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "object",
+          "description": "Your Proofpoint Security Awareness Region.",
+          "enum": [
+            "results.ap.securityeducation.com",
+            "results.us.securityeducation.com",
+            "results.eu.securityeducation.com"
+          ]
+        },
+        "token_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Proofpoint Security Awareness Token Key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "proofpoint_security_awareness_config_V1"
+  ]
+}

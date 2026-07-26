@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Access Key ID"
+        },
+        "access_key_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Access Key Secret",
+          "format": "password"
+        },
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Access approach",
+          "enum": [
+            "IAM_ROLE",
+            "ACCESS_KEY"
+          ]
+        },
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The S3 bucket name with the AWS Cost and Usage Report "
+        },
+        "prefix": {
+          "title": "",
+          "type": "string",
+          "description": "Folder path to the aws_cost_report files within the bucket."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for access Key ID"
+        },
+        "access_key_secret": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for access Key Secret"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "aws_cost_report_config_V1",
+    "aws_cost_report_esm_keys_config_V1"
+  ]
+}

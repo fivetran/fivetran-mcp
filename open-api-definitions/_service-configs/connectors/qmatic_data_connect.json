@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Qmatic Data Connect password.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Qmatic Data Connect subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Qmatic Data Connect username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "qmatic_data_connect_config_V1"
+  ]
+}

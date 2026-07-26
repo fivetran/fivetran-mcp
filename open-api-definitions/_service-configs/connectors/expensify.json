@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "partner_user_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Expensify partnerUserID."
+        },
+        "partner_user_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Expensify partnerUserSecret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "expensify_config_V1"
+  ]
+}

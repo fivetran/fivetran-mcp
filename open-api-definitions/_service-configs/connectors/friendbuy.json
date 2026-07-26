@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Friendbuy API key."
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Friendbuy API secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "friendbuy_config_V1"
+  ]
+}

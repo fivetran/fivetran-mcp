@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your dbt Cloud service token.",
+          "format": "password"
+        },
+        "custom_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your dbt Cloud access url."
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your dbt Cloud API server region.",
+          "enum": [
+            "",
+            "cloud.getdbt.com",
+            "emea.dbt.com",
+            "au.dbt.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "dbt_cloud_config_V1"
+  ]
+}

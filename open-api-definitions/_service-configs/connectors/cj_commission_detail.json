@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "company_ids": {
+          "title": "",
+          "type": "string",
+          "description": "Your CJ Commission Detail company IDs."
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your CJ Commission Detail personal access token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "cj_commission_detail_config_V1"
+  ]
+}

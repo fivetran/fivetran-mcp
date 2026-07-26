@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "Your Smadex account's email ID."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Smadex Password.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "smadex_config_V1"
+  ]
+}

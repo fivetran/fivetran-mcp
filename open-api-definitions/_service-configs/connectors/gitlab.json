@@ -1,0 +1,95 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "type": "object",
+          "description": "Your GitLab auth type.",
+          "enum": [
+            "oauth_2",
+            "personal_access_token"
+          ]
+        },
+        "base_url": {
+          "type": "object",
+          "description": "Your GitLab base URL.",
+          "enum": [
+            "",
+            "gitlab.com"
+          ]
+        },
+        "client_certificate": {
+          "title": "",
+          "type": "string",
+          "description": "Your GitLab client certificate content.",
+          "format": "password"
+        },
+        "client_private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your GitLab client private key content.",
+          "format": "password"
+        },
+        "custom_base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your GitLab custom base URL."
+        },
+        "enable_mtls_connection": {
+          "title": "",
+          "type": "string",
+          "description": "The confirmation that you have allowed Fivetran to connect with your self-hosted instance. Possible values: `true`, `false`."
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your GitLab personal access token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your GitLab access token.",
+          "format": "password"
+        },
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": "Your GitLab client access."
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your GitLab refresh token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gitlab_config_V1",
+    "gitlab_auth_V1"
+  ]
+}

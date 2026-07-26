@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Learn Amp client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Learn Amp client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "learn_amp_config_V1"
+  ]
+}

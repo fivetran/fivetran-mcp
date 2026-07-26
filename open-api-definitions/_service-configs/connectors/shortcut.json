@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Shortcut API token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "shortcut_config_V1"
+  ]
+}

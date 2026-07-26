@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Higher Logic Vanilla access token.",
+          "format": "password"
+        },
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Higher Logic Vanilla base URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "higher_logic_vanilla_config_V1"
+  ]
+}

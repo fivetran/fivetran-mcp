@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Vonage Contact Center client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Vonage Contact Center client secret.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Vonage Contact Center region.",
+          "enum": [
+            "emea",
+            "nam",
+            "apac"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "vonage_contact_center_config_V1"
+  ]
+}

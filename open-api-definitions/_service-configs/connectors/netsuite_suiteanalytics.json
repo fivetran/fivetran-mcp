@@ -1,0 +1,96 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "title": "",
+          "type": "string",
+          "description": "The NetSuite Account ID."
+        },
+        "certificate_id": {
+          "title": "",
+          "type": "string",
+          "description": "Certificate Id",
+          "format": "password"
+        },
+        "consumer_key": {
+          "title": "",
+          "type": "string",
+          "description": "Consumer Key",
+          "format": "password"
+        },
+        "consumer_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Consumer Secret",
+          "format": "password"
+        },
+        "datasource": {
+          "title": "",
+          "type": "object",
+          "description": "The NetSuite data source value: `NetSuite.com`.",
+          "enum": [
+            "NetSuite2.com",
+            "NetSuite.com"
+          ]
+        },
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "The NetSuite user's email address."
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "The NetSuite service host address."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The NetSuite user's password.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The NetSuite service host port.",
+          "format": "int32"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Private Key",
+          "format": "password"
+        },
+        "role": {
+          "title": "",
+          "type": "string",
+          "description": "The NetSuite Role ID for connection."
+        },
+        "should_sync_reimport_tables": {
+          "title": "",
+          "type": "boolean",
+          "description": "Re-sync re-import tables during every sync"
+        },
+        "token_key": {
+          "title": "",
+          "type": "string",
+          "description": "Token ID",
+          "format": "password"
+        },
+        "token_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Token Secret",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "netsuite_suiteanalytics_config_V1"
+  ]
+}

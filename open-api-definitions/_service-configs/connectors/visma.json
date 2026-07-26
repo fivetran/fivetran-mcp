@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Visma client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Visma client secret.",
+          "format": "password"
+        },
+        "tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Visma tenant ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "visma_config_V1"
+  ]
+}

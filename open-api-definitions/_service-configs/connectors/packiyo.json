@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Packiyo API token.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Packiyo subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "packiyo_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your DCL Logistics API key.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your DCL Logistics username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "dcl_logistics_config_V1"
+  ]
+}

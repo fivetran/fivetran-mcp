@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Helpjuice account name."
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Helpjuice API key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "helpjuice_config_V1"
+  ]
+}

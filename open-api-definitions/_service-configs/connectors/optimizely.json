@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Optimizely account ID."
+        },
+        "enriched_export": {
+          "title": "",
+          "type": "string",
+          "description": "Enriched Events S3 bucket"
+        },
+        "packing_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Packing mode for conversion and decision tables.",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Optimizely client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Optimizely client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "optimizely_config_V1",
+    "optimizely_auth_V1"
+  ]
+}

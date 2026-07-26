@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Kustomer API key.",
+          "format": "password"
+        },
+        "api_utilization_percentage": {
+          "title": "",
+          "type": "number",
+          "description": "Api Utilization Percentage"
+        },
+        "domain": {
+          "title": "",
+          "type": "string",
+          "description": "Domain is the beginning of your kustomer URL going before <strong>.kustomerapp.com</strong>, e.g. for <strong>yourcompany.kustomerapp.com</strong> the domain name is <strong>yourcompany</strong>"
+        },
+        "eu_region": {
+          "title": "",
+          "type": "boolean",
+          "description": "Turn it on if your app is on EU region"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "kustomer_config_V1"
+  ]
+}

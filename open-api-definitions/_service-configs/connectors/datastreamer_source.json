@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "datastreamer_source_config_V1"
+  ]
+}

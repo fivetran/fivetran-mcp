@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Toggl Track API token",
+          "format": "password"
+        },
+        "custom_rate_limit": {
+          "title": "",
+          "type": "string",
+          "description": "Your Toggl Track custom rate limit. Supports only numeric characters (0-9)."
+        },
+        "rate_limit_plan": {
+          "type": "object",
+          "description": "Your Toggl Track plan type.",
+          "enum": [
+            "220",
+            "",
+            "27",
+            "580"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "toggl_track_config_V1"
+  ]
+}

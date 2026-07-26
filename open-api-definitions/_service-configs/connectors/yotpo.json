@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "app_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Yotpo app key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          }
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "yotpo_config_V1",
+    "yotpo_auth_V1"
+  ]
+}

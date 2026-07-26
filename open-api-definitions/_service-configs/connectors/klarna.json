@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "csv_delimiter": {
+          "type": "object",
+          "description": "The CSV delimiter used in your Klarna settlement report.",
+          "enum": [
+            ":",
+            ";",
+            ",",
+            "|"
+          ]
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Klarna password.",
+          "format": "password"
+        },
+        "subdomain": {
+          "type": "object",
+          "description": "Your Klarna subdomain.",
+          "enum": [
+            "api-na",
+            "api-oc",
+            "api"
+          ]
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Klarna username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "klarna_config_V1"
+  ]
+}

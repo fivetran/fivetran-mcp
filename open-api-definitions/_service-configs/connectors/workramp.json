@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "academy_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your WorkRamp academy ID."
+        },
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your WorkRamp access token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "workramp_config_V1"
+  ]
+}

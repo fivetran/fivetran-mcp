@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_plan": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tymeshift account plan."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tymeshift email."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tymeshift password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tymeshift subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "tymeshift_config_V1"
+  ]
+}

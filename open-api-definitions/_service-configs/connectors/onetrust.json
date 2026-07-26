@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_integration_type": {
+          "type": "object",
+          "description": "Your OneTrust API integration type.",
+          "enum": [
+            "consentmanager/v1/datasubjects/profiles",
+            "/cmp/v1/webscans",
+            "/assessment/v2/assessments"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your OneTrust client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your OneTrust client secret.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your OneTrust subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "onetrust_config_V1"
+  ]
+}

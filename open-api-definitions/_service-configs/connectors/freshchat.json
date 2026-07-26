@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bearer_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshchat API Token.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshchat Sub Domain"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "freshchat_config_V1"
+  ]
+}

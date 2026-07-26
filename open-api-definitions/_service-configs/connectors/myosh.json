@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your myosh API key.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your myosh password.",
+          "format": "password"
+        },
+        "server_variable": {
+          "title": "",
+          "type": "string",
+          "description": "Your myosh server variable."
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your myosh subdomain.",
+          "enum": [
+            "oteapi",
+            "api",
+            "testapi"
+          ]
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your myosh username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "myosh_config_V1"
+  ]
+}

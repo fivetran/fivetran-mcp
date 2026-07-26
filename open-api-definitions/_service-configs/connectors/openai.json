@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your OpenAI Admin API key.",
+          "format": "password"
+        },
+        "api_key_2": {
+          "title": "",
+          "type": "string",
+          "description": "The project-specific API key for the OpenAI Platform project whose data you want to sync.",
+          "format": "password"
+        },
+        "api_key_3": {
+          "title": "",
+          "type": "string",
+          "description": "The API key scoped to `codex.enterprise.analytics.read` for syncing Codex Enterprise Analytics data from a specific ChatGPT workspace.",
+          "format": "password"
+        },
+        "workspace_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your ChatGPT Enterprise Workspace ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "openai_config_V1"
+  ]
+}

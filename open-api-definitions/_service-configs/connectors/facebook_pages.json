@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "pages": {
+          "title": "",
+          "type": "array",
+          "description": "Specific pages to sync. Must be populated if `sync_mode` is set to `SpecificPages`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts. Default value: `AllPages`.",
+          "enum": [
+            "SpecificPages",
+            "AllPages"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The `Access Token` carries the information necessary for API resources to fetch data"
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Facebook  client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Facebook client application."
+            }
+          },
+          "description": "Your application client access fields"
+        },
+        "system_user_access_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "facebook_pages_config_V1",
+    "facebook_pages_auth_V1"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "API token generated from your Smartsheet account.",
+          "format": "password"
+        },
+        "auth_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Authorization type.",
+          "enum": [
+            "OAuth2",
+            "APIToken"
+          ]
+        },
+        "region": {
+          "title": "",
+          "type": "object",
+          "description": "The Smartsheet data region for your account. Can be COM, EU, or AU.",
+          "enum": [
+            "COM",
+            "EU",
+            "AU"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "realm_id": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "smartsheet_config_V1",
+    "smartsheet_auth_V1"
+  ]
+}

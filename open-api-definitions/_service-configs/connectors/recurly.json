@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "The Recurly API key.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Recurly region.",
+          "enum": [
+            "v3.eu",
+            "v3"
+          ]
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your company's Recurly subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "recurly_config_V1"
+  ]
+}

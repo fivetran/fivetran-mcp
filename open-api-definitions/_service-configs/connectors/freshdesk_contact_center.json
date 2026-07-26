@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshdesk Contact Center account name."
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshdesk Contact Center API key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "freshdesk_contact_center_config_V1"
+  ]
+}

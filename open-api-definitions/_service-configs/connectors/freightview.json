@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_type": {
+          "type": "object",
+          "description": "Your Freightview account type.",
+          "enum": [
+            "freightview.com",
+            "freightview.dev"
+          ]
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freightview API key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "freightview_config_V1"
+  ]
+}

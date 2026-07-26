@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Zip API key.",
+          "format": "password"
+        },
+        "environment": {
+          "title": "",
+          "type": "string",
+          "description": "Your Zip environment."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "zip_config_V1"
+  ]
+}

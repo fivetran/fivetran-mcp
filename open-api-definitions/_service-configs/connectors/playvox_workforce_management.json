@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "title": "",
+          "type": "string",
+          "description": "Your Playvox Workforce Management client identifier."
+        },
+        "region_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Playvox Workforce Management region URL."
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Playvox Workforce Management client secret.",
+          "format": "password"
+        },
+        "tenant_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Playvox Workforce Management tenant URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "playvox_workforce_management_config_V1"
+  ]
+}

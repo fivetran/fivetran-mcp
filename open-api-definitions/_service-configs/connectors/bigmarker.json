@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your BigMarker API key.",
+          "format": "password"
+        },
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your BigMarker base URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "bigmarker_config_V1"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Zendesk API tokens are auto-generated passwords in the Support admin interface.",
+          "format": "password"
+        },
+        "domain": {
+          "title": "",
+          "type": "string",
+          "description": "Zendesk domain."
+        },
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "Zendesk email."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "zendesk_sunshine_config_V1"
+  ]
+}

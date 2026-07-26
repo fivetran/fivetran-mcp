@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Checkout.com access key ID."
+        },
+        "access_key_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Checkout.com access key secret.",
+          "format": "password"
+        },
+        "entity_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Checkout.com entity ID."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Checkout.com environment.",
+          "enum": [
+            "sandbox.checkout",
+            "checkout"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "checkout_config_V1"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Datadog API key.",
+          "format": "password"
+        },
+        "application_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Datadog application key."
+        },
+        "base_url": {
+          "type": "object",
+          "description": "Your Datadog base url.",
+          "enum": [
+            "",
+            "ap1.datadoghq.com",
+            "api.datadoghq.eu",
+            "us3.datadoghq.com",
+            "api.ddog-gov.com",
+            "api.datadoghq.com",
+            "us5.datadoghq.com"
+          ]
+        },
+        "custom_base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Datadog custom base url."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "datadog_config_V1"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "app_sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all apps or specific apps.",
+          "enum": [
+            "AllApps",
+            "SpecificApps"
+          ]
+        },
+        "apps": {
+          "title": "",
+          "type": "array",
+          "description": "Specific apps to sync. Must be populated if `app_sync_mode` is set to `SpecificApps`.",
+          "items": {
+            "title": "",
+            "type": "integer",
+            "description": "",
+            "format": "int32"
+          }
+        },
+        "issuer_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Issuer ID. Must be populated if `key_type` is set to `Team`"
+        },
+        "key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Key ID"
+        },
+        "key_type": {
+          "title": "",
+          "type": "object",
+          "description": "Key Type",
+          "enum": [
+            "Individual",
+            "Team"
+          ]
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Private Key",
+          "format": "password"
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Historical sync time frame in months.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "vendors_id": {
+          "title": "",
+          "type": "array",
+          "description": "Your vendors id",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "itunes_connect_config_V1"
+  ]
+}

@@ -1,0 +1,58 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID of your QuickBooks client application."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Client Secret of your QuickBooks client application.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your QuickBooks client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your QuickBooks client application."
+            }
+          },
+          "description": ""
+        },
+        "realm_id": {
+          "title": "",
+          "type": "string",
+          "description": "`Realm ID` of your QuickBooks application."
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "quickbooks_config_V1",
+    "quickbooks_auth_V1"
+  ]
+}

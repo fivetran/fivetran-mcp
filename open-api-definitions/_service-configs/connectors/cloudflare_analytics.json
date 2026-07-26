@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Cloudflare Analytics API token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "cloudflare_analytics_config_V1"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the Segment bucket. Must be populated if `sync_type` is set to `S3`."
+        },
+        "prefix": {
+          "title": "",
+          "type": "string",
+          "description": "Folder path to the Segment files within the bucket. Must be populated if `sync_type` is set to `S3`."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication. Must be populated if `sync_type` is set to `S3`.",
+          "format": "password"
+        },
+        "sync_type": {
+          "title": "",
+          "type": "object",
+          "description": "The Segment connector sync type.",
+          "enum": [
+            "S3",
+            "Webhook"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "segment_config_V1"
+  ]
+}

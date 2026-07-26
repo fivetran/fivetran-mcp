@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "facility_codes": {
+          "title": "",
+          "type": "string",
+          "description": "Your uniware facility codes."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your uniware login password.",
+          "format": "password"
+        },
+        "tenant": {
+          "title": "",
+          "type": "string",
+          "description": "Your uniware tenant."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your uniware login username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "unicommerce_config_V1"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "surrealdb_destination_config_V1"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fountain API token.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fountain subdomain."
+        },
+        "url_format": {
+          "type": "object",
+          "description": "Your Fountain URL format.",
+          "enum": [
+            "api/v2",
+            "v2"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "fountain_config_V1"
+  ]
+}

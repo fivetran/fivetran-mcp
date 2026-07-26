@@ -1,0 +1,121 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Klaviyo API key.",
+          "format": "password"
+        },
+        "historical_sync_limit": {
+          "title": "",
+          "type": "object",
+          "description": "The time range for which historical data should be synced. Default value: `ALL_TIME`.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "historical_sync_limit_date": {
+          "title": "",
+          "type": "string",
+          "description": "The start date (YYYY-MM-DD) from which to sync historical data."
+        },
+        "packing_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Packing mode for EVENT and PERSON tables.",
+          "enum": [
+            "UNPACKED",
+            "PACKED"
+          ]
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "*  custom report(s)",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "breakdown": {
+                "title": "",
+                "type": "object",
+                "description": "Optional breakdown for Form Series reports. Select Form version ID to group data by individual form versions, or Form ID to group data by form only.",
+                "enum": [
+                  "form_version_id",
+                  "form_id"
+                ]
+              },
+              "conversion_metric_id": {
+                "title": "",
+                "type": "string",
+                "description": "The ID of the conversion metric."
+              },
+              "interval": {
+                "title": "",
+                "type": "object",
+                "description": "The interval used in the API calls to retrieve the reports.",
+                "enum": [
+                  "WEEKLY",
+                  "DAILY",
+                  "MONTHLY",
+                  "HOURLY"
+                ]
+              },
+              "name": {
+                "title": "",
+                "type": "string",
+                "description": "The name of the custom report. The same name is used to name the table in the destination."
+              },
+              "rollback_window_in_days": {
+                "title": "",
+                "type": "integer",
+                "description": "The number of days to look back during each sync to capture late-arriving data. Valid range: 2 to 90 days. Default: 5 days.",
+                "format": "int32"
+              },
+              "statistics": {
+                "title": "",
+                "type": "array",
+                "description": "The list of statistics to be retrieved.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "type": {
+                "title": "",
+                "type": "object",
+                "description": "The type of the custom report.",
+                "enum": [
+                  "SEGMENT",
+                  "FORM",
+                  "FLOW"
+                ]
+              }
+            },
+            "description": "*  custom report(s)"
+          }
+        },
+        "should_sync_events_with_deleted_profiles": {
+          "title": "",
+          "type": "boolean",
+          "description": "Sync events linked to deleted profiles."
+        },
+        "should_sync_predictive_analytics": {
+          "title": "",
+          "type": "boolean",
+          "description": "Sync predictive analytics for `PERSON` table."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "klaviyo_config_V1"
+  ]
+}

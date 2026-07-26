@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShipHero password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShipHero username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "shiphero_config_V1"
+  ]
+}

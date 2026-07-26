@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fillout Base URL."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fillout client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fillout client secret",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "fillout_config_V1",
+    "fillout_auth_V1"
+  ]
+}

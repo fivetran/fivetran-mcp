@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Flywheel Digital API access token.",
+          "format": "password"
+        },
+        "instance": {
+          "title": "",
+          "type": "string",
+          "description": "Your Flywheel Digital instance."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "flywheel_digital_config_V1"
+  ]
+}

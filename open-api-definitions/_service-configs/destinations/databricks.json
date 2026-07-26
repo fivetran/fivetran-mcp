@@ -1,0 +1,183 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication type",
+          "enum": [
+            "PERSONAL_ACCESS_TOKEN",
+            "OAUTH2"
+          ]
+        },
+        "aws_access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your user's access key ID"
+        },
+        "aws_secret_access_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your user's secret access key",
+          "format": "password"
+        },
+        "azure_storage_account_auth_type": {
+          "title": "",
+          "type": "string",
+          "description": "Authentication method for the Azure container you want to use as the external staging for Hybrid Deployment."
+        },
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "Your bucket"
+        },
+        "bucket_region": {
+          "title": "",
+          "type": "string",
+          "description": "Your bucket's region"
+        },
+        "catalog": {
+          "title": "",
+          "type": "string",
+          "description": "Catalog name"
+        },
+        "cloud_provider": {
+          "title": "",
+          "type": "object",
+          "description": "Databricks deployment cloud",
+          "enum": [
+            "AZURE",
+            "GCP",
+            "AWS"
+          ]
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "Directly",
+            "PrivateLink"
+          ]
+        },
+        "create_external_tables": {
+          "title": "",
+          "type": "boolean",
+          "description": "Whether to create external tables"
+        },
+        "create_external_volumes": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether you want Fivetran to create external volumes for unstructured data files."
+        },
+        "disable_vacuum": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether you want Fivetran to disable Vacuum operations on Delta tables."
+        },
+        "external_location": {
+          "title": "",
+          "type": "string",
+          "description": "External location to store Delta tables. Default value: `\"\"`  (null). By default, the external tables will reside in the `/{schema}/{table}` path, and if you specify an external location in the `{externalLocation}/{schema}/{table}` path."
+        },
+        "external_storage_cloud_provider": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "AZURE",
+            "GCP",
+            "AWS"
+          ]
+        },
+        "external_volume_location": {
+          "title": "",
+          "type": "string",
+          "description": "Specifies the external volume path where you want Fivetran to create the unstructured files."
+        },
+        "http_path": {
+          "title": "",
+          "type": "string",
+          "description": "HTTP path"
+        },
+        "oauth2_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth 2.0 client ID"
+        },
+        "oauth2_secret": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth 2.0 secret",
+          "format": "password"
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Personal access token",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "Server port number",
+          "format": "int32"
+        },
+        "s3_bucket_auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication method for the S3 bucket you want to use as the external staging for Hybrid Deployment.",
+          "enum": [
+            "IAM_ROLE",
+            "IAM_USER"
+          ]
+        },
+        "server_host_name": {
+          "title": "",
+          "type": "string",
+          "description": "Server name"
+        },
+        "storage_account_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your storage account key",
+          "format": "password"
+        },
+        "storage_account_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your storage account name"
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "oauth2_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for oAuth 2.0 client ID"
+        },
+        "oauth2_secret": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for oAuth 2.0 secret"
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for personal access token"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "databricks_config_V1",
+    "databricks_esm_keys_config_V1"
+  ]
+}

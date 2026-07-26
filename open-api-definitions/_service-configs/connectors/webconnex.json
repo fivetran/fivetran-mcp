@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Webconnex API key.",
+          "format": "password"
+        },
+        "product": {
+          "type": "object",
+          "description": "Your Webconnex product.",
+          "enum": [
+            "redpodium.com",
+            "ticketspice.com",
+            "givingfuel.com",
+            "regfox.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "webconnex_config_V1"
+  ]
+}

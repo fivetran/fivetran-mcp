@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Alchemer API Secret key.",
+          "format": "password"
+        },
+        "query_param_value": {
+          "title": "",
+          "type": "string",
+          "description": "Your Alchemer API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Alchemer sub-domain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "alchemer_config_V1"
+  ]
+}

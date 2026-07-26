@@ -1,0 +1,430 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts. Default value: `AllAccounts`.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "Specific accounts IDs to sync. Must be populated if `accountSyncMode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "custom_reports": {
+          "title": "",
+          "type": "array",
+          "description": "[Custom reports for Snapchat Ads connector](/docs/connectors/applications/snapchat-ads/custom-reports).",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "action_report_time": {
+                "title": "",
+                "type": "object",
+                "description": "[Determines if reports will be based on imression on coversion time](/docs/connectors/applications/snapchat-ads/custom-reports)",
+                "enum": [
+                  "impression",
+                  "conversion"
+                ]
+              },
+              "add_metric_variants": {
+                "title": "",
+                "type": "boolean",
+                "description": "Add fields for separate \\\"swipe-up\\\" and \\\"view\\\" variants of selected metrics"
+              },
+              "base_metrics_fields": {
+                "title": "",
+                "type": "array",
+                "description": "[List of Core, Additional and Conversion Metrics Stats Fields](/docs/connectors/applications/snapchat-ads/custom-reports#basemetricsfields).",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "quartile_2",
+                    "quartile_3",
+                    "quartile_1",
+                    "conversion_searches_value",
+                    "play_time_millis",
+                    "conversion_login",
+                    "avg_screen_time_millis",
+                    "conversion_page_views",
+                    "saves",
+                    "video_views",
+                    "conversion_list_view",
+                    "conversion_add_billing_value",
+                    "conversion_reserve_value",
+                    "conversion_share",
+                    "conversion_reserve",
+                    "conversion_purchases_value",
+                    "attachment_total_view_time_millis",
+                    "conversion_add_to_wishlist",
+                    "avg_position_screen_time_millis",
+                    "conversion_visit_value",
+                    "story_completes",
+                    "conversion_complete_tutorial_value",
+                    "conversion_start_trial",
+                    "conversion_start_trial_value",
+                    "uniques",
+                    "conversion_subscribe",
+                    "conversion_save",
+                    "conversion_add_cart_value",
+                    "conversion_level_completes",
+                    "screen_time_millis",
+                    "total_reach",
+                    "conversion_invite",
+                    "total_installs",
+                    "conversion_achievement_unlocked_value",
+                    "custom_event_1_value",
+                    "view_completion",
+                    "position_impressions",
+                    "shares",
+                    "video_views_time_based",
+                    "conversion_complete_tutorial",
+                    "conversion_login_value",
+                    "ios_installs",
+                    "conversion_subscribe_value",
+                    "conversion_save_value",
+                    "native_leads",
+                    "conversion_rate",
+                    "avg_view_time_millis",
+                    "conversion_ad_view",
+                    "attachment_avg_view_time_millis",
+                    "earned_impressions",
+                    "custom_event_1",
+                    "impressions",
+                    "position_screen_time_millis",
+                    "custom_event_2",
+                    "conversion_visit",
+                    "conversion_spend_credits_value",
+                    "conversion_add_billing",
+                    "paid_impressions",
+                    "conversion_purchases",
+                    "android_installs",
+                    "swipes",
+                    "conversion_start_checkout",
+                    "conversion_view_content_value",
+                    "conversion_achievement_unlocked",
+                    "position_swipe_up_percent",
+                    "conversion_rate_value",
+                    "frequency",
+                    "custom_event_3",
+                    "custom_event_4",
+                    "custom_event_5",
+                    "earned_reach",
+                    "conversion_start_checkout_value",
+                    "swipe_up_percent",
+                    "conversion_spend_credits",
+                    "profile_clicks",
+                    "conversion_level_completes_value",
+                    "conversion_sign_ups",
+                    "custom_event_5_value",
+                    "story_opens",
+                    "conversion_page_views_value",
+                    "video_views_15s",
+                    "conversion_add_to_wishlist_value",
+                    "custom_event_2_value",
+                    "conversion_ad_click_value",
+                    "attachment_uniques",
+                    "attachment_video_views",
+                    "conversion_list_view_value",
+                    "conversion_ad_view_value",
+                    "conversion_sign_ups_value",
+                    "total_impressions",
+                    "conversion_app_opens_value",
+                    "attachment_quartile_1",
+                    "landing_page_views",
+                    "conversion_app_opens",
+                    "conversion_invite_value",
+                    "attachment_quartile_3",
+                    "spend",
+                    "attachment_quartile_2",
+                    "custom_event_4_value",
+                    "conversion_add_cart",
+                    "conversion_searches",
+                    "attachment_view_completion",
+                    "view_time_millis",
+                    "attachment_frequency",
+                    "conversion_view_content",
+                    "conversion_share_value",
+                    "custom_event_3_value",
+                    "conversion_ad_click"
+                  ]
+                }
+              },
+              "breakdown": {
+                "title": "",
+                "type": "object",
+                "description": "[Sets Breakdown on custom report](/docs/connectors/applications/snapchat-ads/custom-reports#breakdown).",
+                "enum": [
+                  "AD",
+                  "AD_SQUAD",
+                  "CAMPAIGN"
+                ]
+              },
+              "breakout": {
+                "title": "",
+                "type": "object",
+                "description": "[Sets Breakout on custom report](/docs/connectors/applications/snapchat-ads/custom-reports#breakout).",
+                "enum": [
+                  "app",
+                  "offline",
+                  "total",
+                  "total_on_platform",
+                  "web",
+                  "total_off_platform"
+                ]
+              },
+              "dimension": {
+                "title": "",
+                "type": "object",
+                "description": "[Sets Dimension on custom report](/docs/connectors/applications/snapchat-ads/custom-reports#dimension).",
+                "enum": [
+                  "COUNTRY",
+                  "DEVICE_OS",
+                  "DMA",
+                  "DEVICE_MAKE",
+                  "DEMOGRAPHIC",
+                  "REGION",
+                  "INTEREST"
+                ]
+              },
+              "granularity": {
+                "title": "",
+                "type": "object",
+                "description": "[Sets Granularity on custom report](/docs/connectors/applications/snapchat-ads/custom-reports#granularity).",
+                "enum": [
+                  "HOUR",
+                  "DAY"
+                ]
+              },
+              "report_name": {
+                "title": "",
+                "type": "string",
+                "description": "Custom report name (must be unique)"
+              },
+              "sk_ad_metrics_fields": {
+                "title": "",
+                "type": "array",
+                "description": "[List of SKAd  Metrics fields in custom report](/docs/connectors/applications/snapchat-ads/custom-reports#skadmetricsfields).",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "custom_event_2_sk_ad_network_view",
+                    "conversion_invite_sk_ad_network_total",
+                    "custom_event_4_sk_ad_network",
+                    "conversion_list_view_sk_ad_network_view",
+                    "conversion_share_sk_ad_network_total",
+                    "conversion_ad_click_sk_ad_network",
+                    "conversion_save_sk_ad_network_view",
+                    "conversion_sign_ups_sk_ad_network_total",
+                    "conversion_start_trial_sk_ad_network_total",
+                    "conversion_start_trial_sk_ad_network",
+                    "conversion_purchases_sk_ad_network_view",
+                    "conversion_subscribe_sk_ad_network_view",
+                    "conversion_level_completes_sk_ad_network_view",
+                    "conversion_spend_credits_sk_ad_network_view",
+                    "conversion_level_completes_sk_ad_network",
+                    "conversion_add_billing_sk_ad_network_view",
+                    "unknown_sk_ad_network_view",
+                    "conversion_ad_view_sk_ad_network",
+                    "custom_event_5_sk_ad_network_total",
+                    "conversion_rate_sk_ad_network_view",
+                    "conversion_view_content_sk_ad_network",
+                    "conversion_login_sk_ad_network_total",
+                    "conversion_reserve_sk_ad_network_view",
+                    "conversion_app_opens_sk_ad_network_total",
+                    "conversion_spend_credits_sk_ad_network",
+                    "conversion_achievement_unlocked_sk_ad_network_total",
+                    "conversion_reserve_sk_ad_network_total",
+                    "conversion_complete_tutorial_sk_ad_network",
+                    "conversion_ad_click_sk_ad_network_total",
+                    "conversion_add_cart_sk_ad_network",
+                    "conversion_ios_installs_sk_ad_network",
+                    "conversion_assist_install_sk_ad_network_view",
+                    "conversion_view_content_sk_ad_network_total",
+                    "conversion_add_to_wishlist_sk_ad_network_view",
+                    "conversion_start_trial_sk_ad_network_view",
+                    "conversion_add_billing_sk_ad_network",
+                    "conversion_list_view_sk_ad_network",
+                    "conversion_subscribe_sk_ad_network_total",
+                    "conversion_null_sk_ad_network",
+                    "conversion_total_installs_sk_ad_network",
+                    "conversion_sign_ups_sk_ad_network",
+                    "conversion_list_view_sk_ad_network_total",
+                    "conversion_app_opens_sk_ad_network",
+                    "conversion_sign_ups_sk_ad_network_view",
+                    "conversion_achievement_unlocked_sk_ad_network",
+                    "unknown_sk_ad_network",
+                    "conversion_page_views_sk_ad_network_total",
+                    "conversion_ad_view_sk_ad_network_view",
+                    "custom_event_4_sk_ad_network_view",
+                    "conversion_searches_sk_ad_network_total",
+                    "conversion_add_to_wishlist_sk_ad_network",
+                    "conversion_searches_sk_ad_network_view",
+                    "conversion_ad_view_sk_ad_network_total",
+                    "conversion_ios_installs_sk_ad_network_view",
+                    "custom_event_3_sk_ad_network",
+                    "conversion_save_sk_ad_network_total",
+                    "conversion_save_sk_ad_network",
+                    "conversion_add_billing_sk_ad_network_total",
+                    "conversion_null_sk_ad_network_total",
+                    "custom_event_5_sk_ad_network",
+                    "conversion_reserve_sk_ad_network",
+                    "conversion_page_views_sk_ad_network",
+                    "conversion_level_completes_sk_ad_network_total",
+                    "custom_event_1_sk_ad_network_total",
+                    "conversion_add_to_wishlist_sk_ad_network_total",
+                    "conversion_rate_sk_ad_network_total",
+                    "conversion_start_checkout_sk_ad_network_view",
+                    "conversion_app_opens_sk_ad_network_view",
+                    "conversion_spend_credits_sk_ad_network_total",
+                    "conversion_purchases_sk_ad_network",
+                    "conversion_share_sk_ad_network_view",
+                    "custom_event_3_sk_ad_network_total",
+                    "conversion_ios_installs_sk_ad_network_total",
+                    "conversion_rate_sk_ad_network",
+                    "custom_event_1_sk_ad_network_view",
+                    "custom_event_3_sk_ad_network_view",
+                    "conversion_add_cart_sk_ad_network_view",
+                    "conversion_page_views_sk_ad_network_view",
+                    "conversion_purchases_sk_ad_network_total",
+                    "custom_event_1_sk_ad_network",
+                    "conversion_complete_tutorial_sk_ad_network_total",
+                    "custom_event_4_sk_ad_network_total",
+                    "conversion_add_cart_sk_ad_network_total",
+                    "conversion_subscribe_sk_ad_network",
+                    "conversion_start_checkout_sk_ad_network_total",
+                    "custom_event_5_sk_ad_network_view",
+                    "conversion_total_installs_sk_ad_network_view",
+                    "custom_event_2_sk_ad_network_total",
+                    "conversion_view_content_sk_ad_network_view",
+                    "conversion_login_sk_ad_network",
+                    "conversion_login_sk_ad_network_view",
+                    "conversion_start_checkout_sk_ad_network",
+                    "conversion_assist_install_sk_ad_network_total",
+                    "conversion_achievement_unlocked_sk_ad_network_view",
+                    "conversion_searches_sk_ad_network",
+                    "conversion_share_sk_ad_network",
+                    "conversion_ad_click_sk_ad_network_view",
+                    "conversion_total_installs_sk_ad_network_total",
+                    "conversion_assist_install_sk_ad_network",
+                    "unknown_sk_ad_network_total",
+                    "conversion_invite_sk_ad_network",
+                    "conversion_null_sk_ad_network_view",
+                    "conversion_complete_tutorial_sk_ad_network_view",
+                    "conversion_invite_sk_ad_network_view",
+                    "custom_event_2_sk_ad_network"
+                  ]
+                }
+              }
+            },
+            "description": "[Custom reports for Snapchat Ads connector](/docs/connectors/applications/snapchat-ads/custom-reports)."
+          }
+        },
+        "organizations": {
+          "title": "",
+          "type": "array",
+          "description": "Specific organizations IDs to sync. Must be populated if `syncMode` is set to `SpecificOrganizations`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "swipe_attribution_window": {
+          "title": "",
+          "type": "object",
+          "description": "The time period to attribute conversions based on swipes. Default value: `DAY_28`",
+          "enum": [
+            "DAY_1",
+            "DAY_7",
+            "DAY_28"
+          ]
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all organizations or specific organizations. Default value: `AllOrganizations`.",
+          "enum": [
+            "SpecificOrganizations",
+            "AllOrganizations"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `TWELVE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "view_attribution_window": {
+          "title": "",
+          "type": "object",
+          "description": "The time period to attribute conversions based on views. Default value: `DAY_1`",
+          "enum": [
+            "DAY_1",
+            "HOUR_6",
+            "HOUR_3",
+            "HOUR_1",
+            "DAY_7",
+            "NONE",
+            "DAY_28"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Snapchat Ads client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Snapchat Ads client application."
+            }
+          },
+          "description": "Your application client access fields."
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "snapchat_ads_config_V1",
+    "snapchat_ads_auth_V1"
+  ]
+}

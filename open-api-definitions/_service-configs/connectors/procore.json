@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Procore client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Procore client secret.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Procore account environment.",
+          "enum": [
+            "sandbox",
+            "api",
+            "api-monthly"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "procore_config_V1"
+  ]
+}

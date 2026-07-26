@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your StarRez API password",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your StarRez subdomain"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your StarRez API username"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "starrez_config_V1"
+  ]
+}

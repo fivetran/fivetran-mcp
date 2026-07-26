@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Pigment API key.",
+          "format": "password"
+        },
+        "list_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Pigment list ID."
+        },
+        "metric_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Pigment metric ID."
+        },
+        "table_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Pigment table ID."
+        },
+        "view_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Pigment view ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "pigment_config_V1"
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rokt account ID."
+        },
+        "app_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rokt app ID."
+        },
+        "app_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rokt app secret.",
+          "format": "password"
+        },
+        "currency": {
+          "type": "object",
+          "description": "Your Rokt currency.",
+          "enum": [
+            "AUD",
+            "SGD",
+            "KRW",
+            "JPY",
+            "EUR",
+            "GBP",
+            "USD",
+            "CAD",
+            "NZD",
+            "CNY"
+          ]
+        },
+        "historical_sync_time_frame": {
+          "type": "object",
+          "description": "Your Rokt historical sync time frame.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "timezone": {
+          "type": "object",
+          "description": "Your Rokt timezone.",
+          "enum": [
+            "Australia/Sydney",
+            "America/Chicago",
+            "Pacific/Honolulu"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "rokt_config_V1"
+  ]
+}

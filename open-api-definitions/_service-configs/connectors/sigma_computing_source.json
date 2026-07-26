@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_server": {
+          "type": "object",
+          "description": "Your Sigma Computing api server.",
+          "enum": [
+            "api.us-a.aws",
+            "api.uk.aws",
+            "api.uk.azure",
+            "api.ca.aws",
+            "api.ca.azure",
+            "api",
+            "api.eu.aws",
+            "api.au.aws",
+            "aws-api",
+            "api.us.azure",
+            "api.eu.azure"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sigma Computing client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sigma Computing client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sigma_computing_source_config_V1"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Access token` carries the information necessary to access API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ringcentral_config_V1",
+    "ringcentral_auth_V1"
+  ]
+}

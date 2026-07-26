@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "hostname": {
+          "type": "object",
+          "description": "Your National Heavy Vehicle Regulator hostname.",
+          "enum": [
+            "api-mobile.nhvr.gov.au",
+            "api-public.nhvr.gov.au"
+          ]
+        },
+        "subscription_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your NHVR Portal API subscription key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "national_heavy_vehicle_regulator_config_V1"
+  ]
+}

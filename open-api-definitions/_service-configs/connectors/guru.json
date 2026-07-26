@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Guru password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Guru username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "guru_config_V1"
+  ]
+}

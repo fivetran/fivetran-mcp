@@ -1,0 +1,62 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key": {
+          "title": "",
+          "type": "string",
+          "description": "The API key for API authentication.",
+          "format": "password"
+        },
+        "authentication_method": {
+          "title": "",
+          "type": "object",
+          "description": "The authentication method to use. Can be either OAUTH or API_KEY.",
+          "enum": [
+            "API_KEY",
+            "OAUTH"
+          ]
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "The subdomain of your Gainsight Customer Success account."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gainsight_customer_success_config_V1",
+    "gainsight_customer_success_auth_V1"
+  ]
+}

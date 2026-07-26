@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Teams client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Teams client secret.",
+          "format": "password"
+        },
+        "tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Teams tenant ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "microsoft_teams_config_V1"
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "advertisers": {
+                "title": "",
+                "type": "array",
+                "description": "The list of advertisers to include into a sync. This parameter only takes effect when `config_method` is set to `CREATE_NEW`.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "config_method": {
+                "title": "",
+                "type": "object",
+                "description": "The report configuration method. Specifies whether a new configuration is defined manually or an existing configuration is reused. The default value is `CREATE_NEW`.",
+                "enum": [
+                  "CREATE_NEW",
+                  "REUSE_EXISTING"
+                ]
+              },
+              "dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "The report dimensions (filters) to include into a sync. The dimension names are provided in the API format. This is a required parameter when `config_method` is set to `CREATE_NEW`. <br><strong>NOTE:</strong> At least one of the following date dimensions must be included for report data aggregation: `FILTER_DATE` (daily), `FILTER_WEEK` (weekly), or `FILTER_MONTH` (monthly).",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "metrics": {
+                "title": "",
+                "type": "array",
+                "description": "The report metrics to include into a sync. The metric names are provided in the API format. This is a required parameter when `config_method` is set to `CREATE_NEW`.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "partners": {
+                "title": "",
+                "type": "array",
+                "description": "The list of partners to include into a sync. This parameter only takes effect when `config_method` is set to `CREATE_NEW`.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "query_id": {
+                "title": "",
+                "type": "string",
+                "description": "The ID of the query whose configuration you want to reuse. This is a required parameter when `config_method` is set to `REUSE_EXISTING`."
+              },
+              "report_type": {
+                "title": "",
+                "type": "object",
+                "description": "The type of the report to create. This is a required parameter when `config_method` is set to `CREATE_NEW`.",
+                "enum": [
+                  "REACH",
+                  "FLOODLIGHT",
+                  "FULL_PATH",
+                  "INVENTORY_AVAILABILITY",
+                  "REPORT_TYPE_UNSPECIFIED",
+                  "GRP",
+                  "PATH_ATTRIBUTION",
+                  "UNIQUE_REACH_AUDIENCE",
+                  "YOUTUBE_PROGRAMMATIC_GUARANTEED",
+                  "YOUTUBE",
+                  "STANDARD",
+                  "AUDIENCE_COMPOSITION"
+                ]
+              },
+              "split_by_advertiser": {
+                "title": "",
+                "type": "boolean",
+                "description": "If enabled, the report will be queried separately for each advertiser, and the FILTER_ADVERTISER dimension will be added automatically if not already selected. This parameter only takes effect when `config_method` is set to `CREATE_NEW`. The default value is `false`."
+              },
+              "table_name": {
+                "title": "",
+                "type": "string",
+                "description": "The table name within the schema to which connector will sync the data of the specific report."
+              },
+              "update_config_on_each_sync": {
+                "title": "",
+                "type": "boolean",
+                "description": "Specifies whether the configuration is updated before each sync or only when the connector settings are saved. This parameter only takes effect when `config_method` is set to `REUSE_EXISTING`. The default value is `true`."
+              }
+            },
+            "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data."
+          }
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. A change of this value will trigger a re-sync for enabled reports during the next connector sync. <br> <strong>NOTE:</strong> The more months of reporting data you sync, the longer your initial sync will take.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Google Display & Video 360 client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Google Display & Video 360 client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_display_and_video_360_config_V1",
+    "google_display_and_video_360_auth_V1"
+  ]
+}

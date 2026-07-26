@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Jibble client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Jibble client secret.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Jibble environment.",
+          "enum": [
+            "prod",
+            "test"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "jibble_config_V1"
+  ]
+}

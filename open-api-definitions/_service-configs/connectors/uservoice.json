@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "title": "",
+          "type": "string",
+          "description": "Domain of your UserVoice site. If it ends with \".uservoice.com\", you can specify just the subdomain (\"mydomain.uservoice.com\" \u00e2\u0086\u0092 \"mydomain\")"
+        },
+        "key": {
+          "title": "",
+          "type": "string",
+          "description": "The UserVoice API key.",
+          "format": "password"
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "The UserVoice API secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "uservoice_config_V1"
+  ]
+}

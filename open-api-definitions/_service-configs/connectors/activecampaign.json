@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your ActiveCampaign API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your ActiveCampaign sub-domain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "activecampaign_config_V1"
+  ]
+}

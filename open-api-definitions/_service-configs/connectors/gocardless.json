@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your GoCardless API token.",
+          "format": "password"
+        },
+        "sandbox_account": {
+          "type": "object",
+          "description": "Your GoCardless account type.",
+          "enum": [
+            "api",
+            "api-sandbox"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gocardless_config_V1"
+  ]
+}

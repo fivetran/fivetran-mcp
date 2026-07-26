@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your RevX Password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your RevX Username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "revx_config_V1"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "connection_string": {
+          "title": "",
+          "type": "string",
+          "description": "Connection string of the Event Hub Namespace you want to sync.",
+          "format": "password"
+        },
+        "consumer_group": {
+          "title": "",
+          "type": "string",
+          "description": "Name of consumer group created for Fivetran."
+        },
+        "message_type": {
+          "title": "",
+          "type": "object",
+          "description": "Message type.",
+          "enum": [
+            "Text",
+            "Json"
+          ]
+        },
+        "sync_type": {
+          "title": "",
+          "type": "object",
+          "description": "Sync type.  Unpacked messages must be valid JSON.",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "azure_event_hub_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sage HR API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sage HR subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sage_hr_config_V1"
+  ]
+}

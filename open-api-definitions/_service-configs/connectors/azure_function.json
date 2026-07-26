@@ -1,0 +1,90 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "connection_method": {
+          "title": "",
+          "type": "object",
+          "description": "Connection Method. Possible values:  `DIRECT`: Fivetran will connect directly to your function, `PRIVATE_LINK`: Fivetran will connect to your storage container using PrivateLink.",
+          "enum": [
+            "DIRECT",
+            "PRIVATE_LINK"
+          ]
+        },
+        "custom_payloads": {
+          "title": "",
+          "type": "array",
+          "description": "The list of key-value pairs that can be used to specify custom information to the function at runtime.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "key": {
+                "title": "",
+                "type": "string",
+                "description": "Payload Key"
+              },
+              "value": {
+                "title": "",
+                "type": "string",
+                "description": "Payload Value"
+              }
+            },
+            "description": "The list of key-value pairs that can be used to specify custom information to the function at runtime."
+          }
+        },
+        "function_app": {
+          "title": "",
+          "type": "string",
+          "description": "Function app name in Azure portal."
+        },
+        "function_key": {
+          "title": "",
+          "type": "string",
+          "description": "Function key used for authorization.",
+          "format": "password"
+        },
+        "function_name": {
+          "title": "",
+          "type": "string",
+          "description": "Name of the function to be triggered."
+        },
+        "secrets": {
+          "title": "",
+          "type": "string",
+          "description": "The secrets that should be passed to the function at runtime.",
+          "format": "password"
+        },
+        "secrets_list": {
+          "title": "",
+          "type": "array",
+          "description": "The list of secrets that should be passed to the function at runtime.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "key": {
+                "title": "",
+                "type": "string",
+                "description": "Key"
+              },
+              "value": {
+                "title": "",
+                "type": "string",
+                "description": "Value",
+                "format": "password"
+              }
+            },
+            "description": "The list of secrets that should be passed to the function at runtime."
+          }
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "azure_function_config_V1"
+  ]
+}

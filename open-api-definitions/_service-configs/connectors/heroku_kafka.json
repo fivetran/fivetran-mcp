@@ -1,0 +1,84 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_cert": {
+          "title": "",
+          "type": "string",
+          "description": "Heroku Kafka client certificate. Required for `TLS` security protocol.",
+          "format": "password"
+        },
+        "client_cert_key": {
+          "title": "",
+          "type": "string",
+          "description": "Heroku Kafka client certificate key.  Required for `TLS` security protocol.",
+          "format": "password"
+        },
+        "consumer_group": {
+          "title": "",
+          "type": "string",
+          "description": "Heroku Kafka consumer group name."
+        },
+        "key_store_type": {
+          "title": "",
+          "type": "string",
+          "description": "Key Store Type"
+        },
+        "message_type": {
+          "title": "",
+          "type": "object",
+          "description": "Heroku Kafka message type.",
+          "enum": [
+            "Text",
+            "Json"
+          ]
+        },
+        "security_protocol": {
+          "title": "",
+          "type": "object",
+          "description": "Security protocol for Heroku Kafka interaction.",
+          "enum": [
+            "PLAINTEXT",
+            "TLS"
+          ]
+        },
+        "servers": {
+          "title": "",
+          "type": "array",
+          "description": "Comma-separated list of Heroku Kafka servers in the format `server:port`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_type": {
+          "title": "",
+          "type": "object",
+          "description": "Heroku Kafka sync type.  Unpacked messages must be valid JSON.",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        },
+        "trust_store_type": {
+          "title": "",
+          "type": "string",
+          "description": "Trust Store Type"
+        },
+        "trusted_cert": {
+          "title": "",
+          "type": "string",
+          "description": "Heroku Kafka trusted certificate. Required for `TLS` security protocol.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "heroku_kafka_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Statuspage API Key.",
+          "format": "password"
+        },
+        "organization": {
+          "title": "",
+          "type": "string",
+          "description": "Your Statuspage Organization ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "statuspage_config_V1"
+  ]
+}

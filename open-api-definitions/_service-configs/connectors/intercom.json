@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "data_region": {
+          "title": "Data Region",
+          "type": "object",
+          "description": "The Intercom region for your app. Options - empty string (US/default), 'eu' (Europe), 'au' (Australia). Based on your Intercom app URL (app.intercom.io for US, app.eu.intercom.io for EU, app.au.intercom.io for AU). Cannot be changed after initial connection creation.",
+          "enum": [
+            "",
+            "eu",
+            "au"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Access Token` carries the information necessary for API resources to fetch data."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "intercom_config_V1",
+    "intercom_auth_V1"
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account": {
+          "type": "object",
+          "description": "Your Ordway account type.",
+          "enum": [
+            "https://api.ordwaylabs.com",
+            "https://eu-sandbox-api.ordwaylabs.com",
+            "https://api.sandbox.ordwaylabs.com",
+            "https://eu-api.ordwaylabs.com"
+          ]
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ordway API key.",
+          "format": "password"
+        },
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ordway API token.",
+          "format": "password"
+        },
+        "company": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ordway company name."
+        },
+        "email_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ordway user email ID."
+        },
+        "webhook_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ordway Webhook name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ordway_config_V1"
+  ]
+}

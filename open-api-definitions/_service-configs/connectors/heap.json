@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The S3 bucket name."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "heap_config_V1"
+  ]
+}

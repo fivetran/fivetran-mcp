@@ -1,0 +1,93 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication Mode",
+          "enum": [
+            "BASIC",
+            "OAUTH"
+          ]
+        },
+        "domain_host_name": {
+          "title": "",
+          "type": "string",
+          "description": "Workday host name."
+        },
+        "integration_system_id": {
+          "title": "",
+          "type": "string",
+          "description": "Integration System ID"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Workday password.",
+          "format": "password"
+        },
+        "subscriber_id": {
+          "title": "",
+          "type": "string",
+          "description": "WID of the Workday Integration Transaction Log Service subscriber. Used to scope the V2 optimised history transaction-log queries to a specific integration subscriber."
+        },
+        "tenant": {
+          "title": "",
+          "type": "string",
+          "description": "Workday tenant name"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Username of your Workday Integration System User account"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ID of your Workday Client App"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Secret of your Workday Client App"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for workday password."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for username of your Workday Integration System User account"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "workday_hcm_config_V1",
+    "workday_hcm_auth_V1",
+    "workday_hcm_esm_keys_config_V1"
+  ]
+}

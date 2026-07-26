@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your When I Work password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your When I Work username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "when_i_work_config_V1"
+  ]
+}

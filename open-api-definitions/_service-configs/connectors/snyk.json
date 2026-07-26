@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Snyk API token.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Snyk region.",
+          "enum": [
+            "",
+            ".au",
+            ".us",
+            ".eu"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "snyk_config_V1"
+  ]
+}

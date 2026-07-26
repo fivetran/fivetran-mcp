@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Breathe HR API key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Breathe HR environment.",
+          "enum": [
+            "api.breathehr.com",
+            "api.sandbox.breathehr.info"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "breathe_hr_config_V1"
+  ]
+}

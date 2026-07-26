@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your ChurnZero API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your ChurnZero subdomain"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your ChurnZero username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "churnzero_config_V1"
+  ]
+}

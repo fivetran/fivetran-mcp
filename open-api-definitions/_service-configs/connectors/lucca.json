@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Lucca API key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Lucca environment.",
+          "enum": [
+            "ilucca-test.ch",
+            "ilucca.net",
+            "ilucca-demo.ch",
+            "ilucca-test.net",
+            "ilucca.ch",
+            "ilucca-demo.net"
+          ]
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Lucca subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "lucca_config_V1"
+  ]
+}

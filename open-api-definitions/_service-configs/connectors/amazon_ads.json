@@ -1,0 +1,83 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "attribution_window": {
+          "title": "",
+          "type": "object",
+          "description": "Time period used to attribute conversions based on clicks.",
+          "enum": [
+            "DAY_14",
+            "DAY_1",
+            "DAY_30",
+            "DAY_7"
+          ]
+        },
+        "profiles": {
+          "title": "",
+          "type": "array",
+          "description": "Specific User Profile IDs to sync. Must be populated if `sync_mode` is set to `SpecificProfiles`.",
+          "items": {
+            "title": "",
+            "type": "integer",
+            "description": "",
+            "format": "int32"
+          }
+        },
+        "region": {
+          "title": "",
+          "type": "object",
+          "description": "The region used by the Amazon Ads profile.",
+          "enum": [
+            "NORTH_AMERICA",
+            "EUROPE",
+            "FAR_EAST"
+          ]
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Option to select connector should sync all profiles or specific profiles.",
+          "enum": [
+            "AllProfiles",
+            "SpecificProfiles"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Amazon Ads client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Amazon Ads client application."
+            }
+          },
+          "description": "Your application client access fields"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "amazon_ads_config_V1",
+    "amazon_ads_auth_V1"
+  ]
+}

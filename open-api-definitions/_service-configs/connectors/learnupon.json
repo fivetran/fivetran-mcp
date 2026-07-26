@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your LearnUpon API key.",
+          "format": "password"
+        },
+        "custom_region": {
+          "title": "",
+          "type": "string",
+          "description": "Your LearnUpon custom region."
+        },
+        "region": {
+          "type": "object",
+          "description": "Your LearnUpon region.",
+          "enum": [
+            "learnuponau.com",
+            "",
+            "learnupon.com"
+          ]
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your LearnUpon subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your LearnUpon username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "learnupon_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Writesonic API key.",
+          "format": "password"
+        },
+        "project_website_url": {
+          "title": "",
+          "type": "string",
+          "description": "Website URL of your Writesonic project."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "writesonic_config_V1"
+  ]
+}

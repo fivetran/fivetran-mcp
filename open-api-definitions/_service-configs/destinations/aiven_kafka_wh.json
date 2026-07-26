@@ -1,0 +1,115 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bootstrap_servers": {
+          "title": "",
+          "type": "array",
+          "description": "",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "connection_method": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "privatelink",
+            "direct"
+          ]
+        },
+        "data_format": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "JSON",
+            "AVRO"
+          ]
+        },
+        "enable_single_topic": {
+          "title": "",
+          "type": "boolean",
+          "description": ""
+        },
+        "num_of_partitions": {
+          "title": "",
+          "type": "integer",
+          "description": "",
+          "format": "int32"
+        },
+        "replication_factor": {
+          "title": "",
+          "type": "integer",
+          "description": "",
+          "format": "int32"
+        },
+        "sasl_mechanism": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "SCRAM_SHA_512",
+            "SCRAM_SHA_256"
+          ]
+        },
+        "sasl_plain_key": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "sasl_plain_secret": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "schema_registry": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "AIVEN_KARAPACE",
+            "CONFLUENT_CLOUD"
+          ]
+        },
+        "schema_registry_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "schema_registry_api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "schema_registry_url": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "security_protocol": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "SASL",
+            "SASL_PLAINTEXT"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "aiven_kafka_wh_config_V1"
+  ]
+}

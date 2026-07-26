@@ -1,0 +1,57 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "data_model_path_alias_list": {
+          "title": "",
+          "type": "array",
+          "description": "Data Model Paths (Optional)",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "alias": {
+                "title": "",
+                "type": "string",
+                "description": "Schema name"
+              },
+              "path": {
+                "title": "",
+                "type": "string",
+                "description": "Path"
+              }
+            },
+            "description": "Data Model Paths (Optional)"
+          }
+        },
+        "folder_path": {
+          "title": "",
+          "type": "string",
+          "description": "The folder path to save data models and reports."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Business Intelligence user password.",
+          "format": "password"
+        },
+        "server_url": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Business Intelligence Instance URL."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Business Intelligence username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "oracle_business_intelligence_publisher_config_V1"
+  ]
+}

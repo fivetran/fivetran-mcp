@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your iLevel Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your iLevel Client Secret.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your iLevel Environment.",
+          "enum": [
+            "api.ilevelsolutions.com",
+            "sandapi.ilevelsolutions.com",
+            "sandapi.ilevelsolutions.eu",
+            "api.ilevelsolutions.eu"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ilevel_config_V1"
+  ]
+}

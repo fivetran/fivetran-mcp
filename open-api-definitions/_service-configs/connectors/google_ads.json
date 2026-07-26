@@ -1,0 +1,142 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "The list of Account IDs to sync. Must be populated if `sync_mode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "conversion_window_size": {
+          "title": "",
+          "type": "integer",
+          "description": "A period of time in days during which a conversion is recorded.",
+          "format": "int32"
+        },
+        "customer_id": {
+          "title": "",
+          "type": "string",
+          "description": "ID of the customer, can be retrieved from your AdWords dashboard."
+        },
+        "manager_accounts": {
+          "title": "",
+          "type": "array",
+          "description": "The list of the Manager Account IDs whose clients will be synced. Must be populated if `sync_mode` is set to `ManagerAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "fields": {
+                "title": "",
+                "type": "array",
+                "description": "A list of the fields to sync. Must be populated if `config_type` is set to `Custom`.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_type": {
+                "title": "",
+                "type": "string",
+                "description": "The name of the Google Ads report from which the connector will sync the data. [Possible report_type values](https://developers.google.com/adwords/api/docs/appendix/reports#report-types)."
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "The table name within the schema to which connector will sync the data of the specific report."
+              }
+            },
+            "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data."
+          }
+        },
+        "skip_empty_reports": {
+          "title": "",
+          "type": "boolean",
+          "description": "Toggles the [\"Skip empty reports\"](/docs/connectors/applications/google-ads#skipemptyreports) feature. Enabled by default"
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts.",
+          "enum": [
+            "ManagerAccounts",
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "The number of months' worth of reporting data you'd like to include in your initial sync. A change of this value will trigger a re-sync for enabled custom and prebuilt reports during the next connector sync. Default value: `TWELVE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Google Ads client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Google Ads client application."
+            },
+            "developer_token": {
+              "title": "",
+              "type": "string",
+              "description": "Not required. You can provide your own developer token with your custom client."
+            },
+            "user_agent": {
+              "title": "",
+              "type": "string",
+              "description": "Your company's name in your Google Ads client application."
+            }
+          },
+          "description": "We use a Fivetran developer token to access the Google Ads API. If this is your first Google Ads connector with custom authorization, you should create a new Google API Console project. Each Google API Console project can be associated with the developer token from only one manager account. Once you make a Google Ads API request, the developer token is permanently paired to the Google API Console project. Otherwise, we can't bind the Fivetran developer token to your client. You can reuse the same project to create other Google Ads connectors. You can use your own developer token with your custom client if you have one, but it's not required"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_ads_config_V1",
+    "google_ads_auth_V1"
+  ]
+}

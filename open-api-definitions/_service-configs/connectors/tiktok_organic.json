@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_environment": {
+          "type": "object",
+          "description": "Your TikTok Organic API environment.",
+          "enum": [
+            "business-api.tiktok.com",
+            "sandbox-ads.tiktok.com"
+          ]
+        },
+        "app_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tiktok Organic app ID."
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "The secret of the app registered in your TikTok developer account.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "tiktok_organic_config_V1"
+  ]
+}

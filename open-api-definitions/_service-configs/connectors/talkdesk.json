@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Talkdesk Account Name."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Client ID of your OAuth Client"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The Client Secret of your OAuth Client",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Talkdesk region (\".com\",\".eu\",\"ca.com\")",
+          "enum": [
+            ".com",
+            "ca.com",
+            ".eu"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "talkdesk_config_V1"
+  ]
+}

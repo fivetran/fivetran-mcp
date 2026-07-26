@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshservice API Key.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your company's freshservice subdomain (usually **company**.freshservice.com)."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "freshservice_config_V1"
+  ]
+}

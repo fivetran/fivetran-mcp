@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Cabcharge client ID."
+        },
+        "email_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Cabcharge email ID."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Cabcharge password.",
+          "format": "password"
+        },
+        "subscription_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Cabcharge subscription key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "cabcharge_config_V1"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "personal_api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Monday.com Personal API Token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "monday_config_V1"
+  ]
+}

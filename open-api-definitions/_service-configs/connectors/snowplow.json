@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "config_repository_url": {
+          "title": "",
+          "type": "string",
+          "description": "Public repository URL containing JSON configuration files."
+        },
+        "enable_enrichments": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable Enrichments"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "snowplow_config_V1"
+  ]
+}

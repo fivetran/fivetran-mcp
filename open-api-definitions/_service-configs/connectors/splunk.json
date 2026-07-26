@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "The Splunk service host address."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Splunk user's password.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The Splunk service host port.",
+          "format": "int32"
+        },
+        "rollback_window": {
+          "title": "",
+          "type": "integer",
+          "description": "Set a rollback window between 0 and 7 days. The default is 2 days.",
+          "format": "int32"
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The Splunk username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "splunk_config_V1"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Totango personal access token.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Totango region.",
+          "enum": [
+            "api-eu1",
+            "api"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "totango_config_V1"
+  ]
+}

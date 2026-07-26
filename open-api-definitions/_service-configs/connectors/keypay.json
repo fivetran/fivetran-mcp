@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your KeyPay API key.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your KeyPay region.",
+          "enum": [
+            "com.my",
+            "co.nz",
+            "co.uk",
+            "com.au",
+            "com.sg"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "keypay_config_V1"
+  ]
+}

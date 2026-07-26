@@ -1,0 +1,169 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication mode: PASSWORD (username/password) or TOKEN (key-based authentication)",
+          "enum": [
+            "PASSWORD",
+            "TOKEN"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID for token authentication (required for TOKEN authentication)"
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "Workday Adaptive host URL, including the scheme, required for TOKEN authentication"
+        },
+        "instance_code": {
+          "title": "",
+          "type": "string",
+          "description": "Instance code for Workday Adaptive Planning."
+        },
+        "isu": {
+          "title": "",
+          "type": "string",
+          "description": "Integration System User (ISU) for token authentication (required for TOKEN authentication)"
+        },
+        "login": {
+          "title": "",
+          "type": "string",
+          "description": "User email address (required for PASSWORD authentication)"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "User password (required for PASSWORD authentication)",
+          "format": "password"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "PEM-formatted PKCS#8 private key, including BEGIN/END PRIVATE KEY markers, for token authentication",
+          "format": "password"
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "Custom Report",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "account_sync_mode": {
+                "title": "",
+                "type": "object",
+                "description": "Account sync mode for the table. Options: `SYNC_ALL_ACCOUNTS` (sync all accounts) or `SELECT_SPECIFIC_ACCOUNTS` (sync selected accounts only).",
+                "enum": [
+                  "SELECT_SPECIFIC_ACCOUNTS",
+                  "SYNC_ALL_ACCOUNTS"
+                ]
+              },
+              "currency": {
+                "title": "",
+                "type": "string",
+                "description": "List of currencies to sync for the table, if applicable."
+              },
+              "dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "List of dimensions to sync for the table, if applicable.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "include_zero_rows": {
+                "title": "",
+                "type": "boolean",
+                "description": "Include zero rows in the table sync."
+              },
+              "level_sync_mode": {
+                "title": "",
+                "type": "object",
+                "description": "Level sync mode for the table. Options: `SYNC_ALL_LEVELS` (sync all levels) or `SELECT_SPECIFIC_LEVELS` (sync selected levels only).",
+                "enum": [
+                  "SELECT_SPECIFIC_LEVELS",
+                  "SYNC_ALL_LEVELS"
+                ]
+              },
+              "selected_accounts": {
+                "title": "",
+                "type": "array",
+                "description": "List of account IDs to sync when `accountSyncMode` is `SELECT_SPECIFIC_ACCOUNTS`. Each ID should be in the format: `<accountId>,<isAssumption>` (e.g., `1,false`).",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "selected_levels": {
+                "title": "",
+                "type": "array",
+                "description": "List of level IDs to sync when `levelSyncMode` is `SELECT_SPECIFIC_LEVELS`.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "sync_descendant_accounts": {
+                "title": "",
+                "type": "boolean",
+                "description": "Flag to indicate if descendant accounts should be included for the selected accounts."
+              },
+              "sync_descendant_levels": {
+                "title": "",
+                "type": "boolean",
+                "description": "Flag to indicate if descendant levels should be included for the selected levels."
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "Table name to be synced."
+              },
+              "version_sync_strategy": {
+                "title": "",
+                "type": "object",
+                "description": "Version sync strategy for the table, `SYNC_ALL_AND_NEW_VERSIONS` or `SYNC_SELECT_VERSIONS`.",
+                "enum": [
+                  "SYNC_SELECT_VERSIONS",
+                  "SYNC_ALL_AND_NEW_VERSIONS"
+                ]
+              },
+              "versions": {
+                "title": "",
+                "type": "array",
+                "description": "List of versions to sync for the table, if versionSyncStrategy is `SYNC_SELECT_VERSIONS`.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              }
+            },
+            "description": "Custom Report"
+          }
+        },
+        "tenant": {
+          "title": "",
+          "type": "string",
+          "description": "Tenant identifier (required for TOKEN authentication)"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "workday_adaptive_config_V1"
+  ]
+}

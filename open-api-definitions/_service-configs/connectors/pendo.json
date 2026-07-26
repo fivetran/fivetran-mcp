@@ -1,0 +1,143 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "app_ids": {
+          "title": "",
+          "type": "array",
+          "description": "Specific App IDs to sync. Must be populated if `sync_mode` is set to `SpecificAppIds`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "aws_credentials": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "title": "",
+              "type": "string",
+              "description": "AWS bucket name"
+            },
+            "home_folder": {
+              "title": "",
+              "type": "string",
+              "description": "AWS home folder"
+            },
+            "s3_role_arn": {
+              "title": "",
+              "type": "string",
+              "description": "AWS s3 Role Arn",
+              "format": "password"
+            }
+          },
+          "description": "Configuration for AWS S3 Storage"
+        },
+        "azure_credentials": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "connection_string": {
+              "title": "",
+              "type": "string",
+              "description": "Azure connection string",
+              "format": "password"
+            },
+            "container_name": {
+              "title": "",
+              "type": "string",
+              "description": "Azure container name"
+            },
+            "home_folder": {
+              "title": "",
+              "type": "string",
+              "description": "Azure home folder"
+            }
+          },
+          "description": "Configuration for Azure Blob Storage"
+        },
+        "backward_sync_limit_date": {
+          "title": "",
+          "type": "string",
+          "description": "The start date (YYYY-MM-DD) from which to sync historical data."
+        },
+        "export_storage_type": {
+          "title": "",
+          "type": "object",
+          "description": "Denotes which storage option is chosen",
+          "enum": [
+            "AZURE",
+            "GCS",
+            "AWS_S3"
+          ]
+        },
+        "gcs_credentials": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "title": "",
+              "type": "string",
+              "description": "GCS bucket name"
+            },
+            "home_folder": {
+              "title": "",
+              "type": "string",
+              "description": "GCS home folder"
+            }
+          },
+          "description": "Configuration for GCS Bucket"
+        },
+        "historical_sync_time_frame": {
+          "title": "",
+          "type": "object",
+          "description": "The time range for which historical data should be synced. Default value: `All Time`.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "integration_key": {
+          "title": "",
+          "type": "string",
+          "description": "The integration key of the Pendo account.",
+          "format": "password"
+        },
+        "region": {
+          "title": "",
+          "type": "object",
+          "description": "The Pendo account region.",
+          "enum": [
+            "EU",
+            "US1",
+            "AU",
+            "JPN",
+            "US"
+          ]
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all App IDs or specific App IDs. Default value: `AllAppIds`.",
+          "enum": [
+            "AllAppIds",
+            "SpecificAppIds"
+          ]
+        },
+        "use_data_sync": {
+          "title": "",
+          "type": "boolean",
+          "description": "Toggle field to determine whether connector is syncing from API or from Data Sync"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "pendo_config_V1"
+  ]
+}

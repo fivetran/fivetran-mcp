@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID of the OAuth app that you created in Bynder for the connection."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Client secret of the OAuth app that you created in Bynder for the connection.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Bynder subdomain."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "bynder_config_V1",
+    "bynder_auth_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Lessonly password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Lessonly username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "lessonly_config_V1"
+  ]
+}

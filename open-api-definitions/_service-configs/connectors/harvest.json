@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Harvest Account ID."
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Harvest Personal Access Token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "harvest_config_V1"
+  ]
+}

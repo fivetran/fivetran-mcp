@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "business_unit": {
+          "title": "",
+          "type": "string",
+          "description": "Your Deposco business unit."
+        },
+        "custom_base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Deposco custom base URL."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Deposco environment.",
+          "enum": [
+            "",
+            "sandboxapi.deposco.com/config",
+            "sandboxapi.deposco.com/ua",
+            "api.deposco.com"
+          ]
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Deposco password.",
+          "format": "password"
+        },
+        "tenant_code": {
+          "title": "",
+          "type": "string",
+          "description": "Your Deposco tenant code."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Deposco username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "deposco_config_V1"
+  ]
+}

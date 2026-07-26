@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Eventsforce account name."
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Eventsforce API secret key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "eventsforce_config_V1"
+  ]
+}

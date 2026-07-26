@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bearer_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ada API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ada sub-domain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ada_config_V1"
+  ]
+}

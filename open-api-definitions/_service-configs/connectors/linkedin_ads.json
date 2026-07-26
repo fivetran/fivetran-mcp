@@ -1,0 +1,114 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Account IDs to sync. Must be populated if `syncMode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "ad_analytics": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all analytic reports or specific. Default value: `AllReports`",
+          "enum": [
+            "SpecificReports",
+            "AllReports"
+          ]
+        },
+        "post_click_attribution_window_size": {
+          "title": "",
+          "type": "object",
+          "description": "The time period to attribute conversions based on clicks. Default value: `DAY_30`",
+          "enum": [
+            "DAY_1",
+            "DAY_30",
+            "DAY_7",
+            "DAY_28"
+          ]
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "Specific analytics reports to sync. Must be populated if adAnalytics is set to 'SpecificReports'.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts. Default value: `AllAccounts`",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months for which to query reporting data included in the initial sync. This number cannot be modified once the connector is created. Default value: `ALL_TIME`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "view_through_attribution_window_size": {
+          "title": "",
+          "type": "object",
+          "description": "The time period to attribute conversions based on views. Default value: `DAY_7`",
+          "enum": [
+            "DAY_1",
+            "DAY_30",
+            "DAY_7",
+            "DAY_28"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your LinkedIn client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your LinkedIn client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "linkedin_ads_config_V1",
+    "linkedin_ads_auth_V1"
+  ]
+}

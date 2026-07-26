@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Shopware domain."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Shopware password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Shopware username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "shopware_config_V1"
+  ]
+}

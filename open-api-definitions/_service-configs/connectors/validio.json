@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Validio access key ID.",
+          "format": "password"
+        },
+        "secret_access_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Validio secret access key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Validio subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "validio_config_V1"
+  ]
+}

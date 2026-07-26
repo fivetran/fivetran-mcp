@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_sid": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fone Dynamics account SID."
+        },
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fone Dynamics API token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "fone_dynamics_config_V1"
+  ]
+}

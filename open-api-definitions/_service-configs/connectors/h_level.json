@@ -1,0 +1,38 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your HighLevel client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your HighLevel client secret.",
+          "format": "password"
+        },
+        "location_ids": {
+          "title": "",
+          "type": "string",
+          "description": "Your HighLevel location ID."
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your HighLevel subdomain.",
+          "enum": [
+            "leadconnectorhq",
+            "gohighlevel"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "h_level_config_V1"
+  ]
+}

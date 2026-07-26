@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Consensus Demo Automation Platform API key.",
+          "format": "password"
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Consensus Demo Automation Platform API secret.",
+          "format": "password"
+        },
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "The email address of the Consensus Demo Automation Platform account you want Fivetran to use to access your data."
+        },
+        "source_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Consensus Demo Automation Platform source name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "consensus_demo_automation_platform_config_V1"
+  ]
+}

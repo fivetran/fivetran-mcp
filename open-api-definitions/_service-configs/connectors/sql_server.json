@@ -1,0 +1,246 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Require TLS."
+        },
+        "backup_log_format": {
+          "title": "",
+          "type": "string",
+          "description": "Filename pattern for transaction log backup files."
+        },
+        "backup_log_path": {
+          "title": "",
+          "type": "string",
+          "description": "Full path to the local directory containing transaction log backup files. Required if `backup_storage_type` is `ALTERNATE_LOCATION`"
+        },
+        "backup_storage_type": {
+          "title": "",
+          "type": "object",
+          "description": "Location of transaction log backup files when using BACKUP binary log type. Possible values: `\"AZURE\"`, `\"ALTERNATE_LOCATION\"`, `\"AWS\"`, `\"GCS\"`, `\"MSDB\"`.",
+          "enum": [
+            "MSDB",
+            "AZURE",
+            "ALTERNATE_LOCATION",
+            "GCS",
+            "AWS"
+          ]
+        },
+        "binary_log_truncater": {
+          "title": "",
+          "type": "object",
+          "description": "Determine who is responsible for truncating the online transaction log. Possible values: `\"FIVETRAN\"`, `\"USER_MANAGED\"`, `\"SQL_SERVER_AGENT\"`. Default value is `\"FIVETRAN\"`.",
+          "enum": [
+            "FIVETRAN",
+            "USER_MANAGED",
+            "SQL_SERVER_AGENT"
+          ]
+        },
+        "binary_log_type": {
+          "title": "",
+          "type": "object",
+          "description": "Source of transaction log data when using Binary Log Reader. Possible values: `\"ONLINE\"`, `\"BACKUP\"`. Default value is `\"ONLINE\"`.",
+          "enum": [
+            "BACKUP",
+            "ONLINE"
+          ]
+        },
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the S3 bucket."
+        },
+        "connection_string": {
+          "title": "",
+          "type": "string",
+          "description": "The Azure Blob Storage container connection string.",
+          "format": "password"
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values: `Directly`, `PrivateLink`, `SshTunnel`. `SshTunnel` is used as a value if this parameter is omitted in the request and any of the following parameter's values is specified: `tunnel_host`, `tunnel_port`, `tunnel_user`. Otherwise, `Directly` is used as a value if the parameter is omitted.",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "container_name": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the Azure Blob Storage container.",
+          "format": "password"
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": "The database name."
+        },
+        "ekm_key_identifiers": {
+          "title": "",
+          "type": "array",
+          "description": "The list of Azure Key Vault key identifiers used for TDE. Each identifier should be in the format `https://<vault-name>.vault.azure.net/keys/<key-name>` or `https://<vault-name>.vault.azure.net/keys/<key-name>/<version>`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "enable_tde": {
+          "title": "",
+          "type": "boolean",
+          "description": "Use transparent data encryption (TDE)"
+        },
+        "external_id": {
+          "title": "",
+          "type": "string",
+          "description": "The external ID to be used when assuming the IAM role."
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "DB instance host or IP address."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The user's password.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The port number.",
+          "format": "int32"
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The ARN of the IAM role that has access to the S3 bucket.",
+          "format": "password"
+        },
+        "tde_certificate_backup": {
+          "title": "",
+          "type": "string",
+          "description": "Certificate file used to protect a database encryption key. Used when decrypting backup logs.",
+          "format": "password"
+        },
+        "tde_certificate_path": {
+          "title": "",
+          "type": "string",
+          "description": "Certificate file path used to protect a database encryption key. Used when decrypting online logs",
+          "format": "password"
+        },
+        "tde_password": {
+          "title": "",
+          "type": "string",
+          "description": "Password of the TDE private key",
+          "format": "password"
+        },
+        "tde_private_key_backup": {
+          "title": "",
+          "type": "string",
+          "description": "Private key file associated with the TDE certificate. Used when decrypting backup logs.",
+          "format": "password"
+        },
+        "tde_private_key_path": {
+          "title": "",
+          "type": "string",
+          "description": "Private key file path associated with the TDE certificate. Used when decrypting online logs.",
+          "format": "password"
+        },
+        "tde_setting": {
+          "title": "",
+          "type": "object",
+          "description": "Transparent Data Encryption (TDE) setting. Possible values: `\"OFF\"`, `\"CERTIFICATE\"`. Default value is `\"OFF\"`.",
+          "enum": [
+            "CERTIFICATE",
+            "OFF"
+          ]
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH host, specify only to connect via an SSH tunnel (do not use a load balancer)."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH port, specify only to connect via an SSH tunnel.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user, specify only to connect via an SSH tunnel."
+        },
+        "update_method": {
+          "title": "",
+          "type": "object",
+          "description": "(Optional) The incremental update method the connector will use. The possible values are `\"TELEPORT\"` or `\"NATIVE_UPDATE\"`. The type defaults to `\"NATIVE_UPDATE\"` if the value is set to `null` or not specified.",
+          "enum": [
+            "BINARY_LOG_READER",
+            "NATIVE_UPDATE",
+            "TELEPORT"
+          ]
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The user name.  For Azure Databases, the format must be `user@domain`."
+        },
+        "windows_auth_client_certificate": {
+          "title": "",
+          "type": "string",
+          "description": "Fivetran client certificate to add to the Windows Auth server's trusted clients.",
+          "format": "password"
+        },
+        "windows_auth_grpc_host": {
+          "title": "",
+          "type": "string",
+          "description": "Hostname of the Windows Auth gRPC server."
+        },
+        "windows_auth_grpc_port": {
+          "title": "",
+          "type": "integer",
+          "description": "Port of the Windows Auth gRPC server.",
+          "format": "int32"
+        },
+        "windows_auth_server_certificate": {
+          "title": "",
+          "type": "string",
+          "description": "PEM certificate of the Windows Auth gRPC server used to verify the server identity.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sql_server_config_V1",
+    "sql_server_esm_keys_config_V1"
+  ]
+}

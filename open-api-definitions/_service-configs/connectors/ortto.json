@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ortto API key.",
+          "format": "password"
+        },
+        "base_url": {
+          "type": "object",
+          "description": "Your Ortto base URL. Possible values: `api`, `api.au`, `api.eu`.",
+          "enum": [
+            "api.eu",
+            "api.au",
+            "api"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ortto_config_V1"
+  ]
+}

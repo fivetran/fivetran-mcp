@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Piwik PRO client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Piwik PRO client secret.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Piwik PRO subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "piwik_pro_config_V1"
+  ]
+}

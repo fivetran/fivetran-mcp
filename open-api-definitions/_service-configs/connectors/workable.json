@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Workable Access Token.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Workable Subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "workable_config_V1"
+  ]
+}

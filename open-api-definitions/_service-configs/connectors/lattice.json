@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Lattice API access token.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your Lattice subdomain.",
+          "enum": [
+            "api.emea",
+            "api"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "lattice_config_V1"
+  ]
+}

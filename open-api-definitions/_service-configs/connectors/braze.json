@@ -1,0 +1,163 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "abs_connection_string": {
+          "title": "",
+          "type": "string",
+          "description": "Connection String",
+          "format": "password"
+        },
+        "abs_container_name": {
+          "title": "",
+          "type": "string",
+          "description": "Container Name"
+        },
+        "abs_export_connection_string": {
+          "title": "",
+          "type": "string",
+          "description": "Your Azure Blob Storage connection string for exports. Required if `AZURE_BLOB_STORAGE` is the `export_storage_type`",
+          "format": "password"
+        },
+        "abs_export_container_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Azure Blob Storage container name for exports. Required if `AZURE_BLOB_STORAGE` is the `export_storage_type`"
+        },
+        "abs_export_prefix": {
+          "title": "",
+          "type": "string",
+          "description": "Your Azure Blob Storage prefix for exports. Used if `AZURE_BLOB_STORAGE` is the `export_storage_type`"
+        },
+        "abs_prefix": {
+          "title": "",
+          "type": "string",
+          "description": "Prefix"
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Braze API Key.",
+          "format": "password"
+        },
+        "api_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Braze API URL."
+        },
+        "cloud_storage_type": {
+          "title": "",
+          "type": "object",
+          "description": "Cloud storage type Braze Current is connected to.",
+          "enum": [
+            "AZURE_BLOB_STORAGE",
+            "GCS",
+            "NONE",
+            "AWS_S3"
+          ]
+        },
+        "enable_exports": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable User Profile Exports"
+        },
+        "export_storage_type": {
+          "title": "",
+          "type": "object",
+          "description": "Export Storage. Required if `enable_exports` is `true`",
+          "enum": [
+            "AZURE_BLOB_STORAGE",
+            "GCS",
+            "NONE",
+            "AWS_S3"
+          ]
+        },
+        "gcs_bucket": {
+          "title": "",
+          "type": "string",
+          "description": "Your GCS bucket. Required if `GCS` is the `cloud_storage_type`"
+        },
+        "gcs_export_bucket": {
+          "title": "",
+          "type": "string",
+          "description": "Your GCS bucket. Required if `GCS` is the `export_storage_type`"
+        },
+        "gcs_export_folder": {
+          "title": "",
+          "type": "string",
+          "description": "Your GCS folder name. Required if `GCS` is the `export_storage_type`"
+        },
+        "gcs_folder": {
+          "title": "",
+          "type": "string",
+          "description": "Your GCS folder name. Required if `GCS` is the `cloud_storage_type`"
+        },
+        "historic_sync_time_frame": {
+          "title": "",
+          "type": "object",
+          "description": "Range of data in history you would like to include in the initial sync.",
+          "enum": [
+            "ONE_YEAR",
+            "ALL_TIME",
+            "FIVE_YEARS",
+            "TWO_YEARS",
+            "THREE_MONTHS",
+            "SIX_MONTHS"
+          ]
+        },
+        "historical_sync_limit": {
+          "title": "Historical sync time frame",
+          "type": "object",
+          "description": "Range of data in history you would like to include in the initial sync. Valid values are `ALL_TIME` and `DATE_LIMIT`",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "historical_sync_limit_date": {
+          "title": "Historical sync limit date",
+          "type": "string",
+          "description": "The start date (in YYYY-MM-DD) from which to sync historical data. Only used when `historicalSyncLimit` is set to `DATE_LIMIT`."
+        },
+        "s3_export_bucket": {
+          "title": "",
+          "type": "string",
+          "description": "Your S3 user export bucket. Required if `AWS_S3` is the `export_storage_type`"
+        },
+        "s3_export_folder": {
+          "title": "",
+          "type": "string",
+          "description": "Your S3 user export folder name. Required if `AWS_S3` is the `export_storage_type`"
+        },
+        "s3_export_role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication required if `AWS_S3` is the `export_storage_type`",
+          "format": "password"
+        },
+        "s3bucket": {
+          "title": "",
+          "type": "string",
+          "description": "Your S3 bucket required if `AWS_S3` is the `cloud_storage_type`"
+        },
+        "s3folder": {
+          "title": "",
+          "type": "string",
+          "description": "Your S3 folder name required if `AWS_S3` is the `cloud_storage_type`"
+        },
+        "s3role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication required if `AWS_S3` is the `cloud_storage_type`",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "braze_config_V1"
+  ]
+}

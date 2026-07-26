@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Liftoff API key.",
+          "format": "password"
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Liftoff API secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "liftoff_config_V1"
+  ]
+}

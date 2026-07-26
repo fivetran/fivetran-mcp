@@ -1,0 +1,146 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "connection_method": {
+          "title": "",
+          "type": "object",
+          "description": "How Fivetran connects to your message brokers in the cluster",
+          "enum": [
+            "privatelink",
+            "direct"
+          ]
+        },
+        "consumer_group": {
+          "title": "",
+          "type": "string",
+          "description": "The name of consumer group created for Fivetran."
+        },
+        "key_password": {
+          "title": "",
+          "type": "string",
+          "description": "If `security_protocol` is set to `TLS`, enter your `Key Password`.",
+          "format": "password"
+        },
+        "keystore": {
+          "title": "",
+          "type": "string",
+          "description": "If `security_protocol` is set to `TLS`, add the `Keystore File` as Base64 encoded string.",
+          "format": "password"
+        },
+        "keystore_password": {
+          "title": "",
+          "type": "string",
+          "description": "If `security_protocol` is set to `TLS`, enter your `Keystore Password`.",
+          "format": "password"
+        },
+        "message_type": {
+          "title": "",
+          "type": "object",
+          "description": "The Message type.",
+          "enum": [
+            "Text",
+            "Json",
+            "Avro",
+            "Protobuf"
+          ]
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "If `sasl_mechanism` is set to `IAM`, enter your Role ARN",
+          "format": "password"
+        },
+        "sasl_mechanism": {
+          "title": "",
+          "type": "object",
+          "description": "If `security_protocol` is set to `SASL`, enter the SASL Mechanism",
+          "enum": [
+            "IAM",
+            "SCRAM_SHA_512"
+          ]
+        },
+        "sasl_scram512_key": {
+          "title": "",
+          "type": "string",
+          "description": "If `sasl_mechanism` is set to `SCRAM_SHA_512`, enter your secret's `saslScram512Key`.",
+          "format": "password"
+        },
+        "sasl_scram512_secret": {
+          "title": "",
+          "type": "string",
+          "description": "If `sasl_mechanism` is set to `SCRAM_SHA_512`, enter your secret's `saslScram512Key`.",
+          "format": "password"
+        },
+        "schema_registry_credentials_source": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Credentials source"
+        },
+        "schema_registry_key": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Key",
+          "format": "password"
+        },
+        "schema_registry_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Secret",
+          "format": "password"
+        },
+        "schema_registry_urls": {
+          "title": "",
+          "type": "array",
+          "description": "Your schema registry URLs",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "security_protocol": {
+          "title": "",
+          "type": "object",
+          "description": "The security protocol for Kafka interaction.",
+          "enum": [
+            "SASL",
+            "PLAINTEXT",
+            "TLS"
+          ]
+        },
+        "servers": {
+          "title": "",
+          "type": "array",
+          "description": "Comma-separated list of Kafka servers in the `server:port` format.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_type": {
+          "title": "",
+          "type": "object",
+          "description": "The sync type.  Unpacked messages must be valid JSON.",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        },
+        "truststore": {
+          "title": "",
+          "type": "string",
+          "description": "If `security_protocol` is set to `TLS`, add the `Truststore File` as Base64 encoded string.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "aws_msk_config_V1"
+  ]
+}

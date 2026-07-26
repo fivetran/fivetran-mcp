@@ -1,0 +1,75 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_method": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication Method",
+          "enum": [
+            "CONNECTION_STRING",
+            "SERVICE_PRINCIPAL_SECRET"
+          ]
+        },
+        "connection_string": {
+          "title": "",
+          "type": "string",
+          "description": "The blob storage container's connection string.",
+          "format": "password"
+        },
+        "container_name": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the blob container."
+        },
+        "source_file_type": {
+          "title": "",
+          "type": "object",
+          "description": "The file type of the source files. Supported file types are `CSV` and `PARQUET`.",
+          "enum": [
+            "PARQUET",
+            "CSV"
+          ]
+        },
+        "storage_account_name": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the Azure Storage account."
+        },
+        "sync_all_versions": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specify if all versions of the records should be synced. If set to `true`, all versions of the records will be synced. If set to `false`, only the latest version of the records will be synced."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "`Client ID` of your Microsoft client application."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "`Client Secret` of your Microsoft client application."
+        },
+        "tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "`Tenant ID` of your Microsoft client application."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "microsoft_dynamics_365_fno_config_V1",
+    "microsoft_dynamics_365_fno_auth_V1"
+  ]
+}

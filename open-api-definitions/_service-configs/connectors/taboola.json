@@ -1,0 +1,56 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_ids": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Account IDs to sync.  Must be populated if `syncMode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Taboola client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The Taboola client secret.",
+          "format": "password"
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once connection is created. <br> <strong>NOTE:</strong> The more months of reporting data you sync, the longer your initial sync will take.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "taboola_config_V1"
+  ]
+}

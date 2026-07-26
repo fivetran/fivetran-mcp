@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fulfil API key.",
+          "format": "password"
+        },
+        "workspace_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Fulfil workspace ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "fulfil_config_V1"
+  ]
+}

@@ -1,0 +1,1674 @@
+{
+  "endpoints": [
+    {
+      "name": "get_account_info",
+      "resource": "account",
+      "method": "GET",
+      "path": "/v1/account/info",
+      "summary": "Get Account Info from the API Key",
+      "schema_file": "account/get_account_info.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "approve_certificate",
+      "resource": "certificates",
+      "method": "POST",
+      "path": "/v1/certificates",
+      "summary": "WRITE OPERATION - (Deprecated) Approve a Certificate",
+      "schema_file": "certificates/approve_certificate.json",
+      "scope": "write",
+      "deprecated": true
+    },
+    {
+      "name": "approve_connection_certificate",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/certificates",
+      "summary": "WRITE OPERATION - Approve a Certificate for the Connection",
+      "schema_file": "connections/approve_connection_certificate.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "approve_connection_fingerprint",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/fingerprints",
+      "summary": "WRITE OPERATION - Approve a Fingerprint for the Connection",
+      "schema_file": "connections/approve_connection_fingerprint.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "connect_card",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/connect-card",
+      "summary": "WRITE OPERATION - Create a Connect Card",
+      "schema_file": "connections/connect_card.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "connection_column_config",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/schemas/{schema}/tables/{table}/columns",
+      "summary": "Retrieve Source Table Columns Config",
+      "schema_file": "connections/connection_column_config.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "connection_details",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}",
+      "summary": "Retrieve Connection Details",
+      "schema_file": "connections/connection_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "connection_schema_config",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/schemas",
+      "summary": "Retrieve a Connection Schema Config",
+      "schema_file": "connections/connection_schema_config.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "connection_state",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/state",
+      "summary": "Retrieve Connection State",
+      "schema_file": "connections/connection_state.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "create_connection",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections",
+      "summary": "WRITE OPERATION - Create a Connection",
+      "schema_file": "connections/create_connection.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_column_connection_config",
+      "resource": "connections",
+      "method": "DELETE",
+      "path": "/v1/connections/{connectionId}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}",
+      "summary": "DESTRUCTIVE - Drop a Blocked Column From the Destination",
+      "schema_file": "connections/delete_column_connection_config.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_connection",
+      "resource": "connections",
+      "method": "DELETE",
+      "path": "/v1/connections/{connectionId}",
+      "summary": "DESTRUCTIVE - Delete a Connection",
+      "schema_file": "connections/delete_connection.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_multiple_columns_connection_config",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/schemas/drop-columns",
+      "summary": "WRITE OPERATION - Drop Blocked Columns from the Destination.",
+      "schema_file": "connections/delete_multiple_columns_connection_config.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "get_connection_certificate_details",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/certificates/{hash}",
+      "summary": "Retrieve Connection Certificate Details",
+      "schema_file": "connections/get_connection_certificate_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_connection_certificates_list",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/certificates",
+      "summary": "PAGINATED - List Certificates Approved for the Connection",
+      "schema_file": "connections/get_connection_certificates_list.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_connection_fingerprint_details",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/fingerprints/{hash}",
+      "summary": "Retrieve Connection Fingerprint Details",
+      "schema_file": "connections/get_connection_fingerprint_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_connection_fingerprints_list",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/fingerprints",
+      "summary": "PAGINATED - List Fingerprints Approved for the Connection",
+      "schema_file": "connections/get_connection_fingerprints_list.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_connections",
+      "resource": "connections",
+      "method": "GET",
+      "path": "/v1/connections",
+      "summary": "PAGINATED - List All Connections",
+      "schema_file": "connections/list_connections.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_connection",
+      "resource": "connections",
+      "method": "PATCH",
+      "path": "/v1/connections/{connectionId}",
+      "summary": "WRITE OPERATION - Update a Connection",
+      "schema_file": "connections/modify_connection.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "modify_connection_column_config",
+      "resource": "connections",
+      "method": "PATCH",
+      "path": "/v1/connections/{connectionId}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}",
+      "summary": "WRITE OPERATION - Update a Connection Column Config",
+      "schema_file": "connections/modify_connection_column_config.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "modify_connection_database_schema_config",
+      "resource": "connections",
+      "method": "PATCH",
+      "path": "/v1/connections/{connectionId}/schemas/{schemaName}",
+      "summary": "WRITE OPERATION - Update a Connection Database Schema Config",
+      "schema_file": "connections/modify_connection_database_schema_config.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "modify_connection_schema_config",
+      "resource": "connections",
+      "method": "PATCH",
+      "path": "/v1/connections/{connectionId}/schemas",
+      "summary": "WRITE OPERATION - Update a Connection Schema Config",
+      "schema_file": "connections/modify_connection_schema_config.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "modify_connection_state",
+      "resource": "connections",
+      "method": "PATCH",
+      "path": "/v1/connections/{connectionId}/state",
+      "summary": "WRITE OPERATION - Update a Connection State",
+      "schema_file": "connections/modify_connection_state.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "modify_connection_table_config",
+      "resource": "connections",
+      "method": "PATCH",
+      "path": "/v1/connections/{connectionId}/schemas/{schemaName}/tables/{tableName}",
+      "summary": "WRITE OPERATION - Update a Connection Table Config",
+      "schema_file": "connections/modify_connection_table_config.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "pre_create_connection_schema_config",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/schemas",
+      "summary": "WRITE OPERATION - Set Up a New Connection Schema Config",
+      "schema_file": "connections/pre_create_connection_schema_config.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "reload_connection_schema_config",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/schemas/reload",
+      "summary": "WRITE OPERATION - Reload a Connection Schema Config",
+      "schema_file": "connections/reload_connection_schema_config.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "resync_connection",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/resync",
+      "summary": "WRITE OPERATION - Re-sync Connection Data (Historical Sync)",
+      "schema_file": "connections/resync_connection.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "resync_tables",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/schemas/tables/resync",
+      "summary": "WRITE OPERATION - Re-sync Connection Table Data",
+      "schema_file": "connections/resync_tables.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "revoke_connection_certificate",
+      "resource": "connections",
+      "method": "DELETE",
+      "path": "/v1/connections/{connectionId}/certificates/{hash}",
+      "summary": "DESTRUCTIVE - Revoke Connection Certificate",
+      "schema_file": "connections/revoke_connection_certificate.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "revoke_connection_fingerprint",
+      "resource": "connections",
+      "method": "DELETE",
+      "path": "/v1/connections/{connectionId}/fingerprints/{hash}",
+      "summary": "DESTRUCTIVE - Revoke Connection Fingerprint",
+      "schema_file": "connections/revoke_connection_fingerprint.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "run_setup_tests",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/test",
+      "summary": "WRITE OPERATION - Run Connection Setup Tests",
+      "schema_file": "connections/run_setup_tests.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "sync_connection",
+      "resource": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/sync",
+      "summary": "WRITE OPERATION - Sync Connection Data",
+      "schema_file": "connections/sync_connection.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_connector_sdk_package",
+      "resource": "connector-sdk",
+      "method": "POST",
+      "path": "/v1/connector-sdk/packages",
+      "summary": "WRITE OPERATION - Create Connector SDK Package",
+      "schema_file": "connector-sdk/create_connector_sdk_package.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_connector_sdk_package",
+      "resource": "connector-sdk",
+      "method": "DELETE",
+      "path": "/v1/connector-sdk/packages/{package_id}",
+      "summary": "DESTRUCTIVE - Delete Connector SDK Package",
+      "schema_file": "connector-sdk/delete_connector_sdk_package.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "download_connector_sdk_package",
+      "resource": "connector-sdk",
+      "method": "GET",
+      "path": "/v1/connector-sdk/packages/{package_id}/download",
+      "summary": "Download Connector SDK Package",
+      "schema_file": "connector-sdk/download_connector_sdk_package.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_connector_sdk_package",
+      "resource": "connector-sdk",
+      "method": "GET",
+      "path": "/v1/connector-sdk/packages/{package_id}",
+      "summary": "Retrieve Connector SDK Package Details",
+      "schema_file": "connector-sdk/get_connector_sdk_package.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_connector_sdk_packages",
+      "resource": "connector-sdk",
+      "method": "GET",
+      "path": "/v1/connector-sdk/packages",
+      "summary": "PAGINATED - List All Connector SDK Packages",
+      "schema_file": "connector-sdk/list_connector_sdk_packages.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "update_connector_sdk_package",
+      "resource": "connector-sdk",
+      "method": "PATCH",
+      "path": "/v1/connector-sdk/packages/{package_id}",
+      "summary": "WRITE OPERATION - Update Connector SDK Package",
+      "schema_file": "connector-sdk/update_connector_sdk_package.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "approve_destination_certificate",
+      "resource": "destinations",
+      "method": "POST",
+      "path": "/v1/destinations/{destinationId}/certificates",
+      "summary": "WRITE OPERATION - Approve a Certificate for the Destination",
+      "schema_file": "destinations/approve_destination_certificate.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "approve_destination_fingerprint",
+      "resource": "destinations",
+      "method": "POST",
+      "path": "/v1/destinations/{destinationId}/fingerprints",
+      "summary": "WRITE OPERATION - Approve a Fingerprint for the Destination",
+      "schema_file": "destinations/approve_destination_fingerprint.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_destination",
+      "resource": "destinations",
+      "method": "POST",
+      "path": "/v1/destinations",
+      "summary": "WRITE OPERATION - Create a Destination",
+      "schema_file": "destinations/create_destination.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_destination",
+      "resource": "destinations",
+      "method": "DELETE",
+      "path": "/v1/destinations/{destinationId}",
+      "summary": "DESTRUCTIVE - Delete a Destination",
+      "schema_file": "destinations/delete_destination.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "destination_details",
+      "resource": "destinations",
+      "method": "GET",
+      "path": "/v1/destinations/{destinationId}",
+      "summary": "Retrieve Destination Details",
+      "schema_file": "destinations/destination_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_destination_certificate_details",
+      "resource": "destinations",
+      "method": "GET",
+      "path": "/v1/destinations/{destinationId}/certificates/{hash}",
+      "summary": "Retrieve Destination Certificate Details",
+      "schema_file": "destinations/get_destination_certificate_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_destination_certificates_list",
+      "resource": "destinations",
+      "method": "GET",
+      "path": "/v1/destinations/{destinationId}/certificates",
+      "summary": "PAGINATED - List Certificates Approved for the Destination",
+      "schema_file": "destinations/get_destination_certificates_list.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_destination_fingerprint_details",
+      "resource": "destinations",
+      "method": "GET",
+      "path": "/v1/destinations/{destinationId}/fingerprints/{hash}",
+      "summary": "Retrieve Destination Fingerprint Details",
+      "schema_file": "destinations/get_destination_fingerprint_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_destination_fingerprints_list",
+      "resource": "destinations",
+      "method": "GET",
+      "path": "/v1/destinations/{destinationId}/fingerprints",
+      "summary": "PAGINATED - List Fingerprints Approved for the Destination",
+      "schema_file": "destinations/get_destination_fingerprints_list.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_destinations",
+      "resource": "destinations",
+      "method": "GET",
+      "path": "/v1/destinations",
+      "summary": "PAGINATED - List All Destinations Within Account",
+      "schema_file": "destinations/list_destinations.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_destination",
+      "resource": "destinations",
+      "method": "PATCH",
+      "path": "/v1/destinations/{destinationId}",
+      "summary": "WRITE OPERATION - Update a Destination",
+      "schema_file": "destinations/modify_destination.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "revoke_destination_certificate",
+      "resource": "destinations",
+      "method": "DELETE",
+      "path": "/v1/destinations/{destinationId}/certificates/{hash}",
+      "summary": "DESTRUCTIVE - Revoke Destination Certificate",
+      "schema_file": "destinations/revoke_destination_certificate.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "revoke_destination_fingerprint",
+      "resource": "destinations",
+      "method": "DELETE",
+      "path": "/v1/destinations/{destinationId}/fingerprints/{hash}",
+      "summary": "DESTRUCTIVE - Revoke Destination Fingerprint",
+      "schema_file": "destinations/revoke_destination_fingerprint.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "run_destination_setup_tests",
+      "resource": "destinations",
+      "method": "POST",
+      "path": "/v1/destinations/{destinationId}/test",
+      "summary": "WRITE OPERATION - Run Destination Setup Tests",
+      "schema_file": "destinations/run_destination_setup_tests.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "add_account_log_service",
+      "resource": "external-logging",
+      "method": "POST",
+      "path": "/v1/external-logging/account",
+      "summary": "WRITE OPERATION - Create Account Log Service",
+      "schema_file": "external-logging/add_account_log_service.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "add_log_service",
+      "resource": "external-logging",
+      "method": "POST",
+      "path": "/v1/external-logging",
+      "summary": "WRITE OPERATION - Create a Group Log Service",
+      "schema_file": "external-logging/add_log_service.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_account_log_service",
+      "resource": "external-logging",
+      "method": "DELETE",
+      "path": "/v1/external-logging/account",
+      "summary": "DESTRUCTIVE - Delete Account Log Service",
+      "schema_file": "external-logging/delete_account_log_service.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_log_service",
+      "resource": "external-logging",
+      "method": "DELETE",
+      "path": "/v1/external-logging/{logId}",
+      "summary": "DESTRUCTIVE - Delete a Group Log Service",
+      "schema_file": "external-logging/delete_log_service.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "get_account_log_service_details",
+      "resource": "external-logging",
+      "method": "GET",
+      "path": "/v1/external-logging/account",
+      "summary": "Retrieve Account Log Service",
+      "schema_file": "external-logging/get_account_log_service_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_log_service_details",
+      "resource": "external-logging",
+      "method": "GET",
+      "path": "/v1/external-logging/{logId}",
+      "summary": "Retrieve Group Log Service Details",
+      "schema_file": "external-logging/get_log_service_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_log_services",
+      "resource": "external-logging",
+      "method": "GET",
+      "path": "/v1/external-logging",
+      "summary": "PAGINATED - List All Log Services within Account",
+      "schema_file": "external-logging/list_log_services.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "run_setup_tests_account_log_service",
+      "resource": "external-logging",
+      "method": "POST",
+      "path": "/v1/external-logging/account/test",
+      "summary": "WRITE OPERATION - Run Account Log Service Setup Tests",
+      "schema_file": "external-logging/run_setup_tests_account_log_service.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "run_setup_tests_log_service",
+      "resource": "external-logging",
+      "method": "POST",
+      "path": "/v1/external-logging/{logId}/test",
+      "summary": "WRITE OPERATION - Run Group Log Service Setup Tests",
+      "schema_file": "external-logging/run_setup_tests_log_service.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "update_account_log_service",
+      "resource": "external-logging",
+      "method": "PATCH",
+      "path": "/v1/external-logging/account",
+      "summary": "WRITE OPERATION - Update Account Log Service",
+      "schema_file": "external-logging/update_account_log_service.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "update_log_service",
+      "resource": "external-logging",
+      "method": "PATCH",
+      "path": "/v1/external-logging/{logId}",
+      "summary": "WRITE OPERATION - Update a Group Log Service",
+      "schema_file": "external-logging/update_log_service.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_esm",
+      "resource": "external-secrets-managers",
+      "method": "POST",
+      "path": "/v1/external-secrets-managers",
+      "summary": "WRITE OPERATION - Create an External Secrets Manager",
+      "schema_file": "external-secrets-managers/create_esm.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_esm",
+      "resource": "external-secrets-managers",
+      "method": "DELETE",
+      "path": "/v1/external-secrets-managers/{esmId}",
+      "summary": "DESTRUCTIVE - Delete an External Secrets Manager",
+      "schema_file": "external-secrets-managers/delete_esm.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "get_esm_details",
+      "resource": "external-secrets-managers",
+      "method": "GET",
+      "path": "/v1/external-secrets-managers/{esmId}",
+      "summary": "Retrieve External Secrets Manager Details",
+      "schema_file": "external-secrets-managers/get_esm_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_esm_entities",
+      "resource": "external-secrets-managers",
+      "method": "GET",
+      "path": "/v1/external-secrets-managers/{esmId}/entities",
+      "summary": "PAGINATED - List Entities Using an External Secrets Manager",
+      "schema_file": "external-secrets-managers/get_esm_entities.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_esms",
+      "resource": "external-secrets-managers",
+      "method": "GET",
+      "path": "/v1/external-secrets-managers",
+      "summary": "PAGINATED - List all External Secrets Managers",
+      "schema_file": "external-secrets-managers/list_esms.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_esm",
+      "resource": "external-secrets-managers",
+      "method": "PATCH",
+      "path": "/v1/external-secrets-managers/{esmId}",
+      "summary": "WRITE OPERATION - Update an External Secrets Manager",
+      "schema_file": "external-secrets-managers/modify_esm.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "list_esm_entities",
+      "resource": "external-secrets-managers-entities",
+      "method": "GET",
+      "path": "/v1/external-secrets-managers-entities",
+      "summary": "PAGINATED - List All Entities Using External Secrets Managers",
+      "schema_file": "external-secrets-managers-entities/list_esm_entities.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "add_user_to_group",
+      "resource": "groups",
+      "method": "POST",
+      "path": "/v1/groups/{groupId}/users",
+      "summary": "WRITE OPERATION - Add a User to a Group",
+      "schema_file": "groups/add_user_to_group.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_group",
+      "resource": "groups",
+      "method": "POST",
+      "path": "/v1/groups",
+      "summary": "WRITE OPERATION - Create a Group",
+      "schema_file": "groups/create_group.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_group",
+      "resource": "groups",
+      "method": "DELETE",
+      "path": "/v1/groups/{groupId}",
+      "summary": "DESTRUCTIVE - Delete a Group",
+      "schema_file": "groups/delete_group.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_user_from_group",
+      "resource": "groups",
+      "method": "DELETE",
+      "path": "/v1/groups/{groupId}/users/{userId}",
+      "summary": "DESTRUCTIVE - Remove a User from a Group",
+      "schema_file": "groups/delete_user_from_group.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "group_details",
+      "resource": "groups",
+      "method": "GET",
+      "path": "/v1/groups/{groupId}",
+      "summary": "Retrieve Group Details",
+      "schema_file": "groups/group_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "group_service_account",
+      "resource": "groups",
+      "method": "GET",
+      "path": "/v1/groups/{groupId}/service-account",
+      "summary": "Retrieve Group Service Account",
+      "schema_file": "groups/group_service_account.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "group_ssh_public_key",
+      "resource": "groups",
+      "method": "GET",
+      "path": "/v1/groups/{groupId}/public-key",
+      "summary": "Retrieve Group Public SSH Key",
+      "schema_file": "groups/group_ssh_public_key.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_all_connections_in_group",
+      "resource": "groups",
+      "method": "GET",
+      "path": "/v1/groups/{groupId}/connections",
+      "summary": "PAGINATED - List All Connections within a Group",
+      "schema_file": "groups/list_all_connections_in_group.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_all_groups",
+      "resource": "groups",
+      "method": "GET",
+      "path": "/v1/groups",
+      "summary": "PAGINATED - List All Destinations within Account",
+      "schema_file": "groups/list_all_groups.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_all_users_in_group",
+      "resource": "groups",
+      "method": "GET",
+      "path": "/v1/groups/{groupId}/users",
+      "summary": "PAGINATED - List All Users within a Group",
+      "schema_file": "groups/list_all_users_in_group.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_group",
+      "resource": "groups",
+      "method": "PATCH",
+      "path": "/v1/groups/{groupId}",
+      "summary": "WRITE OPERATION - Update a Group",
+      "schema_file": "groups/modify_group.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "hvr_register_hub",
+      "resource": "hvr",
+      "method": "POST",
+      "path": "/v1/hvr/register-hub",
+      "summary": "WRITE OPERATION - Register Hub",
+      "schema_file": "hvr/hvr_register_hub.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_hybrid_deployment_agent",
+      "resource": "hybrid-deployment-agents",
+      "method": "POST",
+      "path": "/v1/hybrid-deployment-agents",
+      "summary": "WRITE OPERATION - Create a Hybrid Deployment Agent",
+      "schema_file": "hybrid-deployment-agents/create_hybrid_deployment_agent.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_hybrid_deployment_agent",
+      "resource": "hybrid-deployment-agents",
+      "method": "DELETE",
+      "path": "/v1/hybrid-deployment-agents/{agentId}",
+      "summary": "DESTRUCTIVE - Delete a Hybrid Deployment Agent",
+      "schema_file": "hybrid-deployment-agents/delete_hybrid_deployment_agent.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "get_hybrid_deployment_agent",
+      "resource": "hybrid-deployment-agents",
+      "method": "GET",
+      "path": "/v1/hybrid-deployment-agents/{agentId}",
+      "summary": "Returns Hybrid Deployment Agent Details",
+      "schema_file": "hybrid-deployment-agents/get_hybrid_deployment_agent.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_hybrid_deployment_agent_list",
+      "resource": "hybrid-deployment-agents",
+      "method": "GET",
+      "path": "/v1/hybrid-deployment-agents",
+      "summary": "PAGINATED - List Hybrid Deployment Agents",
+      "schema_file": "hybrid-deployment-agents/get_hybrid_deployment_agent_list.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "re_auth_hybrid_deployment_agent",
+      "resource": "hybrid-deployment-agents",
+      "method": "PATCH",
+      "path": "/v1/hybrid-deployment-agents/{agentId}/re-auth",
+      "summary": "WRITE OPERATION - Regenerate Authentication Keys",
+      "schema_file": "hybrid-deployment-agents/re_auth_hybrid_deployment_agent.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "reset_hybrid_deployment_agent_credentials",
+      "resource": "hybrid-deployment-agents",
+      "method": "POST",
+      "path": "/v1/hybrid-deployment-agents/{agentId}/reset-credentials",
+      "summary": "WRITE OPERATION - Reset Agent Credentials",
+      "schema_file": "hybrid-deployment-agents/reset_hybrid_deployment_agent_credentials.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "metadata_connector_config",
+      "resource": "metadata",
+      "method": "GET",
+      "path": "/v1/metadata/connector-types/{service}",
+      "summary": "Retrieve Connector Configuration Metadata",
+      "schema_file": "metadata/metadata_connector_config.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "metadata_connectors",
+      "resource": "metadata",
+      "method": "GET",
+      "path": "/v1/metadata/connector-types",
+      "summary": "PAGINATED - Retrieve Source Metadata",
+      "schema_file": "metadata/metadata_connectors.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "create_private_link",
+      "resource": "private-links",
+      "method": "POST",
+      "path": "/v1/private-links",
+      "summary": "WRITE OPERATION - Create a Private Link",
+      "schema_file": "private-links/create_private_link.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_private_link",
+      "resource": "private-links",
+      "method": "DELETE",
+      "path": "/v1/private-links/{privateLinkId}",
+      "summary": "DESTRUCTIVE - Delete a Private Link",
+      "schema_file": "private-links/delete_private_link.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "get_private_link_details",
+      "resource": "private-links",
+      "method": "GET",
+      "path": "/v1/private-links/{privateLinkId}",
+      "summary": "Retrieve Private Link Details",
+      "schema_file": "private-links/get_private_link_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_private_links",
+      "resource": "private-links",
+      "method": "GET",
+      "path": "/v1/private-links",
+      "summary": "PAGINATED - List All Private Links",
+      "schema_file": "private-links/get_private_links.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_private_link",
+      "resource": "private-links",
+      "method": "PATCH",
+      "path": "/v1/private-links/{privateLinkId}",
+      "summary": "WRITE OPERATION - Update a Private Link",
+      "schema_file": "private-links/modify_private_link.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_proxy_agent",
+      "resource": "proxy",
+      "method": "POST",
+      "path": "/v1/proxy",
+      "summary": "WRITE OPERATION - Create a Proxy Agent",
+      "schema_file": "proxy/create_proxy_agent.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_proxy_agent",
+      "resource": "proxy",
+      "method": "DELETE",
+      "path": "/v1/proxy/{agentId}",
+      "summary": "DESTRUCTIVE - Delete a Proxy Agent",
+      "schema_file": "proxy/delete_proxy_agent.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "get_proxy_agent",
+      "resource": "proxy",
+      "method": "GET",
+      "path": "/v1/proxy",
+      "summary": "PAGINATED - List all Proxy Agents",
+      "schema_file": "proxy/get_proxy_agent.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_proxy_agent_connections",
+      "resource": "proxy",
+      "method": "GET",
+      "path": "/v1/proxy/{agentId}/connections",
+      "summary": "PAGINATED - List All Connections Attached to the Proxy Agent",
+      "schema_file": "proxy/get_proxy_agent_connections.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_proxy_agent_details",
+      "resource": "proxy",
+      "method": "GET",
+      "path": "/v1/proxy/{agentId}",
+      "summary": "Retrieve Proxy Agent Details",
+      "schema_file": "proxy/get_proxy_agent_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "regenerate_secrets_proxy_agent",
+      "resource": "proxy",
+      "method": "POST",
+      "path": "/v1/proxy/{agentId}/regenerate-secrets",
+      "summary": "WRITE OPERATION - Regenerate Secrets for Proxy Agent",
+      "schema_file": "proxy/regenerate_secrets_proxy_agent.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "metadata_public_connectors",
+      "resource": "public",
+      "method": "GET",
+      "path": "/public/connector-types",
+      "summary": "Retrieve Source Metadata Public Endpoint",
+      "schema_file": "public/metadata_public_connectors.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_all_roles",
+      "resource": "roles",
+      "method": "GET",
+      "path": "/v1/roles",
+      "summary": "PAGINATED - List all roles",
+      "schema_file": "roles/list_all_roles.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "delete_system_key",
+      "resource": "system-keys",
+      "method": "DELETE",
+      "path": "/v1/system-keys/{keyId}",
+      "summary": "DESTRUCTIVE - Delete a System Key",
+      "schema_file": "system-keys/delete_system_key.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "get_system_key_details",
+      "resource": "system-keys",
+      "method": "GET",
+      "path": "/v1/system-keys/{keyId}",
+      "summary": "Retrieve System Key Details",
+      "schema_file": "system-keys/get_system_key_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_system_keys",
+      "resource": "system-keys",
+      "method": "GET",
+      "path": "/v1/system-keys",
+      "summary": "PAGINATED - List All System Keys",
+      "schema_file": "system-keys/get_system_keys.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "update_system_key",
+      "resource": "system-keys",
+      "method": "PATCH",
+      "path": "/v1/system-keys/{keyId}",
+      "summary": "WRITE OPERATION - Update a System Key",
+      "schema_file": "system-keys/update_system_key.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "add_team_membership_in_connection",
+      "resource": "teams",
+      "method": "POST",
+      "path": "/v1/teams/{teamId}/connections",
+      "summary": "WRITE OPERATION - Add Connection Membership",
+      "schema_file": "teams/add_team_membership_in_connection.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "add_team_membership_in_group",
+      "resource": "teams",
+      "method": "POST",
+      "path": "/v1/teams/{teamId}/groups",
+      "summary": "WRITE OPERATION - Add Group Membership",
+      "schema_file": "teams/add_team_membership_in_group.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "add_user_to_team",
+      "resource": "teams",
+      "method": "POST",
+      "path": "/v1/teams/{teamId}/users",
+      "summary": "WRITE OPERATION - Add a User to the Team",
+      "schema_file": "teams/add_user_to_team.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_team",
+      "resource": "teams",
+      "method": "POST",
+      "path": "/v1/teams",
+      "summary": "WRITE OPERATION - Create a Team",
+      "schema_file": "teams/create_team.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_team",
+      "resource": "teams",
+      "method": "DELETE",
+      "path": "/v1/teams/{teamId}",
+      "summary": "DESTRUCTIVE - Delete a Team",
+      "schema_file": "teams/delete_team.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_team_membership_in_account",
+      "resource": "teams",
+      "method": "DELETE",
+      "path": "/v1/teams/{teamId}/role",
+      "summary": "DESTRUCTIVE - Delete Team from Account",
+      "schema_file": "teams/delete_team_membership_in_account.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_team_membership_in_connection",
+      "resource": "teams",
+      "method": "DELETE",
+      "path": "/v1/teams/{teamId}/connections/{connectionId}",
+      "summary": "DESTRUCTIVE - Delete Connection Membership",
+      "schema_file": "teams/delete_team_membership_in_connection.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_team_membership_in_group",
+      "resource": "teams",
+      "method": "DELETE",
+      "path": "/v1/teams/{teamId}/groups/{groupId}",
+      "summary": "DESTRUCTIVE - Delete Group Membership",
+      "schema_file": "teams/delete_team_membership_in_group.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_user_from_team",
+      "resource": "teams",
+      "method": "DELETE",
+      "path": "/v1/teams/{teamId}/users/{userId}",
+      "summary": "DESTRUCTIVE - Delete a User from a Team",
+      "schema_file": "teams/delete_user_from_team.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "get_team_membership_in_connection",
+      "resource": "teams",
+      "method": "GET",
+      "path": "/v1/teams/{teamId}/connections/{connectionId}",
+      "summary": "Retrieve Connection Membership",
+      "schema_file": "teams/get_team_membership_in_connection.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_team_membership_in_group",
+      "resource": "teams",
+      "method": "GET",
+      "path": "/v1/teams/{teamId}/groups/{groupId}",
+      "summary": "Retrieve Group Membership Details",
+      "schema_file": "teams/get_team_membership_in_group.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_team_memberships_in_connections",
+      "resource": "teams",
+      "method": "GET",
+      "path": "/v1/teams/{teamId}/connections",
+      "summary": "PAGINATED - List All Connection Memberships",
+      "schema_file": "teams/get_team_memberships_in_connections.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_team_memberships_in_groups",
+      "resource": "teams",
+      "method": "GET",
+      "path": "/v1/teams/{teamId}/groups",
+      "summary": "PAGINATED - List All Group Memberships",
+      "schema_file": "teams/get_team_memberships_in_groups.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_user_in_team",
+      "resource": "teams",
+      "method": "GET",
+      "path": "/v1/teams/{teamId}/users/{userId}",
+      "summary": "Retrieve User Membership in a Team",
+      "schema_file": "teams/get_user_in_team.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_all_teams",
+      "resource": "teams",
+      "method": "GET",
+      "path": "/v1/teams",
+      "summary": "PAGINATED - List All Teams",
+      "schema_file": "teams/list_all_teams.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_users_in_team",
+      "resource": "teams",
+      "method": "GET",
+      "path": "/v1/teams/{teamId}/users",
+      "summary": "PAGINATED - List All User Memberships",
+      "schema_file": "teams/list_users_in_team.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_team",
+      "resource": "teams",
+      "method": "PATCH",
+      "path": "/v1/teams/{teamId}",
+      "summary": "WRITE OPERATION - Update a Team",
+      "schema_file": "teams/modify_team.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "team_details",
+      "resource": "teams",
+      "method": "GET",
+      "path": "/v1/teams/{teamId}",
+      "summary": "Retrieve Team Details",
+      "schema_file": "teams/team_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "update_team_membership_in_connection",
+      "resource": "teams",
+      "method": "PATCH",
+      "path": "/v1/teams/{teamId}/connections/{connectionId}",
+      "summary": "WRITE OPERATION - Update Connection Membership",
+      "schema_file": "teams/update_team_membership_in_connection.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "update_team_membership_in_group",
+      "resource": "teams",
+      "method": "PATCH",
+      "path": "/v1/teams/{teamId}/groups/{groupId}",
+      "summary": "WRITE OPERATION - Update Group Membership",
+      "schema_file": "teams/update_team_membership_in_group.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "update_user_membership",
+      "resource": "teams",
+      "method": "PATCH",
+      "path": "/v1/teams/{teamId}/users/{userId}",
+      "summary": "WRITE OPERATION - Update a User Membership",
+      "schema_file": "teams/update_user_membership.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_transformation_project",
+      "resource": "transformation-projects",
+      "method": "POST",
+      "path": "/v1/transformation-projects",
+      "summary": "WRITE OPERATION - Create Transformation Project",
+      "schema_file": "transformation-projects/create_transformation_project.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_transformation_project",
+      "resource": "transformation-projects",
+      "method": "DELETE",
+      "path": "/v1/transformation-projects/{projectId}",
+      "summary": "DESTRUCTIVE - Delete Transformation Project",
+      "schema_file": "transformation-projects/delete_transformation_project.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "list_all_transformation_projects",
+      "resource": "transformation-projects",
+      "method": "GET",
+      "path": "/v1/transformation-projects",
+      "summary": "PAGINATED - List all Transformation Projects",
+      "schema_file": "transformation-projects/list_all_transformation_projects.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_transformation_project",
+      "resource": "transformation-projects",
+      "method": "PATCH",
+      "path": "/v1/transformation-projects/{projectId}",
+      "summary": "WRITE OPERATION - Update Transformation Project",
+      "schema_file": "transformation-projects/modify_transformation_project.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "test_transformation_project",
+      "resource": "transformation-projects",
+      "method": "POST",
+      "path": "/v1/transformation-projects/{projectId}/test",
+      "summary": "WRITE OPERATION - Test Transformation Project",
+      "schema_file": "transformation-projects/test_transformation_project.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "transformation_project_details",
+      "resource": "transformation-projects",
+      "method": "GET",
+      "path": "/v1/transformation-projects/{projectId}",
+      "summary": "Retrieve Transformation Project Details",
+      "schema_file": "transformation-projects/transformation_project_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "cancel_transformation",
+      "resource": "transformations",
+      "method": "POST",
+      "path": "/v1/transformations/{transformationId}/cancel",
+      "summary": "WRITE OPERATION - Cancel Running Transformation",
+      "schema_file": "transformations/cancel_transformation.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_transformation",
+      "resource": "transformations",
+      "method": "POST",
+      "path": "/v1/transformations",
+      "summary": "WRITE OPERATION - Create a Transformation",
+      "schema_file": "transformations/create_transformation.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_transformation",
+      "resource": "transformations",
+      "method": "DELETE",
+      "path": "/v1/transformations/{transformationId}",
+      "summary": "DESTRUCTIVE - Delete a Transformation",
+      "schema_file": "transformations/delete_transformation.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "run_transformation",
+      "resource": "transformations",
+      "method": "POST",
+      "path": "/v1/transformations/{transformationId}/run",
+      "summary": "WRITE OPERATION - Run Transformation",
+      "schema_file": "transformations/run_transformation.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "transformation_details",
+      "resource": "transformations",
+      "method": "GET",
+      "path": "/v1/transformations/{transformationId}",
+      "summary": "Retrieve Transformation Details",
+      "schema_file": "transformations/transformation_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "transformation_package_metadata_details",
+      "resource": "transformations",
+      "method": "GET",
+      "path": "/v1/transformations/package-metadata/{package_definition_id}",
+      "summary": "Retrieve a Quickstart Package Metadata Details",
+      "schema_file": "transformations/transformation_package_metadata_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "transformation_package_metadata_list",
+      "resource": "transformations",
+      "method": "GET",
+      "path": "/v1/transformations/package-metadata",
+      "summary": "PAGINATED - List All Quickstart Package Metadata",
+      "schema_file": "transformations/transformation_package_metadata_list.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "transformations_list",
+      "resource": "transformations",
+      "method": "GET",
+      "path": "/v1/transformations",
+      "summary": "PAGINATED - List all Transformations",
+      "schema_file": "transformations/transformations_list.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "update_transformation",
+      "resource": "transformations",
+      "method": "PATCH",
+      "path": "/v1/transformations/{transformationId}",
+      "summary": "WRITE OPERATION - Update a Transformation",
+      "schema_file": "transformations/update_transformation.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "upgrade_transformation_package",
+      "resource": "transformations",
+      "method": "POST",
+      "path": "/v1/transformations/{transformationId}/upgrade",
+      "summary": "WRITE OPERATION - Upgrade Transformation Package",
+      "schema_file": "transformations/upgrade_transformation_package.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "add_user_membership_in_connection",
+      "resource": "users",
+      "method": "POST",
+      "path": "/v1/users/{userId}/connections",
+      "summary": "WRITE OPERATION - Add a Connection Membership",
+      "schema_file": "users/add_user_membership_in_connection.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "add_user_membership_in_group",
+      "resource": "users",
+      "method": "POST",
+      "path": "/v1/users/{userId}/groups",
+      "summary": "WRITE OPERATION - Add Group Membership",
+      "schema_file": "users/add_user_membership_in_group.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_user",
+      "resource": "users",
+      "method": "POST",
+      "path": "/v1/users",
+      "summary": "WRITE OPERATION - Invite a User",
+      "schema_file": "users/create_user.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_user",
+      "resource": "users",
+      "method": "DELETE",
+      "path": "/v1/users/{id}",
+      "summary": "DESTRUCTIVE - Delete a User",
+      "schema_file": "users/delete_user.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_user_membership_in_account",
+      "resource": "users",
+      "method": "DELETE",
+      "path": "/v1/users/{userId}/role",
+      "summary": "DESTRUCTIVE - Delete Account Role",
+      "schema_file": "users/delete_user_membership_in_account.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_user_membership_in_connection",
+      "resource": "users",
+      "method": "DELETE",
+      "path": "/v1/users/{userId}/connections/{connectionId}",
+      "summary": "DESTRUCTIVE - Delete Connection Membership",
+      "schema_file": "users/delete_user_membership_in_connection.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "delete_user_membership_in_group",
+      "resource": "users",
+      "method": "DELETE",
+      "path": "/v1/users/{userId}/groups/{groupId}",
+      "summary": "DESTRUCTIVE - Delete Group Membership",
+      "schema_file": "users/delete_user_membership_in_group.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "get_user_membership_in_connections",
+      "resource": "users",
+      "method": "GET",
+      "path": "/v1/users/{userId}/connections/{connectionId}",
+      "summary": "Retrieve Connection Membership",
+      "schema_file": "users/get_user_membership_in_connections.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_user_membership_in_group",
+      "resource": "users",
+      "method": "GET",
+      "path": "/v1/users/{userId}/groups/{groupId}",
+      "summary": "Retrieve Group Membership Details",
+      "schema_file": "users/get_user_membership_in_group.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_user_memberships_in_connections",
+      "resource": "users",
+      "method": "GET",
+      "path": "/v1/users/{userId}/connections",
+      "summary": "PAGINATED - List All Connection Memberships",
+      "schema_file": "users/get_user_memberships_in_connections.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "get_user_memberships_in_groups",
+      "resource": "users",
+      "method": "GET",
+      "path": "/v1/users/{userId}/groups",
+      "summary": "PAGINATED - List All Group Memberships",
+      "schema_file": "users/get_user_memberships_in_groups.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_all_users",
+      "resource": "users",
+      "method": "GET",
+      "path": "/v1/users",
+      "summary": "PAGINATED - List All Users",
+      "schema_file": "users/list_all_users.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_user",
+      "resource": "users",
+      "method": "PATCH",
+      "path": "/v1/users/{userId}",
+      "summary": "WRITE OPERATION - Update a User",
+      "schema_file": "users/modify_user.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "update_user_membership_in_connection",
+      "resource": "users",
+      "method": "PATCH",
+      "path": "/v1/users/{userId}/connections/{connectionId}",
+      "summary": "WRITE OPERATION - Update Connection Membership",
+      "schema_file": "users/update_user_membership_in_connection.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "update_user_membership_in_group",
+      "resource": "users",
+      "method": "PATCH",
+      "path": "/v1/users/{userId}/groups/{groupId}",
+      "summary": "WRITE OPERATION - Update Group Membership",
+      "schema_file": "users/update_user_membership_in_group.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "user_details",
+      "resource": "users",
+      "method": "GET",
+      "path": "/v1/users/{userId}",
+      "summary": "Retrieve User Details",
+      "schema_file": "users/user_details.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "create_account_webhook",
+      "resource": "webhooks",
+      "method": "POST",
+      "path": "/v1/webhooks/account",
+      "summary": "WRITE OPERATION - Create an Account Webhook",
+      "schema_file": "webhooks/create_account_webhook.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "create_group_webhook",
+      "resource": "webhooks",
+      "method": "POST",
+      "path": "/v1/webhooks/group/{groupId}",
+      "summary": "WRITE OPERATION - Create a Group Webhook",
+      "schema_file": "webhooks/create_group_webhook.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "delete_webhook",
+      "resource": "webhooks",
+      "method": "DELETE",
+      "path": "/v1/webhooks/{webhookId}",
+      "summary": "DESTRUCTIVE - Delete a Webhook",
+      "schema_file": "webhooks/delete_webhook.json",
+      "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "list_all_webhooks",
+      "resource": "webhooks",
+      "method": "GET",
+      "path": "/v1/webhooks",
+      "summary": "PAGINATED - List all Webhooks",
+      "schema_file": "webhooks/list_all_webhooks.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "modify_webhook",
+      "resource": "webhooks",
+      "method": "PATCH",
+      "path": "/v1/webhooks/{webhookId}",
+      "summary": "WRITE OPERATION - Update a Webhook",
+      "schema_file": "webhooks/modify_webhook.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "test_webhook",
+      "resource": "webhooks",
+      "method": "POST",
+      "path": "/v1/webhooks/{webhookId}/test",
+      "summary": "WRITE OPERATION - Test a Webhook",
+      "schema_file": "webhooks/test_webhook.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "webhook_details",
+      "resource": "webhooks",
+      "method": "GET",
+      "path": "/v1/webhooks/{webhookId}",
+      "summary": "Retrieve Webhook Details",
+      "schema_file": "webhooks/webhook_details.json",
+      "scope": "read",
+      "deprecated": false
+    }
+  ]
+}

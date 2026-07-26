@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Forj Community API key.",
+          "format": "password"
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Forj Community API secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "forj_community_config_V1"
+  ]
+}

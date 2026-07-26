@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Google Calendar access token.",
+          "format": "password"
+        },
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          }
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Google Calendar refresh token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_calendar_config_V1",
+    "google_calendar_auth_V1"
+  ]
+}

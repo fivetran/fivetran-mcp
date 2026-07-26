@@ -1,0 +1,166 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_version": {
+          "title": "",
+          "type": "object",
+          "description": "API Version",
+          "enum": [
+            "V3",
+            "V4"
+          ]
+        },
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authenticate using OAuth or HTTP Basic",
+          "enum": [
+            "BASIC",
+            "OAUTH"
+          ]
+        },
+        "business_unit_id": {
+          "title": "",
+          "type": "string",
+          "description": "Business Unit Id"
+        },
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "The email of the Pardot user."
+        },
+        "historical_sync_limit_date": {
+          "title": "Historical sync limit date",
+          "type": "string",
+          "description": "The start date (YYYY-MM-DD) from which to sync historical data."
+        },
+        "historical_sync_limit_time_frame": {
+          "title": "Historical sync time frame",
+          "type": "object",
+          "description": "The options for time range for which historical data should be synced. Default value: `All Time`.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "is_external_activities_endpoint_selected": {
+          "title": "",
+          "type": "boolean",
+          "description": "Whether the `EXTERNAL_ACTIVITY` table must be synced or not."
+        },
+        "limit_for_api_calls_to_external_activities_endpoint": {
+          "title": "",
+          "type": "integer",
+          "description": "API limit for the external activities endpoint.",
+          "format": "int32"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Pardot user's password.",
+          "format": "password"
+        },
+        "rest_api_limit": {
+          "title": "",
+          "type": "integer",
+          "description": "The number of API calls that the connector should not exceed in a day. Default REST API call limit per day: 150,000.",
+          "format": "int32"
+        },
+        "salesforce_security_token": {
+          "title": "",
+          "type": "string",
+          "description": "The Pardot user's Salesforce SSO Account Security Token.",
+          "format": "password"
+        },
+        "time_zone": {
+          "title": "",
+          "type": "object",
+          "description": "The time zone configured in your Pardot instance. An empty value defaults to `UTC+00:00`.",
+          "enum": [
+            "GMT+00:00",
+            "GMT+02:00",
+            "GMT-09:30",
+            "GMT+04:00",
+            "GMT+06:00",
+            "GMT+08:45",
+            "GMT+03:30",
+            "GMT+08:00",
+            "GMT+05:30",
+            "GMT-12:00",
+            "GMT-10:00",
+            "GMT+13:00",
+            "GMT-04:00",
+            "GMT+10:30",
+            "GMT-03:30",
+            "GMT+09:00",
+            "GMT+11:00",
+            "GMT+13:45",
+            "GMT-08:00",
+            "GMT-06:00",
+            "GMT-02:00",
+            "GMT+01:00",
+            "GMT+05:00",
+            "GMT+03:00",
+            "GMT+05:45",
+            "GMT+04:30",
+            "GMT+07:00",
+            "GMT+06:30",
+            "GMT-11:00",
+            "GMT-02:30",
+            "GMT+09:30",
+            "GMT+10:00",
+            "GMT+12:45",
+            "GMT+14:00",
+            "GMT+12:00",
+            "GMT-09:00",
+            "GMT-01:00",
+            "GMT-07:00",
+            "GMT-05:00",
+            "GMT-03:00"
+          ]
+        },
+        "user_key": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Pardot client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Pardot client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "pardot_config_V1",
+    "pardot_auth_V1"
+  ]
+}

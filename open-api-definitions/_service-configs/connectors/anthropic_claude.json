@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "analytics_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Analytics API key for syncing Claude Enterprise organization-level analytics data.",
+          "format": "password"
+        },
+        "api_admin_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Claude Platform Admin API key for syncing organization-level management and reporting data.",
+          "format": "password"
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your API key for syncing data from a specific Claude workspace.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "anthropic_claude_config_V1"
+  ]
+}

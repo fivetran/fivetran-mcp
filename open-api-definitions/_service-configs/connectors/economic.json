@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "agreement_grant_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your E-conomic X-AgreementGrantToken goes here.",
+          "format": "password"
+        },
+        "app_secret_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your E-conomic X-AppSecretToken goes here.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "economic_config_V1"
+  ]
+}

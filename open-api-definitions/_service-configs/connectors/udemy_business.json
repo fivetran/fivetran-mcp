@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Udemy Business account ID."
+        },
+        "account_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Udemy Business account name."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Udemy Business client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Udemy Business client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "udemy_business_config_V1"
+  ]
+}

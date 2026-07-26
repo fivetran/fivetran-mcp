@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Paychex client ID.",
+          "format": "password"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Paychex client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "paychex_config_V1"
+  ]
+}

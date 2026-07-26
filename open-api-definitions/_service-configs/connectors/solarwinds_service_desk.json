@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "domain": {
+          "type": "object",
+          "description": "Your SolarWinds Service Desk domain.",
+          "enum": [
+            "https://api.samanage.com",
+            "https://apieu.samanage.com"
+          ]
+        },
+        "token": {
+          "title": "",
+          "type": "string",
+          "description": "Your SolarWinds Service Desk token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "solarwinds_service_desk_config_V1"
+  ]
+}

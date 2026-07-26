@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Centra API token.",
+          "format": "password"
+        },
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Centra base URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "centra_config_V1"
+  ]
+}

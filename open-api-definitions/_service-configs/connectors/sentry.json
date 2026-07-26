@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sentry auth token.",
+          "format": "password"
+        },
+        "organization_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sentry organization ID."
+        },
+        "project_ids": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sentry project IDs."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sentry_config_V1"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your CloudTalk Access Key ID.",
+          "format": "password"
+        },
+        "access_key_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your CloudTalk Access Key Secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "cloudtalk_config_V1"
+  ]
+}

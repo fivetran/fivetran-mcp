@@ -1,0 +1,233 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "append_file_option": {
+          "title": "",
+          "type": "object",
+          "description": "If you know that the source completely over-writes the same file with new data, you can append the changes instead of upserting based on filename and line number.",
+          "enum": [
+            "upsert_file_with_primary_keys",
+            "upsert_file",
+            "append_file"
+          ]
+        },
+        "archive_pattern": {
+          "title": "",
+          "type": "string",
+          "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026."
+        },
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authorization type. Required for storage bucket authentication.",
+          "enum": [
+            "FIVETRAN_SERVICE_ACCOUNT",
+            "CUSTOM_SERVICE_ACCOUNT"
+          ]
+        },
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the GCS bucket."
+        },
+        "compression": {
+          "title": "",
+          "type": "object",
+          "description": "The secrets that should be passed to the function at runtime.",
+          "enum": [
+            "zip",
+            "gz",
+            "tar_gz",
+            "tar",
+            "infer",
+            "gzip",
+            "uncompressed",
+            "bz2",
+            "tar_bz2"
+          ]
+        },
+        "delimiter": {
+          "title": "",
+          "type": "string",
+          "description": "You can specify your the delimiter that your CSVs use here. Fivetran generally tries to infer the delimiter, but in some cases this is impossible."
+        },
+        "empty_header": {
+          "title": "",
+          "type": "boolean",
+          "description": "<strong>Optional.</strong> If your CSV generating software doesn't provide header line for the documents, Fivetran can generate the generic column names and sync data rows with them."
+        },
+        "escape_char": {
+          "title": "",
+          "type": "string",
+          "description": "If your CSV generator follows non-standard rules for escaping quotation marks, you can set the escape character here."
+        },
+        "extraction_pattern": {
+          "title": "",
+          "type": "string",
+          "description": "Required when `file_mapping_method` = `EXTRACT_TABLES`. A regular expression with a named capture group `(?<table>...)` to extract table names from file paths."
+        },
+        "file_mapping_method": {
+          "title": "",
+          "type": "object",
+          "description": "The method used to map files to destination tables. Use `DEFINE_PER_TABLE` to manually configure each table with its own file pattern, or `EXTRACT_TABLES` to automatically discover tables based on a single extraction pattern.",
+          "enum": [
+            "EXTRACT_TABLES",
+            "DEFINE_PER_TABLE"
+          ]
+        },
+        "file_type": {
+          "title": "",
+          "type": "object",
+          "description": "If your files are saved with improper extensions, you can force them to by synced as the selected file type.",
+          "enum": [
+            "tsv",
+            "xml",
+            "csv",
+            "spreadsheet",
+            "json",
+            "jsonl",
+            "avro",
+            "parquet"
+          ]
+        },
+        "files": {
+          "title": "",
+          "type": "array",
+          "description": "Required when `file_mapping_method` = `DEFINE_PER_TABLE`. Mapped file name patterns to a destination table.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "archive_pattern": {
+                "title": "",
+                "type": "string",
+                "description": "All Files inside of compressed archives with filenames matching this regular expression will be synced."
+              },
+              "file_pattern": {
+                "title": "",
+                "type": "string",
+                "description": "All files in your search path matching this regular expression will be synced per table."
+              },
+              "selected_range": {
+                "title": "",
+                "type": "string",
+                "description": "Cell reference that will be used to sync all contiguous data starting from the top-left cell in all the spreadsheets matching the name. Cell reference is in the `'<sheetName>'!<startColumnName><startRowNumber>` format."
+              },
+              "table_name": {
+                "title": "",
+                "type": "string",
+                "description": "All files matching the above pattern will be synced to this table."
+              }
+            },
+            "description": "Required when `file_mapping_method` = `DEFINE_PER_TABLE`. Mapped file name patterns to a destination table."
+          }
+        },
+        "json_delivery_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Control how your JSON data is delivered into your destination",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        },
+        "line_separator": {
+          "title": "",
+          "type": "string",
+          "description": "You can specify the custom line separator for your CSV files. The line separator is used in files to separate one row from the next."
+        },
+        "non_standard_escape_char": {
+          "title": "",
+          "type": "boolean",
+          "description": "Use this if your CSV generator uses non-standard ways of escaping characters. Default value: `false`."
+        },
+        "null_sequence": {
+          "title": "",
+          "type": "string",
+          "description": "If your CSVs use a special value indicating null, you can specify it here."
+        },
+        "on_error": {
+          "title": "",
+          "type": "object",
+          "description": "If you know that your files contain some errors, you can choose to have poorly formatted lines skipped. We recommend leaving the value as fail unless you are certain that you have undesirable, malformed data.",
+          "enum": [
+            "fail",
+            "skip"
+          ]
+        },
+        "pattern": {
+          "title": "",
+          "type": "string",
+          "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026."
+        },
+        "pgp_pass_phrase": {
+          "title": "",
+          "type": "string",
+          "description": "The PGP passphrase used to create the key. Must be populated if `use_pgp_encryption_options` is set to `true`.",
+          "format": "password"
+        },
+        "pgp_secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "The contents of your PGP secret key file. Must be populated if `use_pgp_encryption_options` is set to `true`.",
+          "format": "password"
+        },
+        "prefix": {
+          "title": "",
+          "type": "string",
+          "description": "The connection will look for files in this folder path. Choose the lowest common folder in a folder hierarchy that includes all the files you want to sync. This defines a specific location where Fivetran scans for files and helps ensure optimal performance."
+        },
+        "quote_char": {
+          "title": "",
+          "type": "string",
+          "description": "You can specify the enclosing character used in your CSVs here. Fivetran will consider \" as the quote character if this field is empty and quote_character_enabled is set to true."
+        },
+        "quote_character_enabled": {
+          "title": "",
+          "type": "boolean",
+          "description": "If you don\u2019t want to use an enclosing character while processing the files, set the value to false. By default, the value is set to true and is considered \" as quote character."
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your JSON Private Key. Used to authorize service account. Required if you use a Custom Service Account to authenticate the storage bucket.",
+          "format": "password"
+        },
+        "selected_range": {
+          "title": "",
+          "type": "string",
+          "description": "Cell reference that will be used to sync all contiguous data starting from the top-left cell in all the spreadsheets matching the name. Cell reference is in the `'<sheetName>'!<startColumnName><startRowName>` format."
+        },
+        "signer_public_key": {
+          "title": "",
+          "type": "string",
+          "description": "The contents of the signer's public key file. Must be populated if `use_pgp_encryption_options` is set to `true` and PGP encrypted files are signed."
+        },
+        "skip_after": {
+          "title": "",
+          "type": "integer",
+          "description": "We will skip over the number of lines specified at the end so as to not introduce aberrant data into your destination.",
+          "format": "int32"
+        },
+        "skip_before": {
+          "title": "",
+          "type": "integer",
+          "description": "We will skip over the number of lines specified before syncing data.",
+          "format": "int32"
+        },
+        "use_pgp_encryption_options": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set to `true` if files are encrypted using PGP in the GCS bucket. Default value: `false`."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gcs_config_V1"
+  ]
+}

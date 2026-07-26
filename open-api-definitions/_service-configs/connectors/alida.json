@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Alida API key.",
+          "format": "password"
+        },
+        "community_api_key_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Alida community API key name."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Alida client secret.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Alida region.",
+          "enum": [
+            "eu1",
+            "ap2",
+            "eu2",
+            "na2",
+            "na1"
+          ]
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Alida client ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "alida_config_V1"
+  ]
+}

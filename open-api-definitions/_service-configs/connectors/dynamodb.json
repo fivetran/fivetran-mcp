@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "aws_region_code": {
+          "title": "",
+          "type": "string",
+          "description": "The AWS region code for the DynamoDB instance, e.g. `us-east-1`."
+        },
+        "is_private_link_required": {
+          "title": "",
+          "type": "boolean",
+          "description": "We use PrivateLink by default if your DynamoDB instance is in the same region as Fivetran. Turning on this toggle ensures that Fivetran always connects to DynamoDB over PrivateLink. Learn more in our [PrivateLink documentation](https://fivetran.com/docs/connectors/databases/connection-options/aws-private-link)."
+        },
+        "packed_mode_tables": {
+          "title": "",
+          "type": "array",
+          "description": "List of tables to be synced in packed mode.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "Role ARN",
+          "format": "password"
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Which packed mode setting to use. Default value: `UsePackedModeOnly`.",
+          "enum": [
+            "UsePackedModeOnly",
+            "UseUnpackedModeOnly"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "dynamodb_config_V1"
+  ]
+}

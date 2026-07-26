@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Clari API token.",
+          "format": "password"
+        },
+        "forecast_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Clari Forecast id ."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "clari_config_V1"
+  ]
+}

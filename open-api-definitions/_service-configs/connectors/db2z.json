@@ -1,0 +1,108 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Require TLS"
+        },
+        "application_name": {
+          "title": "",
+          "type": "string",
+          "description": "The application name used to generate an RACF PassTicket for user authentication. Specify only when `authentication_method` is `LEGACY_PASS_TICKET` or `ENHANCED_PASS_TICKET`."
+        },
+        "authentication_method": {
+          "title": "",
+          "type": "object",
+          "description": "User authentication method. Supported values:<br>`PASSWORD`- Authenticate with the database server using an RACF user ID and password. If the parameter is omitted, `PASSWORD` is used by default. <br>`LEGACY_PASS_TICKET`- Authenticate with the database server using an RACF user ID and legacy PassTicket. <br>`ENHANCED_PASS_TICKET`- Authenticate with the database server using an RACF user ID and an enhanced PassTicket. Enhanced PassTickets are more secure than legacy PassTickets.",
+          "enum": [
+            "PASSWORD",
+            "LEGACY_PASS_TICKET",
+            "ENHANCED_PASS_TICKET"
+          ]
+        },
+        "certificate": {
+          "title": "",
+          "type": "string",
+          "description": "Db2 for z/OS host certificate",
+          "format": "password"
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values: `Directly`, `SshTunnel`. `SshTunnel` is used as a value if this parameter is omitted in the request and any of the following parameter's values is specified: `tunnel_host`, `tunnel_port`, `tunnel_user`. Otherwise, `Directly` is used as a value if the parameter is omitted.",
+          "enum": [
+            "Directly",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": "The database name."
+        },
+        "enhanced_pass_ticket_type": {
+          "title": "",
+          "type": "object",
+          "description": "Determines whether the Enhanced PassTicket is sent in mixed case or uppercase before authentication. Specify only when `authentication_method` is `ENHANCED_PASS_TICKET`. Supported values:<br>`UPPER`- The generated PassTicket consist of uppercase alphanumeric characters.<br>`MIXED`- The generated PassTicket consists of mixed-case alphanumeric characters and may include '-' and '_'.",
+          "enum": [
+            "UPPER",
+            "MIXED"
+          ]
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "DB instance host or IP address."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The user's password. Specify only when `authentication_method` is `PASSWORD`.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The port number.",
+          "format": "int32"
+        },
+        "secured_signon_key": {
+          "title": "",
+          "type": "string",
+          "description": "Application secret key registered in RACF for the application. Used to generate a PassTicket when `authentication_method` is `LEGACY_PASS_TICKET` or `ENHANCED_PASS_TICKET`.",
+          "format": "password"
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH host, specify only to connect via an SSH tunnel (do not use a load balancer)."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH port, specify only to connect via an SSH tunnel.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user, specify only to connect via an SSH tunnel."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The user name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "db2z_config_V1"
+  ]
+}

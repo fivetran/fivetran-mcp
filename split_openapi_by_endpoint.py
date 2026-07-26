@@ -22,8 +22,15 @@ Example:
 import ast
 import json
 import re
-from collections import defaultdict
 from pathlib import Path
+
+
+# Endpoints deliberately excluded from the manifest. `create_system_key` and
+# `rotate_system_key` mint credentials that outlive the session — a class of
+# privilege escalation that no agent workflow needs and every FIVETRAN_SCOPES
+# grant should refuse to authorize. Discovery, get_schema, and call all skip
+# them because they never make it into endpoints.json.
+EXCLUDED_ENDPOINTS = frozenset({"create_system_key", "rotate_system_key"})
 
 
 def resolve_ref(ref: str, components: dict) -> dict | None:
@@ -98,6 +105,117 @@ def strip_discriminator_mappings(obj):
     elif isinstance(obj, list):
         return [strip_discriminator_mappings(item) for item in obj]
     return obj
+
+
+def _merge_service_config(service: str, request_schema_name: str, components: dict) -> dict | None:
+    """Assemble one per-service config file by pulling service-specific pieces out of
+    `{service}_NewConnectorRequestV1` / `{service}_NewDestinationRequest`.
+
+    Walks the request schema's `allOf` and keeps only refs whose target name is
+    service-prefixed — dropping the shared base (`NewConnectorRequestV1`,
+    `NewDestinationRequest`, `schema_format_schema_prefix`). Merges the kept parts'
+    properties and required lists into a single flat object. For 32 connectors this
+    also folds in `{service}_esm_keys_config_V1` so the agent gets one file per service.
+
+    `components` is the top-level `spec['components']` object (with `schemas` inside),
+    matching what `resolve_refs_inline` expects.
+    """
+    request = components.get('schemas', {}).get(request_schema_name)
+    if not isinstance(request, dict) or 'allOf' not in request:
+        return None
+
+    merged_props: dict = {}
+    merged_required: list[str] = []
+    sources: list[str] = []
+
+    for item in request.get('allOf', []):
+        if not isinstance(item, dict):
+            continue
+        ref = item.get('$ref')
+        if not ref:
+            continue
+        target = ref.split('/')[-1]
+        if not target.startswith(f'{service}_'):
+            continue
+        resolved = resolve_refs_inline(item, components)
+        if not isinstance(resolved, dict):
+            continue
+        sources.append(target)
+        for prop_name, prop_schema in resolved.get('properties', {}).items():
+            merged_props[prop_name] = prop_schema
+        for req in resolved.get('required', []):
+            if req not in merged_required:
+                merged_required.append(req)
+
+    if not merged_props:
+        return None
+
+    out: dict = {'type': 'object', 'properties': merged_props}
+    if merged_required:
+        out['required'] = merged_required
+    out['x-sources'] = sources
+    return strip_examples(out)
+
+
+def write_service_configs(spec: dict, output_dir: Path) -> None:
+    """Write one file per service to `_service-configs/{connectors,destinations}/{svc}.json`.
+
+    Prerequisite for the get_schema(name, service=) router in the target architecture —
+    lets a caller reach the actual config shape for a chosen service without splicing.
+    """
+    components = spec.get('components', {})
+    schemas = components.get('schemas', {})
+    if not schemas:
+        print('  No components.schemas in spec; skipping service configs.')
+        return
+
+    connectors = sorted(
+        n.removesuffix('_NewConnectorRequestV1')
+        for n in schemas
+        if n.endswith('_NewConnectorRequestV1')
+    )
+    destinations = sorted(
+        n.removesuffix('_NewDestinationRequest')
+        for n in schemas
+        if n.endswith('_NewDestinationRequest')
+    )
+
+    base_dir = output_dir / '_service-configs'
+    conn_dir = base_dir / 'connectors'
+    dest_dir = base_dir / 'destinations'
+    conn_dir.mkdir(parents=True, exist_ok=True)
+    dest_dir.mkdir(parents=True, exist_ok=True)
+
+    written = {'connectors': [], 'destinations': []}
+    skipped = {'connectors': [], 'destinations': []}
+
+    for svc in connectors:
+        cfg = _merge_service_config(svc, f'{svc}_NewConnectorRequestV1', components)
+        if cfg is None:
+            skipped['connectors'].append(svc)
+            continue
+        (conn_dir / f'{svc}.json').write_text(json.dumps(cfg, indent=2))
+        written['connectors'].append(svc)
+
+    for svc in destinations:
+        cfg = _merge_service_config(svc, f'{svc}_NewDestinationRequest', components)
+        if cfg is None:
+            skipped['destinations'].append(svc)
+            continue
+        (dest_dir / f'{svc}.json').write_text(json.dumps(cfg, indent=2))
+        written['destinations'].append(svc)
+
+    index = {'connectors': written['connectors'], 'destinations': written['destinations']}
+    (base_dir / 'index.json').write_text(json.dumps(index, indent=2))
+
+    print(
+        f'  Wrote {len(written["connectors"])} connector configs, '
+        f'{len(written["destinations"])} destination configs to _service-configs/'
+    )
+    for kind in ('connectors', 'destinations'):
+        if skipped[kind]:
+            print(f'  Skipped {len(skipped[kind])} {kind} (no service-specific allOf refs): '
+                  f'{skipped[kind][:5]}{"..." if len(skipped[kind]) > 5 else ""}')
 
 
 def extract_parameters(operation: dict) -> list[dict]:
@@ -185,6 +303,36 @@ def _response_is_paginated(operation: dict, components: dict) -> bool:
     return False
 
 
+_LARGE_ENUM_STRIP_THRESHOLD = 50
+_STRIP_RESPONSE_ENUM_PROPS = frozenset({"service"})
+
+
+def _strip_large_enums_on_response(obj):
+    """Recursively drop huge informational enums from response schemas.
+
+    A large `service` enum on a response body constrains nothing — the API has
+    already returned a specific value. It only balloons `get_schema` payloads.
+    Applied only to whitelisted property names (`service`) so real domain enums
+    like a small status list are untouched.
+    """
+    if isinstance(obj, dict):
+        props = obj.get("properties")
+        if isinstance(props, dict):
+            for prop_name, prop_schema in props.items():
+                if (
+                    prop_name in _STRIP_RESPONSE_ENUM_PROPS
+                    and isinstance(prop_schema, dict)
+                    and isinstance(prop_schema.get("enum"), list)
+                    and len(prop_schema["enum"]) > _LARGE_ENUM_STRIP_THRESHOLD
+                ):
+                    prop_schema.pop("enum", None)
+        for v in obj.values():
+            _strip_large_enums_on_response(v)
+    elif isinstance(obj, list):
+        for v in obj:
+            _strip_large_enums_on_response(v)
+
+
 def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
     """Extract a minimal endpoint doc with only what's needed to call the API."""
     path_item = openapi_doc['paths'][path]
@@ -219,6 +367,7 @@ def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
 
     response = extract_response(operation, components)
     if response:
+        _strip_large_enums_on_response(response)
         endpoint_doc['response'] = response
 
     return endpoint_doc
@@ -231,50 +380,66 @@ def get_resource_from_path(path: str) -> str:
     return parts[0] if parts else 'other'
 
 
-def get_referenced_schema_files(server_file: Path) -> set[str]:
-    """Return all schema_file paths already referenced in server.py (active or commented)."""
-    pattern = re.compile(r'"schema_file":\s*"([^"]+)"')
-    return {m.group(1) for m in pattern.finditer(server_file.read_text())}
+def classify_scope(method: str) -> str:
+    """Scope model: read (GET) / write (POST, PATCH) / delete (DELETE).
+
+    No admin bucket — sensitive endpoints get protected by per-resource scoping
+    in Step 5 (grants shaped like `connections:write`, `system-keys:delete`).
+    """
+    if method == 'GET':
+        return 'read'
+    if method == 'DELETE':
+        return 'delete'
+    return 'write'
 
 
-def build_tool_entry(operation_id: str, schema_file_rel: str, endpoint_doc: dict) -> str:
-    """Generate a commented-out TOOLS entry string for a new endpoint."""
-    method = endpoint_doc['method']
-    path = endpoint_doc['path']
-    # Collapse multi-line descriptions and escape quotes for use in a Python string literal
-    raw_desc = endpoint_doc.get('description', '')
-    description = ' '.join(raw_desc.split()).replace('"', '\\"')
+def _summary_with_prefix(method: str, summary: str, description: str) -> str:
+    """Short OpenAPI summary prefixed with an all-caps category word.
 
-    # Path params are URL placeholders (the API never sees the name), so normalize
-    # them to snake_case to match the PARAM_DEFINITIONS convention. The endpoint
-    # template's {placeholders} MUST be rewritten to the same names, or .format()
-    # won't find them at call time.
-    raw_path_params = [p['name'] for p in endpoint_doc.get('parameters', []) if p.get('in') == 'path']
-    path_params = [_to_snake(n) for n in raw_path_params]
+    Categories: DESTRUCTIVE (DELETE), WRITE OPERATION (POST/PATCH/PUT),
+    PAGINATED (GETs whose response has a next_cursor). Non-paginated GETs get no prefix.
+    """
+    if method == 'DELETE':
+        return f'DESTRUCTIVE - {summary}'
+    if method in ('POST', 'PATCH', 'PUT'):
+        return f'WRITE OPERATION - {summary}'
+    if description.startswith('⚠️ RESULTS ARE PAGINATED'):
+        return f'PAGINATED - {summary}'
+    return summary
 
-    endpoint_path = path
-    for raw in raw_path_params:
-        endpoint_path = endpoint_path.replace('{' + raw + '}', '{' + _to_snake(raw) + '}')
 
-    has_body = 'request_body' in endpoint_doc or method in ('POST', 'PATCH', 'PUT')
-    params = path_params + (['request_body'] if has_body else [])
+def write_manifest(all_mappings: dict, output_dir: Path) -> None:
+    """Emit endpoints.json — one flat row per endpoint for the Step 4 router.
 
-    # Query params go in their own list, OPTIONAL at call time. Names are emitted
-    # verbatim (NO snake_case normalization) because a query param name is the
-    # literal wire format — ?groupId= and ?group_id= are different requests.
-    query_params = [p['name'] for p in endpoint_doc.get('parameters', []) if p.get('in') == 'query']
+    `summary` is the short OpenAPI summary with an all-caps category prefix. The
+    full description lives only in the per-endpoint split file and is reached via
+    get_schema — the router's `call` tool carries a blanket warning that applies
+    to every DESTRUCTIVE / WRITE OPERATION so it doesn't need per-endpoint text.
+    """
+    entries = []
+    for resource in sorted(all_mappings):
+        for name in sorted(all_mappings[resource]):
+            info = all_mappings[resource][name]
+            schema_rel = info['file']
+            doc = json.loads((output_dir / schema_rel).read_text())
+            entries.append({
+                'name': name,
+                'resource': resource,
+                'method': info['method'],
+                'path': info['path'],
+                'summary': _summary_with_prefix(
+                    info['method'], info.get('summary', ''), doc.get('description', '')
+                ),
+                'schema_file': schema_rel,
+                'scope': classify_scope(info['method']),
+                'deprecated': doc.get('deprecated', False),
+            })
 
-    lines = [f'    # "{operation_id}": {{']
-    lines.append(f'    #     "description": "{description}",')
-    lines.append(f'    #     "schema_file": "{schema_file_rel}",')
-    lines.append(f'    #     "method": "{method}",')
-    lines.append(f'    #     "endpoint": "{endpoint_path}",')
-    if params:
-        lines.append(f'    #     "params": {json.dumps(params)},')
-    if query_params:
-        lines.append(f'    #     "query_params": {json.dumps(query_params)},')
-    lines.append(f'    # }},')
-    return '\n'.join(lines)
+    (output_dir / 'endpoints.json').write_text(
+        json.dumps({'endpoints': entries}, indent=2)
+    )
+    print(f'  Wrote endpoints.json with {len(entries)} entries')
+
 
 def _clean_desc(s: str) -> str:
     """Collapse whitespace/newlines so a spec description fits on one comment-free line."""
@@ -320,8 +485,6 @@ def sync_param_definitions(output_dir: Path, server_file: Path) -> None:
     # name -> (type, description) from the first file that introduces it.
     discovered: dict[str, tuple[str, str]] = {}
     for schema_path in sorted(output_dir.rglob('*.json')):
-        if schema_path.name == 'endpoint-index.json':
-            continue
         try:
             endpoint_doc = json.loads(schema_path.read_text())
         except json.JSONDecodeError:
@@ -365,80 +528,6 @@ def sync_param_definitions(output_dir: Path, server_file: Path) -> None:
     for name in discovered:
         print(f'  + {name}')
 
-def inject_new_tools(output_dir: Path, all_mappings: dict, server_file: Path) -> None:
-    """Detect schema files not yet in server.py and inject commented-out tool entries."""
-    referenced = get_referenced_schema_files(server_file)
-    lines = server_file.read_text().splitlines()
-
-    SEP = '    # ' + '=' * 76
-
-    # Map section title -> line index of its first separator line
-    sections = {}
-    for i in range(len(lines) - 2):
-        if lines[i] == SEP and lines[i + 2] == SEP:
-            title = lines[i + 1].strip().lstrip('#').strip()
-            sections[title] = i
-
-    # Find line index of the TOOLS dict closing brace
-    tools_start = next(i for i, l in enumerate(lines) if l.startswith('TOOLS = {'))
-    tools_end = next(i for i in range(tools_start, len(lines)) if lines[i].rstrip() == '}')
-
-    # Collect new tools grouped by resource
-    new_by_resource: dict[str, list] = {}
-    for resource_name, endpoint_mapping in all_mappings.items():
-        for operation_id, info in endpoint_mapping.items():
-            schema_file_rel = f"{output_dir.name}/{info['file'].replace(chr(92), '/')}"
-            if schema_file_rel in referenced:
-                continue
-            schema_path = output_dir / info['file']
-            if not schema_path.exists():
-                continue
-            with open(schema_path) as f:
-                endpoint_doc = json.load(f)
-            new_by_resource.setdefault(resource_name, []).append(
-                (operation_id, schema_file_rel, endpoint_doc)
-            )
-
-    if not new_by_resource:
-        print('\nserver.py is up to date — no new endpoints to add.')
-        return
-
-    # Build insertion map: line_index -> list of lines to insert before that line
-    insertion_map: dict[int, list[str]] = defaultdict(list)
-
-    for resource_name, tools in new_by_resource.items():
-        section_title = resource_name.upper().replace('-', ' ')
-        entry_lines = []
-        for op_id, sf, doc in tools:
-            entry_lines.extend(build_tool_entry(op_id, sf, doc).splitlines())
-
-        if section_title in sections:
-            # Find the next section separator after this section's header, or tools_end
-            insert_at = tools_end
-            for i in range(sections[section_title] + 3, tools_end):
-                if lines[i] == SEP:
-                    insert_at = i
-                    break
-            insertion_map[insert_at].extend(entry_lines)
-        else:
-            # New section: insert block before the TOOLS closing brace
-            new_section = ['', SEP, f'    # {section_title}', SEP] + entry_lines
-            insertion_map[tools_end].extend(new_section)
-
-    # Apply insertions from bottom to top so earlier indices stay valid
-    for insert_at in sorted(insertion_map.keys(), reverse=True):
-        lines[insert_at:insert_at] = insertion_map[insert_at]
-
-    server_file.write_text('\n'.join(lines) + '\n')
-
-    total = sum(len(v) for v in new_by_resource.values())
-    print(f'\nAdded {total} new tool entr{"y" if total == 1 else "ies"} to server.py (commented out):')
-    for resource_name, tools in sorted(new_by_resource.items()):
-        for op_id, _, _ in tools:
-            print(f'  + {op_id} ({resource_name})')
-    print('Uncomment entries in server.py to enable them.')
-
-
 def sync_tool_descriptions(output_dir: Path, server_file: Path) -> None:
     """Update descriptions of all TOOLS entries in server.py (active and commented) to match schema files."""
     lines = server_file.read_text().splitlines()
@@ -479,62 +568,6 @@ def sync_tool_descriptions(output_dir: Path, server_file: Path) -> None:
         print(f'\nSynced {changed} tool description(s) in server.py.')
     else:
         print('\nTool descriptions in server.py are already up to date.')
-
-
-def apply_description_overrides(output_dir: Path) -> None:
-    """Apply description overrides from CSV to generated JSON schema files."""
-    import csv
-
-    csv_file = Path(__file__).parent / 'fivetran-open-api-description-overrides.csv'
-    if not csv_file.exists():
-        return
-
-    overrides: dict[tuple[str, str], str] = {}
-    with open(csv_file, newline='', encoding='utf-8') as f:
-        reader = csv.reader(f)
-        next(reader)  # skip header
-        for row in reader:
-            if len(row) < 5:
-                continue
-            endpoint = row[0].strip()
-            new_desc = row[4].strip()
-            if not new_desc:
-                continue
-            parts = endpoint.split(' ', 1)
-            if len(parts) != 2:
-                continue
-            method, path = parts[0].upper(), parts[1].strip()
-            overrides[(method, path)] = new_desc
-
-    if not overrides:
-        return
-
-    applied = 0
-    for schema_path in sorted(output_dir.rglob('*.json')):
-        if schema_path.name == 'endpoint-index.json':
-            continue
-        try:
-            doc = json.loads(schema_path.read_text())
-        except json.JSONDecodeError:
-            continue
-
-        method = doc.get('method', '').upper()
-        path = doc.get('path', '')
-        new_desc = overrides.get((method, path))
-        if not new_desc:
-            continue
-
-        if method == 'DELETE':
-            new_desc = f'⚠️ DESTRUCTIVE - Confirm with user before calling. {new_desc}'
-        elif method in ('POST', 'PATCH', 'PUT'):
-            new_desc = f'⚠️ WRITE OPERATION - Confirm with user before calling. {new_desc}'
-
-        doc['description'] = new_desc
-        schema_path.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + '\n')
-        applied += 1
-        print(f'  Overrode: {method} {path}')
-
-    print(f'\nApplied {applied} description override(s) from {csv_file.name}.')
 
 
 def main():
@@ -602,6 +635,10 @@ def main():
                     print(f'  WARNING: No operationId for {method.upper()} {path}, skipping')
                     continue
 
+                if operation_id in EXCLUDED_ENDPOINTS:
+                    print(f'  Excluded: {operation_id} (in EXCLUDED_ENDPOINTS)')
+                    continue
+
                 endpoint_doc = extract_endpoint_schema(resource_openapi, path, method)
 
                 output_file = resource_output_dir / f'{operation_id}.json'
@@ -624,25 +661,22 @@ def main():
         all_mappings[resource_name] = endpoint_mapping
         print()
 
-    # Write an index file
-    index_file = output_dir / 'endpoint-index.json'
-    with open(index_file, 'w') as f:
-        json.dump(all_mappings, f, indent=2)
-    print(f'Created endpoint index: {index_file}')
+    # Emit the flat manifest (one row per endpoint) for the Step 4 router
+    print('\nWriting endpoints manifest...')
+    write_manifest(all_mappings, output_dir)
 
     total_endpoints = sum(len(m) for m in all_mappings.values())
     print(f'\nDone! Split into {total_endpoints} endpoint files across {len(all_mappings)} resources.')
     print(f'Total output: {total_new_lines} lines')
 
-    # Apply description overrides from CSV
-    print('\nApplying description overrides...')
-    apply_description_overrides(output_dir)
+    # Emit per-service config schemas
+    print('\nWriting per-service config schemas...')
+    write_service_configs(openapi_doc, output_dir)
 
-    # Inject any new endpoints into server.py and sync descriptions of existing ones
+    # Keep server.py's PARAM_DEFINITIONS and existing tool descriptions in sync
     server_file = Path(__file__).parent / 'server.py'
     if server_file.exists():
         sync_param_definitions(output_dir, server_file)
-        inject_new_tools(output_dir, all_mappings, server_file)
         sync_tool_descriptions(output_dir, server_file)
 
     return 0

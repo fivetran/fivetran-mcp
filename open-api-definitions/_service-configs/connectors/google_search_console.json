@@ -1,0 +1,192 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of reports. Each report corresponds to a table within the schema to which connector syncs the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "aggregation": {
+                "title": "",
+                "type": "object",
+                "description": "(Optional) Aggregation type. Supported only for the `SEARCH_RESULTS` report type",
+                "enum": [
+                  "BY_PROPERTY",
+                  "BY_PAGE"
+                ]
+              },
+              "dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "The report dimensions included to sync.",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "DATE",
+                    "COUNTRY",
+                    "HOUR",
+                    "QUERY",
+                    "DEVICE",
+                    "PAGE",
+                    "SEARCH_APPEARANCE"
+                  ]
+                }
+              },
+              "filters": {
+                "title": "",
+                "type": "array",
+                "description": "The list of filters to be applied to the report.",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "properties": {
+                    "dimension": {
+                      "title": "",
+                      "type": "object",
+                      "description": "",
+                      "enum": [
+                        "COUNTRY",
+                        "QUERY",
+                        "DEVICE",
+                        "PAGE",
+                        "SEARCH_APPEARANCE"
+                      ]
+                    },
+                    "expression": {
+                      "title": "",
+                      "type": "string",
+                      "description": ""
+                    },
+                    "filter_type": {
+                      "title": "",
+                      "type": "object",
+                      "description": "",
+                      "enum": [
+                        "EXCLUDE",
+                        "INCLUDE"
+                      ]
+                    },
+                    "match_type": {
+                      "title": "",
+                      "type": "object",
+                      "description": "",
+                      "enum": [
+                        "EQUALS",
+                        "CONTAINS"
+                      ]
+                    }
+                  },
+                  "description": ""
+                }
+              },
+              "report_type": {
+                "title": "",
+                "type": "object",
+                "description": "The type of report",
+                "enum": [
+                  "DISCOVER",
+                  "GOOGLE_NEWS",
+                  "SEARCH_RESULTS"
+                ]
+              },
+              "search_types": {
+                "title": "",
+                "type": "array",
+                "description": "Search types included to sync. Supported only for the `SEARCH_RESULTS` report type",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "IMAGE",
+                    "WEB",
+                    "VIDEO",
+                    "NEWS",
+                    "DISCOVER",
+                    "GOOGLE_NEWS"
+                  ]
+                }
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "The name of a table within the schema to which connector syncs the data of a given report."
+              }
+            },
+            "description": "The list of reports. Each report corresponds to a table within the schema to which connector syncs the data."
+          }
+        },
+        "site_urls": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Site URLs to sync. Must be populated if `sync_mode` is set to `SpecificSites`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all sites or specific sites.",
+          "enum": [
+            "AllSites",
+            "SpecificSites"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. A change of this value will trigger a re-sync for enabled reports during the next connector sync.",
+          "enum": [
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Google Search Console client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Google Search Console client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_search_console_config_V1",
+    "google_search_console_auth_V1"
+  ]
+}

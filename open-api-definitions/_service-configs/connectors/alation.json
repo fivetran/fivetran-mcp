@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID of the OAuth client application registered in Alation for this connection."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Client secret of the OAuth client application registered in Alation for this connection.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Alation base URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "alation_config_V1"
+  ]
+}

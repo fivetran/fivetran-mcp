@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Paylocity client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Paylocity client secret.",
+          "format": "password"
+        },
+        "company_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Paylocity company ID."
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Paylocity subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "paylocity_config_V1"
+  ]
+}

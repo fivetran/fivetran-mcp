@@ -1,0 +1,93 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Accounts to sync.  Must be populated if `sync_mode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "is_custom_api_credentials": {
+          "title": "",
+          "type": "boolean",
+          "description": "Custom API credentials"
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Historical sync timeframe in months.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your X Ads client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your X Ads client application."
+            }
+          },
+          "description": "Your application client access fields."
+        },
+        "consumer_key": {
+          "title": "",
+          "type": "string",
+          "description": "The X App consumer key."
+        },
+        "consumer_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The X App consumer secret."
+        },
+        "oauth_token": {
+          "title": "",
+          "type": "string",
+          "description": "The X App access token."
+        },
+        "oauth_token_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The X App access token secret."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "twitter_ads_config_V1",
+    "twitter_ads_auth_V1"
+  ]
+}

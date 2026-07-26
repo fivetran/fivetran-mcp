@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Acumatica client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Acumatica client secret.",
+          "format": "password"
+        },
+        "contract_version": {
+          "title": "",
+          "type": "string",
+          "description": "Your Acumatica contract version."
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Acumatica subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "acumatica_config_V1"
+  ]
+}

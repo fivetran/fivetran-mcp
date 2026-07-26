@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_mode": {
+          "title": "",
+          "type": "object",
+          "description": "The Authentication Mode used by SAP Concur. It can be PasswordGrant or CompanyLevel auth mode",
+          "enum": [
+            "CompanyLevel",
+            "PasswordGrant"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Concur Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Concur Client secret.",
+          "format": "password"
+        },
+        "company_request_token": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Concur Company Request Token",
+          "format": "password"
+        },
+        "company_uuid": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Concur Company UUID"
+        },
+        "historical_sync_limit": {
+          "title": "",
+          "type": "string",
+          "description": "Historical Sync Limit for the Sync"
+        },
+        "login_password": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Concur password.",
+          "format": "password"
+        },
+        "region": {
+          "title": "",
+          "type": "string",
+          "description": "The region."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Concur username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "concur_config_V1"
+  ]
+}

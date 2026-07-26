@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "app_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your ServiceTitan app key.",
+          "format": "password"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your ServiceTitan client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your ServiceTitan secret key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your ServiceTitan environment.",
+          "enum": [
+            "-integration.",
+            "."
+          ]
+        },
+        "tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your ServiceTitan tenant ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "servicetitan_config_V1"
+  ]
+}

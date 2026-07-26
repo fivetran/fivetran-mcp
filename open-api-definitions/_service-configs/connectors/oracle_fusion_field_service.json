@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Oracle Fusion Field Service client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Oracle Fusion Field Service client secret.",
+          "format": "password"
+        },
+        "root_resource_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Oracle Fusion Field Service rootresourceId."
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Oracle Fusion Field Service subDomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "oracle_fusion_field_service_config_V1"
+  ]
+}

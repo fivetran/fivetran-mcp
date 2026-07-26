@@ -1,0 +1,60 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_quota": {
+          "title": "",
+          "type": "integer",
+          "description": "Allowed number of API requests to Marketo instance per day, the default value is 10000.",
+          "format": "int32"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Marketo REST API Client Id."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Marketo REST API Client Secret.",
+          "format": "password"
+        },
+        "endpoint": {
+          "title": "",
+          "type": "string",
+          "description": "Marketo REST API endpoint."
+        },
+        "historical_sync_limit": {
+          "title": "",
+          "type": "object",
+          "description": "The time range for which historical data should be synced. Default value: `All Time`.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "historical_sync_limit_date": {
+          "title": "",
+          "type": "string",
+          "description": "The start date (YYYY-MM-DD) from which to sync historical data."
+        },
+        "identity": {
+          "title": "",
+          "type": "string",
+          "description": "Marketo REST API identity url."
+        },
+        "prioritise_bulk_export_over_rest": {
+          "title": "",
+          "type": "boolean",
+          "description": "Use BULK for both LEAD and ACTIITIES"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "marketo_config_V1"
+  ]
+}

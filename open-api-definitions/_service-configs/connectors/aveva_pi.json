@@ -1,0 +1,71 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Require TLS."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values: `Directly`, `PrivateLink`",
+          "enum": [
+            "Directly",
+            "PrivateLink"
+          ]
+        },
+        "database": {
+          "title": "Database Name",
+          "type": "string",
+          "description": ""
+        },
+        "host": {
+          "title": "AF Server IP Address",
+          "type": "string",
+          "description": "IP address of the AF Server"
+        },
+        "password": {
+          "title": "Database User Password",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "port": {
+          "title": "AF Server Port Number",
+          "type": "integer",
+          "description": "Port number at which the AF Server is running",
+          "format": "int32"
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH host, specify only to connect via an SSH tunnel (do not use a load balancer)."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH port, specify only to connect via an SSH tunnel.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user, specify only to connect via an SSH tunnel."
+        },
+        "user": {
+          "title": "Database User Username",
+          "type": "string",
+          "description": "Username for the user to authenticate as with the AF Server"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "aveva_pi_config_V1"
+  ]
+}

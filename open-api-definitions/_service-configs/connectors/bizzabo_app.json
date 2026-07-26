@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Bizzabo account ID."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Bizzabo client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Bizzabo client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "bizzabo_app_config_V1"
+  ]
+}

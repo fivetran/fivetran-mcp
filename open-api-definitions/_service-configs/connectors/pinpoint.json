@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Pinpoint API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Pinpoint sub domain name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "pinpoint_config_V1"
+  ]
+}

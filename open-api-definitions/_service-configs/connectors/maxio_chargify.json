@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Enter Your API Key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Enter Your Subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "maxio_chargify_config_V1"
+  ]
+}

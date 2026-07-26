@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Trelica client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Trelica client secret.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Trelica environment.",
+          "enum": [
+            "app",
+            "eu"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "trelica_config_V1"
+  ]
+}

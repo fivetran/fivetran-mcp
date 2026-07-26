@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Xray Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Xray Client Secret.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Xray region.",
+          "enum": [
+            "au.xray.cloud.getxray.app",
+            "xray.cloud.getxray.app",
+            "us.xray.cloud.getxray.app",
+            "eu.xray.cloud.getxray.app"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "xray_config_V1"
+  ]
+}

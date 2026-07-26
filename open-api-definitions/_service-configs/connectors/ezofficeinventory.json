@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your EZOfficeInventory API secret key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your EZOfficeInventory Subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ezofficeinventory_config_V1"
+  ]
+}

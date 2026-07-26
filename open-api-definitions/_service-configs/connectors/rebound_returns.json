@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your ReBound Returns API key.",
+          "format": "password"
+        },
+        "login": {
+          "title": "",
+          "type": "string",
+          "description": "Your ReBound Returns login."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "rebound_returns_config_V1"
+  ]
+}

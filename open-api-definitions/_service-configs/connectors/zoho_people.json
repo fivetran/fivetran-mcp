@@ -1,0 +1,73 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The client ID of the application that is registered in your Zoho People developer account for this connection."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The client secret of the application that is registered in your Zoho People developer account for this connection.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "The region where the application that is registered in your Zoho People developer account is hosted.",
+          "enum": [
+            "com",
+            "eu",
+            "in",
+            "jp",
+            "com.cn",
+            "com.au"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "zoho_people_config_V1",
+    "zoho_people_auth_V1"
+  ]
+}

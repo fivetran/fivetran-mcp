@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your GreenPowerMonitor password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your GreenPowerMonitor subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your GreenPowerMonitor username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "green_power_monitor_config_V1"
+  ]
+}

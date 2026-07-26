@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your SAP SuccessFactors Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your SAP SuccessFactors Client Secret that you generated through SAML Assertion.",
+          "format": "password"
+        },
+        "company_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your SAP SuccessFactors Company ID."
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your SAP SuccessFactors Subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sap_success_factors_config_V1"
+  ]
+}

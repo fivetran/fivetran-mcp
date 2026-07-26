@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Quorum API key.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Quorum username ."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "quorum_config_V1"
+  ]
+}

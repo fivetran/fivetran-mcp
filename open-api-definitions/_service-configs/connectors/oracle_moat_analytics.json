@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "brand_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Oracle Moat Analytics Brand ID."
+        },
+        "token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Oracle Moat Analytics Token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "oracle_moat_analytics_config_V1"
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication method (BasicAuth or MutualTLS).",
+          "enum": [
+            "BasicAuth",
+            "MutualTLS"
+          ]
+        },
+        "client_certificate": {
+          "title": "",
+          "type": "string",
+          "description": "Client certificate for mutual TLS authentication.",
+          "format": "password"
+        },
+        "client_private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Client private key for mutual TLS authentication.",
+          "format": "password"
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "AMQP broker host address."
+        },
+        "json_delivery_mode": {
+          "title": "",
+          "type": "object",
+          "description": "JSON delivery mode (Packed or Unpacked).",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        },
+        "message_type": {
+          "title": "",
+          "type": "object",
+          "description": "Message type (Text or JSON).",
+          "enum": [
+            "Text",
+            "JSON"
+          ]
+        },
+        "namespace": {
+          "title": "",
+          "type": "string",
+          "description": "AMQP namespace or virtual host."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Password for basic authentication.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "AMQP broker port.",
+          "format": "int32"
+        },
+        "queue_name": {
+          "title": "",
+          "type": "string",
+          "description": "AMQP queue name to consume messages from."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Username for basic authentication."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "amqp_config_V1"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShipStation password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShipStation username.",
+          "format": "password"
+        },
+        "v2_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShipStation V2 API key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "shipstation_config_V1"
+  ]
+}

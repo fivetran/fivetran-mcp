@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your WordPress subdomain."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "format": "password"
+        },
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          }
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "wordpress_config_V1",
+    "wordpress_auth_V1"
+  ]
+}

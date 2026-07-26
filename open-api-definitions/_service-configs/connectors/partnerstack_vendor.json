@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "public_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your PartnerStack Vendor Public key."
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your PartnerStack Vendor Secret key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "partnerstack_vendor_config_V1"
+  ]
+}

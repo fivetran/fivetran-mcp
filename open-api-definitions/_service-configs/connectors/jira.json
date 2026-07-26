@@ -1,0 +1,104 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_cursor_rollback_window": {
+          "title": "",
+          "type": "integer",
+          "description": "The number of hours to roll back the issue search cursor. Allows reprocessing of recently updated issues that may have been missed due to indexing delays. Valid range is 0-48 hours. A value of 0 disables the rollback.",
+          "format": "int32"
+        },
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authorization type.",
+          "enum": [
+            "SERVICE_ACCOUNT",
+            "BASIC",
+            "OAUTH"
+          ]
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "The Jira service host address."
+        },
+        "on_premise": {
+          "title": "",
+          "type": "boolean",
+          "description": "Whether the Jira instance is local or in cloud."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Jira user's password.",
+          "format": "password"
+        },
+        "path": {
+          "title": "",
+          "type": "string",
+          "description": "A URL subdirectory where the Jira instance is working."
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The Jira service host port.",
+          "format": "int32"
+        },
+        "projects": {
+          "title": "",
+          "type": "array",
+          "description": "Specific projects to sync. Must be populated if `syncMode` is set to `CUSTOM`.",
+          "items": {
+            "title": "",
+            "type": "integer",
+            "description": "",
+            "format": "int32"
+          }
+        },
+        "sync_files": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether to sync files in JIRA for supported destinations (true) or not (false)."
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all projects or specific projects.",
+          "enum": [
+            "ALL",
+            "CUSTOM"
+          ]
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The Jira username."
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Jira user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Jira username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "jira_config_V1",
+    "jira_esm_keys_config_V1"
+  ]
+}

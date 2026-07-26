@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Impact Brand Account Token",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Impact Brand Account SID"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "impact_config_V1"
+  ]
+}

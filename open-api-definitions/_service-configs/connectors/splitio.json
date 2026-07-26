@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "admin_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Split admin api key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "splitio_config_V1"
+  ]
+}

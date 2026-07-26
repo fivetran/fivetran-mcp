@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_sid": {
+          "title": "",
+          "type": "string",
+          "description": "Your Impact Partner account SID"
+        },
+        "auth_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Impact Partner auth token",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "impact_partner_config_V1"
+  ]
+}

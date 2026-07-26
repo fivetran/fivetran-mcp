@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your integral_ad_science password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your integral_ad_science username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "integral_ad_science_config_V1"
+  ]
+}

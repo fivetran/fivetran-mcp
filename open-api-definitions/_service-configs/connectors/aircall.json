@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Aircall API ID."
+        },
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Aircall API token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "aircall_config_V1"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": ""
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel"
+          ]
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "",
+          "format": "int32"
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "maria_rds_warehouse_config_V1"
+  ]
+}

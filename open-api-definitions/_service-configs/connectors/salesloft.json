@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "`Client ID` of your Salesloft client application."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "`Client Secret` of your Salesloft client application.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "salesloft_config_V1",
+    "salesloft_auth_V1"
+  ]
+}

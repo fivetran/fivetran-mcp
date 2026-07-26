@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Splash client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Splash client secret.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Splash password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Splash username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "splash_config_V1"
+  ]
+}

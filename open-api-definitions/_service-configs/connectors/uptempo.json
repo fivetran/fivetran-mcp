@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Uptempo password.",
+          "format": "password"
+        },
+        "subdomain": {
+          "type": "object",
+          "description": "Your Uptempo subdomain.",
+          "enum": [
+            "api-eu",
+            "api-na"
+          ]
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Uptempo username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "uptempo_config_V1"
+  ]
+}

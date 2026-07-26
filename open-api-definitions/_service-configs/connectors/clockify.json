@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Clockify API key.",
+          "format": "password"
+        },
+        "server_region": {
+          "type": "object",
+          "description": "Your Clockify server region.",
+          "enum": [
+            "euc1",
+            "euw2",
+            "apse2",
+            "api",
+            "use2"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "clockify_config_V1"
+  ]
+}

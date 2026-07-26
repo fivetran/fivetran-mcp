@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Okendo API key.",
+          "format": "password"
+        },
+        "user_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Okendo user ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "okendo_config_V1"
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "region_api_url": {
+          "type": "object",
+          "description": "Your Amazon Attribution API URL region.",
+          "enum": [
+            "api-fe",
+            "api-eu",
+            "api"
+          ]
+        },
+        "region_auth_url": {
+          "type": "object",
+          "description": "Your Amazon Attribution auth URL region.",
+          "enum": [
+            "apac.account",
+            "www",
+            "eu.account"
+          ]
+        },
+        "region_token_url": {
+          "type": "object",
+          "description": "Your Amazon Attribution token URL region.",
+          "enum": [
+            "com",
+            "co.uk",
+            "co.jp"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "amazon_attribution_config_V1",
+    "amazon_attribution_auth_V1"
+  ]
+}

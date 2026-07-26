@@ -1,0 +1,168 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication Mode",
+          "enum": [
+            "BASIC",
+            "OAUTH"
+          ]
+        },
+        "authorization_url": {
+          "title": "",
+          "type": "string",
+          "description": "Authorization URL"
+        },
+        "domain_host_name": {
+          "title": "",
+          "type": "string",
+          "description": "Workday host name."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Workday password.",
+          "format": "password"
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "dynamic_parameter_field": {
+                "title": "",
+                "type": "string",
+                "description": "Dynamic parameter field name"
+              },
+              "enable_dynamic_parameters": {
+                "title": "",
+                "type": "boolean",
+                "description": "Select this option to enable dynamic report parameters."
+              },
+              "generate_fivetran_pk": {
+                "title": "",
+                "type": "boolean",
+                "description": "Select this option to generate a Primary Key for reports where no single column or combination of columns can be used to form a Primary Key."
+              },
+              "primary_keys": {
+                "title": "",
+                "type": "array",
+                "description": "Primary Keys",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_format_type": {
+                "title": "",
+                "type": "object",
+                "description": "This is to select report format from JSON and CSV. By default, report format is JSON.",
+                "enum": [
+                  "csv",
+                  "json"
+                ]
+              },
+              "report_url": {
+                "title": "",
+                "type": "string",
+                "description": "URL for a live custom report."
+              },
+              "start_date": {
+                "title": "",
+                "type": "string",
+                "description": "Start date"
+              },
+              "start_date_parameter_field": {
+                "title": "",
+                "type": "string",
+                "description": "Start date parameter field name"
+              },
+              "support_nested_columns": {
+                "title": "",
+                "type": "boolean",
+                "description": "This option is to unpack the nested columns and sync them separately. By default, we sync the nested columns as JSON objects."
+              },
+              "sync_strategy": {
+                "title": "",
+                "type": "object",
+                "description": "Dynamic report parameters sync strategy",
+                "enum": [
+                  "FROM_START_DATE",
+                  "FROM_LAST_SYNCED_DATE"
+                ]
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "The table name within the schema to which connector will sync the data of the specific report."
+              }
+            },
+            "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data."
+          }
+        },
+        "tenant": {
+          "title": "",
+          "type": "string",
+          "description": "Workday tenant name"
+        },
+        "user_name": {
+          "title": "",
+          "type": "string",
+          "description": "Workday username."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Client Secret"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth Refresh Token"
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for workday password."
+        },
+        "user_name": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for workday username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "workday_config_V1",
+    "workday_auth_V1",
+    "workday_esm_keys_config_V1"
+  ]
+}

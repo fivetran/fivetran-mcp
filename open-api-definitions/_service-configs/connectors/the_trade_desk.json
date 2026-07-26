@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "login": {
+          "title": "",
+          "type": "string",
+          "description": "The Trade Desk email. It is a part of the login credentials."
+        },
+        "partners": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Partner IDs to sync.  Must be populated if `syncMode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Trade Desk password. It is a part of the login credentials.",
+          "format": "password"
+        },
+        "report_templates": {
+          "title": "",
+          "type": "array",
+          "description": "Report templates to sync.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `THREE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "the_trade_desk_config_V1"
+  ]
+}

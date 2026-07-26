@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "app_level": {
+          "type": "object",
+          "description": "Your Slack app level.",
+          "enum": [
+            "users:read,bookmarks:read,channels:history,channels:read,dnd:read,emoji:read,groups:history,groups:read,im:history,im:read,mpim:history,mpim:read,pins:read,reactions:read,reminders:read,usergroups:read,files:read,users.profile:read,users:read.email,remote_files:read,pins:read,team.billing:read,team.preferences:read",
+            "users:read,bookmarks:read,channels:history,channels:read,dnd:read,emoji:read,groups:history,groups:read,im:history,im:read,mpim:history,mpim:read,pins:read,reactions:read,reminders:read,usergroups:read,files:read,users.profile:read,users:read.email,remote_files:read,pins:read,team.billing:read,team.preferences:read,auditlogs:read"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Slack app Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Slack app Client Secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "slack_app_config_V1"
+  ]
+}

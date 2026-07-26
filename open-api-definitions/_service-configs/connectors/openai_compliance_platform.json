@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your OpenAI Compliance Platform API key.",
+          "format": "password"
+        },
+        "organization_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your OpenAI Compliance Platform organization ID."
+        },
+        "workspace_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your OpenAI Compliance Platform workspace ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "openai_compliance_platform_config_V1"
+  ]
+}

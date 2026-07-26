@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mode Secret.",
+          "format": "password"
+        },
+        "token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mode Token.",
+          "format": "password"
+        },
+        "workspace": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mode Workspace."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "mode_config_V1"
+  ]
+}

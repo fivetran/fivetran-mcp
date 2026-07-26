@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Triple Whale API key.",
+          "format": "password"
+        },
+        "shop_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Triple Whale shop domain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "triple_whale_config_V1"
+  ]
+}

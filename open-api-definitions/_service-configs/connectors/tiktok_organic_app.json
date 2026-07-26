@@ -1,0 +1,95 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_environment": {
+          "type": "object",
+          "description": "Your TikTok Organic API environment.",
+          "enum": [
+            "business-api.tiktok.com",
+            "sandbox-ads.tiktok.com"
+          ]
+        },
+        "business_category": {
+          "type": "object",
+          "description": "The TikTok business category whose data you want to sync.",
+          "enum": [
+            "CLOTHING_AND_ACCESSORIES",
+            "FINANCE_AND_INVESTING",
+            "HEALTH_AND_WELLNESS",
+            "SHOPPING_AND_RETAIL",
+            "BABY",
+            "PROFESSIONAL_SERVICES",
+            "GAMING",
+            "PETS",
+            "EDUCATION_AND_TRAINING",
+            "PUBLIC_ADMINISTRATION",
+            "PERSONAL_BLOG",
+            "SPORTS_FITNESS_AND_OUTDOORS",
+            "ELECTRONICS",
+            "REAL_ESTATE",
+            "TRAVEL_AND_TOURISM",
+            "MACHINERY_AND_EQUIPMENT",
+            "RESTAURANTS_AND_BARS",
+            "ART_AND_CRAFTS",
+            "HOME_FURNITURE_AND_APPLIANCES",
+            "OTHERS",
+            "BEAUTY",
+            "SOFTWARE_AND_APPS",
+            "FOOD_AND_BEVERAGE",
+            "MEDIA_AND_ENTERTAINMENT",
+            "AUTOMOTIVE_AND_TRANSPORTATION"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your TikTok Organic access token.",
+          "format": "password"
+        },
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": "Your TikTok Organic client access."
+        },
+        "realm_id": {
+          "title": "",
+          "type": "string",
+          "description": "The TikTok account Open ID (open_id) returned during OAuth authorization. Required when creating the connector via REST API."
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your TikTok Organic refresh token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "tiktok_organic_app_config_V1",
+    "tiktok_organic_app_auth_V1"
+  ]
+}

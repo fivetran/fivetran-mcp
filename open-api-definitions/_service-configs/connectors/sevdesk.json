@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your sevdesk API token.",
+          "format": "password"
+        },
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "The base URL for the sevdesk API, without the protocol prefix."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sevdesk_config_V1"
+  ]
+}

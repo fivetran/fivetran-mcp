@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your TestRail API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your TestRail subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your TestRail username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "testrail_config_V1"
+  ]
+}

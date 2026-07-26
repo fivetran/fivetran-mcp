@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bearer_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your SmartHR access token.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your SmartHR environment.",
+          "enum": [
+            "daruma.space",
+            "smarthr.jp"
+          ]
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your SmartHR subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "smarthr_config_V1"
+  ]
+}

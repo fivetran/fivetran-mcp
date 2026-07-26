@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Adobe Commerce access_token",
+          "format": "password"
+        },
+        "auth_type": {
+          "type": "object",
+          "description": "Your Adobe Commerce auth type.",
+          "enum": [
+            "access_token",
+            "oauth_2"
+          ]
+        },
+        "host_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Adobe Commerce host url."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Adobe Commerce password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Adobe Commerce username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "adobe_commerce_config_V1"
+  ]
+}

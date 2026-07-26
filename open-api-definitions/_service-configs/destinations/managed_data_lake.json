@@ -1,0 +1,234 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Specifies the authentication types for Fivetran to connect to Databricks. Use this parameter only if you want to use Unity Catalog to manage your Delta Lake tables.",
+          "enum": [
+            "PERSONAL_ACCESS_TOKEN",
+            "OAUTH2"
+          ]
+        },
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) Name of the S3 or Google Cloud Storage (GCS) bucket you want to use to store your data. Use this parameter only if you want to deploy your data lake on Amazon Web Services (AWS) or GCS."
+        },
+        "catalog": {
+          "title": "",
+          "type": "string",
+          "description": "Name of the specific catalog in Unity Catalog that you want to use to manage your Delta Lake tables. Use this parameter only if you want to use Unity Catalog with your data lake."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID of the service principal you created for Fivetran. Use this parameter only if you want to deploy your data lake on ADLS."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "connection type",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "container_name": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) Name of the ADLS container you want to use to store your data. Use this parameter only if you want to deploy your data lake on ADLS."
+        },
+        "databricks_connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Specifies how you want Fivetran to connect to the Databricks account associated with Unity Catalog. Default value: `Directly`. Use this parameter only if you want to use Unity Catalog with your data lake.",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "fivetran_role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) ARN of the IAM role you created for the IAM policy associated with your S3 bucket or Glue catalog. Use this parameter only if you want to deploy your data lake on AWS."
+        },
+        "gcs_project_id": {
+          "title": "",
+          "type": "string",
+          "description": "GCS Project ID of your Google Cloud Storage bucket. Use this parameter only if you want to deploy your data lake on GCS."
+        },
+        "http_path": {
+          "title": "",
+          "type": "string",
+          "description": "HTTP path of the Databricks account associated with Unity Catalog. Use this parameter only if you want to use Unity Catalog to manage your Delta Lake tables."
+        },
+        "lakehouse_guid": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) OneLake lakehouse GUID."
+        },
+        "oauth2_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The OAuth 2.0 client ID you created for authenticating Fivetran. Use this parameter only if you want to use OAuth 2.0 as the authentication type for Fivetran to connect to Databricks."
+        },
+        "oauth2_secret": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth 2.0 secret you created for authenticating Fivetran. Use this parameter only if you want to use OAuth 2.0 as the authentication type for Fivetran to connect to Databricks.",
+          "format": "password"
+        },
+        "one_lake_auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "(Immutable) Authentication type for OneLake. Default value: `ServicePrincipal`.",
+          "enum": [
+            "SERVICE_PRINCIPAL",
+            "WORKSPACE_IDENTITY"
+          ]
+        },
+        "onelake_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) Client ID of OneLake service principal."
+        },
+        "onelake_client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Secret value for OneLake service principal.",
+          "format": "password"
+        },
+        "onelake_tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) Tenant ID of OneLake service principal"
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The personal access token you created for authenticating Fivetran. Use this parameter only if you want to use a personal access token as the authentication type for Fivetran to connect to Databricks.",
+          "format": "password"
+        },
+        "polaris_catalog_configuration": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "type": "string",
+              "description": "Client ID"
+            },
+            "client_secret": {
+              "type": "string",
+              "description": "Client Secret"
+            },
+            "polaris_catalog": {
+              "type": "string",
+              "description": "Polaris Catalog"
+            },
+            "polaris_server_endpoint": {
+              "type": "string",
+              "description": "Polaris Server Endpoint"
+            }
+          },
+          "description": "Polaris Catalog Base Configuration. Universal connection settings for any query engine or analytics tool."
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "Server port number of the Databricks account associated with Unity Catalog. Use this parameter only if you want to use Unity Catalog to manage your Delta Lake tables.",
+          "format": "int32"
+        },
+        "prefix_path": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) Prefix path or virtual folder path within your bucket or container where you want Fivetran to store your data. Skip this parameter for AWS-based data lakes if the IAM policy configured for your S3 bucket grants access to the entire bucket."
+        },
+        "region": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) AWS Region of your S3 bucket. Use this parameter only if you want to deploy your data lake on AWS."
+        },
+        "secret_value": {
+          "title": "",
+          "type": "string",
+          "description": "Secret value of the service principal you created for Fivetran. Use this parameter only if you want to deploy your data lake on ADLS.",
+          "format": "password"
+        },
+        "server_host_name": {
+          "title": "",
+          "type": "string",
+          "description": "Server host name of the Databricks account associated with Unity Catalog. Use this parameter only if you want to use Unity Catalog to manage your Delta Lake tables."
+        },
+        "should_maintain_tables_in_bqms": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether you want to manage your Iceberg tables in BQMS. Use this parameter only if you want to deploy your data lake on GCS."
+        },
+        "should_maintain_tables_in_databricks": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether you want to manage your Delta Lake tables in Databricks Unity Catalog."
+        },
+        "should_maintain_tables_in_glue": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether you want to manage your Iceberg tables in AWS Glue. Use this parameter only if you want to deploy your data lake on AWS."
+        },
+        "should_maintain_tables_in_one_lake": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether you want to create shortcut for you table in OneLake. Use this parameter only if you want to deploy your data lake on ADLS."
+        },
+        "snapshot_retention_period": {
+          "title": "",
+          "type": "object",
+          "description": "Specifies how long you want us to retain your table snapshots. We delete the snapshots that are older than the retention period during our table maintenance operations. Default value: `ONE_WEEK`.",
+          "enum": [
+            "TWO_WEEKS",
+            "SIX_WEEKS",
+            "RETAIN_ALL_SNAPSHOTS",
+            "ONE_WEEK",
+            "FOUR_WEEKS",
+            "ONE_DAY"
+          ]
+        },
+        "storage_account_name": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) Name of your Azure Data Lake Storage Gen2 (ADLS Gen2) storage account. Use this parameter only if you want to deploy your data lake on ADLS."
+        },
+        "storage_provider": {
+          "title": "",
+          "type": "object",
+          "description": "The cloud storage provider you want to use for your data lake.",
+          "enum": [
+            "ADLS",
+            "GCS",
+            "AWS"
+          ]
+        },
+        "tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Tenant ID of the service principal you created for Fivetran. Use this parameter only if you want to deploy your data lake on ADLS."
+        },
+        "workspace_guid": {
+          "title": "",
+          "type": "string",
+          "description": "(Immutable) OneLake workspace GUID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "managed_data_lake_config_V1"
+  ]
+}

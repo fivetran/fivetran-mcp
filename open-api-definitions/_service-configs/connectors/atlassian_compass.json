@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Atlassian Compass API token.",
+          "format": "password"
+        },
+        "email_id": {
+          "title": "",
+          "type": "string",
+          "description": "The email ID associated with the Atlassian Compass account you want Fivetran to use to access your data."
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Atlassian Compass subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "atlassian_compass_config_V1"
+  ]
+}

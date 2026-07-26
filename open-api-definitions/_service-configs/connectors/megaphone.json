@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Megaphone API token.",
+          "format": "password"
+        },
+        "organization_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Megaphone organization ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "megaphone_config_V1"
+  ]
+}

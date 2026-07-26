@@ -1,0 +1,89 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce Commerce Cloud Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce Commerce Cloud Client secret.",
+          "format": "password"
+        },
+        "customer_list_id": {
+          "title": "",
+          "type": "string",
+          "description": "The parameter to retrieve customer details."
+        },
+        "include_ocapi_endpoints": {
+          "title": "",
+          "type": "boolean",
+          "description": "Whether to sync data through OCAPI endpoints."
+        },
+        "ocapi_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce Commerce Cloud OCAPI Client ID."
+        },
+        "ocapi_client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce Commerce Cloud OCAPI Client secret.",
+          "format": "password"
+        },
+        "ocapi_custom_object_types": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce Commerce Cloud OCAPI custom object types."
+        },
+        "ocapi_hostname": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce Commerce Cloud OCAPI hostname."
+        },
+        "organization_id": {
+          "title": "",
+          "type": "string",
+          "description": "The organization ID from Salesforce Commerce Cloud account."
+        },
+        "short_code": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce eight-character string assigned to a realm for routing purposes.",
+          "format": "password"
+        },
+        "site_id": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the site from which you want to sync data."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "ocapi_access_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "ocapi_refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "salesforce_commerce_cloud_config_V1",
+    "salesforce_commerce_cloud_auth_V1"
+  ]
+}

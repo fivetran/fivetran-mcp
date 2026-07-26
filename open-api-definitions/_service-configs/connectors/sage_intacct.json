@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "company_id": {
+          "title": "",
+          "type": "string",
+          "description": "Company ID"
+        },
+        "historical_sync_limit": {
+          "title": "",
+          "type": "string",
+          "description": "Historical Sync Limit for the Sync"
+        },
+        "login_password": {
+          "title": "",
+          "type": "string",
+          "description": "The login password. It is a part of the login credentials.",
+          "format": "password"
+        },
+        "look_back_window_for_gl_batch_endpoint": {
+          "title": "",
+          "type": "integer",
+          "description": "Lookback window for GL Batch endpoint lookback sync",
+          "format": "int32"
+        },
+        "sender_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sender ID"
+        },
+        "sender_password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sender Password",
+          "format": "password"
+        },
+        "user_id": {
+          "title": "",
+          "type": "string",
+          "description": "User ID"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sage_intacct_config_V1"
+  ]
+}

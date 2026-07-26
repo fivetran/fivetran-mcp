@@ -1,0 +1,70 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "authentication_method": {
+          "title": "",
+          "type": "object",
+          "description": "(Optional) Authentication type (default value is `Basic`)",
+          "enum": [
+            "Basic",
+            "OAuth2"
+          ]
+        },
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Base URL of your Veeva Vault instance"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth2 client ID (only when authentication_method is `OAuth2`)"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth2 client secret (only when authentication_method is `OAuth2`)",
+          "format": "password"
+        },
+        "o_auth_service_token_url": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth2 authorization server token endpoint URL (only when authentication_method is `OAuth2`)"
+        },
+        "oidc_profile_id": {
+          "title": "",
+          "type": "string",
+          "description": "OIDC profile ID configured in Veeva Vault (only when authentication_method is `OAuth2`)"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Password (only when authentication_method is `Basic`)",
+          "format": "password"
+        },
+        "scope": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth2 scope (only when authentication_method is `OAuth2`)"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Username (only when authentication_method is `Basic`)"
+        },
+        "vault_dns": {
+          "title": "",
+          "type": "string",
+          "description": "(Optional) Target Vault DNS if different from default (only when authentication_method is `OAuth2`)"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "veeva_vault_config_V1"
+  ]
+}

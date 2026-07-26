@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "social_data_sync_timeframe": {
+          "title": "",
+          "type": "object",
+          "description": "The social data (UGCPosts, Shares, Comments) sync time frame in months. Default value: `SIX` .",
+          "enum": [
+            "SIX",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your LinkedIn client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your LinkedIn client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "linkedin_company_pages_config_V1",
+    "linkedin_company_pages_auth_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key_api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Revel Systems API Key and API Secret.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Revel Systems subDomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "revel_config_V1"
+  ]
+}

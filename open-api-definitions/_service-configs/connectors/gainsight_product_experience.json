@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gainsight Product Experience API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your Gainsight Product Experience subdomain.",
+          "enum": [
+            "https://api-us2.aptrinsic.com",
+            "https://api-eu.aptrinsic.com",
+            "https://api.aptrinsic.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gainsight_product_experience_config_V1"
+  ]
+}

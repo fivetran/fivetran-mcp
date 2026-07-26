@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "pat_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tableau Source PAT Name."
+        },
+        "pat_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tableau Source PAT Secret.",
+          "format": "password"
+        },
+        "site_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tableau Source site name."
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Tableau Source subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "tableau_source_config_V1"
+  ]
+}

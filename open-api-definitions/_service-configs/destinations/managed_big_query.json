@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "data_set_location": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "EU",
+            "asia-east2",
+            "australia-southeast1",
+            "US"
+          ]
+        },
+        "project_id": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "support_json_type": {
+          "title": "",
+          "type": "boolean",
+          "description": "Stores JSON columns as JSON instead of STRING. This parameter is applicable only to destinations created before August 1, 2025."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "managed_big_query_config_V1"
+  ]
+}

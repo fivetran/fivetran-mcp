@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your NICE access key ID."
+        },
+        "access_key_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your NICE access key secret.",
+          "format": "password"
+        },
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your NICE base URL."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your NICE client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your NICE client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "nice_config_V1"
+  ]
+}

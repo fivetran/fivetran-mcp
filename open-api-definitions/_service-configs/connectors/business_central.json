@@ -1,0 +1,62 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "companies": {
+          "title": "",
+          "type": "array",
+          "description": "List of companies to sync",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "environment_name": {
+          "title": "",
+          "type": "string",
+          "description": "Name of the environment"
+        },
+        "tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "`Tenant ID` of your Business Central application"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Airtable client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Airtable client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived refresh token along with the client ID and client secret parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "business_central_config_V1",
+    "business_central_auth_V1"
+  ]
+}

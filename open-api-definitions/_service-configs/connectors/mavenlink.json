@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "mavenlink_config_V1"
+  ]
+}

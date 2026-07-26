@@ -1,0 +1,69 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "advertisers_id": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Advertiser IDs to sync. Must be populated if `syncMode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "integer",
+            "description": "",
+            "format": "int32"
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts. Default value: `SpecificAccounts`.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `TWELVE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Yahoo Gemini client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Yahoo Gemini client application."
+            }
+          },
+          "description": "Your application client access fields"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "yahoo_gemini_config_V1",
+    "yahoo_gemini_auth_V1"
+  ]
+}

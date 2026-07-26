@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_confirmation": {
+          "title": "",
+          "type": "string",
+          "description": "Your confirmation that you have granted Fivetran access to all the RESTful services and fields you want to sync. Possible values: `true`, `false`."
+        },
+        "client_host": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ceridian Dayforce client host."
+        },
+        "client_namespace": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ceridian Dayforce client namespace."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ceridian Dayforce password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ceridian Dayforce username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ceridian_dayforce_config_V1"
+  ]
+}

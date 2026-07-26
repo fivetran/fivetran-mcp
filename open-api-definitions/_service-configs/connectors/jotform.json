@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Jotform API key.",
+          "format": "password"
+        },
+        "base_url": {
+          "type": "object",
+          "description": "Your Jotform base URL.",
+          "enum": [
+            "",
+            "hipaa-api.jotform.com",
+            "api.jotform.com"
+          ]
+        },
+        "custom_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Jotform custom base URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "jotform_config_V1"
+  ]
+}

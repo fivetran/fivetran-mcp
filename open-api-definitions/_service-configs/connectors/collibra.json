@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your collibra password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your collibra subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your collibra username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "collibra_config_V1"
+  ]
+}

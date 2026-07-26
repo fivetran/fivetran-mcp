@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Device Magic API access token.",
+          "format": "password"
+        },
+        "organization_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Device Magic organization ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "device_magic_config_V1"
+  ]
+}

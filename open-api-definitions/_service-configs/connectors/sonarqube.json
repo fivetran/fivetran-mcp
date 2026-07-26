@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sonarqube subdomain."
+        },
+        "user_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Sonarqube user token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sonarqube_config_V1"
+  ]
+}

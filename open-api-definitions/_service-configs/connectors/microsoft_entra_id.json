@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Entra ID Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Entra ID Client Secret.",
+          "format": "password"
+        },
+        "tenant": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Entra ID Tenant."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "microsoft_entra_id_config_V1"
+  ]
+}

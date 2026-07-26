@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether TLS is required. Must be populated if `connection_type` is set to `SshTunnel`."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Connection method. Default value: `Directly`.",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel"
+          ]
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": "Database name"
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "Server name"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Database user password",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "Server port number",
+          "format": "int32"
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH server name. Must be populated if `connection_type` is set to `SshTunnel`."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH server port name. Must be populated if `connection_type` is set to `SshTunnel`.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user name. Must be populated if `connection_type` is set to `SshTunnel`."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "Database user name"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "mysql_rds_warehouse_config_V1"
+  ]
+}

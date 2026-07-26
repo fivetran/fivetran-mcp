@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "historical_sync_limit": {
+          "title": "",
+          "type": "object",
+          "description": "Range of data in history you would like to include in the initial sync. Default value: `ALL_TIME`.",
+          "enum": [
+            "ONE_YEAR",
+            "ALL_TIME",
+            "FIVE_YEARS",
+            "TWO_YEARS",
+            "THREE_MONTHS",
+            "SIX_MONTHS"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "eloqua_config_V1"
+  ]
+}

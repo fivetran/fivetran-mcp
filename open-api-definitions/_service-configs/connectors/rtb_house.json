@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your RTB House password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your RTB House username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "rtb_house_config_V1"
+  ]
+}

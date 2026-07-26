@@ -1,0 +1,71 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "custom_payloads": {
+          "title": "",
+          "type": "array",
+          "description": "The list of key-value pairs that can be used to specify custom information to the function at runtime.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "key": {
+                "title": "",
+                "type": "string",
+                "description": "Payload Key"
+              },
+              "value": {
+                "title": "",
+                "type": "string",
+                "description": "Payload Value"
+              }
+            },
+            "description": "The list of key-value pairs that can be used to specify custom information to the function at runtime."
+          }
+        },
+        "function_trigger": {
+          "title": "Function Trigger",
+          "type": "string",
+          "description": "The trigger URL of the cloud function.",
+          "format": "password"
+        },
+        "secrets": {
+          "title": "Secrets",
+          "type": "string",
+          "description": "The secrets that should be passed to the function at runtime.",
+          "format": "password"
+        },
+        "secrets_list": {
+          "title": "",
+          "type": "array",
+          "description": "The list of secrets that should be passed to the function at runtime.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "key": {
+                "title": "",
+                "type": "string",
+                "description": "Key"
+              },
+              "value": {
+                "title": "",
+                "type": "string",
+                "description": "Value",
+                "format": "password"
+              }
+            },
+            "description": "The list of secrets that should be passed to the function at runtime."
+          }
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_cloud_function_config_V1"
+  ]
+}

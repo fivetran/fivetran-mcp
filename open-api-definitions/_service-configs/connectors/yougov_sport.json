@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Yougov Sport API key.",
+          "format": "password"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Yougov Sport client ID."
+        },
+        "client_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Yougov Sport client key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "yougov_sport_config_V1"
+  ]
+}

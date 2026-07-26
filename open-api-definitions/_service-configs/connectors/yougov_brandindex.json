@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your YouGov BrandIndex password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your YouGov BrandIndex username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "yougov_brandindex_config_V1"
+  ]
+}

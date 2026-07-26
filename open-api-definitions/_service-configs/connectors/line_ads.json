@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your LINE Ads access key.",
+          "format": "password"
+        },
+        "group_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your LINE Ads group ID(s)."
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your LINE Ads secret key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "line_ads_config_V1"
+  ]
+}

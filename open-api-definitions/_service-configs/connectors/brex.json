@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brex API token",
+          "format": "password"
+        },
+        "base_url": {
+          "type": "object",
+          "description": "Your Brex Base URL",
+          "enum": [
+            "platform.brexapis.com",
+            "platform.staging.brexapps.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "brex_config_V1"
+  ]
+}

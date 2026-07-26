@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coalesce access token.",
+          "format": "password"
+        },
+        "base_url": {
+          "type": "object",
+          "description": "Your Coalesce base URL.",
+          "enum": [
+            "",
+            "app.australia-southeast1.gcp.coalescesoftware.io",
+            "app.us-west-2.aws.coalescesoftware.io",
+            "app.eu.coalescesoftware.io",
+            "app.us-east-1.aws.coalescesoftware.io",
+            "app.us-west-2.aws.privatelink.coalescesoftware.io",
+            "app.coalescesoftware.io",
+            "app.westus2.azure.coalescesoftware.io",
+            "app.us-east-1.aws.privatelink.coalescesoftware.io",
+            "app.northamerica-northeast1.gcp.coalescesoftware.io",
+            "app.eastus2.azure.coalescesoftware.io"
+          ]
+        },
+        "custom_base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coalesce custom base URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "coalesce_config_V1"
+  ]
+}

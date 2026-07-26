@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ringover API key.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Ringover region.",
+          "enum": [
+            "-api-us",
+            "-api"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ringover_config_V1"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Upland Software API key.",
+          "format": "password"
+        },
+        "auth_type": {
+          "type": "object",
+          "description": "Authentication method you want to use for your connection.",
+          "enum": [
+            "api_key",
+            "basic"
+          ]
+        },
+        "company_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Upland Software company key.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Upland Software password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Upland Software subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Upland Software username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "upland_config_V1"
+  ]
+}

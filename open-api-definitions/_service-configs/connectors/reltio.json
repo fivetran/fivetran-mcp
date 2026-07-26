@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "max_api_requests_per_day": {
+          "title": "",
+          "type": "integer",
+          "description": "Maximum API requests per day",
+          "format": "int32"
+        },
+        "tenant_configs": {
+          "title": "",
+          "type": "array",
+          "description": "* tenant(s)",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "subdomain": {
+                "title": "",
+                "type": "string",
+                "description": "Your Reltio subdomain."
+              },
+              "tenant_id": {
+                "title": "",
+                "type": "string",
+                "description": "Your Reltio tenant ID."
+              }
+            },
+            "description": "* tenant(s)"
+          }
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "reltio_config_V1"
+  ]
+}

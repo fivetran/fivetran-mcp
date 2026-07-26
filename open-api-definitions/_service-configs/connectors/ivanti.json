@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ivanti API Key.",
+          "format": "password"
+        },
+        "tenant_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ivanti Tenant URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ivanti_config_V1"
+  ]
+}

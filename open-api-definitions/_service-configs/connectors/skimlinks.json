@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Skimlinks client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Skimlinks client secret.",
+          "format": "password"
+        },
+        "historical_sync_time_frame": {
+          "type": "object",
+          "description": "Your Skimlinks Historical sync time frame.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "publisher_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Skimlinks publisher ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "skimlinks_config_V1"
+  ]
+}

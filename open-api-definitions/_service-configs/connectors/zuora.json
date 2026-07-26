@@ -1,0 +1,76 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_role": {
+          "title": "",
+          "type": "string",
+          "description": "The API role assigned to the integration user."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Zuora Client ID."
+        },
+        "client_name": {
+          "title": "",
+          "type": "string",
+          "description": "The name of your organization as registered with Zuora Revenue."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Zuora Client Secret.",
+          "format": "password"
+        },
+        "entity_id": {
+          "title": "",
+          "type": "string",
+          "description": "If `is_multi_entity_feature_enabled` is `true`, then it's `EntityId`."
+        },
+        "environment": {
+          "title": "",
+          "type": "string",
+          "description": "Zuora Sandbox Environment. This accepts either of the two values Sandbox or Central Sandbox based on your subscription. The default environment is Sandbox."
+        },
+        "host_name": {
+          "title": "",
+          "type": "string",
+          "description": "The domain or URL of your Zuora Revenue instance."
+        },
+        "is_multi_entity_feature_enabled": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set to `true` if there are multiple entities in your Zuora account and you only want to use one entity. Otherwise, set to `false`."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The corresponding password for the API user.",
+          "format": "password"
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Select `Zuora Billing` to sync exclusively Zuora Billing related records. Choose `Zuora Revenue` for syncing only Zuora Revenue reports. If both Zuora Billing records and Zuora Revenue reports are to be synced, opt for `Both`.",
+          "enum": [
+            "ZuoraBilling",
+            "ZuoraRevenue",
+            "Both"
+          ]
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "The API username with the necessary access permissions."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "zuora_config_V1"
+  ]
+}

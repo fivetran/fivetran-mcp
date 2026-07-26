@@ -1,0 +1,75 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Require TLS encryption."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values:`SshTunnel`, `PrivateLink` . `SshTunnel` is used as a value if this parameter is omitted in the request and the following parameter's values are specified: `tunnel_host`, `tunnel_port`, `tunnel_user`.",
+          "enum": [
+            "PrivateLink",
+            "SshTunnel"
+          ]
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "Host IP address of the primary node. Ignored if `hosts` value is provided."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The user's password.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "Port of the primary node. Ignored if `hosts` value is provided.",
+          "format": "int32"
+        },
+        "sync_pack_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Indicates whether synced data will be packed into a single entry(column), or unpacked with one layer of nested fields.",
+          "enum": [
+            "UNPACKED_MODE",
+            "PACKED_MODE"
+          ]
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH host, only specify when connecting via an SSH tunnel (do not use a load balancer). Required for connector creation."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH port, only specify when connecting via an SSH tunnel. Required for connector creation.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user, specify only to connect via an SSH tunnel. Required for connector creation."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The user name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "documentdb_config_V1"
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_region": {
+          "title": "",
+          "type": "object",
+          "description": "If your Iterable account URL starts with `https://app.eu.iterable.com` then provide `EU` else `US`",
+          "enum": [
+            "EU",
+            "US"
+          ]
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Iterable API key.",
+          "format": "password"
+        },
+        "custom_event_sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Custom Events Sync Mode.",
+          "enum": [
+            "SelectedEvents",
+            "AllEvents",
+            "NoEvents"
+          ]
+        },
+        "custom_events": {
+          "title": "",
+          "type": "array",
+          "description": "List of custom events to sync. Should be specified when `custom_event_sync_mode` is `SelectedEvents`",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "events": {
+          "title": "",
+          "type": "array",
+          "description": "List of events to sync. Should be specified when `sync_mode` is `SelectedEvents`",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "historical_sync_limit": {
+          "title": "",
+          "type": "object",
+          "description": "The time range for which historical data should be synced. Default value: `All Time`.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "historical_sync_limit_date": {
+          "title": "",
+          "type": "string",
+          "description": "The start date (YYYY-MM-DD) from which to sync historical data."
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Events Sync Mode.",
+          "enum": [
+            "SelectedEvents",
+            "AllEvents"
+          ]
+        },
+        "webhook_auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "The authentication method for the Iterable webhook. Accepted values: `NoAuth`, `Basic`, `OAuth2`.",
+          "enum": [
+            "Basic",
+            "OAuth2",
+            "NoAuth"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "iterable_config_V1"
+  ]
+}

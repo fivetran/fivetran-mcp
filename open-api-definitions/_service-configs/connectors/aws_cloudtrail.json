@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The AWS bucket name which is configured for AWS CloudTrail."
+        },
+        "prefix": {
+          "title": "",
+          "type": "string",
+          "description": "If prefix is present when configuring the bucket."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "aws_cloudtrail_config_V1"
+  ]
+}

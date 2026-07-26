@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshsales API key.",
+          "format": "password"
+        },
+        "base_url": {
+          "type": "object",
+          "description": "Your Freshsales product.",
+          "enum": [
+            "myfreshworks.com/crm/sales",
+            "freshsales.io"
+          ]
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshsales domain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "freshsales_config_V1"
+  ]
+}

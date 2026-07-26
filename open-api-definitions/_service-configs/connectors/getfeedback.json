@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your GetFeedback Access token.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your GetFeedback region.",
+          "enum": [
+            "api.eu",
+            "api"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "getfeedback_config_V1"
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication mechanism. Either one of `OAUTH2`, or `SERVICE_PRINCIPAL`. Default value `OAUTH2`",
+          "enum": [
+            "SERVICE_PRINCIPAL",
+            "OAUTH2"
+          ]
+        },
+        "domain_name": {
+          "title": "",
+          "type": "string",
+          "description": "The custom domain name associated with Dynamics 365."
+        },
+        "resource_url": {
+          "title": "",
+          "type": "string",
+          "description": "URL at which Dynamics 365 is accessed"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "Client ID of your Dynamics 365 client application, or service principal."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "Client Secret of your Dynamics 365 client application, or service principal."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "dynamics_365_config_V1",
+    "dynamics_365_auth_V1"
+  ]
+}

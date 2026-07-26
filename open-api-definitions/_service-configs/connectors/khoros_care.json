@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "company_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Khoros Care companyKey.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Khoros Care password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Khoros Care subDomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Khoros Care username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "khoros_care_config_V1"
+  ]
+}

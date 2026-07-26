@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Planful access ID."
+        },
+        "access_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Planful access key.",
+          "format": "password"
+        },
+        "email_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Planful email ID."
+        },
+        "tenant_app_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Planful tenant app URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "planful_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your SmartRecruiters client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your SmartRecruiters client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "smartrecruiters_config_V1"
+  ]
+}

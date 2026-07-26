@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your PostHog API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your PostHog data region (`app` or `eu`).",
+          "enum": [
+            "app",
+            "eu"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "posthog_config_V1"
+  ]
+}

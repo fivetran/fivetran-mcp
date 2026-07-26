@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Buildium API client ID."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Buildium environment.",
+          "enum": [
+            "apisandbox",
+            "api"
+          ]
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Buildium API secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "buildium_config_V1"
+  ]
+}

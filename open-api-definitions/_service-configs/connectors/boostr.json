@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Boostr base URL."
+        },
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "Your Boostr email."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Boostr password.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "boostr_config_V1"
+  ]
+}

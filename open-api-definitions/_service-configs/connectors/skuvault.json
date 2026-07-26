@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "Your SkuVault email."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your SkuVault password.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "skuvault_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Stylight Password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Stylight Username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "stylight_config_V1"
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Require TLS"
+        },
+        "binary_representation": {
+          "title": "",
+          "type": "object",
+          "description": "How binary data is represented in the database. Possible values: 'Base64' (default), 'Uuid'.",
+          "enum": [
+            "Base64",
+            "Uuid"
+          ]
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values:`Directly`, `PrivateLink`. `Directly` is the default value",
+          "enum": [
+            "Directly",
+            "PrivateLink"
+          ]
+        },
+        "database": {
+          "title": "Authentication Database",
+          "type": "string",
+          "description": "Authentication database for the source. Usually 'admin'."
+        },
+        "hosts": {
+          "title": "",
+          "type": "array",
+          "description": "A list of host addresses for Azure Cosmos DB for Mongo DB.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "packed_mode_tables": {
+          "title": "",
+          "type": "array",
+          "description": "List of tables to be synced in packed mode; format:`<db>.<table>`(case-sensitive).",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "packing_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Indicates the desired sync pack mode. Accepted values are `UsePackedModeOnly` and `UseUnpackedModeOnly`. `SelectTablesForPackedMode` is deprecated. ",
+          "enum": [
+            "UsePackedModeOnly",
+            "UseUnpackedModeOnly"
+          ]
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Password used for source database authentication.",
+          "format": "password"
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH host, specify only to connect via an SSH tunnel (do not use a load balancer)."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH port, specify only to connect via an SSH tunnel.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user, specify only to connect via an SSH tunnel."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "Username for source database access."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "azure_cosmos_for_mongo_config_V1"
+  ]
+}

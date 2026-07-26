@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Healthie API key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Healthie environment.",
+          "enum": [
+            "staging-api",
+            "api"
+          ]
+        },
+        "shard_authorization_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Healthie shard authorization ID.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "healthie_config_V1"
+  ]
+}

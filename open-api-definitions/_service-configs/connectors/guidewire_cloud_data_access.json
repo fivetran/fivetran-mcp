@@ -1,0 +1,84 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Access Key ID for access key authentication."
+        },
+        "access_key_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Access Key Secret for access key authentication.",
+          "format": "password"
+        },
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Access approach. Supported values: IAM_ROLE, ACCESS_KEY, PUBLIC_BUCKET.",
+          "enum": [
+            "IAM_ROLE",
+            "PUBLIC_BUCKET",
+            "ACCESS_KEY"
+          ]
+        },
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The S3 bucket name containing the Guidewire CDA export. Required for connector creation."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Connection method. Default value: `Directly`.",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "is_private_link_required": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set to `true` if you want to connect to S3 bucket over PrivateLink. Default value: `false`."
+        },
+        "manifest_path": {
+          "title": "",
+          "type": "string",
+          "description": "The path to the Guidewire CDA manifest.json file in the S3 bucket."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for IAM role authentication.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for access Key ID for access key authentication."
+        },
+        "access_key_secret": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for access Key Secret for access key authentication."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "guidewire_cloud_data_access_config_V1",
+    "guidewire_cloud_data_access_esm_keys_config_V1"
+  ]
+}

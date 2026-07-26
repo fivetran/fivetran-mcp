@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Hex subdomain."
+        },
+        "workspace_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Hex workspace token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "hex_config_V1"
+  ]
+}

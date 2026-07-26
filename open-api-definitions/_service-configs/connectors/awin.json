@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Awin API Token.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Awin Region.",
+          "enum": [
+            "DE",
+            "NO",
+            "BE",
+            "FI",
+            "CH",
+            "DK",
+            "IT",
+            "FR",
+            "ES",
+            "BR",
+            "SE",
+            "AT",
+            "BU",
+            "AU",
+            "GB",
+            "IE",
+            "PL",
+            "CA",
+            "NL",
+            "US"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "awin_config_V1"
+  ]
+}

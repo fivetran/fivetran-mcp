@@ -1,0 +1,96 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "title": "",
+          "type": "object",
+          "description": "Password-based or key-based authentication type",
+          "enum": [
+            "PASSWORD",
+            "KEY_PAIR"
+          ]
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Directly or Private Link",
+          "enum": [
+            "Directly",
+            "PrivateLink"
+          ]
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": "The database name: Snowflake"
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "Host name"
+        },
+        "is_private_key_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Indicates that a private key is encrypted. The default value: `false`. The field can be specified if authentication type is `KEY_PAIR`."
+        },
+        "passphrase": {
+          "title": "",
+          "type": "string",
+          "description": "In case private key is encrypted, you are required to enter passphrase that was used to encrypt the private key. The field can be specified if authentication type is `KEY_PAIR`.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Snowflake user's password.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The Snowflake optional port number.",
+          "format": "int32"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Private access key.  The field should be specified if authentication type is `KEY_PAIR`.",
+          "format": "password"
+        },
+        "role": {
+          "title": "",
+          "type": "string",
+          "description": "Snowflake Connector role name"
+        },
+        "use_workspace": {
+          "title": "",
+          "type": "boolean",
+          "description": "Choose a database and schema to create temporary tables for syncs."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The Snowflake username."
+        },
+        "workspace_name": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the database where the temporary tables will be created."
+        },
+        "workspace_schema": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the schema that belongs to the workspace database where the temporary tables will be created."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "snowflake_db_config_V1"
+  ]
+}

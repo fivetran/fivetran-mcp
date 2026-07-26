@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your SugarCRM client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your SugarCRM client secret.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your SugarCRM password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your SugarCRM subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your SugarCRM username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sugarcrm_config_V1"
+  ]
+}

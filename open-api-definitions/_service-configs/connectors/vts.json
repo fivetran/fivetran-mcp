@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your VTS API key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your VTS environment.",
+          "enum": [
+            "sandbox.vts.com",
+            "api.vts.com"
+          ]
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your VTS secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "vts_config_V1"
+  ]
+}

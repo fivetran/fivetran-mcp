@@ -1,0 +1,84 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your SISTRIX API key.",
+          "format": "password"
+        },
+        "country": {
+          "type": "object",
+          "description": "Your SISTRIX country code.",
+          "enum": [
+            "de",
+            "pt",
+            "dk",
+            "hr",
+            "ua",
+            "hu",
+            "uk",
+            "id",
+            "ie",
+            "us",
+            "eg",
+            "ae",
+            "in",
+            "mt",
+            "za",
+            "it",
+            "mx",
+            "my",
+            "es",
+            "ve",
+            "ar",
+            "at",
+            "au",
+            "vn",
+            "ng",
+            "ro",
+            "nl",
+            "no",
+            "be",
+            "fi",
+            "ru",
+            "bg",
+            "jp",
+            "fr",
+            "nz",
+            "br",
+            "se",
+            "sg",
+            "si",
+            "sk",
+            "ca",
+            "ch",
+            "cl",
+            "gr",
+            "co",
+            "th",
+            "pe",
+            "cy",
+            "cz",
+            "ph",
+            "pk",
+            "pl",
+            "tr"
+          ]
+        },
+        "domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your SISTRIX domain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sistrix_config_V1"
+  ]
+}

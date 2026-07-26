@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your JustCall API key.",
+          "format": "password"
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your JustCall API secret.",
+          "format": "password"
+        },
+        "plan_type": {
+          "type": "object",
+          "description": "Your JustCall Plan Type.",
+          "enum": [
+            "57",
+            "27",
+            "85"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "justcall_config_V1"
+  ]
+}

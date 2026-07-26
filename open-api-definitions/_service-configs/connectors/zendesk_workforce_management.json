@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Zendesk Workforce Management API token.",
+          "format": "password"
+        },
+        "email_id": {
+          "title": "",
+          "type": "string",
+          "description": "Email ID associated with the Zendesk Workforce Management account you want Fivetran to use to access your data."
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Zendesk Workforce Management subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "zendesk_workforce_management_config_V1"
+  ]
+}

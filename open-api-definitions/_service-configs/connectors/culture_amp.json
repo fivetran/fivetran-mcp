@@ -1,0 +1,41 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "base_url": {
+          "type": "object",
+          "description": "Your Culture Amp base URL.",
+          "enum": [
+            "sandbox.public-api.development.cultureamp.net",
+            "api.cultureamp.com"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Culture Amp client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Culture Amp client secret.",
+          "format": "password"
+        },
+        "target_entity_id": {
+          "type": "object",
+          "description": "Your Culture Amp Target entity ID.",
+          "enum": [
+            "79040b4d-3e2b-4480-a061-2e230eeb83b2",
+            "8ed17dce-9eca-4383-a9e1-54f82c362b6d"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "culture_amp_config_V1"
+  ]
+}

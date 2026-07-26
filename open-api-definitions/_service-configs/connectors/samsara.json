@@ -1,0 +1,47 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Samsara API token.",
+          "format": "password"
+        },
+        "app_id": {
+          "title": "",
+          "type": "string",
+          "description": "App ID for your OAuth 2.0 app."
+        },
+        "app_secret": {
+          "title": "",
+          "type": "string",
+          "description": "App secret for your OAuth 2.0 app.",
+          "format": "password"
+        },
+        "auth_type": {
+          "type": "object",
+          "description": "The authentication method you want to use for your connection.",
+          "enum": [
+            "access_token",
+            "oauth_2"
+          ]
+        },
+        "region": {
+          "type": "object",
+          "description": "The region of your Samsara account. For instance, if your region is `EUROPE`, provide `eu.samsara` in the `Region` field. If your region is not in Europe, provide `samsara`.",
+          "enum": [
+            "eu.samsara",
+            "samsara"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "samsara_config_V1"
+  ]
+}

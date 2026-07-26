@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Salsify API Key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Salsify Organization ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "salsify_config_V1"
+  ]
+}

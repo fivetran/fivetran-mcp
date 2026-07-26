@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID of the API application in your GoFundMe Pro account."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Client secret of the API application in your GoFundMe Pro account.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gofundme_pro_config_V1"
+  ]
+}

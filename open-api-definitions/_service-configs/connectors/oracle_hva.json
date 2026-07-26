@@ -1,0 +1,218 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "agent_host": {
+          "title": "",
+          "type": "string",
+          "description": "The host of the agent. This is the same as database host, since the agent must be installed in the same machine as source database."
+        },
+        "agent_ora_home": {
+          "title": "",
+          "type": "string",
+          "description": "The home directory of the Oracle database."
+        },
+        "agent_password": {
+          "title": "",
+          "type": "string",
+          "description": "The agent user's password. It should have a minimum length of 10 characters.",
+          "format": "password"
+        },
+        "agent_port": {
+          "title": "",
+          "type": "integer",
+          "description": "The port number of the agent.",
+          "format": "int32"
+        },
+        "agent_public_cert": {
+          "title": "",
+          "type": "string",
+          "description": "The agent public certificate."
+        },
+        "agent_user": {
+          "title": "",
+          "type": "string",
+          "description": "The agent's user."
+        },
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Require TLS through Tunnel"
+        },
+        "archive_log_format": {
+          "title": "",
+          "type": "string",
+          "description": "Archive log format."
+        },
+        "archive_log_path": {
+          "title": "",
+          "type": "string",
+          "description": "Archive log path."
+        },
+        "asm_option": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using ASM on a non-RAC instance."
+        },
+        "asm_oracle_home": {
+          "title": "",
+          "type": "string",
+          "description": "ASM Oracle Home path."
+        },
+        "asm_password": {
+          "title": "",
+          "type": "string",
+          "description": "ASM password. Mandatory if `use_oracle_rac` or `asm_option` is set to `true`.",
+          "format": "password"
+        },
+        "asm_tns": {
+          "title": "",
+          "type": "string",
+          "description": "ASM TNS."
+        },
+        "asm_user": {
+          "title": "",
+          "type": "string",
+          "description": "ASM user. Mandatory if `use_oracle_rac` or `asm_option` is set to `true`."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values:`Directly`, `PrivateLink`, `SshTunnel`. `SshTunnel` is used as a value if this parameter is omitted in the request and any of the following parameter's values is specified: `tunnel_host`, `tunnel_port`, `tunnel_user`. Otherwise, `Directly` is used as a value if the parameter is omitted.",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": "The database name."
+        },
+        "direct_capture_method": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values:`DIRECT`, `BFILE`, `ASM`, `ARCHIVE_ONLY`",
+          "enum": [
+            "ARCHIVE_ONLY",
+            "ASM",
+            "BFILE",
+            "DIRECT"
+          ]
+        },
+        "enable_archive_log_only": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using archive log only mode."
+        },
+        "enable_tde_encryption": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using TDE encryption."
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "DB instance host or IP address."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The user's password.",
+          "format": "password"
+        },
+        "pdb_name": {
+          "title": "",
+          "type": "string",
+          "description": "(Multi-tenant databases only) The database's PDB name. Omit this parameter for single-tenant databases."
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The port number.",
+          "format": "int32"
+        },
+        "tde_wallet_password": {
+          "title": "",
+          "type": "string",
+          "description": "TDE wallet password. Required for password based wallet.",
+          "format": "password"
+        },
+        "tns": {
+          "title": "",
+          "type": "string",
+          "description": "Single-tenant database: The database's SID. <br> Multi-tenant database: The database's TNS."
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH host, specify only to connect via an SSH tunnel (do not use a load balancer)."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH port, specify only to connect via an SSH tunnel.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user, specify only to connect via an SSH tunnel."
+        },
+        "update_method": {
+          "title": "",
+          "type": "object",
+          "description": "The method used to detect new or changed rows. Supported values: - `LOGMINER` - Fivetran uses LogMiner, a utility that is part of Oracle Database, to detect modified rows in the source tables. - `TELEPORT` - Fivetran's proprietary replication method that uses compressed snapshots to detect and apply changes.",
+          "enum": [
+            "BINARY_LOG_READER",
+            "XSTREAM_OUT",
+            "LOGMINER",
+            "TELEPORT",
+            "DIRECT_CAPTURE",
+            "BFILE_REMOTE_CAPTURE"
+          ]
+        },
+        "use_oracle_rac": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using a RAC instance."
+        },
+        "use_pdb_only": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` to connect directly to a single PDB. When `true`, set `database` to the PDB name and omit the `pdbName` field. Use only for Direct or Archive Log Only capture. Not supported with TDE, ASM, or RAC."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The user name."
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "oracle_hva_config_V1",
+    "oracle_hva_esm_keys_config_V1"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "The Confluence API token.",
+          "format": "password"
+        },
+        "domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Confluence domain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Confluence username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "confluence_config_V1"
+  ]
+}

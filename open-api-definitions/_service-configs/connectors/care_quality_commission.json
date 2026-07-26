@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "primary_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Care Quality Commission primary key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "care_quality_commission_config_V1"
+  ]
+}

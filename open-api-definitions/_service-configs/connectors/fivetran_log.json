@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "is_account_level_connector": {
+          "title": "",
+          "type": "boolean",
+          "description": "(Optional) Retrieve account-level logs."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "fivetran_log_config_V1"
+  ]
+}

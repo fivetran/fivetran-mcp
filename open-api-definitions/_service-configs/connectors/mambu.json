@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mambu API key.",
+          "format": "password"
+        },
+        "tenant_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mambu tenant name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "mambu_config_V1"
+  ]
+}

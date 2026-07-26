@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Picqer API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Picqer subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "picqer_config_V1"
+  ]
+}

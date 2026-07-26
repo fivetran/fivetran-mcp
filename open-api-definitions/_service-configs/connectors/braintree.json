@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "merchant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Braintree merchant ID."
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "The contents of your secret key file.",
+          "format": "password"
+        },
+        "public_key": {
+          "title": "",
+          "type": "string",
+          "description": "The contents of your PEM certificate file."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "braintree_config_V1"
+  ]
+}

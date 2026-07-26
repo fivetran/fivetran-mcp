@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "customer_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro Customer API key.",
+          "format": "password"
+        },
+        "hostname": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro hostname."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ukg_pro_config_V1"
+  ]
+}

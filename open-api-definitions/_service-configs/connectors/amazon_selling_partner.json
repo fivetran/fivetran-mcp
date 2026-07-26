@@ -1,0 +1,75 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "backward_sync_limit": {
+          "title": "",
+          "type": "string",
+          "description": "The earliest date to sync data from, in YYYY-MM-DD format. Cannot be before 1994-01-01 or in the future."
+        },
+        "historical_sync_time_frame": {
+          "title": "",
+          "type": "object",
+          "description": "The time frame for historical data synchronization. Default value: `ALL_TIME`.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "is_vendor": {
+          "title": "",
+          "type": "boolean",
+          "description": "Whether or not you have a Vendor Account. Default value: `false`."
+        },
+        "merchant_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Merchant ID or Vendor Code."
+        },
+        "region": {
+          "title": "",
+          "type": "object",
+          "description": "The region used by the Amazon Selling Partner profile.",
+          "enum": [
+            "NORTH_AMERICA",
+            "EUROPE",
+            "FAR_EAST"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "application_id": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "amazon_selling_partner_config_V1",
+    "amazon_selling_partner_auth_V1"
+  ]
+}

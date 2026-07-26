@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_key": {
+          "title": "",
+          "type": "string",
+          "description": "The read-only primary or secondary account key for the database account. Required for the `ACCOUNT_KEY` data access method.",
+          "format": "password"
+        },
+        "data_access_method": {
+          "title": "",
+          "type": "object",
+          "description": "The source data access method. Supported values:<br>`ACCOUNT_KEY`- Data access method that uses account keys to authenticate to the source database. It comes in both read-write and read-only variants.<br>`RESOURCE_TOKEN`- Fine-grained permission model based on native Azure Cosmos DB users and permissions.<br> Learn more in our [Azure Cosmos DB Data Access Methods documentation](/docs/connectors/databases/cosmos#dataaccessmethods).",
+          "enum": [
+            "ACCOUNT_KEY",
+            "RESOURCE_TOKEN"
+          ]
+        },
+        "resource_token": {
+          "title": "",
+          "type": "string",
+          "description": "A token that provides access to a specific Azure Cosmos DB resource. Required for the `RESOURCE_TOKEN` data access method.",
+          "format": "password"
+        },
+        "sync_pack_mode": {
+          "title": "",
+          "type": "object",
+          "description": "The packing mode type. Supported values:<br>`STANDARD_UNPACKED_MODE`- Unpacks _one_ layer of nested fields and infers types.<br>`PACKED_MODE`- Delivers packed data as a single destination column value.<br>Learn more in our [Azure Cosmos DB Sync Pack Mode Options documentation](/docs/connectors/databases/cosmos#packmodeoptions).",
+          "enum": [
+            "STANDARD_UNPACKED_MODE",
+            "PACKED_MODE"
+          ]
+        },
+        "token_authenticated_container": {
+          "title": "",
+          "type": "string",
+          "description": "The container name. Required for the `RESOURCE_TOKEN` data access method."
+        },
+        "token_authenticated_database": {
+          "title": "",
+          "type": "string",
+          "description": "The database name. Required for the `RESOURCE_TOKEN` data access method."
+        },
+        "uri": {
+          "title": "",
+          "type": "string",
+          "description": "Cosmos resource instance address."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "cosmos_config_V1"
+  ]
+}

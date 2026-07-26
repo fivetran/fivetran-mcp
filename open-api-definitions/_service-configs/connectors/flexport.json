@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Flexport API Key."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The Flexport API Secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "flexport_config_V1"
+  ]
+}

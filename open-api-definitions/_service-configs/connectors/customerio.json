@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bearer_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Customer.io App API Key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your Customer.io region-specific Subdomain.",
+          "enum": [
+            "api-eu",
+            "api"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "customerio_config_V1"
+  ]
+}

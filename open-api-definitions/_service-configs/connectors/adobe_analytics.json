@@ -1,0 +1,126 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "adobe_analytics_configurations": {
+          "title": "",
+          "type": "array",
+          "description": "The list of configurations of tables you want to sync. The number of tables and their configurations is limited to 5. Required for connector creation.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "calculated_metrics": {
+                "title": "",
+                "type": "array",
+                "description": "The calculated_metrics that you want to sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "elements": {
+                "title": "",
+                "type": "array",
+                "description": "The elements that you want to sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "metrics": {
+                "title": "",
+                "type": "array",
+                "description": "The metrics that you want to sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_suites": {
+                "title": "",
+                "type": "array",
+                "description": "Specific report suites to sync. Must be populated if `sync_mode` is set to `SpecificReportSuites`.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "segments": {
+                "title": "",
+                "type": "array",
+                "description": "The segments that you want to sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "sync_mode": {
+                "title": "",
+                "type": "object",
+                "description": "Whether to sync all report suites or specific report suites. Default value: `AllReportSuites` .",
+                "enum": [
+                  "SpecificReportSuites",
+                  "AllReportSuites"
+                ]
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "The table name unique within the schema to which connector will sync the data. Required for connector creation."
+              }
+            },
+            "description": "The list of configurations of tables you want to sync. The number of tables and their configurations is limited to 5. Required for connector creation."
+          }
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID from the OAuth Server-to-Server credentials of your Adobe Project."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Client Secret from the OAuth Server-to-Server credentials of your Adobe Project.",
+          "format": "password"
+        },
+        "date_granularity": {
+          "title": "",
+          "type": "object",
+          "description": "The aggregation duration you want. Default value: `HOUR` .",
+          "enum": [
+            "MONTH",
+            "QUARTER",
+            "YEAR",
+            "HOUR",
+            "WEEK",
+            "DAY"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector has been created. Default value: `TWELVE` .",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "adobe_analytics_config_V1"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your ADP Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your ADP Client Secret.",
+          "format": "password"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Private Key.",
+          "format": "password"
+        },
+        "ws_certificate": {
+          "title": "",
+          "type": "string",
+          "description": "Web Services Certificate.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "adp_workforce_now_config_V1"
+  ]
+}

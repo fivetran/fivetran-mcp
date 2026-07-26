@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The Stripe API Restricted Key",
+          "format": "password"
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Restricted API key",
+          "format": "password"
+        },
+        "backward_sync_limit": {
+          "title": "",
+          "type": "string",
+          "description": "Limit of the Historical Sync Time for selected tables"
+        },
+        "historical_sync_time_frame": {
+          "title": "",
+          "type": "object",
+          "description": "Used to configure Historical sync timeframe for selected tables",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "support_connected_accounts_sync": {
+          "title": "",
+          "type": "boolean",
+          "description": "Sync Connected Accounts. Connected Account Documentation - https://stripe.com/docs/api/connected_accounts."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "stripe_test_config_V1"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Checkr secret key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your Checkr subdomain.",
+          "enum": [
+            "checkr-staging.com",
+            "checkr.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "checkr_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "organization_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Productive Organization ID."
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Productive personal access token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "productive_config_V1"
+  ]
+}

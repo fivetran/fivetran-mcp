@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Cin7 Core account ID."
+        },
+        "application_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Cin7 Core application key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "cin7core_config_V1"
+  ]
+}

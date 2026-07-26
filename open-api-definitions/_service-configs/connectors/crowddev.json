@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bearer_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your crowd.dev Auth Token.",
+          "format": "password"
+        },
+        "tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your  crowd.dev Tenant ID.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "crowddev_config_V1"
+  ]
+}

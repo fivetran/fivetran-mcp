@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_environment": {
+          "type": "object",
+          "description": "Your Afterpay API environment.",
+          "enum": [
+            "global-api-sandbox",
+            "global-api"
+          ]
+        },
+        "merchant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Afterpay Merchant ID."
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Afterpay Secret Key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "afterpay_config_V1"
+  ]
+}

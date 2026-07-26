@@ -1,0 +1,160 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "Specific accounts to sync. Must be populated if `accountsSyncMode` is set to `SPECIFIC_ACCOUNTS`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "accounts_sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific.",
+          "enum": [
+            "ALL_ACCOUNTS",
+            "SPECIFIC_ACCOUNTS"
+          ]
+        },
+        "advertisers": {
+          "title": "",
+          "type": "array",
+          "description": "Specific advertisers to sync. Must be populated if `advertisersSyncMode` is set to `SPECIFIC_ADVERTISERS`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "advertisers_sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all or specific advertisers.",
+          "enum": [
+            "SPECIFIC_ADVERTISERS",
+            "ALL_ADVERTISERS"
+          ]
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of reports. Each report corresponds to a table within the schema to which connector syncs the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "attributes": {
+                "title": "",
+                "type": "array",
+                "description": "The report attributes included to sync. Labeled `Fields` in the Fivetran dashboard.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "custom_column_ids": {
+                "title": "",
+                "type": "array",
+                "description": "The report custom column IDs included to sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "metrics": {
+                "title": "",
+                "type": "array",
+                "description": "The report metrics included to sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_type": {
+                "title": "",
+                "type": "string",
+                "description": "The type of report. Labeled `Resource type` in the Fivetran dashboard."
+              },
+              "rollback_window": {
+                "title": "",
+                "type": "integer",
+                "description": "The custom window size for rollback syncs (between 2 and 90).",
+                "format": "int32"
+              },
+              "segments": {
+                "title": "",
+                "type": "array",
+                "description": "The report segments included to sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "The name of a table within the schema to which connector syncs the data of a given report."
+              }
+            },
+            "description": "The list of reports. Each report corresponds to a table within the schema to which connector syncs the data."
+          }
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. A change of this value will trigger a re-sync for enabled reports during the next connector sync. ",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Google Search Ads 360 client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Google Search Ads 360 client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_search_ads_360_config_V1",
+    "google_search_ads_360_auth_V1"
+  ]
+}

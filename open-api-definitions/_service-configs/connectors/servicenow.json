@@ -1,0 +1,52 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ServiceNow Client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "ServiceNow Client Secret.",
+          "format": "password"
+        },
+        "include_inherited_columns": {
+          "title": "",
+          "type": "boolean",
+          "description": "(Immutable) Include inherited columns."
+        },
+        "instance": {
+          "title": "",
+          "type": "string",
+          "description": "ServiceNow Instance ID."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your account password.",
+          "format": "password"
+        },
+        "rollback_window": {
+          "title": "",
+          "type": "integer",
+          "description": "Set a rollback window between 0 and 7 days. The default is 0 days.",
+          "format": "int32"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your ServiceNow User ID (username)."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "servicenow_config_V1"
+  ]
+}

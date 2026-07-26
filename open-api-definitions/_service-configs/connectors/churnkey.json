@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Churnkey API Key.",
+          "format": "password"
+        },
+        "app_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Churnkey APP ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "churnkey_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID of your PayPal client application."
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Secret key of your PayPal client application.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "paypal_sandbox_config_V1"
+  ]
+}

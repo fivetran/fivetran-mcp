@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your AWS S3 or GCS bucket."
+        },
+        "csv_definition": {
+          "title": "",
+          "type": "string",
+          "description": "CSV definition for the CSV export (https://help.adjust.com/en/article/csv-uploads#how-do-i-format-my-csv-definition)."
+        },
+        "export_storage_type": {
+          "title": "",
+          "type": "object",
+          "description": "Your cloud storage.",
+          "enum": [
+            "GCS",
+            "AWS_S3"
+          ]
+        },
+        "s3_role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "Used if the `export_storage_type` is `AWS_S3`, the Role ARN required for authentication.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "adjust_config_V1"
+  ]
+}

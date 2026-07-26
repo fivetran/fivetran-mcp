@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Simplesat account key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "simplesat_config_V1"
+  ]
+}

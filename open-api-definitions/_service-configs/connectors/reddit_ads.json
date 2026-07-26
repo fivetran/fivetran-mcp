@@ -1,0 +1,186 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "business_accounts": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Accounts to sync.  Must be populated if `sync_mode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "custom_reports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of custom report configurations. Each report corresponds to a table within the schema to which connector will sync the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "breakdowns": {
+                "title": "",
+                "type": "array",
+                "description": "Breakdowns are now used instead of level and segmentation. They provide a filter for report data.",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "CAMPAIGN_ID",
+                    "AD_ID",
+                    "OS_TYPE",
+                    "KEYWORD",
+                    "INTEREST",
+                    "REGION",
+                    "AD_ACCOUNT_ID",
+                    "PLACEMENT",
+                    "COMMUNITY",
+                    "COUNTRY",
+                    "DMA",
+                    "GENDER",
+                    "AD_GROUP_ID",
+                    "GALLERY_ITEM_ID"
+                  ]
+                }
+              },
+              "conversions_report_included": {
+                "title": "",
+                "type": "boolean",
+                "description": "The boolean value specifying whether to enable or disable event conversions data synchronisation. Default value: `false`"
+              },
+              "custom_events_included": {
+                "title": "",
+                "type": "boolean",
+                "description": "The boolean value specifying whether the custom events are included in event conversions report. Default value: `false`"
+              },
+              "event_names": {
+                "title": "",
+                "type": "array",
+                "description": "The list of events the conversion data will be synchronised for",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "level": {
+                "title": "",
+                "type": "object",
+                "description": "Level of custom report.",
+                "enum": [
+                  "ACCOUNT",
+                  "AD",
+                  "POST",
+                  "AD_GROUP",
+                  "NONE",
+                  "CAMPAIGN"
+                ]
+              },
+              "report_fields": {
+                "title": "",
+                "type": "array",
+                "description": "The list of fields included in custom report",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_name": {
+                "title": "",
+                "type": "string",
+                "description": "The table name within the schema to which connector syncs the data of the specific report."
+              },
+              "segmentation": {
+                "title": "",
+                "type": "object",
+                "description": "Level of custom report.",
+                "enum": [
+                  "PLACEMENT",
+                  "COUNTRY",
+                  "METRO",
+                  "COMMUNITY",
+                  "NONE",
+                  "INTEREST"
+                ]
+              },
+              "time_zone": {
+                "title": "",
+                "type": "string",
+                "description": "The specific time zone to sync report data if  `useAccountTimeZone` set to `false`."
+              },
+              "time_zone_mode": {
+                "title": "",
+                "type": "object",
+                "description": "When this parameter is set to `ACCOUNT`, connector will use account related time zone to sync report data. Default value: `ACCOUNT`. Possible values: `ACCOUNT`, `USER`",
+                "enum": [
+                  "ACCOUNT",
+                  "USER"
+                ]
+              }
+            },
+            "description": "The list of custom report configurations. Each report corresponds to a table within the schema to which connector will sync the data."
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `TWELVE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Reddit Ads client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Reddit Ads client application."
+            }
+          },
+          "description": "Your application client access fields"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "reddit_ads_config_V1",
+    "reddit_ads_auth_V1"
+  ]
+}

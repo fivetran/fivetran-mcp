@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Qualaroo API Key."
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Qualaroo API Secret.",
+          "format": "password"
+        },
+        "survey_ids": {
+          "title": "",
+          "type": "string",
+          "description": "Array of Qualaroo Survey IDs."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "qualaroo_config_V1"
+  ]
+}

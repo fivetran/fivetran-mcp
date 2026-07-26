@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Concord API key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Concord environment.",
+          "enum": [
+            "uat",
+            "api"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "concord_config_V1"
+  ]
+}

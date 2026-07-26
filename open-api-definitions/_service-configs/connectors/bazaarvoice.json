@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Bazaarvoice API key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Bazaarvoice environment.",
+          "enum": [
+            "api.bazaarvoice.com",
+            "stg.api.bazaarvoice.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "bazaarvoice_config_V1"
+  ]
+}

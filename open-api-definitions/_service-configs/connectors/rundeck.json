@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rundeck API token.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rundeck subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "rundeck_config_V1"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "is_test_account": {
+          "title": "",
+          "type": "boolean",
+          "description": "Whether or not your Adyen Account is a Test Account. Default value: `false`."
+        },
+        "report_service_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Report Service API key.",
+          "format": "password"
+        },
+        "web_service_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Adyen Web Service API key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "adyen_config_V1"
+  ]
+}

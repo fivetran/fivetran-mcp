@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your SkillsTX client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your SkillsTX client secret.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your SkillsTX subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "skillstx_config_V1"
+  ]
+}

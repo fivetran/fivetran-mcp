@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "personal_api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your CircleCI Personal API token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "circleci_config_V1"
+  ]
+}

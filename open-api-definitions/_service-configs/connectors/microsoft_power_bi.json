@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Power BI client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Power BI client secret.",
+          "format": "password"
+        },
+        "tenant": {
+          "title": "",
+          "type": "string",
+          "description": "Your Microsoft Power BI tenant."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "microsoft_power_bi_config_V1"
+  ]
+}

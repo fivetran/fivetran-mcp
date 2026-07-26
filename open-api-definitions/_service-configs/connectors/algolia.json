@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Algolia API key.",
+          "format": "password"
+        },
+        "application_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Algolia application ID."
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Algolia analytics region.",
+          "enum": [
+            "analytics.us.algolia.com",
+            "analytics.de.algolia.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "algolia_config_V1"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your HappyFox account name."
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your HappyFox API key.",
+          "format": "password"
+        },
+        "auth_code": {
+          "title": "",
+          "type": "string",
+          "description": "Your HappyFox auth code.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your HappyFox region.",
+          "enum": [
+            "happyfox.net",
+            "happyfox.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "happyfox_config_V1"
+  ]
+}

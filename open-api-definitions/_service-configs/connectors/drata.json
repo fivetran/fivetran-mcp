@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Drata API Key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your Drata sub_domain.",
+          "enum": [
+            "",
+            ".eu"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "drata_config_V1"
+  ]
+}

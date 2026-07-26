@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The AWS bucket name that is configured for AWS Config."
+        },
+        "prefix": {
+          "title": "",
+          "type": "string",
+          "description": "The prefix if you used one when configuring the bucket."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "aws_inventory_config_V1"
+  ]
+}

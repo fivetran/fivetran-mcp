@@ -1,0 +1,131 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "Specific accounts to sync.  Must be populated if `sync_mode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "attribution_window_size": {
+          "title": "",
+          "type": "object",
+          "description": "Rollback sync duration to capture conversions. Set this to your configured attribution window in TikTok Ads. The default value is 7 days.",
+          "enum": [
+            "TWENTY_EIGHT",
+            "FOURTEEN",
+            "ONE",
+            "SEVEN"
+          ]
+        },
+        "custom_reports": {
+          "title": "",
+          "type": "array",
+          "description": "Title of Custom Report",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "aggregate": {
+                "title": "",
+                "type": "string",
+                "description": "Time aggregation of report"
+              },
+              "dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "Dimensions to synced",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "metrics": {
+                "title": "",
+                "type": "array",
+                "description": "Metrics to be synced",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_type": {
+                "title": "",
+                "type": "string",
+                "description": "Type of report to be generated"
+              },
+              "table_name": {
+                "title": "",
+                "type": "string",
+                "description": "Destination Table name of report"
+              }
+            },
+            "description": "Title of Custom Report"
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all advertiser accounts or specific accounts.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `THREE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Access token` carries the information necessary to access API resources."
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your TikTok Ads client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your TikTok Ads client application."
+            }
+          },
+          "description": "Your application client access fields"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "tiktok_ads_config_V1",
+    "tiktok_ads_auth_V1"
+  ]
+}

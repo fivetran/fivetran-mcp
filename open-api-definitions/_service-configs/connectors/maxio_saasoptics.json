@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Maxio SaaSOptics account name."
+        },
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Maxio SaaSOptics API token.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Maxio SaaSOptics subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "maxio_saasoptics_config_V1"
+  ]
+}

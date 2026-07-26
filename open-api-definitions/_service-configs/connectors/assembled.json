@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Assembled API key.",
+          "format": "password"
+        },
+        "return_full_schedule": {
+          "type": "object",
+          "description": "Your Assembled ReturnFullSchedule Query param for Activity table.",
+          "enum": [
+            "false",
+            "true"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "assembled_config_V1"
+  ]
+}

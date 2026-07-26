@@ -1,0 +1,80 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "The Sailthru API key."
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The Sailthru API secret.",
+          "format": "password"
+        },
+        "campaign_query_lookback_window_in_days": {
+          "title": "",
+          "type": "integer",
+          "description": "The number of days to look back for campaign query data during incremental syncs. Valid range: 2-90. Default: 60.",
+          "format": "int32"
+        },
+        "historical_sync_limit": {
+          "title": "",
+          "type": "object",
+          "description": "The time range for which historical data should be synced. Default value: `All Time`.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "historical_sync_limit_date": {
+          "title": "",
+          "type": "string",
+          "description": "The start date (YYYY-MM-DD) from which to sync historical data."
+        },
+        "is_sailthru_connect_enabled": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable this if you want to sync Sailthru Connect"
+        },
+        "packing_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Packing mode for LIST_STATE and USER tables.",
+          "enum": [
+            "UNPACKED",
+            "PACKED"
+          ]
+        },
+        "s3bucket": {
+          "title": "",
+          "type": "string",
+          "description": "Name of the bucket configured to receive sailthru connect data."
+        },
+        "s3path": {
+          "title": "",
+          "type": "string",
+          "description": "Copy and use this to configure Sailthru Connect in your sailthru account."
+        },
+        "s3role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "Role ARN of the IAM role created for Fivetran.",
+          "format": "password"
+        },
+        "use_customer_s3_bucket": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable this if you want to sync Sailthru Connect using your own\"  S3 bucket."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sailthru_config_V1"
+  ]
+}

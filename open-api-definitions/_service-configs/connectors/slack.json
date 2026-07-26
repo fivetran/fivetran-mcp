@@ -1,0 +1,12 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "slack_config_V1"
+  ]
+}

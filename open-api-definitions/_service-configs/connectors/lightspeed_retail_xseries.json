@@ -1,0 +1,56 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "domain_prefix": {
+          "title": "",
+          "type": "string",
+          "description": "Your Lightspeed Retail X-Series store domain prefix."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Lightspeed Retail X-Series access token.",
+          "format": "password"
+        },
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Lightspeed Retail X-Series client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Lightspeed Retail X-Series client application.",
+              "format": "password"
+            }
+          },
+          "description": "Your Lightspeed Retail X-Series client access"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Lightspeed Retail X-Series refresh token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "lightspeed_retail_xseries_config_V1",
+    "lightspeed_retail_xseries_auth_V1"
+  ]
+}

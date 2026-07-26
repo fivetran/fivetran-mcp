@@ -1,0 +1,114 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: true. Set to false if TLS is not required when using an SSH tunnel."
+        },
+        "authentication_method": {
+          "title": "",
+          "type": "object",
+          "description": "The authentication method used to connect to your cluster.",
+          "enum": [
+            "BASICAUTH",
+            "APIKEY"
+          ]
+        },
+        "capture_deletes": {
+          "title": "",
+          "type": "boolean",
+          "description": "Whether to capture hard deletes, meaning source documents removed from the index. Set to false to skip hard-delete detection, which may improve connector performance for sources that do not hard-delete documents. This does not affect source-level soft-delete fields; those fields sync as ordinary document updates. If you re-enable delete capture later, resync the affected tables to rebuild an accurate delete baseline. Default value: true."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values:`Directly`, `SshTunnel`. `SshTunnel` is used as a value if this parameter is omitted in the request and any of the following parameter's values is specified: `tunnel_host`, `tunnel_port`, `tunnel_user`. Otherwise, `Directly` is used as a value if the parameter is omitted.",
+          "enum": [
+            "Directly",
+            "SshTunnel"
+          ]
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "DB instance host or IP address."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The user's password.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The port number.",
+          "format": "int32"
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH host, specify only to connect using an SSH tunnel (do not use a load balancer)."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH port, specify only to connect using an SSH tunnel.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user, specify only to connect using an SSH tunnel."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The user name."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "The Elasticsearch API key. If omitted, then basic user and password authentication will apply."
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Elasticsearch API key"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "es_self_hosted_config_V1",
+    "es_self_hosted_auth_V1",
+    "es_self_hosted_esm_keys_config_V1"
+  ]
+}

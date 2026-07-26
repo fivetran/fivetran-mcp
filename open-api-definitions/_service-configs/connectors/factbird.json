@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Factbird API token.",
+          "format": "password"
+        },
+        "base_url": {
+          "type": "object",
+          "description": "Your Factbird base url.",
+          "enum": [
+            "",
+            "api.cloud.factbird.com"
+          ]
+        },
+        "custom_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Factbird custom base url."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "factbird_config_V1"
+  ]
+}

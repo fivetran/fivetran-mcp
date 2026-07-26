@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshteam API key.",
+          "format": "password"
+        },
+        "base_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your company's Freshteam base domain name (usually **company**.freshteam.com)."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "freshteam_config_V1"
+  ]
+}

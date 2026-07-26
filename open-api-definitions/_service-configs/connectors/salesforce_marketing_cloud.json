@@ -1,0 +1,118 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce Marketing Cloud client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The Salesforce Marketing Cloud client secret.",
+          "format": "password"
+        },
+        "historical_sync_limit": {
+          "title": "",
+          "type": "object",
+          "description": "The time range for which historical data should be synced. Default value: `All Time`.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "historical_sync_limit_date": {
+          "title": "",
+          "type": "string",
+          "description": "The start date (YYYY-MM-DD) from which to sync historical data."
+        },
+        "instance": {
+          "title": "",
+          "type": "object",
+          "description": "The Salesforce Marketing Cloud instance ID",
+          "enum": [
+            "s4",
+            "s5",
+            "s11",
+            "s6",
+            "s10",
+            "s7",
+            "s8",
+            "s12",
+            "s1",
+            "s51",
+            "s50"
+          ]
+        },
+        "is_new_package": {
+          "title": "",
+          "type": "boolean",
+          "description": "Indicates that that your installed package uses OAuth 2.0. Default value: `false`"
+        },
+        "is_sftp_creds_available": {
+          "title": "",
+          "type": "boolean",
+          "description": "Provide SFTP credentials"
+        },
+        "selected_event_types": {
+          "title": "",
+          "type": "array",
+          "description": "Select the event types to be synced.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sftp_host": {
+          "title": "",
+          "type": "string",
+          "description": "Host"
+        },
+        "sftp_is_key_pair": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set this field if you use a key pair for logging into your SFTP server. Don't set it if you use a username and password"
+        },
+        "sftp_password": {
+          "title": "",
+          "type": "string",
+          "description": "Password",
+          "format": "password"
+        },
+        "sftp_port": {
+          "title": "",
+          "type": "integer",
+          "description": "Port",
+          "format": "int32"
+        },
+        "sftp_user": {
+          "title": "",
+          "type": "string",
+          "description": "User"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Salesforce Marketing Cloud subdomain."
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Filter event types.",
+          "enum": [
+            "SelectedEvents",
+            "AllEvents"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "salesforce_marketing_cloud_config_V1"
+  ]
+}

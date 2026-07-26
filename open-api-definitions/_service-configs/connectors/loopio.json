@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "app_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Loopio App Key."
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Loopio Secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "loopio_config_V1"
+  ]
+}

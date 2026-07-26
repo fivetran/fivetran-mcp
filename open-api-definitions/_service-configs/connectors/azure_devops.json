@@ -1,0 +1,43 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Azure Organization Name"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          }
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "azure_devops_config_V1",
+    "azure_devops_auth_V1"
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The Typeform API access token."
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "The Typeform client ID."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "The Typeform client secret."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The Typeform API refresh token."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "typeform_config_V1",
+    "typeform_auth_V1"
+  ]
+}

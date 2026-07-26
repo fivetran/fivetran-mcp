@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshdesk API Key.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your company's freshdesk subdomain (usually **company**.freshdesk.com)."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "freshdesk_config_V1"
+  ]
+}

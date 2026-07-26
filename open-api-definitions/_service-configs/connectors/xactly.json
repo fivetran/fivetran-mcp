@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "application_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Xactly Application ID."
+        },
+        "connect_password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Xactly Connect password.",
+          "format": "password"
+        },
+        "connect_username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Xactly Connect username."
+        },
+        "consumer_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Xactly Connect consumer name."
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Xactly environment.",
+          "enum": [
+            "api",
+            "api-sandbox",
+            "api-implement"
+          ]
+        },
+        "environment_host": {
+          "title": "",
+          "type": "string",
+          "description": "Your Xactly environment host."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "xactly_config_V1"
+  ]
+}

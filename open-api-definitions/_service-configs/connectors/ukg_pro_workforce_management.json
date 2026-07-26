@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_environment": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro Workforce Management Auth base URL."
+        },
+        "auth_type": {
+          "type": "object",
+          "description": "The authentication method you want to use for your connection.",
+          "enum": [
+            "client_credentials",
+            "ropc"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro Workforce Management client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro Workforce Management client secret.",
+          "format": "password"
+        },
+        "host_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro Workforce Management hostname."
+        },
+        "organization": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro Workforce Management Organization ID."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro Workforce Management password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your UKG Pro Workforce Management username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ukg_pro_workforce_management_config_V1"
+  ]
+}

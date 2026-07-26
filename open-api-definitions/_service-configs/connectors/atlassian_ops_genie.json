@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Opsgenie API key",
+          "format": "password"
+        },
+        "region": {
+          "title": "",
+          "type": "string",
+          "description": "Your company's Osgenie region (usually **company**.opsgenie.com)"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "atlassian_ops_genie_config_V1"
+  ]
+}

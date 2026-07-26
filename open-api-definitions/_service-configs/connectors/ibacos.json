@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your IBACOS client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your IBACOS client secret.",
+          "format": "password"
+        },
+        "subdomain": {
+          "type": "object",
+          "description": "Your IBACOS server.",
+          "enum": [
+            "perform-api-stg.ibacos.org",
+            "perform-api.Indo.site",
+            "ibacos-perform-api.ibacos.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ibacos_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rakuten Advertising API token.",
+          "format": "password"
+        },
+        "report_keys": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rakuten Advertising report keys."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "rakutenadvertising_config_V1"
+  ]
+}

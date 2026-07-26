@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your TRELLO api key.",
+          "format": "password"
+        },
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your TRELLO api token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "trello_config_V1"
+  ]
+}

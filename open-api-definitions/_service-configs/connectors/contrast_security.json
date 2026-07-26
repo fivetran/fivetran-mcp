@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Contrast Security API Key.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Contrast Security API Password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Contrast Security subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Contrast Security API Username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "contrast_security_config_V1"
+  ]
+}

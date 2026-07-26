@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Walmart Marketplace client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Walmart Marketplace client secret.",
+          "format": "password"
+        },
+        "service_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Walmart Marketplace service name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "walmart_marketplace_config_V1"
+  ]
+}

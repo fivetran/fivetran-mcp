@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Appcues Account ID."
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Appcues API key.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Appcues region.",
+          "enum": [
+            "appcues.com",
+            "eu.appcues.com"
+          ]
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Appcues Secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "appcues_config_V1"
+  ]
+}

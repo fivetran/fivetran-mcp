@@ -1,0 +1,106 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "advertisables": {
+          "title": "",
+          "type": "array",
+          "description": "Specific advertisables to sync. Must be populated if `sync_mode` is set to `SpecificAdvertisables`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "dimensions": {
+          "title": "",
+          "type": "array",
+          "description": "The dimenstions that you want to sync.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "metrics": {
+          "title": "",
+          "type": "array",
+          "description": "The metrics that you want to sync.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "report_type": {
+          "title": "",
+          "type": "object",
+          "description": "The report type you want. Default value: `ALL_ADS`.",
+          "enum": [
+            "ALL_ADS",
+            "ALL_ADGROUPS",
+            "ALL_ADVERTISABLES",
+            "ALL_CAMPAIGNS",
+            "ALL_AUDIENCE",
+            "CONVERSIONS"
+          ]
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all advertisables or specific advertisables. Default value: `AllAdvertisables`.",
+          "enum": [
+            "AllAdvertisables",
+            "SpecificAdvertisables"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `TWELVE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your AdRoll client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your AdRoll client application."
+            }
+          },
+          "description": "Your application client access fields"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "adroll_config_V1",
+    "adroll_auth_V1"
+  ]
+}

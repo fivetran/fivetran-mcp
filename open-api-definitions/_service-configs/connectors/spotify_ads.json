@@ -1,0 +1,153 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "The list of Ad Account IDs to sync. Must be populated if `sync_mode` is set to `SPECIFIC_ACCOUNTS`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "report_list": {
+          "title": "",
+          "type": "array",
+          "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "dimension": {
+                "title": "",
+                "type": "object",
+                "description": "The dimension (entity_type) to sync.",
+                "enum": [
+                  "AD_ACCOUNT",
+                  "AD",
+                  "AD_SET",
+                  "CAMPAIGN"
+                ]
+              },
+              "fields": {
+                "title": "",
+                "type": "array",
+                "description": "A list of the fields (metrics) to sync.",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "CTR",
+                    "SKIPS",
+                    "VIDEO_VIEWS",
+                    "COMPLETES",
+                    "STREAMS_PER_USER",
+                    "E_CPCL",
+                    "SPEND",
+                    "THIRD_QUARTILES",
+                    "CLICKS",
+                    "NEW_LISTENER_CONVERSION_RATE",
+                    "FREQUENCY",
+                    "OFF_SPOTIFY_IMPRESSIONS",
+                    "VIDEO_EXPAND_RATE",
+                    "NEW_LISTENERS",
+                    "PAID_LISTENS",
+                    "IMPRESSIONS",
+                    "CONVERSION_RATE",
+                    "FIRST_QUARTILES",
+                    "STREAMED_IMPRESSIONS",
+                    "PAID_LISTENS_FREQUENCY",
+                    "STREAMS_PER_NEW_LISTENER",
+                    "PAID_LISTENS_REACH",
+                    "LISTENERS",
+                    "REACH",
+                    "STARTS",
+                    "NEW_LISTENER_STREAMS",
+                    "STREAMS",
+                    "VIDEO_EXPANDS",
+                    "INTENT_RATE",
+                    "MIDPOINTS",
+                    "E_CPM"
+                  ]
+                }
+              },
+              "granularity": {
+                "title": "",
+                "type": "object",
+                "description": "The report granularity.",
+                "enum": [
+                  "HOUR",
+                  "DAY"
+                ]
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "The table name within the schema to which connector will sync the data of the specific report."
+              }
+            },
+            "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data."
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all ad accounts or specific ad accounts.",
+          "enum": [
+            "ALL_ACCOUNTS",
+            "SPECIFIC_ACCOUNTS"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "The number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `SIX`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Ad Studio application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Ad Studio application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "spotify_ads_config_V1",
+    "spotify_ads_auth_V1"
+  ]
+}

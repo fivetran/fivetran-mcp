@@ -1,6 +1,6 @@
 # Fivetran MCP Server
 
-An MCP server that you can use to interact with your Fivetran environment.  It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connection's broken?"  Additionally, if you set FIVETRAN_ALLOW_WRITES to "true" you can complete write operations like "update the sync frequency of my Redshift connections to every 3 hours".  The MCP will confirm with you before performing a write operation.
+An MCP server that you can use to interact with your Fivetran environment. It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connections broken?" Set `FIVETRAN_SCOPE` to `read/write` or `read/write/delete` to unlock write and delete operations, and use `DISALLOWED_ACTIONS` to carve exceptions out of that tier (for example, `system-keys:write,system-keys:delete` to keep credential minting off-limits). The MCP will confirm with you before performing a write or delete operation.
 
 ## Enabling Additional Tools
 
@@ -22,7 +22,7 @@ The `open-api-definitions/` directory contains lightweight per-endpoint schema f
 python split_openapi_by_endpoint.py fivetran-open-api-definition.json open-api-definitions
 ```
 
-This will replace the existing schema files with freshly generated ones. Description overrides from `fivetran-open-api-description-overrides.csv` are applied automatically.
+This will replace the existing schema files with freshly generated ones.
 
 ## Setup
 
@@ -83,7 +83,8 @@ Using uvx (Option A):
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
-        "FIVETRAN_ALLOW_WRITES": "false"
+        "FIVETRAN_SCOPE": "read",
+        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
       }
     }
   }
@@ -101,7 +102,8 @@ Using a local clone (Option B):
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
-        "FIVETRAN_ALLOW_WRITES": "false"
+        "FIVETRAN_SCOPE": "read",
+        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
       }
     }
   }
@@ -123,7 +125,8 @@ Using uvx (Option A):
 claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
-  --env FIVETRAN_ALLOW_WRITES=false \
+  --env FIVETRAN_SCOPE=read \
+  --env DISALLOWED_ACTIONS=system-keys:write,system-keys:delete \
   -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
@@ -133,7 +136,8 @@ Using a local clone (Option B):
 claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
-  --env FIVETRAN_ALLOW_WRITES=false \
+  --env FIVETRAN_SCOPE=read \
+  --env DISALLOWED_ACTIONS=system-keys:write,system-keys:delete \
   -- python /path/to/fivetran-mcp/server.py
 ```
 
@@ -148,7 +152,8 @@ Or add it directly to your `~/.claude.json` configuration:
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
-        "FIVETRAN_ALLOW_WRITES": "false"
+        "FIVETRAN_SCOPE": "read",
+        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
       }
     }
   }
@@ -175,7 +180,8 @@ Using uvx (Option A):
 codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
-  --env FIVETRAN_ALLOW_WRITES=false \
+  --env FIVETRAN_SCOPE=read \
+  --env DISALLOWED_ACTIONS=system-keys:write,system-keys:delete \
   -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
@@ -185,7 +191,8 @@ Using a local clone (Option B):
 codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
-  --env FIVETRAN_ALLOW_WRITES=false \
+  --env FIVETRAN_SCOPE=read \
+  --env DISALLOWED_ACTIONS=system-keys:write,system-keys:delete \
   -- python /path/to/fivetran-mcp/server.py
 ```
 
@@ -201,7 +208,8 @@ args = ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"
 [mcp_servers.fivetran.env]
 FIVETRAN_API_KEY = "your-api-key"
 FIVETRAN_API_SECRET = "your-api-secret"
-FIVETRAN_ALLOW_WRITES = "false"
+FIVETRAN_SCOPE = "read"
+DISALLOWED_ACTIONS = "system-keys:write,system-keys:delete"
 ```
 
 Using a local clone (Option B):
@@ -214,7 +222,8 @@ args = ["/path/to/fivetran-mcp/server.py"]
 [mcp_servers.fivetran.env]
 FIVETRAN_API_KEY = "your-api-key"
 FIVETRAN_API_SECRET = "your-api-secret"
-FIVETRAN_ALLOW_WRITES = "false"
+FIVETRAN_SCOPE = "read"
+DISALLOWED_ACTIONS = "system-keys:write,system-keys:delete"
 ```
 
 Verify configuration:
@@ -245,7 +254,8 @@ Using uvx (Option A):
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
-        "FIVETRAN_ALLOW_WRITES": "false"
+        "FIVETRAN_SCOPE": "read",
+        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
       }
     }
   }
@@ -263,7 +273,8 @@ Using a local clone (Option B):
       "env": {
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
-        "FIVETRAN_ALLOW_WRITES": "false"
+        "FIVETRAN_SCOPE": "read",
+        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
       }
     }
   }
@@ -284,7 +295,8 @@ Restart Cursor to load the new MCP server configuration.
 |----------|----------|---------|-------------|
 | `FIVETRAN_API_KEY` | Yes | - | Your Fivetran API key |
 | `FIVETRAN_API_SECRET` | Yes | - | Your Fivetran API secret |
-| `FIVETRAN_ALLOW_WRITES` | No | `false` | Set to `true` to enable POST, PATCH, and DELETE operations |
+| `FIVETRAN_SCOPE` | No | `read` | One of `read`, `read/write`, `read/write/delete`. Case-insensitive. Sets the ceiling of what the server can do. |
+| `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. |
 
 ## Available Tools
 

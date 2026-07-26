@@ -1,0 +1,441 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "List of accounts of which connector will sync the data.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "custom_tables": {
+          "title": "",
+          "type": "array",
+          "description": "List of custom tables. Each custom table corresponds to a table within the schema to which connector will sync the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "action_breakdowns": {
+                "title": "",
+                "type": "array",
+                "description": "List of action_breakdowns which connector will sync. [Possible action_breakdowns values](/docs/connectors/applications/facebook-ads#actionbreakdowns).",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "action_canvas_component_name",
+                    "action_carousel_card_id",
+                    "action_video_sound",
+                    "action_link_click_destination",
+                    "action_type",
+                    "action_video_type",
+                    "action_carousel_card_name",
+                    "action_target_id",
+                    "action_destination",
+                    "action_device",
+                    "action_reaction"
+                  ]
+                }
+              },
+              "action_report_time": {
+                "title": "",
+                "type": "object",
+                "description": "The report time of action stats. [Possible action_report time values](/docs/connectors/applications/facebook-ads#actionreporttime).",
+                "enum": [
+                  "impression",
+                  "mixed",
+                  "conversion"
+                ]
+              },
+              "aggregation": {
+                "title": "",
+                "type": "object",
+                "description": "Options to select aggregation duration. [Possible aggregation values](/docs/connectors/applications/facebook-ads#aggregation).",
+                "enum": [
+                  "Month",
+                  "Lifetime",
+                  "Day",
+                  "Week"
+                ]
+              },
+              "attribution_windows": {
+                "title": "",
+                "type": "array",
+                "description": "List of attribution windows passed as Meta's `action_attribution_windows` query parameter. Default: `CLICK_7D`, `VIEW_1D`, `INCREMENTALITY`. Possible values: `CLICK_1D`, `CLICK_7D`, `CLICK_28D`, `VIEW_1D`, `ENGAGED_VIEW_1D`, `INCREMENTALITY`, `INCREMENTALITY_FIRST_CONVERSION`, `INCREMENTALITY_ALL_CONVERSIONS`.",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "VIEW_1D",
+                    "INCREMENTALITY",
+                    "CLICK_1D",
+                    "INCREMENTALITY_FIRST_CONVERSION",
+                    "CLICK_7D",
+                    "INCREMENTALITY_ALL_CONVERSIONS",
+                    "CLICK_28D",
+                    "ENGAGED_VIEW_1D"
+                  ]
+                }
+              },
+              "breakdowns": {
+                "title": "",
+                "type": "array",
+                "description": "List of breakdowns which connector will sync. [Possible breakdowns values](/docs/connectors/applications/facebook-ads#breakdowns).",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "country",
+                    "skan_campaign_id",
+                    "gender",
+                    "hourly_stats_aggregated_by_advertiser_time_zone",
+                    "skan_conversion_id",
+                    "link_url_asset",
+                    "title_asset",
+                    "action_converted_product_id",
+                    "fidelity_type",
+                    "mmm",
+                    "call_to_action_asset",
+                    "image_asset",
+                    "product_id",
+                    "hsid",
+                    "app_id",
+                    "impression_device",
+                    "user_segment_key",
+                    "body_asset",
+                    "frequency_value",
+                    "place_page_id",
+                    "video_asset",
+                    "redownload",
+                    "hourly_stats_aggregated_by_audience_time_zone",
+                    "ad_format_asset",
+                    "platform_position",
+                    "postback_sequence_index",
+                    "dma",
+                    "device_platform",
+                    "placement",
+                    "publisher_platform",
+                    "comscore_market",
+                    "region",
+                    "is_conversion_id_modeled",
+                    "coarse_conversion_value",
+                    "age",
+                    "description_asset"
+                  ]
+                }
+              },
+              "click_attribution_window": {
+                "title": "",
+                "type": "object",
+                "description": "Deprecated. Read-only legacy field used only during migration to `attribution_windows`.",
+                "enum": [
+                  "DAY_1",
+                  "DAY_1_EV",
+                  "DAY_7",
+                  "NONE",
+                  "DAY_28"
+                ]
+              },
+              "config_type": {
+                "title": "",
+                "type": "object",
+                "description": "Option to select Prebuilt Reports or Custom Reports. [Possible config_type values](/docs/connectors/applications/facebook-ads#configtype).",
+                "enum": [
+                  "Prebuilt",
+                  "Custom"
+                ]
+              },
+              "engaged_view_attribution_window": {
+                "title": "",
+                "type": "object",
+                "description": "Deprecated. Read-only legacy field used only during migration to `attribution_windows`.",
+                "enum": [
+                  "DAY_1",
+                  "DAY_1_EV",
+                  "DAY_7",
+                  "NONE",
+                  "DAY_28"
+                ]
+              },
+              "fields": {
+                "title": "",
+                "type": "array",
+                "description": "List of fields which connector will sync. [Possible field values](/docs/connectors/applications/facebook-ads#fields).",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "cost_per_estimated_ad_recallers",
+                    "optimization_goal",
+                    "video_thruplay_watched_actions",
+                    "reach",
+                    "click_to_app_store",
+                    "cost_per_unique_action_type",
+                    "total_actions",
+                    "website_clicks",
+                    "place_page_name",
+                    "social_impressions",
+                    "buying_type",
+                    "objective",
+                    "video_30_sec_watched_actions",
+                    "canvas_component_avg_pct_view",
+                    "cost_per_thruplay",
+                    "instant_experience_outbound_clicks",
+                    "unique_clicks",
+                    "unique_outbound_clicks",
+                    "total_unique_actions",
+                    "video_p75_watched_actions",
+                    "cost_per_unique_inline_link_click",
+                    "canvas_avg_view_time",
+                    "social_clicks",
+                    "inline_link_click_ctr",
+                    "newsfeed_avg_position",
+                    "ctr",
+                    "instagram_upcoming_event_reminders_set",
+                    "deeplink_clicks",
+                    "video_avg_time_watched_actions",
+                    "unique_impressions",
+                    "video_play_retention_20_to_60s_actions",
+                    "ad_click_actions",
+                    "labels",
+                    "cost_per_ad_click",
+                    "newsfeed_impressions",
+                    "unique_link_clicks_ctr",
+                    "video_p95_watched_actions",
+                    "ad_id",
+                    "full_view_reach",
+                    "catalog_segment_value",
+                    "cost_per_unique_outbound_click",
+                    "inline_post_engagement",
+                    "auction_competitiveness",
+                    "actions",
+                    "catalog_segment_value_omni_purchase_roas",
+                    "video_continuous_2_sec_watched_actions",
+                    "unique_outbound_clicks_ctr",
+                    "objective_result_rate",
+                    "conversions",
+                    "video_10_sec_watched_actions",
+                    "estimated_ad_recall_rate",
+                    "attribution_setting",
+                    "video_play_retention_0_to_15s_actions",
+                    "cost_per_action_type",
+                    "dda_countby_convs",
+                    "outbound_clicks_ctr",
+                    "unique_inline_link_click_ctr",
+                    "cost_per_result",
+                    "catalog_segment_actions",
+                    "cost_per_15_sec_video_view",
+                    "social_reach",
+                    "objective_results",
+                    "account_name",
+                    "video_time_watched_actions",
+                    "wish_bid",
+                    "unique_inline_link_clicks",
+                    "video_p100_watched_actions",
+                    "cost_per_conversion",
+                    "video_p50_watched_actions",
+                    "outbound_clicks",
+                    "cost_per_one_thousand_ad_impression",
+                    "app_store_clicks",
+                    "interactive_component_tap",
+                    "converted_product_quantity",
+                    "unique_social_clicks",
+                    "qualifying_question_qualify_answer_rate",
+                    "ad_name",
+                    "impressions",
+                    "full_view_impressions",
+                    "cost_per_10_sec_video_view",
+                    "account_id",
+                    "website_purchase_roas",
+                    "instant_experience_clicks_to_open",
+                    "adset_name",
+                    "social_spend",
+                    "video_play_curve_actions",
+                    "frequency",
+                    "action_values",
+                    "call_to_action_clicks",
+                    "cpc",
+                    "cost_per_dda_countby_convs",
+                    "campaign_id",
+                    "cpm",
+                    "created_time",
+                    "cpp",
+                    "conversion_rate_ranking",
+                    "click_to_app_deeplink",
+                    "cost_per_inline_link_click",
+                    "video_play_retention_graph_actions",
+                    "date_start",
+                    "conversion_values",
+                    "adset_id",
+                    "purchase_roas",
+                    "estimated_ad_recallers",
+                    "cost_per_unique_click",
+                    "account_currency",
+                    "inline_link_clicks",
+                    "video_15_sec_watched_actions",
+                    "website_ctr",
+                    "auction_max_competitor_bid",
+                    "converted_product_value",
+                    "auction_bid",
+                    "catalog_segment_value_website_purchase_roas",
+                    "campaign_name",
+                    "cost_per_inline_post_engagement",
+                    "unique_actions",
+                    "click_to_website",
+                    "video_avg_percent_watched_actions",
+                    "spend",
+                    "date_stop",
+                    "video_play_actions",
+                    "catalog_segment_value_mobile_purchase_roas",
+                    "video_p25_watched_actions",
+                    "cost_per_outbound_click",
+                    "canvas_avg_view_percent",
+                    "quality_ranking",
+                    "total_action_value",
+                    "unique_ctr",
+                    "user_segment_key",
+                    "cost_per_total_action",
+                    "instant_experience_clicks_to_start",
+                    "cost_per_2_sec_continuous_video_view",
+                    "relevance_score",
+                    "newsfeed_clicks",
+                    "clicks",
+                    "engagement_rate_ranking",
+                    "location",
+                    "gender_targeting",
+                    "mobile_app_purchase_roas",
+                    "ad_impression_actions"
+                  ]
+                }
+              },
+              "level": {
+                "title": "",
+                "type": "object",
+                "enum": [
+                  "ad",
+                  "adset",
+                  "campaign",
+                  "none",
+                  "account"
+                ]
+              },
+              "prebuilt_report_name": {
+                "title": "",
+                "type": "string",
+                "description": "The report name to which connector will sync the data. [Possible prebuilt_report values](/docs/connectors/applications/facebook-ads#prebuiltreport)."
+              },
+              "table_name": {
+                "title": "",
+                "type": "string",
+                "description": "The table name within the schema to which the connector will sync the data. It must be unique within the connector and must comply with [Fivetran's naming conventions](/docs/getting-started/core-concepts#namingconventions)."
+              },
+              "use_unified_attribution_setting": {
+                "title": "",
+                "type": "boolean"
+              },
+              "view_attribution_window": {
+                "title": "",
+                "type": "object",
+                "description": "Deprecated. Read-only legacy field used only during migration to `attribution_windows`.",
+                "enum": [
+                  "DAY_1",
+                  "DAY_1_EV",
+                  "DAY_7",
+                  "NONE",
+                  "DAY_28"
+                ]
+              }
+            },
+            "description": "List of custom tables. Each custom table corresponds to a table within the schema to which connector will sync the data."
+          }
+        },
+        "sync_metadata": {
+          "title": "",
+          "type": "boolean",
+          "description": "Parameter defining whether to enable or disable metadata synchronisation. Default value: `TRUE`."
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Option to select connector should sync all accounts or specific accounts. [Possible sync_mode values](/docs/connectors/applications/facebook-ads#syncmode).",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `THREE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Access token` along with the `client_id` and `client_secret` parameters carry the information necessary to query the Facebook Ads API. Use either `access_token` or `user_access_token`, not both at the same time."
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Facebook client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Facebook client application."
+            }
+          },
+          "description": "Your application client access fields."
+        },
+        "user_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "System User Token. Use in combination with `client_id` and `client_secret`. Use either `user_access_token` (for system token) or `access_token` (for user access token), not both at the same time."
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "user_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for system User Token"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "facebook_ads_config_V1",
+    "facebook_ads_auth_V1",
+    "facebook_ads_esm_keys_config_V1"
+  ]
+}

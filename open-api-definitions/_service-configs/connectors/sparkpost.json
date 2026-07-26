@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your SparkPost API key.",
+          "format": "password"
+        },
+        "host_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your SparkPost host URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sparkpost_config_V1"
+  ]
+}

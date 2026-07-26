@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Duoplane API key.",
+          "format": "password"
+        },
+        "api_password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Duoplane API password.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "duoplane_config_V1"
+  ]
+}

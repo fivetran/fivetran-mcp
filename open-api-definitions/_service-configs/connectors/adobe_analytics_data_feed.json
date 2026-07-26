@@ -1,0 +1,131 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "abs_connection_method": {
+          "title": "",
+          "type": "object",
+          "description": "Azure Blob Storage connection method",
+          "enum": [
+            "SSH_TUNNEL",
+            "DIRECT",
+            "PRIVATE_LINK"
+          ]
+        },
+        "abs_connection_string": {
+          "title": "",
+          "type": "string",
+          "description": "Azure Blob Storage connection string.",
+          "format": "password"
+        },
+        "abs_container_address": {
+          "title": "",
+          "type": "string",
+          "description": "Azure Blob Storage container address"
+        },
+        "abs_container_name": {
+          "title": "",
+          "type": "string",
+          "description": "Azure Blob Storage container name."
+        },
+        "abs_host_ip": {
+          "title": "",
+          "type": "string",
+          "description": "Azure Blob Storage host IP"
+        },
+        "abs_host_user": {
+          "title": "",
+          "type": "string",
+          "description": "Azure Blob Storage username"
+        },
+        "folder_path": {
+          "title": "",
+          "type": "string",
+          "description": "Folder Path"
+        },
+        "ftp_host": {
+          "title": "",
+          "type": "string",
+          "description": "FTP host."
+        },
+        "ftp_password": {
+          "title": "",
+          "type": "string",
+          "description": "FTP password.",
+          "format": "password"
+        },
+        "ftp_port": {
+          "title": "",
+          "type": "integer",
+          "description": "FTP port.",
+          "format": "int32"
+        },
+        "ftp_user": {
+          "title": "",
+          "type": "string",
+          "description": "FTP user."
+        },
+        "is_ftps": {
+          "title": "",
+          "type": "boolean",
+          "description": "Use Secure FTP (FTPS)."
+        },
+        "s3bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The S3 bucket name."
+        },
+        "s3role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication.",
+          "format": "password"
+        },
+        "sftp_host": {
+          "title": "",
+          "type": "string",
+          "description": "SFTP host."
+        },
+        "sftp_is_key_pair": {
+          "title": "",
+          "type": "boolean",
+          "description": "Log in with key pair or password"
+        },
+        "sftp_password": {
+          "title": "",
+          "type": "string",
+          "description": "SFTP password required if sftp_is_key_pair is false",
+          "format": "password"
+        },
+        "sftp_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SFTP port.",
+          "format": "int32"
+        },
+        "sftp_user": {
+          "title": "",
+          "type": "string",
+          "description": "SFTP user."
+        },
+        "source": {
+          "title": "",
+          "type": "object",
+          "description": "The data source.",
+          "enum": [
+            "S3",
+            "AZURE_BLOB_STORAGE",
+            "FTP",
+            "SFTP"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "adobe_analytics_data_feed_config_V1"
+  ]
+}

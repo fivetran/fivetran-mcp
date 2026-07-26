@@ -1,0 +1,48 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket_name": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the bucket."
+        },
+        "dataset_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Dataset ID."
+        },
+        "list_sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "The Sync Mode",
+          "enum": [
+            "COLUMNS",
+            "JSON"
+          ]
+        },
+        "project_id": {
+          "title": "",
+          "type": "string",
+          "description": "The Project ID."
+        },
+        "sync_tables": {
+          "title": "",
+          "type": "object",
+          "description": "Sync Table",
+          "enum": [
+            "DAILY_ONLY",
+            "FRESH_DAILY",
+            "STREAMING"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_analytics_4_export_config_V1"
+  ]
+}

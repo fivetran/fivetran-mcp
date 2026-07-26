@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gladly API Token.",
+          "format": "password"
+        },
+        "organization": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gladly Organization Name."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gladly Username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gladly_config_V1"
+  ]
+}

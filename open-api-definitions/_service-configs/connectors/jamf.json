@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Jamf password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Jamf subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Jamf username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "jamf_config_V1"
+  ]
+}

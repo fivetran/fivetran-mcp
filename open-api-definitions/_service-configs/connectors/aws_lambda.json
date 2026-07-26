@@ -1,0 +1,164 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "S3 Bucket"
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Connection method. Default value: `Directly`.",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "custom_payloads": {
+          "title": "",
+          "type": "array",
+          "description": "The list of key-value pairs that can be used to specify custom information to the function at runtime.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "key": {
+                "title": "",
+                "type": "string",
+                "description": "Payload Key"
+              },
+              "value": {
+                "title": "",
+                "type": "string",
+                "description": "Payload Value"
+              }
+            },
+            "description": "The list of key-value pairs that can be used to specify custom information to the function at runtime."
+          }
+        },
+        "function": {
+          "title": "",
+          "type": "string",
+          "description": "The name of your AWS Lambda Function."
+        },
+        "is_private_link_required": {
+          "title": "",
+          "type": "boolean",
+          "description": "We use PrivateLink by default if your AWS Lambda is in the same region as Fivetran. Turning on this toggle ensures that Fivetran always connects to AWS lambda over PrivateLink. Learn more in our [PrivateLink documentation](https://fivetran.com/docs/connectors/databases/connection-options/aws-private-link)."
+        },
+        "region": {
+          "title": "",
+          "type": "object",
+          "description": "The AWS region code for the DynamoDB instance.",
+          "enum": [
+            "me-central-1",
+            "aws-cn-global",
+            "us-isof-south-1",
+            "ap-east-2",
+            "us-west-1",
+            "us-west-2",
+            "af-south-1",
+            "ap-northeast-3",
+            "ap-northeast-2",
+            "ap-northeast-1",
+            "me-south-1",
+            "sa-east-1",
+            "cn-north-1",
+            "ap-southeast-1",
+            "ap-southeast-2",
+            "ap-southeast-3",
+            "ap-southeast-4",
+            "ap-southeast-5",
+            "us-east-1",
+            "us-east-2",
+            "ap-southeast-7",
+            "cn-northwest-1",
+            "aws-iso-e-global",
+            "ap-south-2",
+            "ap-south-1",
+            "eu-south-1",
+            "eu-south-2",
+            "us-gov-east-1",
+            "il-central-1",
+            "ca-central-1",
+            "mx-central-1",
+            "eu-central-1",
+            "eusc-de-east-1",
+            "us-iso-west-1",
+            "eu-central-2",
+            "eu-isoe-west-1",
+            "aws-global",
+            "eu-north-1",
+            "eu-west-3",
+            "eu-west-2",
+            "eu-west-1",
+            "aws-iso-global",
+            "ap-east-1",
+            "ca-west-1",
+            "us-gov-west-1",
+            "us-iso-east-1",
+            "aws-iso-b-global",
+            "aws-iso-f-global",
+            "us-isob-east-1",
+            "aws-us-gov-global",
+            "us-isof-east-1"
+          ]
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication.",
+          "format": "password"
+        },
+        "secrets": {
+          "title": "",
+          "type": "string",
+          "description": "The secrets that should be passed to the function at runtime.",
+          "format": "password"
+        },
+        "secrets_list": {
+          "title": "",
+          "type": "array",
+          "description": "List of Secrets that should be passed to the function at runtime.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "key": {
+                "title": "",
+                "type": "string",
+                "description": "Secret Key."
+              },
+              "value": {
+                "title": "",
+                "type": "string",
+                "description": "Secret Value.",
+                "format": "password"
+              }
+            },
+            "description": "List of Secrets that should be passed to the function at runtime."
+          }
+        },
+        "sync_method": {
+          "title": "",
+          "type": "object",
+          "description": "Sync Method",
+          "enum": [
+            "CLOUD_STORAGE",
+            "DIRECT"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "aws_lambda_config_V1"
+  ]
+}

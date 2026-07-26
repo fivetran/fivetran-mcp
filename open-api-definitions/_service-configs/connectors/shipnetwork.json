@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_user_identifier": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShipNetwork API user identifier.",
+          "format": "password"
+        },
+        "api_user_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShipNetwork API user secret.",
+          "format": "password"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShipNetwork client ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "shipnetwork_config_V1"
+  ]
+}

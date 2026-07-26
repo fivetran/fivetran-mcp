@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Okta API token.",
+          "format": "password"
+        },
+        "domain": {
+          "type": "object",
+          "description": "Your Okta domain.",
+          "enum": [
+            "",
+            ".okta.com",
+            ".okta-emea.com",
+            ".oktapreview.com"
+          ]
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Okta subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "okta_config_V1"
+  ]
+}

@@ -1,0 +1,150 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_cert": {
+          "title": "",
+          "type": "string",
+          "description": "Kafka client certificate.",
+          "format": "password"
+        },
+        "client_cert_key": {
+          "title": "",
+          "type": "string",
+          "description": "Kafka client certificate key.",
+          "format": "password"
+        },
+        "consumer_group": {
+          "title": "",
+          "type": "string",
+          "description": "Kafka consumer group name."
+        },
+        "message_type": {
+          "title": "",
+          "type": "object",
+          "description": "Kafka message type.",
+          "enum": [
+            "Text",
+            "Json",
+            "Avro",
+            "Protobuf"
+          ]
+        },
+        "sasl_mechanism": {
+          "title": "",
+          "type": "object",
+          "description": "SASL Mechanism",
+          "enum": [
+            "PLAIN",
+            "SCRAM_SHA_512",
+            "SCRAM_SHA_256"
+          ]
+        },
+        "sasl_plain_key": {
+          "title": "",
+          "type": "string",
+          "description": "API Key",
+          "format": "password"
+        },
+        "sasl_plain_secret": {
+          "title": "",
+          "type": "string",
+          "description": "API Secret",
+          "format": "password"
+        },
+        "sasl_scram256_key": {
+          "title": "",
+          "type": "string",
+          "description": "API Key",
+          "format": "password"
+        },
+        "sasl_scram256_secret": {
+          "title": "",
+          "type": "string",
+          "description": "API Secret",
+          "format": "password"
+        },
+        "sasl_scram512_key": {
+          "title": "",
+          "type": "string",
+          "description": "API Key",
+          "format": "password"
+        },
+        "sasl_scram512_secret": {
+          "title": "",
+          "type": "string",
+          "description": "API Secret",
+          "format": "password"
+        },
+        "schema_registry_credentials_source": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Credentials source"
+        },
+        "schema_registry_key": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Key",
+          "format": "password"
+        },
+        "schema_registry_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Secret",
+          "format": "password"
+        },
+        "schema_registry_urls": {
+          "title": "",
+          "type": "array",
+          "description": "Your schema registry URLs",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "security_protocol": {
+          "title": "",
+          "type": "object",
+          "description": "Security protocol for Kafka interaction.",
+          "enum": [
+            "SASL",
+            "PLAINTEXT",
+            "TLS"
+          ]
+        },
+        "servers": {
+          "title": "",
+          "type": "array",
+          "description": "Comma-separated list of Kafka servers in the format `server:port`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_type": {
+          "title": "",
+          "type": "object",
+          "description": "Kafka sync type.  Unpacked messages must be valid JSON.",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        },
+        "trusted_cert": {
+          "title": "",
+          "type": "string",
+          "description": "Kafka trusted certificate.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "apache_kafka_config_V1"
+  ]
+}

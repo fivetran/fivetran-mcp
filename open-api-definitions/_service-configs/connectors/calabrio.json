@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Calabrio access token.",
+          "format": "password"
+        },
+        "domain_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Calabrio domain name"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "calabrio_config_V1"
+  ]
+}

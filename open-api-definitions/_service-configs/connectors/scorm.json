@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Scorm Secret Key.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Scorm App ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "scorm_config_V1"
+  ]
+}

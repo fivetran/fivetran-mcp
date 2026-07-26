@@ -1,0 +1,88 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Vimeo client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Vimeo client secret.",
+          "format": "password"
+        },
+        "historical_sync_time_frame": {
+          "type": "object",
+          "description": "Your Vimeo Historical sync time frame.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "rate_limit_plan": {
+          "type": "object",
+          "description": "Your Vimeo rate limit plan.",
+          "enum": [
+            "235",
+            "115",
+            "725",
+            "480",
+            "20"
+          ]
+        },
+        "user_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Vimeo user ID."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "vimeo_config_V1",
+    "vimeo_auth_V1"
+  ]
+}

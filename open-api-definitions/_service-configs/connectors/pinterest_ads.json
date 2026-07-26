@@ -1,0 +1,202 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "advertisers": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Advertisers to sync.  Must be populated if `sync_mode` is set to `SpecificAdvertisers`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "click_attribution_window": {
+          "title": "",
+          "type": "object",
+          "description": "The number of days to use as the conversion attribution window for a 'click' action.",
+          "enum": [
+            "ZERO",
+            "THIRTY",
+            "SIXTY",
+            "FOURTEEN",
+            "ONE",
+            "SEVEN"
+          ]
+        },
+        "conversion_report_time": {
+          "title": "",
+          "type": "object",
+          "description": "The date that the user interacted with the ad OR completed a conversion event.",
+          "enum": [
+            "CONVERSION_EVENT",
+            "AD_EVENT"
+          ]
+        },
+        "custom_reports": {
+          "title": "",
+          "type": "array",
+          "description": "Custom reports to sync. Each entry creates a destination table with the specified metrics and breakdown level.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "click_attribution_window": {
+                "title": "",
+                "type": "object",
+                "description": "Overrides the connector-level click attribution window for this report.",
+                "enum": [
+                  "ZERO",
+                  "THIRTY",
+                  "SIXTY",
+                  "FOURTEEN",
+                  "ONE",
+                  "SEVEN"
+                ]
+              },
+              "conversion_report_time": {
+                "title": "",
+                "type": "object",
+                "description": "Overrides the connector-level conversion report time for this report.",
+                "enum": [
+                  "CONVERSION_EVENT",
+                  "AD_EVENT"
+                ]
+              },
+              "granularity": {
+                "title": "",
+                "type": "object",
+                "description": "Time granularity for the report: DAY, HOUR, WEEK, MONTH, or TOTAL.",
+                "enum": [
+                  "TOTAL",
+                  "MONTH",
+                  "HOUR",
+                  "WEEK",
+                  "DAY"
+                ]
+              },
+              "metrics": {
+                "title": "",
+                "type": "array",
+                "description": "List of metrics to include in the report.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_type": {
+                "title": "",
+                "type": "string",
+                "description": "The breakdown level for the report (e.g. ADVERTISER, CAMPAIGN, AD_GROUP, PIN_PROMOTION, KEYWORD, PRODUCT_GROUP, PRODUCT_ITEM)."
+              },
+              "table_name": {
+                "title": "",
+                "type": "string",
+                "description": "Destination table name for this custom report."
+              },
+              "view_attribution_window": {
+                "title": "",
+                "type": "object",
+                "description": "Overrides the connector-level view attribution window for this report.",
+                "enum": [
+                  "ZERO",
+                  "THIRTY",
+                  "SIXTY",
+                  "FOURTEEN",
+                  "ONE",
+                  "SEVEN"
+                ]
+              }
+            },
+            "description": "Custom reports to sync. Each entry creates a destination table with the specified metrics and breakdown level."
+          }
+        },
+        "refresh_token_expires_at": {
+          "title": "",
+          "type": "string",
+          "description": "The expiration date of the refresh token. Unix timestamp in seconds",
+          "format": "date-time"
+        },
+        "report_granularity": {
+          "title": "",
+          "type": "object",
+          "description": "Granularity at which reports will be ",
+          "enum": [
+            "HOUR",
+            "DAY"
+          ]
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all advertisers or specific advertisers.",
+          "enum": [
+            "SpecificAdvertisers",
+            "AllAdvertisers"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `THREE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "view_attribution_window": {
+          "title": "",
+          "type": "object",
+          "description": "The number of days to use as the conversion attribution window for a 'view' action.",
+          "enum": [
+            "ZERO",
+            "THIRTY",
+            "SIXTY",
+            "FOURTEEN",
+            "ONE",
+            "SEVEN"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Pinterest client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Pinterest client application."
+            }
+          },
+          "description": "Your application client access fields."
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "pinterest_ads_config_V1",
+    "pinterest_ads_auth_V1"
+  ]
+}

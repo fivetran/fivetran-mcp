@@ -1,0 +1,271 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "The list of specific Account IDs to sync. Must be populated if `sync_mode` is set to `SPECIFIC_ACCOUNTS`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "properties": {
+          "title": "",
+          "type": "array",
+          "description": "The array of strings in the `properties/{id}` format where `id` is a Google Analytics 4 property identifier. Must be populated if `sync_mode` is set to `SPECIFIC_ACCOUNTS`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "config_type": {
+                "title": "",
+                "type": "object",
+                "description": "Whether to use the Prebuilt Reports or Custom Reports.",
+                "enum": [
+                  "CUSTOM",
+                  "PREBUILT"
+                ]
+              },
+              "dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "The report dimensions to include into a sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "filter_field_name": {
+                "title": "",
+                "type": "string",
+                "description": "The dimension name to filter on."
+              },
+              "filter_type": {
+                "title": "",
+                "type": "object",
+                "description": "Filter type for reports request. Possible values are INCLUDE and EXCLUDE",
+                "enum": [
+                  "EXCLUDE",
+                  "INCLUDE"
+                ]
+              },
+              "filter_value": {
+                "title": "",
+                "type": "string"
+              },
+              "filters": {
+                "title": "",
+                "type": "array",
+                "description": "The list of filters to apply to the report data.",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "properties": {
+                    "filter_dimension": {
+                      "title": "",
+                      "type": "string",
+                      "description": "The dimension name to filter on."
+                    },
+                    "filter_type": {
+                      "title": "",
+                      "type": "object",
+                      "description": "Filter type for reports request. Possible values are INCLUDE and EXCLUDE",
+                      "enum": [
+                        "EXCLUDE",
+                        "INCLUDE"
+                      ]
+                    },
+                    "filter_value": {
+                      "title": "",
+                      "type": "string",
+                      "description": "The filter value."
+                    },
+                    "filter_values": {
+                      "title": "",
+                      "type": "array",
+                      "description": "The filter values for EXACT match type.",
+                      "items": {
+                        "title": "",
+                        "type": "string",
+                        "description": ""
+                      }
+                    },
+                    "match_type": {
+                      "title": "",
+                      "type": "object",
+                      "description": "The filter match type.",
+                      "enum": [
+                        "EXACT",
+                        "CONTAINS"
+                      ]
+                    }
+                  },
+                  "description": "The list of filters to apply to the report data."
+                }
+              },
+              "metrics": {
+                "title": "",
+                "type": "array",
+                "description": "The report metrics to include into a sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "prebuilt_report": {
+                "title": "",
+                "type": "object",
+                "description": "The name of the Prebuilt Report from which the connector will sync the data.",
+                "enum": [
+                  "ECOMMERCE_PURCHASES_ITEM_CATEGORY_5_REPORT",
+                  "USER_ACQUISITION_FIRST_USER_GOOGLE_ADS_AD_GROUP_NAME_REPORT",
+                  "TRAFFIC_ACQUISITION_SESSION_SOURCE_PLATFORM_REPORT",
+                  "USER_ACQUISITION_FIRST_USER_GOOGLE_ADS_NETWORK_TYPE_REPORT",
+                  "ECOMMERCE_PURCHASES_ITEM_CATEGORY_REPORT",
+                  "USER_ACQUISITION_FIRST_USER_CAMPAIGN_REPORT",
+                  "TECH_BROWSER_REPORT",
+                  "AUDIENCES_REPORT",
+                  "CONVERSIONS_REPORT",
+                  "USER_ACQUISITION_FIRST_USER_MEDIUM_REPORT",
+                  "ECOMMERCE_PURCHASES_ITEM_ID_REPORT",
+                  "USER_ACQUISITION_FIRST_USER_SOURCE_PLATFORM_REPORT",
+                  "TECH_SCREEN_RESOLUTION_REPORT",
+                  "PAGES_PATH_REPORT",
+                  "PAGES_TITLE_AND_SCREEN_NAME_REPORT",
+                  "DEMOGRAPHIC_CITY_REPORT",
+                  "DEMOGRAPHIC_LANGUAGE_REPORT",
+                  "TRAFFIC_ACQUISITION_SESSION_DEFAULT_CHANNEL_GROUPING_REPORT",
+                  "ECOMMERCE_PURCHASES_ITEM_CATEGORY_REPORT_COMBINED",
+                  "TECH_OPERATING_SYSTEM_REPORT",
+                  "DEMOGRAPHIC_AGE_REPORT",
+                  "ECOMMERCE_PURCHASES_ITEM_CATEGORY_3_REPORT",
+                  "TECH_OS_WITH_VERSION_REPORT",
+                  "PAGES_TITLE_AND_SCREEN_CLASS_REPORT",
+                  "DEMOGRAPHIC_REGION_REPORT",
+                  "ECOMMERCE_PURCHASES_ITEM_BRAND_REPORT",
+                  "TECH_PLATFORM_DEVICE_CATEGORY_REPORT",
+                  "USER_ACQUISITION_FIRST_USER_SOURCE_REPORT",
+                  "TRAFFIC_ACQUISITION_SESSION_CAMPAIGN_REPORT",
+                  "EVENTS_REPORT",
+                  "DEMOGRAPHIC_COUNTRY_REPORT",
+                  "TRAFFIC_ACQUISITION_SESSION_SOURCE_REPORT",
+                  "TRAFFIC_ACQUISITION_SESSION_SOURCE_MEDIUM_REPORT",
+                  "DEMOGRAPHIC_GENDER_REPORT",
+                  "TECH_DEVICE_CATEGORY_REPORT",
+                  "PUBLISHER_ADS_PAGE_PATH_REPORT",
+                  "USER_ACQUISITION_FIRST_USER_SOURCE_MEDIUM_REPORT",
+                  "TRAFFIC_ACQUISITION_SESSION_MEDIUM_REPORT",
+                  "TECH_DEVICE_MODEL_REPORT",
+                  "PUBLISHER_ADS_AD_FORMAT_REPORT",
+                  "TECH_PLATFORM_REPORT",
+                  "TECH_OS_VERSION_REPORT",
+                  "TECH_APP_VERSION_REPORT",
+                  "DEMOGRAPHIC_INTERESTS_REPORT",
+                  "ECOMMERCE_PURCHASES_ITEM_CATEGORY_2_REPORT",
+                  "PUBLISHER_ADS_AD_SOURCE_REPORT",
+                  "ECOMMERCE_PURCHASES_ITEM_NAME_REPORT",
+                  "PUBLISHER_ADS_AD_UNIT_REPORT",
+                  "ECOMMERCE_PURCHASES_ITEM_CATEGORY_4_REPORT",
+                  "CONTENT_GROUP_REPORT"
+                ]
+              },
+              "rollback_window": {
+                "title": "",
+                "type": "integer",
+                "description": "The custom window size for rollback syncs.",
+                "format": "int32"
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "The table name within the schema to which connector will sync the data of the specific report."
+              },
+              "time_aggregation_granularity": {
+                "title": "",
+                "type": "object",
+                "description": "The report data aggregation time granularity.",
+                "enum": [
+                  "YEARLY",
+                  "WEEKLY",
+                  "DAILY",
+                  "MONTHLY"
+                ]
+              }
+            },
+            "description": "The list of reports. Each report corresponds to a table within the schema to which connector will sync the data."
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts.",
+          "enum": [
+            "ALL_ACCOUNTS",
+            "SPECIFIC_ACCOUNTS"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "The number of months' worth of reporting data you'd like to include in your initial sync. A change of this value will trigger a re-sync for enabled reports during the next connector sync. The default value: `TWELVE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Google Analytics client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Google Analytics client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_analytics_4_config_V1",
+    "google_analytics_4_auth_V1"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "admin_username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brivo Admin username."
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brivo API key.",
+          "format": "password"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brivo client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brivo client secret.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brivo password.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "brivo_config_V1"
+  ]
+}

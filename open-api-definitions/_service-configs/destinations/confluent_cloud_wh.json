@@ -1,0 +1,118 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bootstrap_servers": {
+          "title": "",
+          "type": "array",
+          "description": "Comma-separated list of Confluent Cloud servers in the `server:port` format.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "connection_method": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "privatelink",
+            "direct"
+          ]
+        },
+        "data_format": {
+          "title": "",
+          "type": "object",
+          "description": "Confluent Cloud message format.",
+          "enum": [
+            "JSON",
+            "AVRO"
+          ]
+        },
+        "enable_single_topic": {
+          "title": "",
+          "type": "boolean",
+          "description": "Populate all tables in a single topic."
+        },
+        "num_of_partitions": {
+          "title": "",
+          "type": "integer",
+          "description": "Number of partitions per topic.",
+          "format": "int32"
+        },
+        "replication_factor": {
+          "title": "",
+          "type": "integer",
+          "description": "Replication factor.",
+          "format": "int32"
+        },
+        "sasl_mechanism": {
+          "title": "",
+          "type": "object",
+          "description": "Security protocol for Confluent Cloud interaction.",
+          "enum": [
+            "PLAIN",
+            "SCRAM_SHA_512",
+            "SCRAM_SHA_256",
+            "AWS_IAM"
+          ]
+        },
+        "sasl_plain_key": {
+          "title": "",
+          "type": "string",
+          "description": "Confluent Cloud SASL key.",
+          "format": "password"
+        },
+        "sasl_plain_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Confluent Cloud SASL secret.",
+          "format": "password"
+        },
+        "schema_registry": {
+          "title": "",
+          "type": "object",
+          "description": "Schema Registry",
+          "enum": [
+            "AIVEN_KARAPACE",
+            "CONFLUENT_CLOUD",
+            "AWS_GLUE"
+          ]
+        },
+        "schema_registry_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Schema registry API key.",
+          "format": "password"
+        },
+        "schema_registry_api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Schema registry API secret.",
+          "format": "password"
+        },
+        "schema_registry_url": {
+          "title": "",
+          "type": "string",
+          "description": "Schema registry URL."
+        },
+        "security_protocol": {
+          "title": "",
+          "type": "object",
+          "description": "Security protocol for Confluent Cloud interaction.",
+          "enum": [
+            "SASL",
+            "SASL_PLAINTEXT"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "confluent_cloud_wh_config_V1"
+  ]
+}

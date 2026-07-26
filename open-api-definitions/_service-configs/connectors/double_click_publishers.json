@@ -1,0 +1,201 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "ad_unit_view": {
+          "title": "",
+          "type": "object",
+          "description": "Ad unit view for the report.",
+          "enum": [
+            "HIERARCHICAL",
+            "TOP_LEVEL",
+            "FLAT"
+          ]
+        },
+        "columns": {
+          "title": "",
+          "type": "array",
+          "description": "Columns provide all trafficking statistics and revenue information available for the chosen Dimensions.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "custom_dimension_key_ids": {
+          "title": "",
+          "type": "array",
+          "description": "The list of custom dimension key IDs included in the report. Custom dimension keys can only be selected with the CUSTOM_DIMENSION dimension.",
+          "items": {
+            "title": "",
+            "type": "integer",
+            "description": "",
+            "format": "int32"
+          }
+        },
+        "custom_field_ids": {
+          "title": "",
+          "type": "array",
+          "description": "The list of custom field IDs included in the report. Custom fields can only be selected with their corresponding dimensions.",
+          "items": {
+            "title": "",
+            "type": "integer",
+            "description": "",
+            "format": "int32"
+          }
+        },
+        "dimension_attributes": {
+          "title": "",
+          "type": "array",
+          "description": "Dimension attributes provide additional fields associated with a Dimension. Dimension attributes can only be selected with their corresponding Dimensions.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "dimensions": {
+          "title": "",
+          "type": "array",
+          "description": "Report dimensions to include in the sync. The `date` dimension is mandatory for all the report types.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "network_code": {
+          "title": "",
+          "type": "integer",
+          "description": "Network code is a unique, numeric identifier for your Ad Manager network.",
+          "format": "int32"
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of reports. We create a table within the schema for each report.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "ad_unit_view": {
+                "title": "",
+                "type": "object",
+                "description": "Ad unit view for the report.",
+                "enum": [
+                  "HIERARCHICAL",
+                  "TOP_LEVEL",
+                  "FLAT"
+                ]
+              },
+              "columns": {
+                "title": "",
+                "type": "array",
+                "description": "Columns provide all trafficking statistics and revenue information available for the chosen dimensions.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "custom_dimension_key_ids": {
+                "title": "",
+                "type": "array",
+                "description": "The list of custom dimension key IDs included in the report. Custom dimension keys can only be selected with the CUSTOM_DIMENSION dimension.",
+                "items": {
+                  "title": "",
+                  "type": "integer",
+                  "description": "",
+                  "format": "int32"
+                }
+              },
+              "custom_field_ids": {
+                "title": "",
+                "type": "array",
+                "description": "The list of custom field IDs included in the report. Custom fields can only be selected with their corresponding dimensions.",
+                "items": {
+                  "title": "",
+                  "type": "integer",
+                  "description": "",
+                  "format": "int32"
+                }
+              },
+              "dimension_attributes": {
+                "title": "",
+                "type": "array",
+                "description": "Dimension attributes provide additional fields associated with a dimension. Dimension attributes can only be selected with their corresponding dimensions.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "Report dimensions to include in the sync. The `date` dimension is mandatory for all the report types.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "The name of the table within the schema storing the data for a given report."
+              }
+            },
+            "description": "The list of reports. We create a table within the schema for each report."
+          }
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. A change of this value will trigger a re-sync for enabled reports during the next connector sync.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Google Ad Manager client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Google Ad Manager client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "double_click_publishers_config_V1",
+    "double_click_publishers_auth_V1"
+  ]
+}

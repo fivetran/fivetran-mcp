@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api": {
+          "title": "",
+          "type": "string",
+          "description": "Set this parameter to `api`."
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshsuccess API key.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Freshsuccess subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "freshsuccess_config_V1"
+  ]
+}

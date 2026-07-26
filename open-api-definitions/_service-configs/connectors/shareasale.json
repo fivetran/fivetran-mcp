@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShareASale API secret.",
+          "format": "password"
+        },
+        "merchant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShareASale merchant ID."
+        },
+        "token": {
+          "title": "",
+          "type": "string",
+          "description": "Your ShareASale token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "shareasale_config_V1"
+  ]
+}

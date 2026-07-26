@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your ON24 client ID."
+        },
+        "region": {
+          "type": "object",
+          "description": "Your ON24 region.",
+          "enum": [
+            "api.eu",
+            "api"
+          ]
+        },
+        "token_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your ON24 token key.",
+          "format": "password"
+        },
+        "token_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your ON24 token secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "on24_config_V1"
+  ]
+}

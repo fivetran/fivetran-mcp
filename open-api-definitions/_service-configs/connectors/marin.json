@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "The Marin host address."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Marin user's password.",
+          "format": "password"
+        },
+        "prefix": {
+          "title": "",
+          "type": "string",
+          "description": "Folder path to the Marin manifest file."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The Marin username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "marin_config_V1"
+  ]
+}

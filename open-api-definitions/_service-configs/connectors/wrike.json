@@ -1,0 +1,70 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "plan": {
+          "type": "object",
+          "description": "Your Wrike Subscription Plan.",
+          "enum": [
+            "{\"folder_project\":\"[customColumnIds,superParentIds,customItemTypeId,metadata,attachmentCount,customFields,space]\",\"folder_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,metadata,customFields,customItemTypeId,effortAllocation]\",\"space_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,metadata,customFields,customItemTypeId,effortAllocation]\"}",
+            "{\"folder_project\":\"[customColumnIds,superParentIds,customItemTypeId,attachmentCount,space,customFields,metadata]\",\"folder_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,effortAllocation,customFields,customItemTypeId,metadata]\",\"space_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,effortAllocation,customFields,customItemTypeId,metadata]\"}",
+            "{\"folder_project\":\"[customColumnIds,superParentIds,customItemTypeId,metadata,attachmentCount,space,customFields]\",\"folder_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,metadata,customFields,effortAllocation,customItemTypeId]\",\"space_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,metadata,customFields,effortAllocation,customItemTypeId]\"}",
+            "{\"folder_project\":\"[customColumnIds,superParentIds,customItemTypeId,metadata,space,customFields,attachmentCount]\",\"folder_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,metadata,customItemTypeId,effortAllocation,customFields]\",\"space_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,metadata,customItemTypeId,effortAllocation,customFields]\"}",
+            "{\"folder_project\":\"[customColumnIds,superParentIds,customItemTypeId,metadata,attachmentCount,space,customFields,contractType]\",\"folder_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,responsiblePlaceholderIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,metadata,customFields,effortAllocation,billingType,finance,customItemTypeId]\",\"space_task\":\"[authorIds,hasAttachments,attachmentCount,parentIds,superParentIds,sharedIds,responsibleIds,responsiblePlaceholderIds,description,briefDescription,followerIds,recurrent,superTaskIds,subTaskIds,dependencyIds,metadata,customFields,effortAllocation,billingType,customItemTypeId]\"}"
+          ]
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your Wrike Subdomain.",
+          "enum": [
+            "app-us2.wrike.com",
+            "www.wrike.com",
+            "app-eu.wrike.com"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          }
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "wrike_config_V1",
+    "wrike_auth_V1"
+  ]
+}

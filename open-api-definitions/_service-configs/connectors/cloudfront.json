@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The bucket name for CloudFront."
+        },
+        "prefix": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the CloudFront folder in the bucket."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "cloudfront_config_V1"
+  ]
+}

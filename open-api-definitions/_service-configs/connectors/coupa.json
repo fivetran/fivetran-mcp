@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coupa access token fetched using client_id and client_secret",
+          "format": "password"
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coupa API key.",
+          "format": "password"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coupa client_id"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coupa client_id",
+          "format": "password"
+        },
+        "instance": {
+          "title": "",
+          "type": "string",
+          "description": "The instance name of your Coupa account in the URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "coupa_config_V1"
+  ]
+}

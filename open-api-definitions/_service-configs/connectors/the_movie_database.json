@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_read_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your The Movie Database API read access token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "the_movie_database_config_V1"
+  ]
+}

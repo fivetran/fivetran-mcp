@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "business_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Birdeye Business ID.",
+          "format": "password"
+        },
+        "query_param_value": {
+          "title": "",
+          "type": "string",
+          "description": "Your Birdeye query-param-value.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "birdeye_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "Your Asset Panda email."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Asset Panda password.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "asset_panda_config_V1"
+  ]
+}

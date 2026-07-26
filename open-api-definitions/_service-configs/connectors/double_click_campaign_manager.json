@@ -1,0 +1,248 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "conversion_dimensions": {
+          "title": "",
+          "type": "array",
+          "description": "Conversion Dimensions.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "custom_floodlight_variables": {
+          "title": "",
+          "type": "array",
+          "description": "Custom Floodlight variables enable you to capture information beyond the basics (visits and revenue) that you can collect with standard parameters in your tags.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "dimensions": {
+          "title": "",
+          "type": "array",
+          "description": "Report dimensions to include into a sync. The `date` dimension is mandatory for all the report types. The `advertiser` dimension is mandatory for `REACH` report type",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "enable_all_dimension_combinations": {
+          "title": "",
+          "type": "boolean",
+          "description": "Whether to enable all reach dimension combinations in the report. Default value: `false`"
+        },
+        "metrics": {
+          "title": "",
+          "type": "array",
+          "description": "Report metrics to include into a sync.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "per_interaction_dimensions": {
+          "title": "",
+          "type": "array",
+          "description": "Per Interaction Dimensions.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "report_configuration_ids": {
+          "title": "",
+          "type": "array",
+          "description": "You can select only one Floodlight Configuration ID per account.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "report_type": {
+          "title": "",
+          "type": "object",
+          "description": "Type of reporting data to sync. Default value: `STANDARD`.",
+          "enum": [
+            "REACH",
+            "FLOODLIGHT",
+            "PATH_TO_CONVERSION",
+            "STANDARD"
+          ]
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "List of reports",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "conversion_dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "Conversion Dimensions.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "custom_floodlight_variables": {
+                "title": "",
+                "type": "array",
+                "description": "Custom Floodlight variables enable you to capture information beyond the basics (visits and revenue) that you can collect with standard parameters in your tags.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "Report dimensions to include in a sync. The `date` dimension is mandatory for all report types. The `advertiser` dimension is mandatory for the `REACH` report type",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "enable_all_dimension_combinations": {
+                "title": "",
+                "type": "boolean",
+                "description": "Specifies whether to enable all reach dimension combinations in the report. Default value: `false`"
+              },
+              "metrics": {
+                "title": "",
+                "type": "array",
+                "description": "Report metrics to include into a sync.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "per_interaction_dimensions": {
+                "title": "",
+                "type": "array",
+                "description": "Per Interaction Dimensions.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_configuration_ids": {
+                "title": "",
+                "type": "array",
+                "description": "You can select only one Floodlight Configuration ID per account.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "report_type": {
+                "title": "",
+                "type": "object",
+                "description": "Type of reporting data to sync. Default value: `STANDARD`.",
+                "enum": [
+                  "REACH",
+                  "FLOODLIGHT",
+                  "PATH_TO_CONVERSION",
+                  "STANDARD"
+                ]
+              },
+              "rollback_window": {
+                "title": "",
+                "type": "integer",
+                "description": "The custom window size for rollback syncs (between 1 and 90).",
+                "format": "int32"
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "Destination table name. It must be unique within this connection and must comply with Fivetran's naming conventions."
+              }
+            },
+            "description": "List of reports"
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all user profiles or specific ones. Default value: `AllAccounts`.",
+          "enum": [
+            "SPECIFIC_PROFILES",
+            "ALL_PROFILES"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. A change of this value will trigger a re-sync for enabled reports during the next connector sync. Default value: `TWELVE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "user_profiles": {
+          "title": "",
+          "type": "array",
+          "description": "IDs of specific User Profiles to sync. Must be populated if `sync_mode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Google Campaign Manager 360 client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Google Campaign Manager 360 client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "double_click_campaign_manager_config_V1",
+    "double_click_campaign_manager_auth_V1"
+  ]
+}

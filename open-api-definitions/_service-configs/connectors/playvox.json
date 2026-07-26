@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Playvox API Key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Playvox Subdomain."
+        },
+        "user_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Playvox User ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "playvox_config_V1"
+  ]
+}

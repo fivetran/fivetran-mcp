@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Swoogo client Id."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Swoogo Client Secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "swoogo_config_V1"
+  ]
+}

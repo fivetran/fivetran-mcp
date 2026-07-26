@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "backward_sync_limit_date": {
+          "title": "",
+          "type": "string",
+          "description": "Date from which data needs to be synced."
+        },
+        "historical_sync_time_frame": {
+          "type": "object",
+          "description": "Should sync all data or adhere to `backward_sync_limit_date`",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "project_id": {
+          "title": "",
+          "type": "string",
+          "description": "Project ID"
+        },
+        "region": {
+          "type": "object",
+          "description": "Data Region",
+          "enum": [
+            "{\"defaultUrl\":\"mixpanel.com\",\"exportUrl\":\"data.mixpanel.com\"}",
+            "{\"defaultUrl\":\"eu.mixpanel.com\",\"exportUrl\":\"data-eu.mixpanel.com\"}"
+          ]
+        },
+        "service_account_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Service Account Secret",
+          "format": "password"
+        },
+        "service_account_username": {
+          "title": "",
+          "type": "string",
+          "description": "Service Account Username"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "mixpanel_config_V1"
+  ]
+}

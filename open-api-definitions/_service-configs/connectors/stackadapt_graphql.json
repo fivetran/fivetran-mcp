@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your StackAdapt API key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your StackAdapt environment.",
+          "enum": [
+            "api.stackadapt.com",
+            "sandbox.stackadapt.com/public"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "stackadapt_graphql_config_V1"
+  ]
+}

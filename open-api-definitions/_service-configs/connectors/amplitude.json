@@ -1,0 +1,101 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "aws_credentials": {
+          "title": "Amazon S3 Credentials",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "title": "Bucket Name",
+              "type": "string",
+              "description": "Your AWS S3 bucket name"
+            },
+            "home_folder": {
+              "title": "Home Folder",
+              "type": "string",
+              "description": "Prefix to filter out the data"
+            },
+            "s3_role_arn": {
+              "title": "Role ARN",
+              "type": "string",
+              "description": "Role ARN required for authentication",
+              "format": "password"
+            }
+          },
+          "description": "Amazon S3 Credentials"
+        },
+        "export_storage_type": {
+          "title": "Cloud Storage Type",
+          "type": "object",
+          "description": "Your cloud storage type",
+          "enum": [
+            "GCS"
+          ]
+        },
+        "gcs_credentials": {
+          "title": "GCS Credentials",
+          "type": "object",
+          "properties": {
+            "bucket_name": {
+              "title": "Bucket Name",
+              "type": "string",
+              "description": "Your GCS bucket name"
+            },
+            "home_folder": {
+              "title": "Home Folder",
+              "type": "string",
+              "description": "Prefix to filter out the data"
+            }
+          },
+          "description": "GCS Credentials"
+        },
+        "project_credentials": {
+          "title": "",
+          "type": "array",
+          "description": "*  Project(s)",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "api_key": {
+                "title": "",
+                "type": "string",
+                "description": "The API key of the project.",
+                "format": "password"
+              },
+              "project": {
+                "title": "",
+                "type": "string",
+                "description": "The project name you wish to use with Fivetran."
+              },
+              "project_id": {
+                "title": "",
+                "type": "string",
+                "description": "The project ID you wish to use with Fivetran."
+              },
+              "secret_key": {
+                "title": "",
+                "type": "string",
+                "description": "The secret key of the project.",
+                "format": "password"
+              }
+            },
+            "description": "*  Project(s)"
+          }
+        },
+        "use_cloud_storage": {
+          "title": "",
+          "type": "boolean",
+          "description": "Sync events from cloud storage"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "amplitude_config_V1"
+  ]
+}

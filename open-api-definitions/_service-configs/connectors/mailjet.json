@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mailjet API key.",
+          "format": "password"
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mailjet secret key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "mailjet_config_V1"
+  ]
+}

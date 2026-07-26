@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gongio Access key.",
+          "format": "password"
+        },
+        "access_key_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gongio Access Key Secret.",
+          "format": "password"
+        },
+        "api_base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gong API Base URL."
+        },
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gong Base URL."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gongio_config_V1"
+  ]
+}

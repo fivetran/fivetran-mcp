@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Clockodo API key.",
+          "format": "password"
+        },
+        "company_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Clockodo company name."
+        },
+        "email_address": {
+          "title": "",
+          "type": "string",
+          "description": "Your Clockodo email address."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "clockodo_config_V1"
+  ]
+}

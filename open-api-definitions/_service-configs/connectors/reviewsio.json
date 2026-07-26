@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your REVIEWS.io API key.",
+          "format": "password"
+        },
+        "store_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your REVIEWS.io store ID"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "reviewsio_config_V1"
+  ]
+}

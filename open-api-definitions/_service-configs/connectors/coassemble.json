@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coassemble API key.",
+          "format": "password"
+        },
+        "host_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coassemble Hostname."
+        },
+        "user_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Coassemble user ID."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "coassemble_config_V1"
+  ]
+}

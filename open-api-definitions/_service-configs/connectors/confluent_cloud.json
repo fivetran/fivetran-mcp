@@ -1,0 +1,143 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "API Key",
+          "format": "password"
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "API Secret",
+          "format": "password"
+        },
+        "auth_method": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication method. Use API_KEY for API Key/Secret or OAUTH for OAuth 2.0 client credentials flow.",
+          "enum": [
+            "API_KEY",
+            "OAUTH"
+          ]
+        },
+        "consumer_group": {
+          "title": "",
+          "type": "string",
+          "description": "Confluent Cloud consumer group name."
+        },
+        "message_type": {
+          "title": "",
+          "type": "object",
+          "description": "Confluent Cloud message type.",
+          "enum": [
+            "Text",
+            "Json",
+            "Avro",
+            "Protobuf"
+          ]
+        },
+        "schema_registry_credentials_source": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Credentials source"
+        },
+        "schema_registry_key": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Key",
+          "format": "password"
+        },
+        "schema_registry_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Schema Registry Secret",
+          "format": "password"
+        },
+        "schema_registry_urls": {
+          "title": "",
+          "type": "array",
+          "description": "Your schema registry URLs",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "security_protocol": {
+          "title": "",
+          "type": "object",
+          "description": "Security protocol for Confluent Cloud interaction.",
+          "enum": [
+            "SASL",
+            "PLAINTEXT"
+          ]
+        },
+        "servers": {
+          "title": "",
+          "type": "array",
+          "description": "Comma-separated list of Confluent Cloud servers in the format `server:port`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_type": {
+          "title": "",
+          "type": "object",
+          "description": "Kafka sync type.  Unpacked messages must be valid JSON.",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "identity_pool_id": {
+          "title": "",
+          "type": "string",
+          "description": "Optional Confluent Cloud identity pool ID. When omitted, Confluent auto-maps the token to a matching pool."
+        },
+        "logical_cluster_id": {
+          "title": "",
+          "type": "string",
+          "description": "Confluent Cloud logical cluster ID. Required for OAuth 2.0 authentication."
+        },
+        "oauth_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth 2.0 client ID issued by the identity provider."
+        },
+        "oauth_client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth 2.0 client secret issued by the identity provider."
+        },
+        "oauth_scope": {
+          "title": "",
+          "type": "string",
+          "description": "Optional OAuth 2.0 scope to request with the access token."
+        },
+        "oauth_token_endpoint_url": {
+          "title": "",
+          "type": "string",
+          "description": "OAuth 2.0 token endpoint URL used to obtain access tokens."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "confluent_cloud_config_V1",
+    "confluent_cloud_auth_V1"
+  ]
+}

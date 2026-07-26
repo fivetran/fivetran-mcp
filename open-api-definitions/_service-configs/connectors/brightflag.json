@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brightflag client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brightflag client secret.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Brightflag region.",
+          "enum": [
+            "app",
+            "app-test",
+            "enterprise",
+            "aus-test",
+            "enterprise-test",
+            "aus"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "brightflag_config_V1"
+  ]
+}

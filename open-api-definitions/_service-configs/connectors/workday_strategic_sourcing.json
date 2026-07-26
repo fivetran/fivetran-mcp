@@ -1,0 +1,40 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "object",
+          "description": "Your Workday Strategic Sourcing Region.",
+          "enum": [
+            "eu",
+            "us",
+            "ca"
+          ]
+        },
+        "x_api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Workday Strategic Sourcing X API key.",
+          "format": "password"
+        },
+        "x_user_email": {
+          "title": "",
+          "type": "string",
+          "description": "Your Workday Strategic Sourcing X User Email."
+        },
+        "x_user_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Workday Strategic Sourcing X User Token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "workday_strategic_sourcing_config_V1"
+  ]
+}

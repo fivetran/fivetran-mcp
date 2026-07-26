@@ -1,0 +1,218 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "application_id": {
+          "title": "",
+          "type": "string",
+          "description": "Application ID of your app created in Azure"
+        },
+        "auth": {
+          "title": "",
+          "type": "object",
+          "description": "Password-based or key-based authentication type",
+          "enum": [
+            "PASSWORD",
+            "KEY_PAIR",
+            "OAUTH"
+          ]
+        },
+        "aws_access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "The unique access key ID of the S3 bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment, want to use an S3 bucket to stage your data, and `awsBucketAuthType` is set to `IAM_USER`."
+        },
+        "aws_bucket_auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Type of authentication configured for the S3 bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use an S3 bucket to stage your data.",
+          "enum": [
+            "IAM_ROLE",
+            "IAM_USER"
+          ]
+        },
+        "aws_secret_access_key": {
+          "title": "",
+          "type": "string",
+          "description": "The secret access key of the S3 bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment , want to use an S3 bucket to stage your data, and `awsBucketAuthType` is set to `IAM_USER`.",
+          "format": "password"
+        },
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the storage bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use an S3 or GCS bucket to stage your data."
+        },
+        "bucket_region": {
+          "title": "",
+          "type": "string",
+          "description": "The AWS Region of the S3 bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use an S3 bucket to stage your data."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Connection method. Default value: `Directly`.",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": "Database name"
+        },
+        "default_virtual_warehouse": {
+          "title": "",
+          "type": "string",
+          "description": "The virtual warehouse to use for running queries."
+        },
+        "directory_id": {
+          "title": "",
+          "type": "string",
+          "description": "Tenant ID of your app created in Azure"
+        },
+        "enable_external_storage_for_unstructured_files": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set to `true` if you want to enable external storage for unstructured files."
+        },
+        "external_stage_storage_provider": {
+          "title": "",
+          "type": "object",
+          "description": "External stage storage provider[Internal, S3, Azure,GCS]",
+          "enum": [
+            "S3",
+            "AZURE",
+            "GCS",
+            "INTERNAL"
+          ]
+        },
+        "external_storage_cloud_provider": {
+          "title": "",
+          "type": "object",
+          "description": "The cloud service provider you want to use for staging data. Use this parameter only if you are using Hybrid Deployment.",
+          "enum": [
+            "AZURE",
+            "GCP",
+            "INTERNAL_STAGE",
+            "AWS"
+          ]
+        },
+        "external_storage_integration": {
+          "title": "",
+          "type": "string",
+          "description": "External storage integration name"
+        },
+        "external_storage_parent_folder_uri": {
+          "title": "",
+          "type": "string",
+          "description": "External storage parent folder URL"
+        },
+        "gcs_service_account_credentials": {
+          "type": "object",
+          "properties": {},
+          "description": "The service account credentials for the Google Cloud Storage (GCS) bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use a GCS bucket to stage your data."
+        },
+        "gcs_service_account_credentials_path": {
+          "title": "",
+          "type": "string",
+          "description": "The path to the JSON file that contains the service account credentials for the GCS bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use a GCS bucket to stage your data."
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "Server name"
+        },
+        "is_private_key_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Indicates that a private key is encrypted. The default value: `false`. The field can be specified if authentication type is `KEY_PAIR`."
+        },
+        "passphrase": {
+          "title": "",
+          "type": "string",
+          "description": "In case private key is encrypted, you are required to enter passphrase that was used to encrypt the private key. The field can be specified if authentication type is `KEY_PAIR`.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Database user password. The field should be specified if authentication type is `PASSWORD`.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "Server port number",
+          "format": "int32"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Private access key.  The field should be specified if authentication type is `KEY_PAIR`.",
+          "format": "password"
+        },
+        "role": {
+          "title": "",
+          "type": "string",
+          "description": "If not specified, Fivetran will use the user's default role"
+        },
+        "storage_account_key": {
+          "title": "",
+          "type": "string",
+          "description": "The access key of the Azure storage account you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use an Azure Blob storage container to stage your data."
+        },
+        "storage_account_name": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the Azure storage account you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use an Azure Blob storage container to stage your data."
+        },
+        "use_customer_staging": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set to `true` if you want to use an S3 bucket to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use an S3 bucket to stage your data."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "Database user name"
+        }
+      },
+      "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "passphrase": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for a passphrase that was used to encrypt the private key.  The field can be specified if authentication type is `KEY_PAIR`."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for database user password. The field should be specified if authentication type is `PASSWORD` and the password is stored in an external secrets manager."
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for private access key.  The field should be specified if authentication type is `KEY_PAIR` and the private key is stored in an external secrets manager."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for database user name"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "snowflake_config_V1",
+    "snowflake_esm_keys_config_V1"
+  ]
+}

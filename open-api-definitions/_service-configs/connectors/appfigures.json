@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Appfigures Client Key.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Appfigures Password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Appfigures Username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "appfigures_config_V1"
+  ]
+}

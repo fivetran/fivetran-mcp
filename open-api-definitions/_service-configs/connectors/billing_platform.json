@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your BillingPlatform subdomain."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your BillingPlatform client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your BillingPlatform client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your BillingPlatform access token.",
+          "format": "password"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your BillingPlatform refresh token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "billing_platform_config_V1",
+    "billing_platform_auth_V1"
+  ]
+}

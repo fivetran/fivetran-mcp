@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "authentication_method": {
+          "title": "",
+          "type": "object",
+          "description": "The Oracle Fusion Cloud authentication method.",
+          "enum": [
+            "JWT",
+            "BASIC"
+          ]
+        },
+        "delete_capture_frequency": {
+          "title": "",
+          "type": "object",
+          "description": "Use this option to configure how often the connection captures deletes.",
+          "enum": [
+            "EVERY_WEEK",
+            "EVERY_SYNC",
+            "NEVER",
+            "EVERY_DAY"
+          ]
+        },
+        "effective_date_disabled": {
+          "title": "",
+          "type": "boolean",
+          "description": "Select this option to extract all historical records without applying a date filter. Console allows setting this option for all datastores in the connector."
+        },
+        "issuer": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Fusion Cloud issuer name."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Fusion Cloud user password.",
+          "format": "password"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Fusion Cloud private key.",
+          "format": "password"
+        },
+        "public_key": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Fusion Cloud public key.",
+          "format": "password"
+        },
+        "server_url": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Fusion Cloud Instance URL."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "The Oracle Fusion Cloud username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "oracle_fusion_cloud_apps_hcm_config_V1"
+  ]
+}

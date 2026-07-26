@@ -1,0 +1,72 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Zoho Desk Client Id."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Zoho Desk Client secret.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Zoho Desk domain.",
+          "enum": [
+            "com",
+            "eu",
+            "in",
+            "jp",
+            "com.au"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "zoho_desk_config_V1",
+    "zoho_desk_auth_V1"
+  ]
+}

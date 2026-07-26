@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "identifier": {
+          "title": "",
+          "type": "string",
+          "description": "Your Statistics Netherlands CBS catalog identifier."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "statistics_netherlands_cbs_config_V1"
+  ]
+}

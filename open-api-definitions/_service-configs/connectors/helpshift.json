@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Helpshift API Key.",
+          "format": "password"
+        },
+        "domain_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Helpshift domain name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "helpshift_config_V1"
+  ]
+}

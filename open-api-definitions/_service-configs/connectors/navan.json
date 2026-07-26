@@ -1,0 +1,33 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Navan client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Navan client secret.",
+          "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "Your Navan region.",
+          "enum": [
+            "https://app-fra.tripactions.com",
+            "https://api.tripactions.com"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "navan_config_V1"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Akamai client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Akamai client secret.",
+          "format": "password"
+        },
+        "hostname": {
+          "title": "",
+          "type": "string",
+          "description": "Your Akamai hostname."
+        },
+        "type_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Akamai type name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "akamai_config_V1"
+  ]
+}

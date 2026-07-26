@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Absorb LMS password.",
+          "format": "password"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Absorb LMS REST API private key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "type": "object",
+          "description": "Your Absorb LMS subdomain.",
+          "enum": [
+            "rest.sandbox.myabsorb.eu",
+            "rest.sandbox.myabsorb.com.au",
+            "rest.sandbox.myabsorb.ca",
+            "rest.sandbox.myabsorb.com",
+            "rest.myabsorb.com.au",
+            "rest.myabsorb.com",
+            "rest.myabsorb.ca",
+            "rest.myabsorb.eu"
+          ]
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Absorb LMS username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "absorb_lms_config_V1"
+  ]
+}

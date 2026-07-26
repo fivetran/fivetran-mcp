@@ -1,0 +1,83 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_url_region": {
+          "type": "object",
+          "description": "Your Amazon DSP API URL region.",
+          "enum": [
+            "api-fe",
+            "api-eu",
+            "api"
+          ]
+        },
+        "auth_url_region": {
+          "type": "object",
+          "description": "Your Amazon DSP auth grant URL region.",
+          "enum": [
+            "apac.account",
+            "www",
+            "eu.account"
+          ]
+        },
+        "profiles": {
+          "title": "",
+          "type": "string",
+          "description": "your Amazon DSP profiles pass it inside an Array list."
+        },
+        "token_url_region": {
+          "type": "object",
+          "description": "Your Amazon DSP token URL region.",
+          "enum": [
+            "com",
+            "co.uk",
+            "co.jp"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Amazon DSP access token.",
+          "format": "password"
+        },
+        "client_access": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": "Your Amazon DSP client access."
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Amazon DSP refresh token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "amazon_dsp_config_V1",
+    "amazon_dsp_auth_V1"
+  ]
+}

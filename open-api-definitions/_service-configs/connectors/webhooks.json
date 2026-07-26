@@ -1,0 +1,100 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "HMAC algorithm used for generating the HMAC signature. Supported algorithms  INFER_FROM_HEADER, MD5, SHA_1, SHA_224, SHA_256, SHA_384, SHA_512. Default: SHA_256",
+          "enum": [
+            "SHA_512",
+            "SHA_256",
+            "SHA_224",
+            "INFER_FROM_HEADER",
+            "SHA_1",
+            "SHA_384",
+            "MD5"
+          ]
+        },
+        "auth_header_key": {
+          "title": "",
+          "type": "string",
+          "description": "Set if you use HMAC/token-based auth methods. This is used to retrieve a key in headers"
+        },
+        "auth_method": {
+          "title": "",
+          "type": "object",
+          "description": "The authentication mechanism you want to use",
+          "enum": [
+            "HMAC",
+            "TOKEN_BASED",
+            "NONE"
+          ]
+        },
+        "auth_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The secret you want to use for HMAC/token-based auth methods",
+          "format": "password"
+        },
+        "blob_sas_url": {
+          "title": "",
+          "type": "string",
+          "description": "The blob SAS URL of your Azure container. Required if `bucket_service` is set to `AZURE`.",
+          "format": "password"
+        },
+        "bucket_service": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to store the events in Fivetran's container service or your S3 bucket. Default value: `Fivetran`.",
+          "enum": [
+            "S3",
+            "AZURE",
+            "GCS",
+            "Fivetran"
+          ]
+        },
+        "gcs_bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The GCS bucket name. Required if `bucket_service` is set to `GCS`."
+        },
+        "s3_bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The S3 bucket name. Required if `bucket_service` is set to `S3`."
+        },
+        "s3_role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication. Required if `bucket_service` is set to `S3`.",
+          "format": "password"
+        },
+        "signature_encoding": {
+          "title": "",
+          "type": "object",
+          "description": "This is used in HMAC auth method to decode and verify the signature. Supported encodings BASE64 and HEXA_DECIMAL. Default: BASE64",
+          "enum": [
+            "BASE64",
+            "HEXA_DECIMAL"
+          ]
+        },
+        "sync_format": {
+          "title": "",
+          "type": "object",
+          "description": "The webhooks sync format.  Default value: `Unpacked`. Unpacked messages must be valid JSON.",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "webhooks_config_V1"
+  ]
+}

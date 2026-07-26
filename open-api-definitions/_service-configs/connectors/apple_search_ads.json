@@ -1,0 +1,113 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "custom_reports": {
+          "title": "",
+          "type": "array",
+          "description": "Allows users to define reports with custom groupBy dimensions.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "base_report_type": {
+                "type": "object",
+                "description": "The base report type. It determines the set of available dimensions for the `groupBy` field and the metrics that will be included in the custom report. Only one value is supported: `CAMPAIGN`.",
+                "enum": [
+                  "CAMPAIGN"
+                ]
+              },
+              "group_by": {
+                "type": "array",
+                "description": "The list of dimensions to group the data by. The available dimensions depend on the selected `baseReportType`.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "table": {
+                "type": "string",
+                "description": "The name of the custom report table. It must be unique within this connection and must comply with Fivetran's naming conventions."
+              }
+            },
+            "description": "Allows users to define reports with custom groupBy dimensions."
+          }
+        },
+        "organizations": {
+          "title": "",
+          "type": "array",
+          "description": "Organizations",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "show_records_with_no_metrics": {
+          "title": "",
+          "type": "boolean",
+          "description": "Turn the toggle on if you want the reports to also return records without metrics."
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Sync Mode",
+          "enum": [
+            "SpecificOrganizations",
+            "AllOrganizations"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once connection is created. <br> <strong>NOTE:</strong> The more months of reporting data you sync, the longer your initial sync will take.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "timezone_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Determines whether to use UTC or the users timezone from the apple account",
+          "enum": [
+            "UserTimezone",
+            "UTC"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Apple Search Ads REST API Client ID. Must be populated if `is_auth2_enabled` is set to `true`."
+        },
+        "key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Apple Search Ads REST API Key ID. Must be populated if `is_auth2_enabled` is set to `true`."
+        },
+        "team_id": {
+          "title": "",
+          "type": "string",
+          "description": "Apple Search Ads REST API Team ID. Must be populated if `is_auth2_enabled` is set to `true`."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "apple_search_ads_config_V1",
+    "apple_search_ads_auth_V1"
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_mode": {
+          "title": "",
+          "type": "object",
+          "description": "The Anaplan authentication method.",
+          "enum": [
+            "Basic",
+            "Certificate"
+          ]
+        },
+        "certificate": {
+          "title": "",
+          "type": "string",
+          "description": "The contents of your PEM certificate file. Must be populated if `auth_mode` is set to `Certificate`.",
+          "format": "password"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Anaplan password. Must be populated if `auth_mode` is set to `Basic`.",
+          "format": "password"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "The contents of your private key file. Must be populated if `auth_mode` is set to `Certificate`.",
+          "format": "password"
+        },
+        "region": {
+          "title": "",
+          "type": "object",
+          "description": "Your Anaplan account region",
+          "enum": [
+            "EU",
+            "CAN",
+            "DEFAULT",
+            "AUS"
+          ]
+        },
+        "selected_exports": {
+          "title": "",
+          "type": "array",
+          "description": "The list of export IDs in the format `<workspace_id>_<model_id>_<export_id>` that the connector will sync. Must be populated if `sync_mode` is set to `SpecificExports`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all exports or specific exports.",
+          "enum": [
+            "SpecificExports",
+            "AllExports"
+          ]
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Anaplan user ID. Must be populated if `auth_mode` is set to `Basic`."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "anaplan_config_V1"
+  ]
+}

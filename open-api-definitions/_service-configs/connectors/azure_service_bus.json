@@ -1,0 +1,148 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "asb_ip": {
+          "title": "asb_ip",
+          "type": "string",
+          "description": "The IP address (or) the URL of ASB namespace"
+        },
+        "auth_type": {
+          "title": "auth_type",
+          "type": "object",
+          "description": "The authentication mode to access the topic",
+          "enum": [
+            "ConnectionString",
+            "AzureActiveDirectory"
+          ]
+        },
+        "connection_method": {
+          "title": "connection_method",
+          "type": "object",
+          "description": "The connection method",
+          "enum": [
+            "SSH_TUNNEL",
+            "DIRECT",
+            "PRIVATE_LINK"
+          ]
+        },
+        "connection_string": {
+          "title": "connection_string",
+          "type": "string",
+          "description": "The connection string used for authentication. Required if the authentication type is `ConnectionString` ",
+          "format": "password"
+        },
+        "has_manage_permissions": {
+          "title": "has_manage_permissions",
+          "type": "boolean",
+          "description": "The boolean value specifying whether the connection string has manage permissions"
+        },
+        "host_ip": {
+          "title": "host_ip",
+          "type": "string",
+          "description": "The IP address of the host machine which we use to connect to ASB via ssh"
+        },
+        "host_user": {
+          "title": "host_user",
+          "type": "string",
+          "description": "The username on the host machine which we use to connect to ASB via ssh"
+        },
+        "message_type": {
+          "title": "message_type",
+          "type": "object",
+          "description": "The format of messages in the topic",
+          "enum": [
+            "Xml",
+            "Text",
+            "Json",
+            "Avro"
+          ]
+        },
+        "namespace": {
+          "title": "namespace",
+          "type": "string",
+          "description": "The ASB namespace which we have to sync. Required for `AzureActiveDirectory` authentication."
+        },
+        "schema_registry_key": {
+          "title": "schema_registry_key",
+          "type": "string",
+          "description": "The key used to access the schema registry. Required for the `avro` and `protobuf` message types"
+        },
+        "schema_registry_secret": {
+          "title": "schema_registry_secret",
+          "type": "string",
+          "description": "The secret used to access the schema registry. Required for the `avro` and `protobuf` message types",
+          "format": "password"
+        },
+        "schema_registry_urls": {
+          "title": "schema_registry_urls",
+          "type": "array",
+          "description": "The comma-separated list of schema registry servers in the `server:port` format",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "subscriber_name": {
+          "title": "subscriber_name",
+          "type": "string",
+          "description": "The subscriber name. If the connection string does not have manage permission, you need to specify a subscriber name we can use to fetch data. If not specified, we default to `fivetran_sub_<schema>`"
+        },
+        "sync_type": {
+          "title": "sync_type",
+          "type": "object",
+          "description": "The sync type, which is based on the message type. For `text` and `xml`, `packed` is supported. For `protobuf` and `avro`, `unpacked` is supported. For `json`, both `packed` and `unpacked` are supported",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        },
+        "topics": {
+          "title": "topics",
+          "type": "array",
+          "description": "The comma-separated list of topics which should be synced. Required if you do not have manage permissions",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Azure application. Required if the authentication type is `AzureActiveDirectory`"
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Azure application. Required if the authentication type is `AzureActiveDirectory`"
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The refresh token. Required if the authentication type is `AzureActiveDirectory`"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "azure_service_bus_config_V1",
+    "azure_service_bus_auth_V1"
+  ]
+}

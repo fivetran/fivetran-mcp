@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication type (TOKEN or OAUTH2)",
+          "enum": [
+            "OAUTH2",
+            "TOKEN"
+          ]
+        },
+        "catalog": {
+          "title": "catalog",
+          "type": "string",
+          "description": "catalog to sync"
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "The host URL for your Databricks account."
+        },
+        "http_path": {
+          "title": "http path",
+          "type": "string",
+          "description": "http path"
+        },
+        "personal_access_token": {
+          "title": "personalAccessToken",
+          "type": "string",
+          "description": "Access Token",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The port of your SQL warehouse.",
+          "format": "int32"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "databricks_db_config_V1"
+  ]
+}

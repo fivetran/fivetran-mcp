@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Trustpilot application API key.",
+          "format": "password"
+        },
+        "api_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Trustpilot application API secret.",
+          "format": "password"
+        },
+        "domain_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your domain from which you want to sync data."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "trustpilot_config_V1"
+  ]
+}

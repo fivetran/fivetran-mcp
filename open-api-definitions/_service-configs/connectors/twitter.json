@@ -1,0 +1,88 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "Specific accounts to sync. Must be populated if `sync_mode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts. Default value: `AllAccounts`.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `THREE`.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your X client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your X client application."
+            }
+          },
+          "description": "Your application client access fields"
+        },
+        "consumer_key": {
+          "title": "",
+          "type": "string",
+          "description": "API Key of your app"
+        },
+        "consumer_secret": {
+          "title": "",
+          "type": "string",
+          "description": "API Secret of your app"
+        },
+        "oauth_token": {
+          "title": "",
+          "type": "string",
+          "description": "The X App access token."
+        },
+        "oauth_token_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The X App access token secret."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "twitter_config_V1",
+    "twitter_auth_V1"
+  ]
+}

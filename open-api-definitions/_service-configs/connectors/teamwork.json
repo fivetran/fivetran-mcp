@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Teamwork password.",
+          "format": "password"
+        },
+        "site_address": {
+          "title": "",
+          "type": "string",
+          "description": "Your Teamwork site address."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Teamwork username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "teamwork_config_V1"
+  ]
+}

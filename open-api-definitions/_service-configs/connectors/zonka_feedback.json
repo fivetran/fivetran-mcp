@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Zonka Feedback auth token.",
+          "format": "password"
+        },
+        "data_center_id": {
+          "type": "object",
+          "description": "Your Zonka Feedback data center ID.",
+          "enum": [
+            "us1",
+            "au",
+            "e",
+            "in"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "zonka_feedback_config_V1"
+  ]
+}

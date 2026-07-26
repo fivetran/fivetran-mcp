@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Matomo subdomain."
+        },
+        "token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Matomo auth token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "matomo_config_V1"
+  ]
+}

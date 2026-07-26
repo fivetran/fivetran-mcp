@@ -1,0 +1,44 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "accounts": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Accounts to sync.  Must be populated if `sync_mode` is set to `SpecificAccounts`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "The Twilio API secret",
+          "format": "password"
+        },
+        "sid": {
+          "title": "",
+          "type": "string",
+          "description": "The Twilio API key SID"
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all accounts or specific accounts.",
+          "enum": [
+            "AllAccounts",
+            "SpecificAccounts"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "twilio_config_V1"
+  ]
+}

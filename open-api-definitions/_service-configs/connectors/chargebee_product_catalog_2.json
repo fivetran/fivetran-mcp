@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Chargebee API key.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Chargebee subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "chargebee_product_catalog_2_config_V1"
+  ]
+}

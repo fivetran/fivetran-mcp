@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "instance_url": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Business ByDesign instance URL."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Business ByDesign password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP Business ByDesign username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sap_business_by_design_config_V1"
+  ]
+}

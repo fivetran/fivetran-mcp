@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Ordergroove API key.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Ordergroove environment.",
+          "enum": [
+            "staging.restapi",
+            "restapi"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "ordergroove_config_V1"
+  ]
+}

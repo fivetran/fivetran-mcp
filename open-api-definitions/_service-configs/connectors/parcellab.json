@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your parcelLab account ID."
+        },
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your parcelLab API token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "parcellab_config_V1"
+  ]
+}

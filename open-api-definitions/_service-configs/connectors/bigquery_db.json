@@ -1,0 +1,66 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Direct or PrivateLink connection",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "data_set_name": {
+          "title": "",
+          "type": "string",
+          "description": "Data set name"
+        },
+        "project_id": {
+          "title": "",
+          "type": "string",
+          "description": "BigQuery project ID"
+        },
+        "quota_project_id": {
+          "title": "Quota project ID",
+          "type": "string",
+          "description": "Specify a different project ID to account for quota and billing of Fivetran query workload"
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Private key of the customer service account. If specified, your service account will be used to process the data instead of the Fivetran-managed service account.",
+          "format": "password"
+        },
+        "use_service_account": {
+          "title": "",
+          "type": "boolean",
+          "description": "BigQuery use service account; default is false"
+        },
+        "use_workspace": {
+          "title": "",
+          "type": "boolean",
+          "description": "Create and drop tables in a query results dataset. Default is false"
+        },
+        "workspace_name": {
+          "title": "",
+          "type": "string",
+          "description": "Workspace Dataset Name"
+        },
+        "workspace_same_as_source": {
+          "title": "",
+          "type": "boolean",
+          "description": "Use the source dataset as the workspace dataset"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "bigquery_db_config_V1"
+  ]
+}

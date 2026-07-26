@@ -1,0 +1,91 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Criteo Retail Media client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Criteo Retail Media client secret.",
+          "format": "password"
+        },
+        "dimensions": {
+          "type": "object",
+          "description": "Your Criteo Retail Media report revenue dimensions.",
+          "enum": [
+            "date",
+            "taxonomy1Id",
+            "attributionSettings",
+            "taxonomy5Id",
+            "lineItemName",
+            "taxonomy3Id",
+            "taxonomy2Name",
+            "retailerCategoryName",
+            "accountTypeName",
+            "salesChannel",
+            "advProductMpn",
+            "taxonomy3Name",
+            "lineItemStatus",
+            "keyword",
+            "advertiserType",
+            "campaignEndDate",
+            "brandName",
+            "campaignId",
+            "taxonomyBreadcrumb",
+            "lineItemEndDate",
+            "accountId",
+            "retailerCategoryId",
+            "taxonomy1Name",
+            "brandId",
+            "advProductId",
+            "skuRelation",
+            "taxonomy6Id",
+            "advProductGtin",
+            "taxonomy7Name",
+            "placementId",
+            "taxonomy4Id",
+            "accountName",
+            "taxonomy2Id",
+            "soldBy",
+            "targetedKeywordType",
+            "parentAccount",
+            "hour",
+            "taxonomy6Name",
+            "placementName",
+            "retailerName",
+            "pageTypeName",
+            "pageCategory",
+            "lineItemId",
+            "lineItemStartDate",
+            "taxonomy4Name",
+            "retailerId",
+            "environment",
+            "campaignTypeName",
+            "taxonomy5Name",
+            "buyType",
+            "taxonomy7Id",
+            "activityType",
+            "campaignName",
+            "campaignStartDate",
+            "advProductName"
+          ]
+        },
+        "version": {
+          "title": "",
+          "type": "string",
+          "description": "Your Criteo Retail Media version."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "criteo_retail_media_config_V1"
+  ]
+}

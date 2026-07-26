@@ -1,0 +1,91 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_key_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your AWS access key ID.",
+          "format": "password"
+        },
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "API Token for AppsFlyer's PULL API.",
+          "format": "password"
+        },
+        "app_ids": {
+          "title": "",
+          "type": "array",
+          "description": "*  App ID(s)",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "app_id": {
+                "title": "",
+                "type": "string",
+                "description": "Your App ID"
+              }
+            },
+            "description": "*  App ID(s)"
+          }
+        },
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "Customer S3 Bucket"
+        },
+        "connection_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Data Locker Connection Name. Default value: `data-locker-hourly/"
+        },
+        "home_folder": {
+          "title": "",
+          "type": "string",
+          "description": "Your S3 home folder path of the Data Locker."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "S3 Role ARN",
+          "format": "password"
+        },
+        "rollback_window": {
+          "title": "",
+          "type": "integer",
+          "description": "Rollback window",
+          "format": "int32"
+        },
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your AWS secret key.",
+          "format": "password"
+        },
+        "sync_data_locker": {
+          "title": "",
+          "type": "boolean",
+          "description": "Sync AppsFlyer Data Locker. Default value is `true`, set it to `false` to sync AppsFlyer data using only webhooks."
+        },
+        "sync_pull_api": {
+          "title": "",
+          "type": "boolean",
+          "description": "These options are for Appsflyer's Pull API, and are only necessary for syncing events from Pull API."
+        },
+        "use_customer_bucket": {
+          "title": "",
+          "type": "boolean",
+          "description": "Use Custom Bucket. Set it to 'true' if the data is being synced to your S3 bucket instead of an AppsFlyer-managed bucket."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "appsflyer_config_V1"
+  ]
+}

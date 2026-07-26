@@ -1,0 +1,84 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_usage_limit": {
+          "title": "",
+          "type": "integer",
+          "description": "(Optional) The percentage of your Salesforce [daily API limit](https://developer.salesforce.com/docs/atlas.en-us.salesforce_app_limits_cheatsheet.meta/salesforce_app_limits_cheatsheet/salesforce_app_limits_platform_api.htm) that Fivetran should consume. Value must be between 50 and 90 (default value = `90`)",
+          "format": "int32"
+        },
+        "authentication_method": {
+          "title": "",
+          "type": "object",
+          "description": "(Optional) Authentication type (default value = `STANDARD`)",
+          "enum": [
+            "STANDARD",
+            "ADVANCED"
+          ]
+        },
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "(Optional) The custom Salesforce domain. Make sure that the `base_url` starts with `https://`."
+        },
+        "certificate": {
+          "title": "",
+          "type": "string",
+          "description": "Provide content of the `.pem` certificate (only when authentication_method = `ADVANCED`).",
+          "format": "password"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Provide content of the `.key` private key (only when authentication_method = `ADVANCED`).",
+          "format": "password"
+        },
+        "sync_formula_fields": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable this option to sync formula fields directly (default value = `false`)"
+        },
+        "update_infrequent_objects_in_every_sync": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable this option to sync infrequently updated tables during every sync (default value = `false`)"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Salesforce client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Salesforce client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "salesforce_config_V1",
+    "salesforce_auth_V1"
+  ]
+}

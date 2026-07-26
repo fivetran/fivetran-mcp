@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "account_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rollbar account access token.",
+          "format": "password"
+        },
+        "project_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rollbar project access token.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "rollbar_config_V1"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "consumer_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your WooCommerce Consumer key."
+        },
+        "consumer_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your WooCommerce Consumer secret.",
+          "format": "password"
+        },
+        "word_press_site_id_or_woocommerce_domain_name": {
+          "title": "",
+          "type": "string",
+          "description": "The Site ID of your WordPress hosted WooCommerce instance or the subdomain of your self-hosted WooCommerce instance."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "woocommerce_config_V1"
+  ]
+}

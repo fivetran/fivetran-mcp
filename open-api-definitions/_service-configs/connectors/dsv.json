@@ -1,0 +1,64 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "dsv_password": {
+          "title": "",
+          "type": "string",
+          "description": "Your DSV Password.",
+          "format": "password"
+        },
+        "dsv_username": {
+          "title": "",
+          "type": "string",
+          "description": "Your DSV Username"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your API Development Environment.",
+          "enum": [
+            "my",
+            "my-demo"
+          ]
+        },
+        "oauth_subscription_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your OAuth subscription key.",
+          "format": "password"
+        },
+        "tracking_subscription_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your DSV Tracking subscription key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "dsv_config_V1",
+    "dsv_auth_V1"
+  ]
+}

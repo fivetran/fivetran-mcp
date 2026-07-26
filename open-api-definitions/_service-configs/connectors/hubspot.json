@@ -1,0 +1,78 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "backward_sync_limit_date": {
+          "title": "",
+          "type": "string",
+          "description": "Date Limit of the Historical Sync Time for selected tables. The Format should be YYYY-MM-DD."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Client secret for private custom app authentication.",
+          "format": "password"
+        },
+        "historical_sync_time_frame": {
+          "title": "",
+          "type": "object",
+          "description": "Used to configure Historical sync timeframe for selected tables.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "sync_highly_sensitive_data": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable syncing of highly sensitive data fields from HubSpot. When enabled, sensitive data syncing is also automatically enabled."
+        },
+        "sync_sensitive_data": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable syncing of sensitive data fields from HubSpot."
+        },
+        "tables_without_access_updated_at": {
+          "title": "",
+          "type": "string",
+          "description": "Timestamp to indicate when tables without access was updated.",
+          "format": "date-time"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your HubSpot client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your HubSpot client application."
+            }
+          },
+          "description": "Your application client access fields."
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "hubspot_config_V1",
+    "hubspot_auth_V1"
+  ]
+}

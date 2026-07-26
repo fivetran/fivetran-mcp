@@ -1,0 +1,77 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_environment": {
+          "type": "object",
+          "description": "Your Younium auth environment. Use this parameter only if you want the connection to authenticate using OAuth 2.0.",
+          "enum": [
+            "younium-identity-server-sandbox.azurewebsites.net",
+            "younium-identity-server.azurewebsites.net"
+          ]
+        },
+        "auth_type": {
+          "type": "object",
+          "description": "The authentication method you want to use for your connection.",
+          "enum": [
+            "jwt_auth",
+            "oauth2"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID of the personal access token you want to use to generate the JWT token. Use this parameter only if you want the connection to authenticate using a JWT token."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Secret key of the personal access token you want to use to generate the JWT token. Use this parameter only if you want the connection to authenticate using a JWT token.",
+          "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Younium API environment. Use this parameter only if you want the connection to authenticate using OAuth 2.0.",
+          "enum": [
+            "apisanbox",
+            "api.us",
+            "api.sandbox.us",
+            "api"
+          ]
+        },
+        "jwt_environment": {
+          "type": "object",
+          "description": "Your Younium API environment. Use this parameter only if you want the connection to authenticate using a JWT token.",
+          "enum": [
+            "api.us",
+            "api.sandbox.us",
+            "api.sandbox",
+            "api"
+          ]
+        },
+        "legal_entity_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Younium legal entity ID."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Younium password. Use this parameter only if you want the connection to authenticate using OAuth 2.0.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Younium username. Use this parameter only if you want the connection to authenticate using OAuth 2.0."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "younium_config_V1"
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The Outbrain user's password.",
+          "format": "password"
+        },
+        "pull_archived_campaigns": {
+          "title": "",
+          "type": "boolean",
+          "description": "Include or ignore results from archived campaigns"
+        },
+        "timeframe_months": {
+          "title": "",
+          "type": "object",
+          "description": "Number of months' worth of reporting data you'd like to include in your initial sync. This cannot be modified once connection is created. <br> <strong>NOTE:</strong> The more months of reporting data you sync, the longer your initial sync will take.",
+          "enum": [
+            "TWENTY_FOUR",
+            "SIX",
+            "ALL_TIME",
+            "TWELVE",
+            "THREE"
+          ]
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The username or email of the Outbrain user."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "outbrain_config_V1"
+  ]
+}

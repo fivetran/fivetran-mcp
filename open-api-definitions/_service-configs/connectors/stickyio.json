@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "base_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your sticky.io base URL ."
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your sticky.io password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your sticky.io username ."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "stickyio_config_V1"
+  ]
+}

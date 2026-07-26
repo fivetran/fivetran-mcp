@@ -1,0 +1,34 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "base_url": {
+          "type": "object",
+          "description": "Your 360Learning base URL.",
+          "enum": [
+            "us.360learning",
+            "staging.360learning-dev",
+            "360learning"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your 360Learning client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your 360Learning client secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "360learning_config_V1"
+  ]
+}

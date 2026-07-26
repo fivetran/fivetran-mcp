@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "The `OAuth` value must be specified for this type of authorization.",
+          "enum": [
+            "ServiceAccount",
+            "OAuth"
+          ]
+        },
+        "named_range": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the named data range on the sheet that contains the data to be synced."
+        },
+        "sheet_id": {
+          "title": "",
+          "type": "string",
+          "description": "The URL of the sheet that can be copied from the browser address bar, or the ID of the sheet that can be found in the sheet's URL between **/d/** and **/edit**."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Google Sheets client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Google Sheets client application."
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "google_sheets_config_V1",
+    "google_sheets_auth_V1"
+  ]
+}

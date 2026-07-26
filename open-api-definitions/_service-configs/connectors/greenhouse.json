@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Greenhouse API key.",
+          "format": "password"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Greenhouse client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Greenhouse client secret.",
+          "format": "password"
+        },
+        "use_harvest_api_v3": {
+          "title": "",
+          "type": "string",
+          "description": "The confirmation that you want to connect to Harvest V3 API. Possible values: `true`, `false`."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "greenhouse_config_V1"
+  ]
+}

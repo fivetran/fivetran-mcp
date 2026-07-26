@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your commercetools client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your commercetools client secret.",
+          "format": "password"
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "Your commercetools host."
+        },
+        "project_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your commercetools project key."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "commercetools_config_V1"
+  ]
+}

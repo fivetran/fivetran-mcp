@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Destini API Key.",
+          "format": "password"
+        },
+        "client_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Destini Client Name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "destini_config_V1"
+  ]
+}

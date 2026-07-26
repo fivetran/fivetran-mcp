@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "bucket": {
+          "title": "",
+          "type": "string",
+          "description": "The name of the Kinesis bucket."
+        },
+        "json_delivery_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Control how your JSON data is delivered into your destination",
+          "enum": [
+            "Packed",
+            "Unpacked"
+          ]
+        },
+        "prefix": {
+          "title": "",
+          "type": "string",
+          "description": "Folder path to the Kinesis files within the bucket."
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "The Role ARN required for authentication.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "kinesis_config_V1"
+  ]
+}

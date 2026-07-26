@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "your clientId"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "your clientSecret",
+          "format": "password"
+        },
+        "use_webhooks": {
+          "title": "",
+          "type": "boolean",
+          "description": "Updates to few fields like sent_to_contact in Invoice table might be missed if you don't enable this."
+        },
+        "webhook_key": {
+          "title": "",
+          "type": "string",
+          "description": "Webhook Key"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "xero_config_V1"
+  ]
+}

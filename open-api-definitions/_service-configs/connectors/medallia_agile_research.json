@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "region": {
+          "type": "object",
+          "description": "Your Medallia Agile region.",
+          "enum": [
+            "eu",
+            "eu2",
+            "ca",
+            "us",
+            "ap"
+          ]
+        },
+        "x_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Medallia Agile Research key.",
+          "format": "password"
+        },
+        "x_master_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Medallia Agile Research master key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "medallia_agile_research_config_V1"
+  ]
+}

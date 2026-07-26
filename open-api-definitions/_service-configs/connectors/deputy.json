@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Deputy API access token.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Deputy subdomain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "deputy_config_V1"
+  ]
+}

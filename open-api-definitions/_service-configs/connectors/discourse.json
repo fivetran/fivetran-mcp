@@ -1,0 +1,32 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Discourse API key.",
+          "format": "password"
+        },
+        "api_username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Discourse API username.",
+          "format": "password"
+        },
+        "hostname": {
+          "title": "",
+          "type": "string",
+          "description": "Your Discourse hostname.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "discourse_config_V1"
+  ]
+}

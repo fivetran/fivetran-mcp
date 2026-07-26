@@ -1,0 +1,36 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "audience": {
+          "title": "",
+          "type": "string",
+          "description": "Your Auth0 API audience.",
+          "format": "password"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Auth0 client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Auth0 client secret.",
+          "format": "password"
+        },
+        "domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Auth0 domain."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "auth0_config_V1"
+  ]
+}

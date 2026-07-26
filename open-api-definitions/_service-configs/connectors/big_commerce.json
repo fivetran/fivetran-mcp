@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your [API access token ](/docs/connectors/applications/big-commerce/setup-guide#createaccesstoken).",
+          "format": "password"
+        },
+        "store_hash": {
+          "title": "",
+          "type": "string",
+          "description": "The [store hash](/docs/connectors/applications/big-commerce/setup-guide#createaccesstoken) in your API path."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "big_commerce_config_V1"
+  ]
+}

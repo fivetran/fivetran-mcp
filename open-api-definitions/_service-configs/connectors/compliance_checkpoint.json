@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your Compliance Checkpoint account password.",
+          "format": "password"
+        },
+        "sub_domain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Compliance Checkpoint subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Compliance Checkpoint account username.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "compliance_checkpoint_config_V1"
+  ]
+}

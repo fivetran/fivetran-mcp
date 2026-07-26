@@ -1,0 +1,84 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "app_reference": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brightpearl app reference."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brightpearl client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brightpearl client secret.",
+          "format": "password"
+        },
+        "data_center": {
+          "type": "object",
+          "description": "Your Brightpearl data center.",
+          "enum": [
+            "euw1",
+            "ws-use"
+          ]
+        },
+        "developer_reference": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brightpearl dev reference."
+        },
+        "organization_name": {
+          "title": "",
+          "type": "string",
+          "description": "Your Brightpearl organization name."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": ""
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "",
+              "format": "password"
+            }
+          },
+          "description": ""
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "brightpearl_config_V1",
+    "brightpearl_auth_V1"
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_requests_per_minute": {
+          "title": "",
+          "type": "integer",
+          "description": "Allowed number of API requests to Qualtrics per minute, the default value is 2000. Maximum allowed number is 3000 because brands may make up to 3000 API requests per minute across all of its API calls.",
+          "format": "int32"
+        },
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "API token of the Qualtrics account.",
+          "format": "password"
+        },
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Type of authentication being used by connector",
+          "enum": [
+            "STANDARD",
+            "ADVANCED"
+          ]
+        },
+        "certificate": {
+          "title": "",
+          "type": "string",
+          "description": "Your Client Certificate",
+          "format": "password"
+        },
+        "data_center": {
+          "title": "",
+          "type": "string",
+          "description": "Data center ID of the Qualtrics account. Can be found in the URL before `qualtrics.com`. (For example, if your URL is `youraccount.ca1.qualtrics.com`, then the data center is `ca1`.)"
+        },
+        "directories": {
+          "title": "",
+          "type": "array",
+          "description": "Set of directories to be synced when syncMode is CUSTOM",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "directory_sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Sync mode to be used for fetching select directories. The Allowed Values are ALL and CUSTOM. If CUSTOM add the directories to be synced in the `directories` field.",
+          "enum": [
+            "ALL",
+            "CUSTOM"
+          ]
+        },
+        "distribution_incremental_fetch_window_days": {
+          "title": "",
+          "type": "integer",
+          "description": "Can be used to set the distributions fetch window for incremental sync. Fetch window cannot be lesser than 60 days.",
+          "format": "int32"
+        },
+        "pass_phrase": {
+          "title": "",
+          "type": "string",
+          "description": "Pass Phrase",
+          "format": "password"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your private key",
+          "format": "password"
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Client ID` of your Qualtrics client application."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Qualtrics client application."
+            }
+          },
+          "description": "Your application client access fields."
+        },
+        "refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Refresh token` along with the `client_id` and `client_secret` parameters carry the information necessary to get a new access token for API resources."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "qualtrics_config_V1",
+    "qualtrics_auth_V1"
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Statsig secret key.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "statsig_config_V1"
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Venminder API key.",
+          "format": "password"
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Venminder secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "venminder_config_V1"
+  ]
+}

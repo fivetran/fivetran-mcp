@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "blockchain": {
+          "type": "object",
+          "description": "Your Rarible Blockchain.",
+          "enum": [
+            "POLYGON",
+            "ETHEREUM",
+            "SOLANA",
+            "IMMUTABLEX",
+            "TEZOS",
+            "FLOW"
+          ]
+        },
+        "collection_address": {
+          "title": "",
+          "type": "string",
+          "description": "Your Rarible Collection Address."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "rarible_config_V1"
+  ]
+}

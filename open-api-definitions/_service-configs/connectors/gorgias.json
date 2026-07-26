@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gorgias API key.",
+          "format": "password"
+        },
+        "subdomain": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gorgias subdomain."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your Gorgias username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "gorgias_config_V1"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "user_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your HiBob Service User Token."
+        },
+        "user_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your HiBob Service User ID.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "hibob_config_V1"
+  ]
+}

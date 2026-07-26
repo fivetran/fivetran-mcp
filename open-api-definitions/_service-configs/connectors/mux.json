@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "token_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mux token ID",
+          "format": "password"
+        },
+        "token_secret_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Mux token secret key",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "mux_config_V1"
+  ]
+}

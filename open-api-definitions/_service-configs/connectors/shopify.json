@@ -1,0 +1,67 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "API access token of your custom or public app.",
+          "format": "password"
+        },
+        "app_url": {
+          "title": "",
+          "type": "string",
+          "description": "App store url of your app"
+        },
+        "backward_sync_limit": {
+          "title": "",
+          "type": "string",
+          "description": "Limit of the Historical Sync Time for selected tables"
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Client ID of your app"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Client secret of your app",
+          "format": "password"
+        },
+        "historical_sync_time_frame": {
+          "title": "",
+          "type": "object",
+          "description": "Used to configure Historical sync timeframe for selected tables",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        },
+        "shop": {
+          "title": "",
+          "type": "string",
+          "description": "The Shopify shop name. Can be found in the URL before **.myshopify.com**."
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The Shopify access token."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "shopify_config_V1",
+    "shopify_auth_V1"
+  ]
+}

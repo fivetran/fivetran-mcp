@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Castor EDC client Id."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Castor EDC client secret.",
+          "format": "password"
+        },
+        "server": {
+          "type": "object",
+          "description": "Your Castor EDC server.",
+          "enum": [
+            "data",
+            "au",
+            "uk",
+            "us"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "castor_edc_config_V1"
+  ]
+}

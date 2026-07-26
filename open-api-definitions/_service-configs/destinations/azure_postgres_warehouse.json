@@ -1,0 +1,99 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": ""
+        },
+        "auth_method": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication method. Default value: `PASSWORD`.",
+          "enum": [
+            "ENTRA_ID",
+            "PASSWORD",
+            "CLIENT_CERTIFICATE",
+            "AWS_IAM"
+          ]
+        },
+        "aws_region_code": {
+          "title": "",
+          "type": "string",
+          "description": "AWS region code. Required when `auth_method` is set to `AWS_IAM`."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "",
+          "enum": [
+            "Directly",
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "external_id": {
+          "title": "",
+          "type": "string",
+          "description": "AWS external ID for authentication. Required when `auth_method` is set to `AWS_IAM`."
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "",
+          "format": "int32"
+        },
+        "role_arn": {
+          "title": "",
+          "type": "string",
+          "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`."
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "azure_postgres_warehouse_config_V1"
+  ]
+}

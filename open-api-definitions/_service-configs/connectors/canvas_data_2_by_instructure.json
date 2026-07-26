@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Canvas Data 2 by Instructure client ID."
+        },
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Canvas Data 2 by Instructure secret.",
+          "format": "password"
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "canvas_data_2_by_instructure_config_V1"
+  ]
+}

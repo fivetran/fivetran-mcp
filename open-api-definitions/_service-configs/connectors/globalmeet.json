@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "Your GlobalMeet Password.",
+          "format": "password"
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "Your GlobalMeet Username."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "globalmeet_config_V1"
+  ]
+}

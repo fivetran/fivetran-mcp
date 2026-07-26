@@ -1,0 +1,77 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_token": {
+          "title": "",
+          "type": "string",
+          "description": "Deprecated: Use Confidential OAuth client authentication instead. Zendesk API tokens are auto-generated passwords in the Support admin interface.",
+          "format": "password"
+        },
+        "api_usage": {
+          "title": "",
+          "type": "number",
+          "description": "Maximum Zendesk Api Usage allowed"
+        },
+        "backward_sync_limit": {
+          "title": "",
+          "type": "string",
+          "description": "Date Limit of the Historical Sync Time for selected tables. The format should be YYYY-MM-DD."
+        },
+        "domain": {
+          "title": "",
+          "type": "string",
+          "description": "Zendesk domain."
+        },
+        "email": {
+          "title": "",
+          "type": "string",
+          "description": "Zendesk email."
+        },
+        "historical_sync_time_frame": {
+          "title": "",
+          "type": "object",
+          "description": "Used to configure Historical sync timeframe for selected tables.",
+          "enum": [
+            "ALL_TIME",
+            "DATE_LIMIT"
+          ]
+        }
+      },
+      "description": ""
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "access_token": {
+          "title": "",
+          "type": "string",
+          "description": "The long-lived `Access token` carries the information necessary to access API resources."
+        },
+        "client_access": {
+          "type": "object",
+          "properties": {
+            "client_id": {
+              "title": "",
+              "type": "string",
+              "description": "`Identifier` of your Zendesk Confidential OAuth client app."
+            },
+            "client_secret": {
+              "title": "",
+              "type": "string",
+              "description": "`Client Secret` of your Zendesk Confidential OAuth client app."
+            }
+          },
+          "description": "Confidential OAuth client credentials for your application."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "zendesk_config_V1",
+    "zendesk_auth_V1"
+  ]
+}

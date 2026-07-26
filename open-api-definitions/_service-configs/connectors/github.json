@@ -1,0 +1,80 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "auth_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Authorization type.",
+          "enum": [
+            "JWT",
+            "PersonalAccessToken",
+            "OAuth"
+          ]
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "GitHub App Client ID"
+        },
+        "host_url": {
+          "title": "",
+          "type": "string",
+          "description": "The GHES instance host address. Only for on-premises installations."
+        },
+        "pats": {
+          "title": "",
+          "type": "array",
+          "description": "The `Personal Access Tokens`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": "",
+            "format": "password"
+          }
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your Private Key",
+          "format": "password"
+        },
+        "repositories": {
+          "title": "",
+          "type": "array",
+          "description": "Specific Repository IDs to sync. Must be populated if `syncMode` is set to `SpecificRepositories`.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": ""
+          }
+        },
+        "sync_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all repositories or specific repositories.",
+          "enum": [
+            "SpecificRepositories",
+            "AllRepositories"
+          ]
+        },
+        "use_webhooks": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set to `true` to capture deletes."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "`Login` of your GitHub profile."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "github_config_V1"
+  ]
+}
