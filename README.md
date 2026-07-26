@@ -296,7 +296,7 @@ Restart Cursor to load the new MCP server configuration.
 | `FIVETRAN_API_KEY` | Yes | - | Your Fivetran API key |
 | `FIVETRAN_API_SECRET` | Yes | - | Your Fivetran API secret |
 | `FIVETRAN_SCOPE` | No | `read` | One of `read`, `read/write`, `read/write/delete`. Case-insensitive. Sets the ceiling of what the server can do. |
-| `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. |
+| `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. Each token cascades to higher actions on the same resource — denying `read` also denies `write` and `delete`; denying `write` also denies `delete`. |
 
 ## Available Tools
 

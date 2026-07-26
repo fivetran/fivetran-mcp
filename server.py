@@ -53,6 +53,15 @@ SCOPE_TIERS: dict[str, tuple[str, ...]] = {
     "read/write/delete": ("read", "write", "delete"),
 }
 
+# Denying an action cascades to all "higher" actions on the same resource,
+# mirroring FIVETRAN_SCOPE's positive cascade (read/write implies read).
+# "You can't observe it, so you can't touch it either."
+ACTION_CASCADE: dict[str, tuple[str, ...]] = {
+    "read": ("read", "write", "delete"),
+    "write": ("write", "delete"),
+    "delete": ("delete",),
+}
+
 
 def _parse_scope() -> tuple[str, ...]:
     """FIVETRAN_SCOPE ∈ {read, read/write, read/write/delete}. Case-insensitive.
@@ -70,6 +79,10 @@ def _parse_scope() -> tuple[str, ...]:
 def _parse_disallowed_actions(all_resources: set[str]) -> set[tuple[str, str]]:
     """DISALLOWED_ACTIONS is a comma-separated list of `resource:action` tokens.
     Case-insensitive. Empty/unset => no denies. Validated against the manifest.
+
+    Each token cascades via ACTION_CASCADE — denying read also denies write and
+    delete on the same resource; denying write also denies delete. Matches how
+    FIVETRAN_SCOPE cascades positively (read/write implies read).
 
     Some resources contain `-` (e.g. `system-keys`, `connector-sdk`) but never `:`,
     so a single `:` is an unambiguous separator between resource and action.
@@ -98,7 +111,8 @@ def _parse_disallowed_actions(all_resources: set[str]) -> set[tuple[str, str]]:
                 f"Invalid action in DISALLOWED_ACTIONS token {token!r}: {action!r}. "
                 f"Valid: ['read', 'write', 'delete']."
             )
-        denies.add((resource, action))
+        for cascaded in ACTION_CASCADE[action]:
+            denies.add((resource, cascaded))
     return denies
 
 
