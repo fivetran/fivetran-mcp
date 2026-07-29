@@ -109,7 +109,7 @@ def validate_and_read_schema(schema_file: str) -> dict[str, Any]:
 
     # Read and parse the schema
     try:
-        with open(schema_path) as f:
+        with open(schema_path, encoding="utf-8") as f:
             return json.load(f)
     except json.JSONDecodeError as e:
         raise ValueError(f"Invalid JSON in schema file '{schema_file}': {e}")
