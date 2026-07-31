@@ -6,7 +6,7 @@ An MCP server that you can use to interact with your Fivetran environment. It al
 
 We have plugins that use this MCP server to make complicated tasks easier, compatible with Claude Code and Codex. Each plugin lives in its own repository with its own README.
 
-- **[copy-connections](https://github.com/fivetran/copy-connections)** — Copy existing Fivetran connections to a new destination.  Keep their configs and schemas intact or modify them as you like.
+- **[copy-connections](https://github.com/fivetran/copy-connections)**. Copy existing Fivetran connections to a new destination.  Keep their configs and schemas intact or modify them as you like.
 
 ## Regenerating API Schema Files
 
@@ -22,7 +22,7 @@ This will replace the existing schema files with freshly generated ones.
 
 ### 1. Choose how to run the server
 
-You have two options. Most users should use **uvx** — no clone required.
+You have two options. Most users should use **uvx**. No clone required.
 
 #### Option A: Run with uvx (recommended)
 
@@ -34,7 +34,7 @@ The command your MCP client will run is:
 uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
-> Note: bare `uvx fivetran-mcp` (without `--from`) does not work — the `fivetran-mcp` and `mcp-fivetran` names on PyPI are owned by unrelated projects, so you must install from the git URL.
+> Note: bare `uvx fivetran-mcp` (without `--from`) does not work. The `fivetran-mcp` and `mcp-fivetran` names on PyPI are owned by unrelated projects, so you must install from the git URL.
 
 #### Option B: Run from a local clone (for development)
 
@@ -54,9 +54,22 @@ You can then point your MCP client at `python /path/to/fivetran-mcp/server.py`.
 
 You can generate credentials within https://fivetran.com/dashboard/user/api-config
 
-### 3. Connect to your AI client
+### 3. Prepare your environment variables
 
-Choose your preferred AI client below and follow the configuration instructions.
+Before configuring any client, decide on the values you will pass to the server. Every client config below expects the same four variables, so figure them out once here and reuse them.
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `FIVETRAN_API_KEY` | Yes | - | Your Fivetran API key (from step 2) |
+| `FIVETRAN_API_SECRET` | Yes | - | Your Fivetran API secret (from step 2) |
+| `FIVETRAN_SCOPE` | No | `read` | One of `read`, `read/write`, `read/write/delete`. Case-insensitive. Sets the ceiling of what the server can do. |
+| `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. Each token cascades to higher actions on the same resource. e.g. denying `read` also denies `write` and `delete`; denying `write` also denies `delete`. |
+
+The server will confirm with you before performing any write or delete operation.
+
+### 4. Connect to your AI client
+
+Choose your preferred AI client below and follow the configuration instructions. Each snippet uses the environment variables you prepared in step 3. Plug in the values you settled on.
 
 #### Claude Desktop
 
@@ -282,15 +295,6 @@ Using a local clone (Option B):
 4. Add the configuration above
 
 Restart Cursor to load the new MCP server configuration.
-
-## Environment Variables
-
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `FIVETRAN_API_KEY` | Yes | - | Your Fivetran API key |
-| `FIVETRAN_API_SECRET` | Yes | - | Your Fivetran API secret |
-| `FIVETRAN_SCOPE` | No | `read` | One of `read`, `read/write`, `read/write/delete`. Case-insensitive. Sets the ceiling of what the server can do. |
-| `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. Each token cascades to higher actions on the same resource — denying `read` also denies `write` and `delete`; denying `write` also denies `delete`. |
 
 ## Example Questions
 
