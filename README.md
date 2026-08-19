@@ -1,6 +1,6 @@
 # Fivetran MCP Server
 
-> **Upgrading from an earlier version?** Two things changed:
+> **Upgrading from version 0.2?** Two things changed:
 > - **Tool selection is now scope-driven.** You no longer edit `server.py` to enable tools.  The available toolset is derived from `FIVETRAN_SCOPE` and `DISALLOWED_ACTIONS`. See the env var table in [Setup](#setup).
 > - **`FIVETRAN_ALLOW_WRITES=true` no longer allows deletes.** It's kept for backwards compatibility and now maps to `FIVETRAN_SCOPE=read/write`. If you were relying on it for `DELETE` operations, switch to `FIVETRAN_SCOPE=read/write/delete`.
 >
