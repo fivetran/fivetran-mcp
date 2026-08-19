@@ -435,13 +435,15 @@ def _build_tools_index(entries: list[dict]) -> list[dict]:
     return sorted(tools, key=lambda t: t['name'])
 
 
-def write_manifest(all_mappings: dict, output_dir: Path) -> None:
+def write_manifest(all_mappings: dict, output_dir: Path) -> list[dict]:
     """Emit endpoints.json — {tools, endpoints} for the resource:action router.
 
     `summary` is the short OpenAPI summary with an all-caps category prefix. Each
     entry also carries `tool_prefix` (resource with `-` → `_`) so the server can
     build tool names without re-normalizing. A top-level `tools` array lists every
-    (resource, action) pair with ≥1 non-deprecated endpoint.
+    (resource, action) pair with ≥1 non-deprecated endpoint. Returns the tools list
+    so callers can render adjacent artifacts (e.g. AVAILABLE_ACTIONS.md) without
+    recomputing.
     """
     entries = []
     for resource in sorted(all_mappings):
@@ -469,6 +471,26 @@ def write_manifest(all_mappings: dict, output_dir: Path) -> None:
         json.dumps({'tools': tools, 'endpoints': entries}, indent=2)
     )
     print(f'  Wrote endpoints.json with {len(entries)} endpoints, {len(tools)} tools')
+    return tools
+
+
+def write_available_actions_md(tools: list[dict], output_dir: Path) -> None:
+    """Emit AVAILABLE_ACTIONS.md — human-readable list of valid resource:action
+    tokens for DISALLOWED_ACTIONS. One row per tool; excludes pairs where every
+    endpoint is deprecated (same rule as _build_tools_index)."""
+    lines = [
+        '# Available actions',
+        '',
+        'Generated from the OpenAPI spec by `split_openapi_by_endpoint.py`. '
+        'Each row is a valid `resource:action` token you can use in `DISALLOWED_ACTIONS`.',
+        '',
+        '| resource:action | tool | endpoints |',
+        '|-----------------|------|-----------|',
+    ]
+    for t in sorted(tools, key=lambda t: (t['resource'], t['action'])):
+        lines.append(f"| {t['resource']}:{t['action']} | `{t['name']}` | {t['endpoints']} |")
+    (output_dir / 'AVAILABLE_ACTIONS.md').write_text('\n'.join(lines) + '\n')
+    print(f'  Wrote AVAILABLE_ACTIONS.md with {len(tools)} tools')
 
 
 def _clean_desc(s: str) -> str:
@@ -693,7 +715,8 @@ def main():
 
     # Emit the flat manifest (one row per endpoint) for the Step 4 router
     print('\nWriting endpoints manifest...')
-    write_manifest(all_mappings, output_dir)
+    tools = write_manifest(all_mappings, output_dir)
+    write_available_actions_md(tools, output_dir)
 
     total_endpoints = sum(len(m) for m in all_mappings.values())
     print(f'\nDone! Split into {total_endpoints} endpoint files across {len(all_mappings)} resources.')

@@ -1,5 +1,11 @@
 # Fivetran MCP Server
 
+> **Upgrading from an earlier version?** Two things changed:
+> - **Tool selection is now scope-driven.** You no longer edit `server.py` to enable tools.  The available toolset is derived from `FIVETRAN_SCOPE` and `DISALLOWED_ACTIONS`. See the env var table in [Setup](#setup).
+> - **`FIVETRAN_ALLOW_WRITES=true` no longer allows deletes.** It's kept for backwards compatibility and now maps to `FIVETRAN_SCOPE=read/write`. If you were relying on it for `DELETE` operations, switch to `FIVETRAN_SCOPE=read/write/delete`.
+>
+> The default remains read-only.
+
 An MCP server that you can use to interact with your Fivetran environment. It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connections broken?" Set `FIVETRAN_SCOPE` to `read/write` or `read/write/delete` to unlock write and delete operations, and use `DISALLOWED_ACTIONS` to carve exceptions out of that tier (for example, `system-keys:write,system-keys:delete` to keep credential minting off-limits). The MCP will confirm with you before performing a write or delete operation.
 
 ## Plugins
@@ -63,7 +69,7 @@ Before configuring any client, decide on the values you will pass to the server.
 | `FIVETRAN_API_KEY` | Yes | - | Your Fivetran API key (from step 2) |
 | `FIVETRAN_API_SECRET` | Yes | - | Your Fivetran API secret (from step 2) |
 | `FIVETRAN_SCOPE` | No | `read` | One of `read`, `read/write`, `read/write/delete`. Case-insensitive. Sets the ceiling of what the server can do. |
-| `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. Each token cascades to higher actions on the same resource. e.g. denying `read` also denies `write` and `delete`; denying `write` also denies `delete`. |
+| `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. Each token cascades to higher actions on the same resource. e.g. denying `read` also denies `write` and `delete`; denying `write` also denies `delete`. See [`open-api-definitions/AVAILABLE_ACTIONS.md`](./open-api-definitions/AVAILABLE_ACTIONS.md) for the full list of valid `resource:action` tokens. |
 | `FIVETRAN_ALLOW_WRITES` | No | `false` | Backwards-compatibility flag from earlier releases. `true` is equivalent to `FIVETRAN_SCOPE=read/write`. Prefer `FIVETRAN_SCOPE` for new configs. If both are set, `FIVETRAN_SCOPE` wins and this is ignored. |
 
 The server will confirm with you before performing any write or delete operation.
