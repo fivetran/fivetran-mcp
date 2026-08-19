@@ -9,6 +9,7 @@ Exposes three tools:
 import base64
 import json
 import os
+import sys
 from collections import defaultdict
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
@@ -73,16 +74,33 @@ ACTION_CASCADE: dict[str, tuple[str, ...]] = {
 
 
 def _parse_scope() -> tuple[str, ...]:
-    """FIVETRAN_SCOPE ∈ {read, read/write, read/write/delete}. Case-insensitive.
-    Default: read."""
-    raw = os.getenv("FIVETRAN_SCOPE", "").strip().lower()
-    if not raw:
-        return SCOPE_TIERS["read"]
-    if raw not in SCOPE_TIERS:
-        raise ValueError(
-            f"Invalid FIVETRAN_SCOPE={raw!r}. Valid: {sorted(SCOPE_TIERS)}."
-        )
-    return SCOPE_TIERS[raw]
+    """Effective scope. Precedence:
+      1. FIVETRAN_SCOPE ∈ {read, read/write, read/write/delete}
+      2. FIVETRAN_ALLOW_WRITES=true  → read/write   (backwards compat)
+      3. default: read
+
+    If both FIVETRAN_SCOPE and FIVETRAN_ALLOW_WRITES are set, FIVETRAN_SCOPE
+    wins and ALLOW_WRITES is ignored (with a stderr warning).
+    """
+    scope_raw = os.getenv("FIVETRAN_SCOPE", "").strip().lower()
+    allow_writes = os.getenv("FIVETRAN_ALLOW_WRITES", "").strip().lower() == "true"
+
+    if scope_raw:
+        if scope_raw not in SCOPE_TIERS:
+            raise ValueError(
+                f"Invalid FIVETRAN_SCOPE={scope_raw!r}. Valid: {sorted(SCOPE_TIERS)}."
+            )
+        if allow_writes:
+            print(
+                "Warning: FIVETRAN_ALLOW_WRITES is ignored because FIVETRAN_SCOPE is set.",
+                file=sys.stderr,
+            )
+        return SCOPE_TIERS[scope_raw]
+
+    if allow_writes:
+        return SCOPE_TIERS["read/write"]
+
+    return SCOPE_TIERS["read"]
 
 
 def _parse_disallowed_actions(all_resources: set[str]) -> set[tuple[str, str]]:

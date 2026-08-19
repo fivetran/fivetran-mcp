@@ -64,6 +64,7 @@ Before configuring any client, decide on the values you will pass to the server.
 | `FIVETRAN_API_SECRET` | Yes | - | Your Fivetran API secret (from step 2) |
 | `FIVETRAN_SCOPE` | No | `read` | One of `read`, `read/write`, `read/write/delete`. Case-insensitive. Sets the ceiling of what the server can do. |
 | `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. Each token cascades to higher actions on the same resource. e.g. denying `read` also denies `write` and `delete`; denying `write` also denies `delete`. |
+| `FIVETRAN_ALLOW_WRITES` | No | `false` | Backwards-compatibility flag from earlier releases. `true` is equivalent to `FIVETRAN_SCOPE=read/write`. Prefer `FIVETRAN_SCOPE` for new configs. If both are set, `FIVETRAN_SCOPE` wins and this is ignored. |
 
 The server will confirm with you before performing any write or delete operation.
 
