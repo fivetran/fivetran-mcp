@@ -450,7 +450,7 @@ def write_manifest(all_mappings: dict, output_dir: Path) -> list[dict]:
         for name in sorted(all_mappings[resource]):
             info = all_mappings[resource][name]
             schema_rel = info['file']
-            doc = json.loads((output_dir / schema_rel).read_text())
+            doc = json.loads((output_dir / schema_rel).read_text(encoding="utf-8"))
             entries.append({
                 'name': name,
                 'resource': resource,
@@ -538,7 +538,7 @@ def sync_param_definitions(output_dir: Path, server_file: Path) -> None:
     discovered: dict[str, tuple[str, str]] = {}
     for schema_path in sorted(output_dir.rglob('*.json')):
         try:
-            endpoint_doc = json.loads(schema_path.read_text())
+            endpoint_doc = json.loads(schema_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             continue
         for p in endpoint_doc.get('parameters', []):
@@ -597,7 +597,7 @@ def sync_tool_descriptions(output_dir: Path, server_file: Path) -> None:
         if not schema_path.exists():
             continue
         try:
-            doc = json.loads(schema_path.read_text())
+            doc = json.loads(schema_path.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             continue
 
@@ -645,7 +645,7 @@ def main():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     print(f'Loading {input_file}...')
-    with open(input_file) as f:
+    with open(input_file, encoding="utf-8") as f:
         openapi_doc = json.load(f)
 
     # Group endpoints by resource
@@ -695,7 +695,7 @@ def main():
 
                 output_file = resource_output_dir / f'{operation_id}.json'
                 output_json = json.dumps(endpoint_doc, indent=2, ensure_ascii=False)
-                with open(output_file, 'w') as f:
+                with open(output_file, 'w', encoding="utf-8") as f:
                     f.write(output_json)
 
                 new_lines = output_json.count('\n') + 1

@@ -39,7 +39,7 @@ OPENAPI_DIR = SERVER_DIR / "open-api-definitions"
 def _load_manifest() -> tuple[
     list[dict], dict[str, dict], dict[str, list[dict]], list[dict]
 ]:
-    doc = json.loads((OPENAPI_DIR / "endpoints.json").read_text())
+    doc = json.loads((OPENAPI_DIR / "endpoints.json").read_text(encoding="utf-8"))
     entries = doc["endpoints"]
     tools = doc.get("tools", [])
     by_name = {e["name"]: e for e in entries}
@@ -205,14 +205,14 @@ def load_endpoint_schema(schema_file: str) -> dict[str, Any]:
     path = OPENAPI_DIR / schema_file
     if not path.exists():
         raise ValueError(f"Schema file not found: '{schema_file}'")
-    return json.loads(path.read_text())
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _load_service_config(kind: str, service: str) -> dict[str, Any]:
     path = OPENAPI_DIR / "_service-configs" / kind / f"{service}.json"
     if not path.exists():
         raise ValueError(f"Unknown {kind[:-1]} service: {service!r}")
-    return json.loads(path.read_text())
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def _splice_service_config(schema: dict, cfg: dict) -> None:
