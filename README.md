@@ -2,9 +2,7 @@
 
 > **Upgrading from version 0.2?** Two things changed:
 > - **Tool selection is now scope-driven.** You no longer edit `server.py` to enable tools.  The available toolset is derived from `FIVETRAN_SCOPE` and `DISALLOWED_ACTIONS`. See the env var table in [Setup](#setup).
-> - **`FIVETRAN_ALLOW_WRITES=true` no longer allows deletes.** It's kept for backwards compatibility and now maps to `FIVETRAN_SCOPE=read/write`. If you were relying on it for `DELETE` operations, switch to `FIVETRAN_SCOPE=read/write/delete`.
->
-> The default remains read-only.
+> - **`FIVETRAN_SCOPE` replaces `FIVETRAN_ALLOW_WRITES` for managing permissions.**  `FIVETRAN_ALLOW_WRITES` still exists for backwards compatibility.  It no longer allows deletes when set.
 
 An MCP server that you can use to interact with your Fivetran environment. It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connections broken?" Set `FIVETRAN_SCOPE` to `read/write` or `read/write/delete` to unlock write and delete operations, and use `DISALLOWED_ACTIONS` to carve exceptions out of that tier (for example, `system-keys:write,system-keys:delete` to keep credential minting off-limits). The MCP will confirm with you before performing a write or delete operation.
 
