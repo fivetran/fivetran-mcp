@@ -1,0 +1,9 @@
+[mcp_servers.fivetran]
+command = "uvx"
+args = ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"]
+
+[mcp_servers.fivetran.env]
+FIVETRAN_API_KEY = "your-api-key"
+FIVETRAN_API_SECRET = "your-api-secret"
+FIVETRAN_SCOPE = "read"
+DISALLOWED_ACTIONS = "system-keys:write"

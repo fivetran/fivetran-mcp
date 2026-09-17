@@ -198,7 +198,16 @@ claude mcp list
 
 #### OpenAI Codex
 
-Codex stores MCP configuration in `~/.codex/config.toml`. You can configure via CLI or by editing the file directly.
+Codex stores MCP configuration in `~/.codex/config.toml` (global) or `.codex/config.toml` inside a project (project-scoped). You can configure via CLI, edit the global file directly, or — if you cloned this repo — start from the shipped example.
+
+**Option 0: Use the shipped example (fastest, for a local clone)**
+
+```bash
+cp .codex/config.example.toml .codex/config.toml
+# then open .codex/config.toml and fill in your API key/secret
+```
+
+Codex only loads project-local config for **trusted** projects. On first use, run `codex` inside the repo directory and accept the trust prompt (or run `codex trust`). Without this step, `.codex/config.toml` is silently ignored.
 
 **Option 1: CLI**
 

@@ -17,6 +17,7 @@ split/
 .env
 
 .mcp.json
+.codex/config.toml
 
 local/
 
