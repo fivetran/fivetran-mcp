@@ -11,11 +11,13 @@ Generated tools are filtered by FIVETRAN_SCOPE and DISALLOWED_ACTIONS.
 import base64
 import json
 import os
+import re
 import sys
 from collections import defaultdict
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Any
+from urllib.parse import quote
 
 import httpx
 
@@ -197,6 +199,10 @@ async def _fivetran_request(
             timeout=30.0,
         )
         response.raise_for_status()
+        # Empty body (204 or otherwise) would raise JSONDecodeError and
+        # surface as an opaque "Expecting value" error.
+        if response.status_code == 204 or not response.content:
+            return {"status": "success", "code": response.status_code}
         return response.json()
 
 
@@ -302,15 +308,22 @@ async def do_call(
 
     # The tool name is the boundary — reject if the caller invoked
     # `metadata_read(name="delete_connection")`. Without this check the tool
-    # namespace is decorative.
+    # namespace is decorative. Returned as a shaped error rather than raised
+    # because the JSON Schema for `name` can't constrain it per generated tool,
+    # so agents will mis-route sometimes and need something to self-correct on.
     if expected_pair is not None and (ep["resource"], ep["scope"]) != expected_pair:
         expected_tool = f"{expected_pair[0].replace('-', '_')}_{expected_pair[1]}"
         actual_tool = f"{ep['resource'].replace('-', '_')}_{ep['scope']}"
-        raise ValueError(
-            f"{name!r} is {ep['resource']}:{ep['scope']}, "
-            f"not {expected_pair[0]}:{expected_pair[1]}. "
-            f"Call this endpoint via {actual_tool!r}, not {expected_tool!r}."
-        )
+        return {
+            "error": "ENDPOINT_TOOL_MISMATCH",
+            "endpoint": name,
+            "expected_tool": expected_tool,
+            "actual_tool": actual_tool,
+            "message": (
+                f"{name!r} belongs to {actual_tool!r}; "
+                f"call it through that tool instead of {expected_tool!r}."
+            ),
+        }
 
     required = (ep["resource"], ep["scope"])
     if required not in ALLOWED_GRANTS:
@@ -339,10 +352,24 @@ async def do_call(
             "message": message,
         }
 
+    # Validate + URL-encode path params. Raw substitution would let a value like
+    # "../groups/gr_123" reach a different resource and bypass DISALLOWED_ACTIONS
+    # (the grant check runs on the endpoint name, not the final URL).
+    expected = re.findall(r"{([^{}]+)}", ep["path"])
+    provided = set((path_params or {}).keys())
+    missing = [p for p in expected if p not in provided]
+    if missing:
+        raise ValueError(
+            f"Missing path_params {missing} for {ep['path']!r}; "
+            f"provided keys: {sorted(provided)}"
+        )
+
     endpoint = ep["path"]
-    if path_params:
-        for k, v in path_params.items():
-            endpoint = endpoint.replace("{" + k + "}", str(v))
+    for k, v in (path_params or {}).items():
+        endpoint = endpoint.replace("{" + k + "}", quote(str(v), safe=""))
+
+    if "{" in endpoint:
+        raise ValueError(f"Unexpected placeholder remaining in {endpoint!r}")
 
     json_body = body
     if isinstance(json_body, str):
