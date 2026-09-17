@@ -4,7 +4,23 @@
 > - **Tool selection is now scope-driven.** You no longer edit `server.py` to enable tools.  The available toolset is derived from `FIVETRAN_SCOPE` and `DISALLOWED_ACTIONS`. See the env var table in [Setup](#setup).
 > - **`FIVETRAN_SCOPE` replaces `FIVETRAN_ALLOW_WRITES` for managing permissions.**  `FIVETRAN_ALLOW_WRITES` still exists for backwards compatibility.  It no longer allows deletes when set.
 
-An MCP server that you can use to interact with your Fivetran environment. It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connections broken?" Set `FIVETRAN_SCOPE` to `read/write` or `read/write/delete` to unlock write and delete operations, and use `DISALLOWED_ACTIONS` to carve exceptions out of that tier (for example, `system-keys:write,system-keys:delete` to keep credential minting off-limits). The MCP will confirm with you before performing a write or delete operation.
+An MCP server that you can use to interact with your Fivetran environment. It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connections broken?" Set `FIVETRAN_SCOPE` to `read/write` or `read/write/delete` to unlock write and delete operations, and use `DISALLOWED_ACTIONS` to carve exceptions out of that tier (for example, `system-keys:write` to deny both write and delete operations on system keys). Write and delete operations are marked with advisory instructions telling the client model to confirm with you before execution; the server does not enforce confirmation.
+
+## Using the tools
+
+The server exposes two discovery tools plus one execution tool for each allowed resource/action pair:
+
+- `list_endpoints` discovers API endpoints. Call it without arguments for category counts, with `category` to list a resource such as `connections`, or with `search` to find endpoints by name, summary, or path.
+- `get_schema` returns the parameters, request body, and response schema for an endpoint. For connection and destination create/modify endpoints, pass `service` (for example, `postgres`) to include the service-specific configuration fields.
+- `<resource>_<action>` tools execute endpoints in that group. Examples include `connections_read`, `connections_write`, and `destinations_delete`. Pass the endpoint `name` plus any `path_params`, `query`, or `body` values required by its schema.
+
+The generated execution tools are filtered by `FIVETRAN_SCOPE` and `DISALLOWED_ACTIONS`, so clients only see operations allowed by the server configuration. A typical workflow is:
+
+1. Discover an endpoint with `list_endpoints(category="connections")` or `list_endpoints(search="sync")`.
+2. Inspect it with `get_schema(name="sync_connection")`.
+3. Execute it with the matching tool, for example `connections_write(name="sync_connection", path_params={"connectionId": "..."})`.
+
+Write and delete tool descriptions and endpoint summaries contain advisory confirmation warnings. Whether confirmation occurs depends on the client model following those instructions; the server does not enforce it.
 
 ## Plugins
 
@@ -60,7 +76,7 @@ You can generate credentials within https://fivetran.com/dashboard/user/api-conf
 
 ### 3. Prepare your environment variables
 
-Before configuring any client, decide on the values you will pass to the server. Every client config below expects the same four variables, so figure them out once here and reuse them.
+Before configuring any client, decide on the values you will pass to the server. Every client config below expects the same five variables, so figure them out once here and reuse them.
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
@@ -70,7 +86,7 @@ Before configuring any client, decide on the values you will pass to the server.
 | `DISALLOWED_ACTIONS` | No | (empty) | Comma-separated list of `resource:action` tokens (e.g. `system-keys:write,connections:delete`) to deny inside the current scope. Case-insensitive. Each token cascades to higher actions on the same resource. e.g. denying `read` also denies `write` and `delete`; denying `write` also denies `delete`. See [`open-api-definitions/AVAILABLE_ACTIONS.md`](./open-api-definitions/AVAILABLE_ACTIONS.md) for the full list of valid `resource:action` tokens. |
 | `FIVETRAN_ALLOW_WRITES` | No | `false` | Backwards-compatibility flag from earlier releases. `true` is equivalent to `FIVETRAN_SCOPE=read/write`. Prefer `FIVETRAN_SCOPE` for new configs. If both are set, `FIVETRAN_SCOPE` wins and this is ignored. |
 
-The server will confirm with you before performing any write or delete operation.
+The server marks write and delete operations with advisory confirmation warnings, but does not enforce confirmation.
 
 ### 4. Connect to your AI client
 
@@ -96,7 +112,7 @@ Using uvx (Option A):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
+        "DISALLOWED_ACTIONS": "system-keys:write"
       }
     }
   }
@@ -115,7 +131,7 @@ Using a local clone (Option B):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
+        "DISALLOWED_ACTIONS": "system-keys:write"
       }
     }
   }
@@ -138,7 +154,7 @@ claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:write,system-keys:delete \
+  --env DISALLOWED_ACTIONS=system-keys:write \
   -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
@@ -149,7 +165,7 @@ claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:write,system-keys:delete \
+  --env DISALLOWED_ACTIONS=system-keys:write \
   -- python /path/to/fivetran-mcp/server.py
 ```
 
@@ -165,7 +181,7 @@ Or add it directly to your `~/.claude.json` configuration:
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
+        "DISALLOWED_ACTIONS": "system-keys:write"
       }
     }
   }
@@ -193,7 +209,7 @@ codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:write,system-keys:delete \
+  --env DISALLOWED_ACTIONS=system-keys:write \
   -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
@@ -204,7 +220,7 @@ codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:write,system-keys:delete \
+  --env DISALLOWED_ACTIONS=system-keys:write \
   -- python /path/to/fivetran-mcp/server.py
 ```
 
@@ -221,7 +237,7 @@ args = ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"
 FIVETRAN_API_KEY = "your-api-key"
 FIVETRAN_API_SECRET = "your-api-secret"
 FIVETRAN_SCOPE = "read"
-DISALLOWED_ACTIONS = "system-keys:write,system-keys:delete"
+DISALLOWED_ACTIONS = "system-keys:write"
 ```
 
 Using a local clone (Option B):
@@ -235,7 +251,7 @@ args = ["/path/to/fivetran-mcp/server.py"]
 FIVETRAN_API_KEY = "your-api-key"
 FIVETRAN_API_SECRET = "your-api-secret"
 FIVETRAN_SCOPE = "read"
-DISALLOWED_ACTIONS = "system-keys:write,system-keys:delete"
+DISALLOWED_ACTIONS = "system-keys:write"
 ```
 
 Verify configuration:
@@ -267,7 +283,7 @@ Using uvx (Option A):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
+        "DISALLOWED_ACTIONS": "system-keys:write"
       }
     }
   }
@@ -286,7 +302,7 @@ Using a local clone (Option B):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write,system-keys:delete"
+        "DISALLOWED_ACTIONS": "system-keys:write"
       }
     }
   }

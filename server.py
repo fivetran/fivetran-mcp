@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Fivetran MCP server — 3-tool router over the endpoints manifest.
+"""Fivetran MCP server — scope-filtered router over the endpoints manifest.
 
-Exposes three tools:
+Exposes two discovery tools plus generated resource/action tools:
   - list_endpoints(category?, search?, include_deprecated?) — tiered discovery
   - get_schema(name, service?) — full schema for a given endpoint
-  - call(name, path_params?, query?, body?) — execute
+  - one tool per allowed (resource, action) pair — execute an endpoint in that group
+
+Generated tools are filtered by FIVETRAN_SCOPE and DISALLOWED_ACTIONS.
 """
 import base64
 import json

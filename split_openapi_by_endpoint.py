@@ -19,7 +19,7 @@ Example:
     python split_openapi_by_endpoint.py fivetran-open-api-definition.json open-api-definitions
 """
 
-import ast
+import hashlib
 import json
 import re
 from collections import defaultdict
@@ -493,133 +493,65 @@ def write_available_actions_md(tools: list[dict], output_dir: Path) -> None:
     print(f'  Wrote AVAILABLE_ACTIONS.md with {len(tools)} tools')
 
 
-def _clean_desc(s: str) -> str:
-    """Collapse whitespace/newlines so a spec description fits on one comment-free line."""
-    return ' '.join((s or '').split())
+def _snapshot_manifest(output_dir: Path) -> tuple[set[tuple[str, str]], dict[str, str], bool]:
+    """Read endpoints.json and hash each referenced per-endpoint file.
 
-def _to_snake(name: str) -> str:
-    """camelCase -> snake_case. Used for PATH param names only (they're URL
-    placeholders, not wire-visible). Never apply this to query param names."""
-    return re.sub(r'([a-z0-9])([A-Z])', r'\1_\2', name).lower()
-
-def sync_param_definitions(output_dir: Path, server_file: Path) -> None:
-    """Append PARAM_DEFINITIONS entries for any PATH params not already keyed there.
-
-    - "new" == the param name is not currently a key in PARAM_DEFINITIONS.
-    - Only PATH params are scanned for now. Query params are intentionally left
-      out; flip the `in` filter below to extend this later (same logic).
-    - Append-only: existing keys are never read for content, edited, or removed.
-    - New entries are tagged with a trailing `# needs audit` marker.
+    Returns (tools, endpoint_hashes, exists). If the manifest is missing or
+    malformed, returns empty sets/dicts and exists=False so the caller can
+    skip the diff.
     """
-    source = server_file.read_text()
-    tree = ast.parse(source)
+    manifest = output_dir / 'endpoints.json'
+    if not manifest.exists():
+        return set(), {}, False
+    try:
+        doc = json.loads(manifest.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return set(), {}, False
+    tools = {(t['resource'], t['action']) for t in doc.get('tools', [])}
+    hashes = {}
+    for ep in doc.get('endpoints', []):
+        schema_path = output_dir / ep['schema_file']
+        if schema_path.exists():
+            hashes[ep['name']] = hashlib.sha1(schema_path.read_bytes()).hexdigest()
+    return tools, hashes, True
 
-    # Locate the PARAM_DEFINITIONS dict literal and its existing keys via AST,
-    # so we get exact line numbers and never disturb formatting/comments.
-    param_defs_node = None
-    for node in tree.body:
-        if isinstance(node, ast.Assign) and isinstance(node.value, ast.Dict):
-            if any(isinstance(t, ast.Name) and t.id == 'PARAM_DEFINITIONS'
-                   for t in node.targets):
-                param_defs_node = node.value
-                break
 
-    if param_defs_node is None:
-        print('\n  WARNING: PARAM_DEFINITIONS not found; skipping param-definition sync.')
+def _print_diff(
+    old_tools: set[tuple[str, str]],
+    old_hashes: dict[str, str],
+    new_tools: set[tuple[str, str]],
+    new_hashes: dict[str, str],
+) -> None:
+    added_tools = sorted(new_tools - old_tools)
+    removed_tools = sorted(old_tools - new_tools)
+    added_eps = sorted(new_hashes.keys() - old_hashes.keys())
+    removed_eps = sorted(old_hashes.keys() - new_hashes.keys())
+    modified_eps = sorted(
+        n for n in (old_hashes.keys() & new_hashes.keys()) if old_hashes[n] != new_hashes[n]
+    )
+
+    if not (added_tools or removed_tools or added_eps or removed_eps or modified_eps):
+        print('\nChanges vs. previous run: none')
         return
 
-    existing_keys = {
-        k.value for k in param_defs_node.keys
-        if isinstance(k, ast.Constant) and isinstance(k.value, str)
-    }
-
-    # Collect undefined path params across every generated schema file.
-    # name -> (type, description) from the first file that introduces it.
-    discovered: dict[str, tuple[str, str]] = {}
-    for schema_path in sorted(output_dir.rglob('*.json')):
-        try:
-            endpoint_doc = json.loads(schema_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            continue
-        for p in endpoint_doc.get('parameters', []):
-            kind = p.get('in')
-            if kind not in ('path', 'query'):
-                continue
-            raw = p.get('name')
-            if not raw:
-                continue
-            # Path params are URL placeholders -> normalize to snake_case to match
-            # the convention and collapse camelCase twins (connectionId -> connection_id).
-            # Query params are the literal wire format -> keep them VERBATIM, because
-            # ?groupId= and ?group_id= are different requests.
-            name = _to_snake(raw) if kind == 'path' else raw
-            if name in existing_keys or name in discovered:
-                continue
-            ptype = (p.get('schema') or {}).get('type', 'string')
-            pdesc = _clean_desc(p.get('description', '')) or name
-            discovered[name] = (ptype, pdesc)
-
-    if not discovered:
-        print('\nPARAM_DEFINITIONS already covers every path param — nothing to add.')
-        return
-
-    # Build the new source lines.
-    new_lines = []
-    for name in discovered:                       # insertion order = discovery order
-        ptype, pdesc = discovered[name]
-        entry = {"type": ptype, "description": pdesc}
-        new_lines.append(f'    {json.dumps(name)}: {json.dumps(entry)},  # needs audit')
-
-    # Insert just before the dict's closing brace line (end_lineno is 1-indexed).
-    lines = source.splitlines()
-    insert_idx = param_defs_node.end_lineno - 1   # 0-indexed line of the closing "}"
-    lines[insert_idx:insert_idx] = new_lines
-    server_file.write_text('\n'.join(lines) + '\n')
-
-    print(f'\nAdded {len(discovered)} param definition(s) to PARAM_DEFINITIONS (marked # needs audit):')
-    for name in discovered:
-        print(f'  + {name}')
-
-def sync_tool_descriptions(output_dir: Path, server_file: Path) -> None:
-    """Update descriptions of all TOOLS entries in server.py (active and commented) to match schema files."""
-    lines = server_file.read_text().splitlines()
-    changed = 0
-
-    # Matches both active ("        ") and commented ("    #     ") schema_file lines
-    sf_re = re.compile(r'^(        |    #     )"schema_file":\s+"([^"]+)"')
-    desc_re = re.compile(r'^((?:        |    #     )"description":\s+")(.+)(",\s*)$')
-
-    for i, line in enumerate(lines):
-        sf_match = sf_re.match(line)
-        if not sf_match:
-            continue
-        schema_path = Path(__file__).parent / sf_match.group(2)
-        if not schema_path.exists():
-            continue
-        try:
-            doc = json.loads(schema_path.read_text(encoding="utf-8"))
-        except json.JSONDecodeError:
-            continue
-
-        new_desc = doc.get('description', '')
-        if not new_desc:
-            continue
-        new_desc_escaped = ' '.join(new_desc.split()).replace('"', '\\"')
-
-        # Find the description line just before schema_file (within 4 lines)
-        for j in range(i - 1, max(i - 5, -1), -1):
-            dm = desc_re.match(lines[j])
-            if dm:
-                if dm.group(2) != new_desc_escaped:
-                    lines[j] = f'{dm.group(1)}{new_desc_escaped}{dm.group(3)}'
-                    changed += 1
-                break
-
-    if changed:
-        server_file.write_text('\n'.join(lines) + '\n')
-        print(f'\nSynced {changed} tool description(s) in server.py.')
-    else:
-        print('\nTool descriptions in server.py are already up to date.')
+    print('\nChanges vs. previous run:')
+    if added_tools or removed_tools:
+        print(f'  Tools:      +{len(added_tools)} added, -{len(removed_tools)} removed')
+        for r, a in added_tools:
+            print(f'    + {r}:{a}')
+        for r, a in removed_tools:
+            print(f'    - {r}:{a}')
+    if added_eps or removed_eps or modified_eps:
+        print(
+            f'  Endpoints:  +{len(added_eps)} added, '
+            f'-{len(removed_eps)} removed, ~{len(modified_eps)} modified'
+        )
+        for n in added_eps:
+            print(f'    + {n}')
+        for n in removed_eps:
+            print(f'    - {n}')
+        for n in modified_eps:
+            print(f'    ~ {n}')
 
 
 def main():
@@ -636,6 +568,10 @@ def main():
     if not input_file.exists():
         print(f'Error: {input_file} not found')
         return 1
+
+    # Snapshot the current manifest + per-endpoint hashes before the wipe so
+    # we can diff against the fresh output at the end.
+    old_tools, old_hashes, had_prior_manifest = _snapshot_manifest(output_dir)
 
     # Clean out existing output directory so stale files don't linger
     if output_dir.exists():
@@ -726,11 +662,11 @@ def main():
     print('\nWriting per-service config schemas...')
     write_service_configs(openapi_doc, output_dir)
 
-    # Keep server.py's PARAM_DEFINITIONS and existing tool descriptions in sync
-    server_file = Path(__file__).parent / 'server.py'
-    if server_file.exists():
-        sync_param_definitions(output_dir, server_file)
-        sync_tool_descriptions(output_dir, server_file)
+    if had_prior_manifest:
+        new_tools, new_hashes, _ = _snapshot_manifest(output_dir)
+        _print_diff(old_tools, old_hashes, new_tools, new_hashes)
+    else:
+        print('\nNo previous manifest to diff against.')
 
     return 0
 
