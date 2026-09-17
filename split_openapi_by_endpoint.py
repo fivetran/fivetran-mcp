@@ -26,12 +26,22 @@ from collections import defaultdict
 from pathlib import Path
 
 
-# Endpoints deliberately excluded from the manifest. `create_system_key` and
-# `rotate_system_key` mint credentials that outlive the session — a class of
-# privilege escalation that no agent workflow needs and every FIVETRAN_SCOPES
-# grant should refuse to authorize. Discovery, get_schema, and call all skip
-# them because they never make it into endpoints.json.
-EXCLUDED_ENDPOINTS = frozenset({"create_system_key", "rotate_system_key"})
+# Endpoints deliberately excluded from the manifest. These mint, rotate,
+# destroy, or re-permission credentials that outlive the session — a class
+# of privilege escalation that no agent workflow needs and every
+# FIVETRAN_SCOPES grant should refuse to authorize. Discovery, get_schema,
+# and call all skip them because they never make it into endpoints.json.
+# update_system_key is here because its request body includes a `permissions`
+# array — an agent could grant a low-scope key broader access.
+EXCLUDED_ENDPOINTS = frozenset({
+    "create_system_key",
+    "rotate_system_key",
+    "delete_system_key",
+    "update_system_key",
+    "create_user_api_key",
+    "rotate_user_api_key",
+    "delete_user_api_keys",
+})
 
 
 def resolve_ref(ref: str, components: dict) -> dict | None:

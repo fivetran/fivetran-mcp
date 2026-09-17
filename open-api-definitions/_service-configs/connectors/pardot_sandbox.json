@@ -16,8 +16,9 @@
         "auth_type": {
           "title": "",
           "type": "object",
-          "description": "Authenticate using OAuth or HTTP Basic",
+          "description": "Authenticate using OAuth, HTTP Basic, or External Client App",
           "enum": [
+            "ECA",
             "BASIC",
             "OAUTH"
           ]
@@ -25,7 +26,7 @@
         "business_unit_id": {
           "title": "",
           "type": "string",
-          "description": "Business Unit Id"
+          "description": "Business Unit ID"
         },
         "email": {
           "title": "",
@@ -56,6 +57,11 @@
           "type": "integer",
           "description": "API limit for the external activities endpoint.",
           "format": "int32"
+        },
+        "my_domain_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your Salesforce domain URL"
         },
         "password": {
           "title": "",

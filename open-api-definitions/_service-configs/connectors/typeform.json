@@ -3,6 +3,18 @@
   "properties": {
     "config": {
       "type": "object",
+      "properties": {
+        "data_region": {
+          "title": "",
+          "type": "object",
+          "description": "The selected Typeform auth/data region. Empty for Standard/Global, `eu` for the New EU Data Center.",
+          "enum": [
+            "EU",
+            "US_DEFAULT",
+            "LEGACY_EU"
+          ]
+        }
+      },
       "description": ""
     },
     "auth": {

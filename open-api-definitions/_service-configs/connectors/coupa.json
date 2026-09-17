@@ -10,12 +10,6 @@
           "description": "Your Coupa access token fetched using client_id and client_secret",
           "format": "password"
         },
-        "api_key": {
-          "title": "",
-          "type": "string",
-          "description": "Your Coupa API key.",
-          "format": "password"
-        },
         "client_id": {
           "title": "",
           "type": "string",
@@ -34,9 +28,26 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for your Coupa client_id"
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for your Coupa client_id"
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
-    "coupa_config_V1"
+    "coupa_config_V1",
+    "coupa_esm_keys_config_V1"
   ]
 }

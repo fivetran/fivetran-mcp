@@ -7,13 +7,21 @@
         "api_key": {
           "title": "",
           "type": "string",
-          "description": "Enter Your API Key.",
+          "description": "Your Maxio Chargify API key.",
           "format": "password"
+        },
+        "domain": {
+          "type": "object",
+          "description": "The Maxio Chargify domain whose data you want to sync.",
+          "enum": [
+            "chargify.com",
+            "ebilling.maxio.com"
+          ]
         },
         "sub_domain": {
           "title": "",
           "type": "string",
-          "description": "Enter Your Subdomain."
+          "description": "Your Maxio Chargify subdomain."
         }
       },
       "description": ""

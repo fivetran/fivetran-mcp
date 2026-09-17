@@ -25,7 +25,8 @@
           "description": "Authentication Method",
           "enum": [
             "CONNECTION_STRING",
-            "SERVICE_PRINCIPAL_SECRET"
+            "SERVICE_PRINCIPAL_SECRET",
+            "SERVICE_PRINCIPAL_CERTIFICATE"
           ]
         },
         "compression": {
@@ -224,7 +225,7 @@
         "signer_public_key": {
           "title": "",
           "type": "string",
-          "description": "The contents of the signer's public key file. Must be populated if `use_pgp_encryption_options` is set to `true` and PGP encrypted files are signed."
+          "description": "The contents of the signer's public key file. This is optional \u2014 if you don't provide the key, we decrypt the files without verifying their signatures."
         },
         "skip_after": {
           "title": "",
@@ -243,6 +244,11 @@
           "type": "string",
           "description": "The name of the Azure Storage account."
         },
+        "sync_inconsistent_rows": {
+          "title": "",
+          "type": "boolean",
+          "description": "When enabled, Fivetran syncs rows with fewer or more columns than the header row. For rows with fewer columns, Fivetran adds NULL values for the missing columns. For rows with extra columns, Fivetran names them `column_<position>`. When disabled, Fivetran handles inconsistent rows according to your error-handling settings."
+        },
         "use_pgp_encryption_options": {
           "title": "",
           "type": "boolean",
@@ -254,6 +260,21 @@
     "auth": {
       "type": "object",
       "properties": {
+        "client_certificate": {
+          "title": "",
+          "type": "string",
+          "description": "`Client Certificate` of your Microsoft client application."
+        },
+        "client_certificate_private_key": {
+          "title": "",
+          "type": "string",
+          "description": "`Certificate Private Key` of your Microsoft client application."
+        },
+        "client_certificate_private_key_passphrase": {
+          "title": "",
+          "type": "string",
+          "description": "`Certificate Private Key Passphrase` of your Microsoft client application."
+        },
         "client_id": {
           "title": "",
           "type": "string",

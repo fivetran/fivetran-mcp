@@ -1,0 +1,104 @@
+{
+  "description": "Retrieves the status of an asynchronous connection move job. Use this endpoint to monitor the progress of a connection move operation that was initiated with the `CONTINUE_WITH_DATA` sync behavior.",
+  "path": "/v1/connections/{connectionId}/move/{jobId}",
+  "method": "GET",
+  "parameters": [
+    {
+      "name": "connectionId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "jobId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the move job. This is returned in the response when you initiate a connection move.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "connection_id",
+              "created_at",
+              "destination_group_id",
+              "id",
+              "source_group_id",
+              "status"
+            ],
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "The unique identifier of the move job. Use this value to check the status of the move operation."
+              },
+              "status": {
+                "type": "string",
+                "description": "The current status of the move job. Possible values: PENDING, IN_PROGRESS, SUCCESS, FAILED.",
+                "enum": [
+                  "PENDING",
+                  "IN_PROGRESS",
+                  "SUCCESS",
+                  "FAILED"
+                ]
+              },
+              "connection_id": {
+                "type": "string",
+                "description": "The unique identifier of the connection that was moved."
+              },
+              "source_group_id": {
+                "type": "string",
+                "description": "The unique identifier of the destination group the connection was moved from."
+              },
+              "destination_group_id": {
+                "type": "string",
+                "description": "The unique identifier of the destination group to move the connection to. Retrieve group IDs from the [List All Groups](https://fivetran.com/docs/rest-api/api-reference/groups/list-all-groups) endpoint."
+              },
+              "created_at": {
+                "type": "string",
+                "description": "The timestamp of when the move job was created.",
+                "format": "date-time"
+              },
+              "started_at": {
+                "type": "string",
+                "description": "The timestamp of when the move job started processing. Null if the job has not started yet.",
+                "format": "date-time"
+              },
+              "completed_at": {
+                "type": "string",
+                "description": "The timestamp of when the move job completed (successfully or with failure). Null if the job has not completed yet.",
+                "format": "date-time"
+              },
+              "error_message": {
+                "type": "string",
+                "description": "The error message if the move job failed. Null if the job has not failed."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}

@@ -20,11 +20,6 @@
           "title": "",
           "type": "string",
           "description": "Your Gong API Base URL."
-        },
-        "base_url": {
-          "title": "",
-          "type": "string",
-          "description": "Your Gong Base URL."
         }
       },
       "description": ""

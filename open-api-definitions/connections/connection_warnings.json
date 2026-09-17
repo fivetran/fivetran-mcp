@@ -1,0 +1,100 @@
+{
+  "description": "⚠️ RESULTS ARE PAGINATED. PRIVATE PREVIEW.  THE ACCOUNT MUST BE ALLOWLISTED TO USE THIS FEATURE. Retrieve all active warnings for a connection, grouped by destination table. Each warning includes a code, message, error details, and creation timestamp.",
+  "path": "/v1/connections/{connectionId}/warnings",
+  "method": "GET",
+  "parameters": [
+    {
+      "name": "connectionId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "type": "object",
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "Array of warnings grouped by destination table",
+                "items": {
+                  "required": [
+                    "warnings"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "schema": {
+                      "type": "string",
+                      "description": "The destination schema name. Omitted for warnings that are not scoped to a specific table."
+                    },
+                    "table": {
+                      "type": "string",
+                      "description": "The destination table name. Omitted for warnings that are not scoped to a specific table."
+                    },
+                    "warnings": {
+                      "type": "array",
+                      "description": "List of warnings for this table",
+                      "items": {
+                        "required": [
+                          "code",
+                          "created_at",
+                          "message"
+                        ],
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string",
+                            "description": "A machine-readable identifier for the condition type. Use this value to programmatically detect and respond to specific connection conditions."
+                          },
+                          "message": {
+                            "type": "string",
+                            "description": "A human-readable label describing the condition. For example: Reconnect, Resync Table Warning."
+                          },
+                          "error_message": {
+                            "type": "string",
+                            "description": "Additional error details extracted from the warning"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "description": "ISO 8601 timestamp when the warning was created",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "Pagination cursor for the next page of results"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}

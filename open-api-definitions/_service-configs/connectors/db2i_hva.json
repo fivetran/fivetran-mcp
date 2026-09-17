@@ -99,6 +99,11 @@
           "type": "string",
           "description": "SSH user, specify only to connect via an SSH tunnel. Required for connector creation."
         },
+        "use_database_name_for_table_filtering": {
+          "title": "",
+          "type": "boolean",
+          "description": "Restricts schema discovery to libraries (schemas) within the configured database. When enabled, the database parameter must also be specified."
+        },
         "user": {
           "title": "",
           "type": "string",

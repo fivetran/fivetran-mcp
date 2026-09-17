@@ -34,7 +34,7 @@
               "action_report_time": {
                 "title": "",
                 "type": "object",
-                "description": "[Determines if reports will be based on imression on coversion time](/docs/connectors/applications/snapchat-ads/custom-reports)",
+                "description": "[Determines if reports will be based on impression or conversion time](/docs/connectors/applications/snapchat-ads/custom-reports)",
                 "enum": [
                   "impression",
                   "conversion"
@@ -195,6 +195,7 @@
                 "enum": [
                   "COUNTRY",
                   "DEVICE_OS",
+                  "COUNTRY_OS",
                   "DMA",
                   "DEVICE_MAKE",
                   "DEMOGRAPHIC",

@@ -172,6 +172,11 @@
           "description": "We will skip over the number of lines specified before syncing data.",
           "format": "int32"
         },
+        "sync_inconsistent_rows": {
+          "title": "",
+          "type": "boolean",
+          "description": "When enabled, Fivetran syncs rows with fewer or more columns than the header row. For rows with fewer columns, Fivetran adds NULL values for the missing columns. For rows with extra columns, Fivetran names them `column_<position>`. When disabled, Fivetran handles inconsistent rows according to your error-handling settings."
+        },
         "sync_nested_files": {
           "title": "",
           "type": "boolean",

@@ -99,6 +99,11 @@
           "type": "string",
           "description": "SSH user, specify only to connect via an SSH tunnel."
         },
+        "use_database_name_for_table_filtering": {
+          "title": "",
+          "type": "boolean",
+          "description": "Restricts schema discovery to libraries (schemas) within the configured database. When enabled, the database parameter must also be specified. Has no effect on SAP ECC on Db2 for i connectors."
+        },
         "user": {
           "title": "",
           "type": "string",

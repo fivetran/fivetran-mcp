@@ -1,5 +1,5 @@
 {
-  "description": "Returns the connection state. This endpoint is only supported for Function and Connection SDK connectors. To update the connection state, use [Update Connection State](https://fivetran.com/docs/rest-api/api-reference/connections/modify-connection-state).",
+  "description": "This endpoint returns the connection state for [Function](/docs/connectors/functions) and [Connector SDK](/docs/connector-sdk) connections. Sending a request for any other connection type returns `400 Bad Request`. To update the connection state, use [Update Connection State](/docs/rest-api/api-reference/connections/modify-connection-state).\n\nTo read the sync status for any connection type, use [Retrieve connection details](/docs/rest-api/api-reference/connections/connection-details) and inspect the `status` object in the response.\n",
   "path": "/v1/connections/{connectionId}/state",
   "method": "GET",
   "parameters": [

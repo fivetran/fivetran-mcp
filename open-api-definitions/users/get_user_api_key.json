@@ -1,0 +1,93 @@
+{
+  "description": "Returns the API key details for the specified service account.",
+  "path": "/v1/users/{userId}/api-keys",
+  "method": "GET",
+  "parameters": [
+    {
+      "name": "userId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier for the user within the account.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "created_at",
+              "key_status",
+              "key_value",
+              "user_id",
+              "user_type"
+            ],
+            "type": "object",
+            "properties": {
+              "user_id": {
+                "type": "string",
+                "description": "The unique identifier for the user within the Fivetran system."
+              },
+              "user_type": {
+                "type": "string",
+                "description": "The type of user. Possible values: `REGULAR_USER`: A human user who can log in to the Fivetran dashboard and interact with the API, and `SERVICE_ACCOUNT`: A non-human identity for machine-to-machine API access that cannot log in to the dashboard.",
+                "enum": [
+                  "REGULAR_USER",
+                  "SERVICE_ACCOUNT"
+                ]
+              },
+              "key_value": {
+                "type": "string",
+                "description": "The public identifier of the API key."
+              },
+              "created_at": {
+                "type": "string",
+                "description": "The timestamp that the user created their API key",
+                "format": "date-time"
+              },
+              "key_status": {
+                "type": "string",
+                "description": "The status of the API key. Possible values: `ACTIVE`: The key has a single active secret, `ACTIVE_GRACE`:  The key has two active secrets during rotation overlap, and `EXPIRED`: The key has expired.",
+                "enum": [
+                  "ACTIVE",
+                  "ACTIVE_GRACE",
+                  "EXPIRED"
+                ]
+              },
+              "expires_at": {
+                "type": "string",
+                "description": "The timestamp when the API key expires.",
+                "format": "date-time"
+              },
+              "overlap_expires_at": {
+                "type": "string",
+                "description": "The timestamp when the previous secret expires after rotation. Only present during the overlap period.",
+                "format": "date-time"
+              },
+              "last_rotated_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}

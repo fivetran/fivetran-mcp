@@ -102,9 +102,26 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
-    "google_cloud_mysql_config_V1"
+    "google_cloud_mysql_config_V1",
+    "google_cloud_mysql_esm_keys_config_V1"
   ]
 }

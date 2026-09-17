@@ -27,9 +27,26 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Marin user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Marin username."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
-    "marin_config_V1"
+    "marin_config_V1",
+    "marin_esm_keys_config_V1"
   ]
 }

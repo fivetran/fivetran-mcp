@@ -15,6 +15,11 @@
           "description": "Your Adobe Workfront client secret.",
           "format": "password"
         },
+        "environment": {
+          "title": "",
+          "type": "string",
+          "description": "Your Adobe Workfront environment."
+        },
         "organization_domain": {
           "title": "",
           "type": "string",

@@ -5,9 +5,9 @@ Generated from the OpenAPI spec by `split_openapi_by_endpoint.py`. Each row is a
 | resource:action | tool | endpoints |
 |-----------------|------|-----------|
 | account:read | `account_read` | 1 |
-| connections:delete | `connections_delete` | 4 |
-| connections:read | `connections_read` | 9 |
-| connections:write | `connections_write` | 17 |
+| connections:delete | `connections_delete` | 5 |
+| connections:read | `connections_read` | 12 |
+| connections:write | `connections_write` | 18 |
 | connector-sdk:delete | `connector_sdk_delete` | 1 |
 | connector-sdk:read | `connector_sdk_read` | 3 |
 | connector-sdk:write | `connector_sdk_write` | 2 |
@@ -37,9 +37,7 @@ Generated from the OpenAPI spec by `split_openapi_by_endpoint.py`. Each row is a
 | proxy:write | `proxy_write` | 2 |
 | public:read | `public_read` | 1 |
 | roles:read | `roles_read` | 1 |
-| system-keys:delete | `system_keys_delete` | 1 |
 | system-keys:read | `system_keys_read` | 2 |
-| system-keys:write | `system_keys_write` | 1 |
 | teams:delete | `teams_delete` | 5 |
 | teams:read | `teams_read` | 8 |
 | teams:write | `teams_write` | 8 |
@@ -50,7 +48,7 @@ Generated from the OpenAPI spec by `split_openapi_by_endpoint.py`. Each row is a
 | transformations:read | `transformations_read` | 4 |
 | transformations:write | `transformations_write` | 5 |
 | users:delete | `users_delete` | 4 |
-| users:read | `users_read` | 6 |
+| users:read | `users_read` | 8 |
 | users:write | `users_write` | 6 |
 | webhooks:delete | `webhooks_delete` | 1 |
 | webhooks:read | `webhooks_read` | 2 |

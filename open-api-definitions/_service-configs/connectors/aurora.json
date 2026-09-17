@@ -103,10 +103,15 @@
           "type": "string",
           "description": "The database name."
         },
+        "database_endpoint": {
+          "title": "",
+          "type": "string",
+          "description": "The RDS database endpoint. Required if the connection type is `PrivateLink` and the authentication method is `AWS_IAM`, where `host` is set to the PrivateLink DNS address instead of the actual database endpoint."
+        },
         "host": {
           "title": "",
           "type": "string",
-          "description": "DB instance host or IP address."
+          "description": "DB instance host or IP address. When the connection type is `PrivateLink` and the authentication method is `AWS_IAM`, set this to the PrivateLink DNS address and use `databaseEndpoint` for the actual RDS endpoint."
         },
         "password": {
           "title": "",
@@ -164,9 +169,26 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
-    "aurora_config_V1"
+    "aurora_config_V1",
+    "aurora_esm_keys_config_V1"
   ]
 }

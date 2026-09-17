@@ -19,6 +19,11 @@
           "type": "string",
           "description": "GitHub App Client ID"
         },
+        "default_branch_only": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set to `true` to include commits only from the default branch."
+        },
         "host_url": {
           "title": "",
           "type": "string",

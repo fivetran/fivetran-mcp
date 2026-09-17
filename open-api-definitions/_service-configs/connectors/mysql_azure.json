@@ -102,9 +102,26 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
-    "mysql_azure_config_V1"
+    "mysql_azure_config_V1",
+    "mysql_azure_esm_keys_config_V1"
   ]
 }

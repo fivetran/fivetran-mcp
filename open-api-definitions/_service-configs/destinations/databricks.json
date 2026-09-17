@@ -24,10 +24,26 @@
           "description": "Your user's secret access key",
           "format": "password"
         },
+        "azure_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Azure AD application (client) ID for Client Credentials authentication to the Azure container used as external staging for Hybrid Deployment."
+        },
+        "azure_client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Azure AD application client secret for Client Credentials authentication to the Azure container used as external staging for Hybrid Deployment.",
+          "format": "password"
+        },
         "azure_storage_account_auth_type": {
           "title": "",
           "type": "string",
           "description": "Authentication method for the Azure container you want to use as the external staging for Hybrid Deployment."
+        },
+        "azure_tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "Your Azure AD tenant ID for Client Credentials authentication to the Azure container used as external staging for Hybrid Deployment."
         },
         "bucket": {
           "title": "",

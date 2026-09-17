@@ -4,23 +4,27 @@
     "config": {
       "type": "object",
       "properties": {
-        "api_key": {
+        "client_id": {
           "title": "",
           "type": "string",
-          "description": "API Key for your Delighted account",
+          "description": "Your Kyriba client ID."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your Kyriba client secret.",
           "format": "password"
         },
-        "password": {
+        "subdomain": {
           "title": "",
           "type": "string",
-          "description": "Pass an empty string",
-          "format": "password"
+          "description": "Your Kyriba subdomain."
         }
       },
       "description": ""
     }
   },
   "x-sources": [
-    "delighted_config_V1"
+    "kyriba_config_V1"
   ]
 }

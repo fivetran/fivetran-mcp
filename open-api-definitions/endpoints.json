@@ -10,19 +10,19 @@
       "name": "connections_delete",
       "resource": "connections",
       "action": "delete",
-      "endpoints": 4
+      "endpoints": 5
     },
     {
       "name": "connections_read",
       "resource": "connections",
       "action": "read",
-      "endpoints": 9
+      "endpoints": 12
     },
     {
       "name": "connections_write",
       "resource": "connections",
       "action": "write",
-      "endpoints": 17
+      "endpoints": 18
     },
     {
       "name": "connector_sdk_delete",
@@ -199,22 +199,10 @@
       "endpoints": 1
     },
     {
-      "name": "system_keys_delete",
-      "resource": "system-keys",
-      "action": "delete",
-      "endpoints": 1
-    },
-    {
       "name": "system_keys_read",
       "resource": "system-keys",
       "action": "read",
       "endpoints": 2
-    },
-    {
-      "name": "system_keys_write",
-      "resource": "system-keys",
-      "action": "write",
-      "endpoints": 1
     },
     {
       "name": "teams_delete",
@@ -280,7 +268,7 @@
       "name": "users_read",
       "resource": "users",
       "action": "read",
-      "endpoints": 6
+      "endpoints": 8
     },
     {
       "name": "users_write",
@@ -386,6 +374,28 @@
       "deprecated": false
     },
     {
+      "name": "connection_moved",
+      "resource": "connections",
+      "tool_prefix": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/move",
+      "summary": "WRITE OPERATION - Move a Connection",
+      "schema_file": "connections/connection_moved.json",
+      "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "connection_moved_job_status",
+      "resource": "connections",
+      "tool_prefix": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/move/{jobId}",
+      "summary": "Retrieve Move Connection Job Status",
+      "schema_file": "connections/connection_moved_job_status.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
       "name": "connection_schema_config",
       "resource": "connections",
       "tool_prefix": "connections",
@@ -404,6 +414,28 @@
       "path": "/v1/connections/{connectionId}/state",
       "summary": "Retrieve Connection State",
       "schema_file": "connections/connection_state.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "connection_sync_history",
+      "resource": "connections",
+      "tool_prefix": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/sync-history",
+      "summary": "PAGINATED - Retrieve Connection Sync History",
+      "schema_file": "connections/connection_sync_history.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "connection_warnings",
+      "resource": "connections",
+      "tool_prefix": "connections",
+      "method": "GET",
+      "path": "/v1/connections/{connectionId}/warnings",
+      "summary": "PAGINATED - Retrieve Connection Warnings",
+      "schema_file": "connections/connection_warnings.json",
       "scope": "read",
       "deprecated": false
     },
@@ -449,6 +481,17 @@
       "summary": "WRITE OPERATION - Drop Blocked Columns from the Destination.",
       "schema_file": "connections/delete_multiple_columns_connection_config.json",
       "scope": "write",
+      "deprecated": false
+    },
+    {
+      "name": "dismiss_connection_warning",
+      "resource": "connections",
+      "tool_prefix": "connections",
+      "method": "DELETE",
+      "path": "/v1/connections/{connectionId}/warnings/{warningType}",
+      "summary": "DESTRUCTIVE - Dismiss Connection Warnings by Type",
+      "schema_file": "connections/dismiss_connection_warning.json",
+      "scope": "delete",
       "deprecated": false
     },
     {
@@ -1442,17 +1485,6 @@
       "deprecated": false
     },
     {
-      "name": "delete_system_key",
-      "resource": "system-keys",
-      "tool_prefix": "system_keys",
-      "method": "DELETE",
-      "path": "/v1/system-keys/{keyId}",
-      "summary": "DESTRUCTIVE - Delete a System Key",
-      "schema_file": "system-keys/delete_system_key.json",
-      "scope": "delete",
-      "deprecated": false
-    },
-    {
       "name": "get_system_key_details",
       "resource": "system-keys",
       "tool_prefix": "system_keys",
@@ -1472,17 +1504,6 @@
       "summary": "PAGINATED - List All System Keys",
       "schema_file": "system-keys/get_system_keys.json",
       "scope": "read",
-      "deprecated": false
-    },
-    {
-      "name": "update_system_key",
-      "resource": "system-keys",
-      "tool_prefix": "system_keys",
-      "method": "PATCH",
-      "path": "/v1/system-keys/{keyId}",
-      "summary": "WRITE OPERATION - Update a System Key",
-      "schema_file": "system-keys/update_system_key.json",
-      "scope": "write",
       "deprecated": false
     },
     {
@@ -1970,6 +1991,17 @@
       "deprecated": false
     },
     {
+      "name": "get_user_api_key",
+      "resource": "users",
+      "tool_prefix": "users",
+      "method": "GET",
+      "path": "/v1/users/{userId}/api-keys",
+      "summary": "Retrieve User API Key",
+      "schema_file": "users/get_user_api_key.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
       "name": "get_user_membership_in_connections",
       "resource": "users",
       "tool_prefix": "users",
@@ -2021,6 +2053,17 @@
       "path": "/v1/users",
       "summary": "PAGINATED - List All Users",
       "schema_file": "users/list_all_users.json",
+      "scope": "read",
+      "deprecated": false
+    },
+    {
+      "name": "list_api_keys",
+      "resource": "users",
+      "tool_prefix": "users",
+      "method": "GET",
+      "path": "/v1/users/api-keys",
+      "summary": "PAGINATED - List All API Keys",
+      "schema_file": "users/list_api_keys.json",
       "scope": "read",
       "deprecated": false
     },

@@ -7,12 +7,12 @@
         "consumer_key": {
           "title": "",
           "type": "string",
-          "description": "Your Odoo consumer key."
+          "description": "Consumer key of the OAuth application that you want the connection to use for authentication."
         },
         "consumer_secret": {
           "title": "",
           "type": "string",
-          "description": "Your Odoo consumer secret.",
+          "description": "Consumer secret of the OAuth application that you want the connection to use for authentication.",
           "format": "password"
         },
         "sub_domain": {

@@ -49,6 +49,11 @@
           "title": "",
           "type": "boolean",
           "description": "Use BULK for both LEAD and ACTIITIES"
+        },
+        "trailing_sync_enabled": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable lookback window for activities"
         }
       },
       "description": ""

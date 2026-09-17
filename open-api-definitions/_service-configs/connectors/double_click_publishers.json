@@ -14,6 +14,15 @@
             "FLAT"
           ]
         },
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication used by client to authenticate with google",
+          "enum": [
+            "OAUTH2",
+            "FIVETRAN_SERVICE_ACCOUNT"
+          ]
+        },
         "columns": {
           "title": "",
           "type": "array",
@@ -141,6 +150,15 @@
                   "type": "string",
                   "description": ""
                 }
+              },
+              "report_type": {
+                "title": "",
+                "type": "object",
+                "description": "Report type. It defines the primary dataset and structure of the report, determining which metrics and dimensions are available for analysis. Possible values: `HISTORICAL` , `FUTURE_SELL_THROUGH`",
+                "enum": [
+                  "HISTORICAL",
+                  "FUTURE_SELL_THROUGH"
+                ]
               },
               "table": {
                 "title": "",

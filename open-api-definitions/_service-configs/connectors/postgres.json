@@ -12,12 +12,11 @@
         "auth_method": {
           "title": "",
           "type": "object",
-          "description": "Database authentication method",
+          "description": "Database authentication method. Supported values: `PASSWORD`, `ENTRA_ID`, `CLIENT_CERTIFICATE`.",
           "enum": [
             "ENTRA_ID",
             "PASSWORD",
-            "CLIENT_CERTIFICATE",
-            "AWS_IAM"
+            "CLIENT_CERTIFICATE"
           ]
         },
         "client_private_key": {

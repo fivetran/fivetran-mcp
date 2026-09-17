@@ -4,6 +4,15 @@
     "config": {
       "type": "object",
       "properties": {
+        "authentication_method": {
+          "title": "",
+          "type": "object",
+          "description": "The authentication method to use for the Facebook Pages connector. Possible values: `USER_ACCESS` (OAuth-based user access, default) or `SYSTEM_TOKEN` (System User Token).",
+          "enum": [
+            "USER_ACCESS",
+            "SYSTEM_TOKEN"
+          ]
+        },
         "pages": {
           "title": "",
           "type": "array",
@@ -32,7 +41,7 @@
         "access_token": {
           "title": "",
           "type": "string",
-          "description": "The `Access Token` carries the information necessary for API resources to fetch data"
+          "description": "The `Access Token` carries the information necessary for API resources to fetch data. Use either `access_token` (for user access token) or `system_user_access_token` (for system token), not both at the same time."
         },
         "client_access": {
           "type": "object",
@@ -53,7 +62,7 @@
         "system_user_access_token": {
           "title": "",
           "type": "string",
-          "description": ""
+          "description": "System User Token. Use in combination with `client_id` and `client_secret`. Use either `system_user_access_token` (for system token) or `access_token` (for user access token), not both at the same time."
         }
       },
       "description": ""

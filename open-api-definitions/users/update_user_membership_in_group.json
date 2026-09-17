@@ -25,6 +25,9 @@
   "request_body": {
     "content": {
       "application/json": {
+        "required": [
+          "role"
+        ],
         "type": "object",
         "properties": {
           "role": {

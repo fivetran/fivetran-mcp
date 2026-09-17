@@ -40,6 +40,11 @@
             "DATE_LIMIT"
           ]
         },
+        "is_graphql_enabled": {
+          "title": "",
+          "type": "boolean",
+          "description": "Set to `true` to sync your data using the Shopify GraphQL Admin API schema instead of the legacy schema. This cannot be changed after the connection is set up."
+        },
         "shop": {
           "title": "",
           "type": "string",

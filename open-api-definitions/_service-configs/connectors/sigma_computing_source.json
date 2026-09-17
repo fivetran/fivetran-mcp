@@ -31,6 +31,14 @@
           "type": "string",
           "description": "Your Sigma Computing client secret.",
           "format": "password"
+        },
+        "environment": {
+          "type": "object",
+          "description": "Your Sigma Computing environment.",
+          "enum": [
+            "sigmacomputing.com",
+            "staging.sigmacomputing.io"
+          ]
         }
       },
       "description": ""

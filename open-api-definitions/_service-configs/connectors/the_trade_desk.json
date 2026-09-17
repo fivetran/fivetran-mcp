@@ -47,7 +47,7 @@
         "timeframe_months": {
           "title": "",
           "type": "object",
-          "description": "Number of months' worth of data you'd like to include in your initial sync. This cannot be modified once the connector is created. Default value: `THREE`.",
+          "description": "Number of months' worth of data you'd like to include in your initial sync. Increasing this value does not automatically backfill older data for tables that have already synced; trigger a resync for those tables to apply the new time frame. Default value: `THREE`.",
           "enum": [
             "TWENTY_FOUR",
             "SIX",

@@ -1,5 +1,5 @@
 {
-  "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields. \n\n> NOTE: This endpoint works only for an existing connection that is in a 'Connected' state.\n",
+  "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields.\n\nTo determine whether this endpoint is available for a table, first [retrieve the connection schema config](/docs/rest-api/api-reference/connection-schema/connection-schema-config) and check the table's public [`supports_columns_config` response field](/docs/rest-api/api-reference/connection-schema/connection-schema-config#supports_columns_config). Column-level schema metadata support is reported per table rather than as a static connector-wide list. If `supports_columns_config` is `false`, column metadata is not available for that table.\n\n> NOTE: This endpoint works only for an existing connection that is in a 'Connected' state.\n\n> NOTE: The connection schema config response includes every schema and table, but includes only columns that were explicitly overridden. Use this endpoint when you need the exhaustive real-time column list for a table that supports column-level configuration.\n",
   "path": "/v1/connections/{connectionId}/schemas/{schema}/tables/{table}/columns",
   "method": "GET",
   "parameters": [
@@ -105,6 +105,10 @@
                       },
                       "is_primary_key": {
                         "type": "boolean"
+                      },
+                      "target_data_type": {
+                        "type": "string",
+                        "description": "The target data type for this column in the destination. Overrides Fivetran's default type mapping. Available target types depend on the column's source data type and destination. Set to null to remove an existing mapping and revert to the default."
                       }
                     }
                   }

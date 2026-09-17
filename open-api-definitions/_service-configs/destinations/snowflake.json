@@ -16,6 +16,7 @@
           "enum": [
             "PASSWORD",
             "KEY_PAIR",
+            "WORKLOAD_IDENTITY_FEDERATION",
             "OAUTH"
           ]
         },
@@ -117,11 +118,6 @@
           "properties": {},
           "description": "The service account credentials for the Google Cloud Storage (GCS) bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use a GCS bucket to stage your data."
         },
-        "gcs_service_account_credentials_path": {
-          "title": "",
-          "type": "string",
-          "description": "The path to the JSON file that contains the service account credentials for the GCS bucket you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use a GCS bucket to stage your data."
-        },
         "host": {
           "title": "",
           "type": "string",
@@ -131,6 +127,11 @@
           "title": "",
           "type": "boolean",
           "description": "Indicates that a private key is encrypted. The default value: `false`. The field can be specified if authentication type is `KEY_PAIR`."
+        },
+        "mdls_group_id": {
+          "title": "",
+          "type": "string",
+          "description": "The managed data lake service (MDLS) group to use as storage. Required when tableType is `LAKEHOUSE`; not applicable when tableType is `NATIVE`."
         },
         "passphrase": {
           "title": "",
@@ -170,6 +171,15 @@
           "title": "",
           "type": "string",
           "description": "The name of the Azure storage account you want to use to stage your data. Use this parameter only if you are using Hybrid Deployment and want to use an Azure Blob storage container to stage your data."
+        },
+        "table_type": {
+          "title": "",
+          "type": "object",
+          "description": "Determines how tables are stored: `NATIVE` writes Snowflake Native Tables using Snowflake compute, while `LAKEHOUSE` writes Lakehouse Tables to a managed data lake to reduce Snowflake ingestion cost. `LAKEHOUSE` is not supported for Hybrid Deployment destinations.",
+          "enum": [
+            "NATIVE",
+            "LAKEHOUSE"
+          ]
         },
         "use_customer_staging": {
           "title": "",

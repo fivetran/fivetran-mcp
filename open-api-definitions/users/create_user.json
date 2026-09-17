@@ -1,5 +1,5 @@
 {
-  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Invites a new user to your Fivetran account. The invited user will have access to the account only after accepting the invitation. Invited user details are still accessible through the API.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new user in your Fivetran account.\n\nFor a regular user, an invitation email is sent, and the user must accept it before gaining access; their details are accessible through the API in the meantime.\n\nFor a service account, the user gets created immediately with no invitation or email validation required.\n\n> Note: A service account user can't create another service account user.\n",
   "path": "/v1/users",
   "method": "POST",
   "request_body": {
@@ -14,7 +14,7 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "The email address that the user has associated with their user profile."
+            "description": "The email address that the user has associated with their user profile. Optional for service accounts (`user_type: SERVICE_ACCOUNT`)."
           },
           "family_name": {
             "type": "string",
@@ -35,6 +35,10 @@
           "role": {
             "type": "string",
             "description": "The role that you would like to assign to the user "
+          },
+          "user_type": {
+            "type": "string",
+            "description": "The type of user. Possible values: `REGULAR_USER`: A human user who can log in to the Fivetran dashboard and interact with the API, and `SERVICE_ACCOUNT`: A non-human identity for machine-to-machine API access that cannot log in to the dashboard."
           }
         }
       }
@@ -74,7 +78,7 @@
               },
               "email": {
                 "type": "string",
-                "description": "The email address that the user has associated with their user profile."
+                "description": "The email address that the user has associated with their user profile. Optional for service accounts (`user_type: SERVICE_ACCOUNT`)."
               },
               "verified": {
                 "type": "boolean",
@@ -117,6 +121,18 @@
                 "type": "string",
                 "description": "The timestamp that the user created their Fivetran account",
                 "format": "date-time"
+              },
+              "user_type": {
+                "type": "string",
+                "description": "The type of user. Possible values: `REGULAR_USER`: A human user who can log in to the Fivetran dashboard and interact with the API, and `SERVICE_ACCOUNT`: A non-human identity for machine-to-machine API access that cannot log in to the dashboard.",
+                "enum": [
+                  "REGULAR_USER",
+                  "SERVICE_ACCOUNT"
+                ]
+              },
+              "has_api_key": {
+                "type": "boolean",
+                "description": "Indicates whether the user has an assigned API key, including expired keys. Accepted values: `true` or `false`."
               }
             }
           }

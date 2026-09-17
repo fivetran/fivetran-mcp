@@ -221,7 +221,7 @@
                     },
                     "sync_frequency": {
                       "type": "integer",
-                      "description": "The connection sync frequency in minutes",
+                      "description": "The connection sync frequency in minutes. `null` when the connection's schedule has no single cadence to report, such as a custom cron or multiple-time-of-day schedule.",
                       "format": "int32"
                     },
                     "data_delay_threshold": {
@@ -301,7 +301,7 @@
                     },
                     "source_sync_details": {
                       "type": "object",
-                      "description": "The additional information about the connection's state. The format of this parameter is specific for each connector type."
+                      "description": "Read-only, connector-specific sync state. Depending on the connector type, this object may include source scope identifiers such as accounts, profiles, or projects; per-entity cursors or checkpoints; or last-synced timestamps. This field is optional, and its schema varies by connector type. To determine whether a connector exposes this information and inspect its returned fields, use [Retrieve Connection Details](https://fivetran.com/docs/rest-api/api-reference/connections/connection-details)."
                     },
                     "hybrid_deployment_agent_id": {
                       "type": "string"

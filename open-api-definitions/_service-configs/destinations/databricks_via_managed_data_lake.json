@@ -186,6 +186,11 @@
           "type": "boolean",
           "description": "Specifies whether you want to create shortcut for you table in OneLake. Use this parameter only if you want to deploy your data lake on ADLS."
         },
+        "should_write_delta": {
+          "title": "",
+          "type": "boolean",
+          "description": "Specifies whether Fivetran writes Delta Lake metadata in addition to Iceberg tables. Databricks via Managed Data Lake requires Delta Lake metadata, so Fivetran always uses `true` for this destination."
+        },
         "snapshot_retention_period": {
           "title": "",
           "type": "object",
@@ -226,9 +231,31 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "oauth2_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the OAuth 2.0 client ID you created for authenticating Fivetran."
+        },
+        "oauth2_secret": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for oAuth 2.0 secret you created for authenticating Fivetran."
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the personal access token you created for authenticating Fivetran."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
-    "databricks_via_managed_data_lake_config_V1"
+    "databricks_via_managed_data_lake_config_V1",
+    "databricks_via_managed_data_lake_esm_keys_config_V1"
   ]
 }

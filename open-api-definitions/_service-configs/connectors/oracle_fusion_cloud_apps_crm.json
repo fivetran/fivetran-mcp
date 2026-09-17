@@ -34,11 +34,31 @@
           "type": "string",
           "description": "The Oracle Fusion Cloud issuer name."
         },
+        "partial_resync_lookback_unit": {
+          "title": "",
+          "type": "object",
+          "description": "The unit (Hours or Days) for partialResyncLookbackValue.",
+          "enum": [
+            "HOURS",
+            "DAYS"
+          ]
+        },
+        "partial_resync_lookback_value": {
+          "title": "",
+          "type": "integer",
+          "description": "The size of the partial resync lookback window, in the unit specified by partialResyncLookbackUnit. The value must be between 24 hours and 30 days.",
+          "format": "int32"
+        },
         "password": {
           "title": "",
           "type": "string",
           "description": "The Oracle Fusion Cloud user password.",
           "format": "password"
+        },
+        "perform_partial_resync": {
+          "title": "",
+          "type": "boolean",
+          "description": "Once per day, re-sync data for incremental tables to catch late-arriving or backdated records that the incremental filter may miss, extending the lookback window by partialResyncLookbackValue/partialResyncLookbackUnit. Disabling this may reduce sync duration but can cause some updates to be missed."
         },
         "private_key": {
           "title": "",

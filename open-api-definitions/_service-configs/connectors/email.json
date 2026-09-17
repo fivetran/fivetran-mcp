@@ -28,6 +28,39 @@
           "type": "string",
           "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026."
         },
+        "azure_credential": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "container_name": {
+              "title": "",
+              "type": "string",
+              "description": "Azure Blob container name."
+            },
+            "prefix": {
+              "title": "",
+              "type": "string",
+              "description": "Optional path prefix within the container. Defaults to the root if not set."
+            },
+            "storage_account": {
+              "title": "",
+              "type": "string",
+              "description": "Azure storage account name."
+            }
+          },
+          "description": "Configuration for Azure Blob storage."
+        },
+        "cloud_storage_option": {
+          "title": "",
+          "type": "object",
+          "description": "Choose where Fivetran stores your attachments. Default value: `FIVETRAN`.",
+          "enum": [
+            "FIVETRAN",
+            "S3",
+            "AZURE",
+            "GCS"
+          ]
+        },
         "compression": {
           "title": "",
           "type": "object",
@@ -108,6 +141,20 @@
                 "type": "string",
                 "description": "All files in your search path matching this regular expression will be synced per table."
               },
+              "file_source": {
+                "title": "",
+                "type": "object",
+                "description": "The source of files to sync. `ATTACHMENT` (default) syncs email attachments; `LINKED_URL_ATTACHMENT` fetches files from URLs in the email body.",
+                "enum": [
+                  "ATTACHMENT",
+                  "LINKED_URL_ATTACHMENT"
+                ]
+              },
+              "link_pattern": {
+                "title": "",
+                "type": "string",
+                "description": "URLs present in email bodies matching this pattern will be fetched and synced as files to this table. Leave this field blank to match all URLs."
+              },
               "selected_range": {
                 "title": "",
                 "type": "string",
@@ -121,6 +168,23 @@
             },
             "description": "Mapped file name patterns to a destination table."
           }
+        },
+        "gcs_credential": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "gcs_bucket": {
+              "title": "",
+              "type": "string",
+              "description": "Google Cloud Storage bucket name."
+            },
+            "prefix": {
+              "title": "",
+              "type": "string",
+              "description": "Optional path prefix within the bucket. Defaults to the root if not set."
+            }
+          },
+          "description": "Configuration for Google Cloud Storage."
         },
         "json_delivery_mode": {
           "title": "",
@@ -156,6 +220,34 @@
           "type": "boolean",
           "description": "If you don\u2019t want to use an enclosing character while processing the files, set the value to false. By default, the value is set to true and is considered \" as quote character."
         },
+        "s3_credential": {
+          "title": "",
+          "type": "object",
+          "properties": {
+            "prefix": {
+              "title": "",
+              "type": "string",
+              "description": "Optional path prefix within the bucket. Defaults to the root if not set."
+            },
+            "s3_bucket": {
+              "title": "",
+              "type": "string",
+              "description": "Amazon S3 bucket name."
+            },
+            "s3_external_id": {
+              "title": "",
+              "type": "string",
+              "description": "Fivetran-generated external ID."
+            },
+            "s3_role_arn": {
+              "title": "",
+              "type": "string",
+              "description": "Amazon S3 Role ARN required for authentication.",
+              "format": "password"
+            }
+          },
+          "description": "Configuration for Amazon S3 storage."
+        },
         "selected_range": {
           "title": "",
           "type": "string",
@@ -172,6 +264,11 @@
           "type": "integer",
           "description": "We will skip over the number of lines specified before syncing data.",
           "format": "int32"
+        },
+        "sync_inconsistent_rows": {
+          "title": "",
+          "type": "boolean",
+          "description": "When enabled, Fivetran syncs rows with fewer or more columns than the header row. For rows with fewer columns, Fivetran adds NULL values for the missing columns. For rows with extra columns, Fivetran names them `column_<position>`. When disabled, Fivetran handles inconsistent rows according to your error-handling settings."
         }
       },
       "description": ""

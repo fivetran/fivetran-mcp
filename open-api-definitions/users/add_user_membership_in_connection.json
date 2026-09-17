@@ -16,6 +16,10 @@
   "request_body": {
     "content": {
       "application/json": {
+        "required": [
+          "id",
+          "role"
+        ],
         "type": "object",
         "properties": {
           "id": {

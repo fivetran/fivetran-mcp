@@ -36,9 +36,26 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "secret": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Twilio API secret"
+        },
+        "sid": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Twilio API key SID"
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
-    "twilio_config_V1"
+    "twilio_config_V1",
+    "twilio_esm_keys_config_V1"
   ]
 }

@@ -55,6 +55,18 @@
             "Password"
           ]
         },
+        "blr_windows_auth_server_certificate": {
+          "title": "",
+          "type": "string",
+          "description": "(Optional) PEM certificate of the Windows Auth gRPC server used to verify the server's identity. Only needed to migrate this connector to the Windows Auth Server.",
+          "format": "password"
+        },
+        "blr_windows_auth_server_grpc_port": {
+          "title": "",
+          "type": "integer",
+          "description": "(Optional) Port of the Windows Auth gRPC server. Only needed to migrate this connector to the Windows Auth Server.",
+          "format": "int32"
+        },
         "connection_type": {
           "title": "",
           "type": "object",

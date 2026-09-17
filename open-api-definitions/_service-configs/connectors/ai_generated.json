@@ -1,0 +1,11 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object"
+    }
+  },
+  "x-sources": [
+    "ai_generated_config_V1"
+  ]
+}

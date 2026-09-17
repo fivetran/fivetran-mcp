@@ -9,6 +9,27 @@
           "type": "boolean",
           "description": "Require TLS through Tunnel"
         },
+        "asm_staging_directory": {
+          "title": "",
+          "type": "string",
+          "description": "ASM staging directory path. Required when the ASM option is enabled."
+        },
+        "cdb_database": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> CDB database name for TDE-encrypted containerized databases."
+        },
+        "cdb_password": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> Password for the CDB user.",
+          "format": "password"
+        },
+        "cdb_user": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> CDB user for TDE-encrypted containerized databases."
+        },
         "connection_type": {
           "title": "",
           "type": "object",
@@ -25,10 +46,35 @@
           "type": "string",
           "description": "The database name."
         },
+        "enable_asm": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using ASM."
+        },
+        "enable_symbolic_links": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using symbolic links."
+        },
+        "enable_tde_encryption": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using TDE encryption."
+        },
         "host": {
           "title": "",
           "type": "string",
           "description": "DB instance host or IP address."
+        },
+        "local_wallet_host": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> The host for the local Oracle Wallet."
+        },
+        "local_wallet_user": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> The user for the local Oracle Wallet."
         },
         "password": {
           "title": "",
@@ -46,6 +92,22 @@
           "type": "integer",
           "description": "The port number.",
           "format": "int32"
+        },
+        "symbolic_links_mapping": {
+          "title": "",
+          "type": "array",
+          "description": "Mapping of symbolic links to actual file paths. Required when symbolic links are enabled.",
+          "items": {
+            "type": "object",
+            "properties": {},
+            "description": ""
+          }
+        },
+        "tde_wallet_password": {
+          "title": "",
+          "type": "string",
+          "description": "TDE wallet password. Required for password based wallet.",
+          "format": "password"
         },
         "tunnel_host": {
           "title": "",

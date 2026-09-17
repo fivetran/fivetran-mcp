@@ -9,6 +9,14 @@
           "type": "string",
           "description": "Your Maxio SaaSOptics account name."
         },
+        "api_domain": {
+          "type": "object",
+          "description": "Your Maxio SaaSOptics API domain.",
+          "enum": [
+            "saasoptics.com",
+            "platform.maxio.com"
+          ]
+        },
         "api_token": {
           "title": "",
           "type": "string",

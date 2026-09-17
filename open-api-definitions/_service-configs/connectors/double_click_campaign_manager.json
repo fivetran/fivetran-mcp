@@ -4,6 +4,15 @@
     "config": {
       "type": "object",
       "properties": {
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication used by client to authenticate with google",
+          "enum": [
+            "OAUTH2",
+            "FIVETRAN_SERVICE_ACCOUNT"
+          ]
+        },
         "conversion_dimensions": {
           "title": "",
           "type": "array",

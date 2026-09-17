@@ -39,6 +39,7 @@
               "affinity",
               "afterpay",
               "aha",
+              "ai_generated",
               "aircall",
               "airtable",
               "akamai",
@@ -217,7 +218,6 @@
               "dbt_cloud",
               "dcl_logistics",
               "deel",
-              "delighted",
               "deposco",
               "deputy",
               "destini",
@@ -245,6 +245,7 @@
               "ebay",
               "economic",
               "elastic_cloud",
+              "elastic_cloud_serverless",
               "electronic_tenant_solutions",
               "eloqua",
               "email",
@@ -391,6 +392,7 @@
               "klaviyo",
               "konnect_insights",
               "kustomer",
+              "kyriba",
               "lattice",
               "launchdarkly",
               "leap_crm",
@@ -413,6 +415,7 @@
               "livechat_partner",
               "livestorm",
               "lob",
+              "local_file_system",
               "looker_source",
               "loop",
               "loopio",
@@ -469,6 +472,7 @@
               "notion",
               "nylas",
               "odoo",
+              "odoo_native",
               "okendo",
               "okta",
               "ometria",
@@ -518,6 +522,7 @@
               "paypal",
               "paypal_sandbox",
               "pendo",
+              "pennylane",
               "peopleforce",
               "persona",
               "personio",
@@ -611,6 +616,8 @@
               "sana",
               "sap_business_by_design",
               "sap_hana_db",
+              "sap_odata",
+              "sap_oracle",
               "sap_success_factors",
               "scorm",
               "security_journey",
@@ -703,6 +710,7 @@
               "tiktok_ads",
               "tiktok_organic",
               "tiktok_organic_app",
+              "tiktok_shop_partner_center",
               "tive",
               "toggl_track",
               "totango",
@@ -816,7 +824,7 @@
           },
           "sync_frequency": {
             "type": "integer",
-            "description": "The connection sync frequency in minutes",
+            "description": "The connection sync frequency in minutes. `null` when the connection's schedule has no single cadence to report, such as a custom cron or multiple-time-of-day schedule.",
             "format": "int32",
             "enum": [
               "1",
@@ -834,7 +842,7 @@
           },
           "data_delay_sensitivity": {
             "type": "string",
-            "description": "The level of data delay notification threshold. Possible values: LOW, NORMAL, HIGH, CUSTOM, SYNC_FREQUENCY. The default value NORMAL. CUSTOM is only available for customers using the [Enterprise plan](https://fivetran.com/docs/getting-started/pricing#fivetranplans) or above.",
+            "description": "The level of data delay notification threshold. Possible values: LOW, NORMAL, HIGH, CUSTOM, SYNC_FREQUENCY. The default value is LOW. CUSTOM is only available for customers using the [Enterprise plan](https://fivetran.com/docs/getting-started/pricing#fivetranplans) or above.",
             "enum": [
               "LOW",
               "NORMAL",
@@ -1092,7 +1100,7 @@
               },
               "sync_frequency": {
                 "type": "integer",
-                "description": "The connection sync frequency in minutes",
+                "description": "The connection sync frequency in minutes. `null` when the connection's schedule has no single cadence to report, such as a custom cron or multiple-time-of-day schedule.",
                 "format": "int32",
                 "enum": [
                   "1",
@@ -1115,7 +1123,7 @@
               },
               "data_delay_sensitivity": {
                 "type": "string",
-                "description": "The level of data delay notification threshold. Possible values: LOW, NORMAL, HIGH, CUSTOM, SYNC_FREQUENCY. The default value NORMAL. CUSTOM is only available for customers using the [Enterprise plan](https://fivetran.com/docs/getting-started/pricing#fivetranplans) or above.",
+                "description": "The level of data delay notification threshold. Possible values: LOW, NORMAL, HIGH, CUSTOM, SYNC_FREQUENCY. The default value is LOW. CUSTOM is only available for customers using the [Enterprise plan](https://fivetran.com/docs/getting-started/pricing#fivetranplans) or above.",
                 "enum": [
                   "LOW",
                   "NORMAL",
@@ -1189,7 +1197,7 @@
               },
               "source_sync_details": {
                 "type": "object",
-                "description": "The additional information about the connection's state. The format of this parameter is specific for each connection type"
+                "description": "Read-only, connector-specific sync state. Depending on the connector type, this object may include source scope identifiers such as accounts, profiles, or projects; per-entity cursors or checkpoints; or last-synced timestamps. This field is optional, and its schema varies by connector type. To determine whether a connector exposes this information and inspect its returned fields, use [Retrieve Connection Details](https://fivetran.com/docs/rest-api/api-reference/connections/connection-details)."
               },
               "connect_card": {
                 "type": "object",

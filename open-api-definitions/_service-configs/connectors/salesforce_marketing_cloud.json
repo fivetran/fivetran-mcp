@@ -15,6 +15,15 @@
           "description": "The Salesforce Marketing Cloud client secret.",
           "format": "password"
         },
+        "event_extract_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Event sync method. This is how Fivetran gets data for the event objects,  can be selected only during the connector creation.  TRACKING_EXTRACT - Salesforce exports a file, which we download and extract event  data from. This is the faster for large volumes, and requires SFTP.  SOAP  - We sync data using the SOAP API event object endpoints. This syncs the  latest events faster, but is slow for large volumes.",
+          "enum": [
+            "TRACKING_EXTRACT",
+            "SOAP"
+          ]
+        },
         "historical_sync_limit": {
           "title": "",
           "type": "object",
@@ -93,11 +102,6 @@
           "title": "",
           "type": "string",
           "description": "User"
-        },
-        "sub_domain": {
-          "title": "",
-          "type": "string",
-          "description": "Your Salesforce Marketing Cloud subdomain."
         },
         "sync_mode": {
           "title": "",

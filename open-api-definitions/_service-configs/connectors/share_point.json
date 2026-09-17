@@ -42,6 +42,12 @@
           "description": "`Certificate Private Key` of your Microsoft client application.",
           "format": "password"
         },
+        "client_certificate_private_key_passphrase": {
+          "title": "",
+          "type": "string",
+          "description": "`Certificate Private Key Passphrase` of your Microsoft client application.",
+          "format": "password"
+        },
         "compression": {
           "title": "",
           "type": "object",
@@ -73,6 +79,11 @@
           "type": "string",
           "description": "If your CSV generator follows non-standard rules for escaping quotation marks, you can set the escape character here."
         },
+        "extraction_pattern": {
+          "title": "",
+          "type": "string",
+          "description": "Required when `file_mapping_method` = `EXTRACT_TABLES`. A regular expression with a named capture group `(?<table>...)` to extract table names from file paths."
+        },
         "file_handling": {
           "title": "",
           "type": "object",
@@ -80,6 +91,15 @@
           "enum": [
             "unstructured",
             "structured"
+          ]
+        },
+        "file_mapping_method": {
+          "title": "",
+          "type": "object",
+          "description": "The method used to map files to destination tables. Use `DEFINE_PER_TABLE` to manually configure each table with its own file pattern, or `EXTRACT_TABLES` to automatically discover tables based on a single extraction pattern.",
+          "enum": [
+            "EXTRACT_TABLES",
+            "DEFINE_PER_TABLE"
           ]
         },
         "file_type": {
@@ -203,6 +223,11 @@
           "type": "integer",
           "description": "We will skip over the number of lines specified before syncing data.",
           "format": "int32"
+        },
+        "sync_inconsistent_rows": {
+          "title": "",
+          "type": "boolean",
+          "description": "When enabled, Fivetran syncs rows with fewer or more columns than the header row. For rows with fewer columns, Fivetran adds NULL values for the missing columns. For rows with extra columns, Fivetran names them `column_<position>`. When disabled, Fivetran handles inconsistent rows according to your error-handling settings."
         },
         "sync_nested_files": {
           "title": "",

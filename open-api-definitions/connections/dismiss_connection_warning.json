@@ -1,0 +1,46 @@
+{
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. PRIVATE PREVIEW.  THE ACCOUNT MUST BE ALLOWLISTED TO USE THIS FEATURE. Dismiss all active warnings of a specific type for a connection. Requires the warning type to be registered in the warning type registry.",
+  "path": "/v1/connections/{connectionId}/warnings/{warningType}",
+  "method": "DELETE",
+  "parameters": [
+    {
+      "name": "connectionId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "warningType",
+      "in": "path",
+      "required": true,
+      "description": "The warning type to dismiss (e.g., 'resync_table_warning', 'type_coercion_to_null_warning')",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}

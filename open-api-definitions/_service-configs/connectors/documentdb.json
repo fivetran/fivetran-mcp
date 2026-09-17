@@ -21,7 +21,17 @@
         "host": {
           "title": "",
           "type": "string",
-          "description": "Host IP address of the primary node. Ignored if `hosts` value is provided."
+          "description": "Host IP address. Ignored if `hosts` value is provided."
+        },
+        "packing_mode": {
+          "title": "",
+          "type": "object",
+          "description": "Whether to sync all tables in unpacked mode only or all tables in packed mode only. Default value: `UseUnpackedModeOnly`.",
+          "enum": [
+            "SelectTablesForPackedMode",
+            "UsePackedModeOnly",
+            "UseUnpackedModeOnly"
+          ]
         },
         "password": {
           "title": "",
@@ -32,13 +42,13 @@
         "port": {
           "title": "",
           "type": "integer",
-          "description": "Port of the primary node. Ignored if `hosts` value is provided.",
+          "description": "Port number. Ignored if `hosts` value is provided.",
           "format": "int32"
         },
         "sync_pack_mode": {
           "title": "",
           "type": "object",
-          "description": "Indicates whether synced data will be packed into a single entry(column), or unpacked with one layer of nested fields.",
+          "description": "Legacy alias for `packing_mode`. Indicates whether synced data will be packed into a single entry(column), or unpacked with one layer of nested fields.",
           "enum": [
             "UNPACKED_MODE",
             "PACKED_MODE"

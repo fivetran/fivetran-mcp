@@ -9,6 +9,14 @@
           "type": "string",
           "description": "Your Cal.com API key.",
           "format": "password"
+        },
+        "domain": {
+          "type": "object",
+          "description": "Your Cal.com API server region.",
+          "enum": [
+            "api.cal.eu",
+            "api.cal.com"
+          ]
         }
       },
       "description": ""

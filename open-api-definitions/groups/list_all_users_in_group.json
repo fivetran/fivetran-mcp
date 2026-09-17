@@ -83,7 +83,7 @@
                     },
                     "email": {
                       "type": "string",
-                      "description": "The email address that the user has associated with their user profile."
+                      "description": "The email address that the user has associated with their user profile. Optional for service accounts (`user_type: SERVICE_ACCOUNT`)."
                     },
                     "verified": {
                       "type": "boolean",
@@ -126,6 +126,18 @@
                       "type": "string",
                       "description": "The timestamp that the user created their Fivetran account",
                       "format": "date-time"
+                    },
+                    "user_type": {
+                      "type": "string",
+                      "description": "The type of user. Possible values: `REGULAR_USER`: A human user who can log in to the Fivetran dashboard and interact with the API, and `SERVICE_ACCOUNT`: A non-human identity for machine-to-machine API access that cannot log in to the dashboard.",
+                      "enum": [
+                        "REGULAR_USER",
+                        "SERVICE_ACCOUNT"
+                      ]
+                    },
+                    "has_api_key": {
+                      "type": "boolean",
+                      "description": "Indicates whether the user has an assigned API key, including expired keys. Accepted values: `true` or `false`."
                     }
                   }
                 }

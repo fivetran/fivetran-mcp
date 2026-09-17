@@ -15,12 +15,12 @@
           "description": "Your Navan client secret.",
           "format": "password"
         },
-        "region": {
+        "url": {
           "type": "object",
-          "description": "Your Navan region.",
+          "description": "Your Navan url.",
           "enum": [
-            "https://app-fra.tripactions.com",
-            "https://api.tripactions.com"
+            "{\"header\":\"US\",\"host\":\"https:\\/\\/api.tripactions.com\"}",
+            "{\"header\":\"EU\",\"host\":\"https:\\/\\/app-fra.tripactions.com\"}"
           ]
         }
       },

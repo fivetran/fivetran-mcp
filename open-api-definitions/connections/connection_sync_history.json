@@ -1,0 +1,184 @@
+{
+  "description": "⚠️ RESULTS ARE PAGINATED. Returns a list of sync history records for the specified connection. The maximum time window is 7 days.",
+  "path": "/v1/connections/{connectionId}/sync-history",
+  "method": "GET",
+  "parameters": [
+    {
+      "name": "connectionId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "duration",
+      "in": "query",
+      "required": false,
+      "description": "Deprecated. Use `start_time` and `end_time` instead.",
+      "schema": {
+        "type": "integer",
+        "format": "int32"
+      }
+    },
+    {
+      "name": "start_time",
+      "in": "query",
+      "required": false,
+      "description": "The start of the time range for which to retrieve sync history, in ISO 8601 format (for example, 2026-01-01T00:00:00Z). If omitted, defaults to one hour before `end_time`. The maximum allowed range between `start_time` and `end_time` is 7 days.",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "end_time",
+      "in": "query",
+      "required": false,
+      "description": "The end of the time range for which to retrieve sync history, in ISO 8601 format (for example, 2026-01-01T01:00:00Z). If omitted, defaults to one hour after `start_time`. Must be after `start_time`.",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "cursor",
+      "in": "query",
+      "required": false,
+      "description": "Paging cursor, [read more about pagination](https://fivetran.com/docs/rest-api/pagination)",
+      "schema": {
+        "type": "string"
+      }
+    },
+    {
+      "name": "limit",
+      "in": "query",
+      "required": false,
+      "description": "Number of records to fetch per page. Accepts a number in the range 1..1000; the default value is 100.",
+      "schema": {
+        "type": "integer",
+        "format": "int32"
+      }
+    }
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "type": "array",
+                "description": "The collection of returned items",
+                "items": {
+                  "required": [
+                    "stages",
+                    "status",
+                    "sync_id"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "start": {
+                      "type": "string",
+                      "description": "The UTC timestamp of when the sync started, in ISO 8601 format. Null if the sync has not started yet."
+                    },
+                    "end": {
+                      "type": "string",
+                      "description": "The UTC timestamp of when the sync finished, in ISO 8601 format. Null if the sync is still in progress."
+                    },
+                    "status": {
+                      "type": "string",
+                      "description": "The outcome of the sync. Possible values: `COMPLETED`, `FAILURE`, `CANCELED`, `INCOMPLETE`, `RESCHEDULED`, `PAUSED`."
+                    },
+                    "reason": {
+                      "type": "string",
+                      "description": "The failure reason if the sync did not complete successfully. Omitted if the sync completed without errors."
+                    },
+                    "stages": {
+                      "description": "The data volume processed in each stage of the sync pipeline.",
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "extract": {
+                              "description": "Data volume metrics for the extract stage, in which data is read from the source system.",
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "volume": {
+                                      "type": "number",
+                                      "description": "The volume of data processed in this stage, in megabytes. Null if volume data is not available for this stage.",
+                                      "format": "double"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            "process": {
+                              "description": "Data volume metrics for the process stage, in which data is transformed and prepared for loading.",
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "volume": {
+                                      "type": "number",
+                                      "description": "The volume of data processed in this stage, in megabytes. Null if volume data is not available for this stage.",
+                                      "format": "double"
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            "load": {
+                              "description": "Data volume metrics for the load stage, in which data is written to the destination.",
+                              "allOf": [
+                                {
+                                  "type": "object",
+                                  "properties": {
+                                    "volume": {
+                                      "type": "number",
+                                      "description": "The volume of data processed in this stage, in megabytes. Null if volume data is not available for this stage.",
+                                      "format": "double"
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "sync_id": {
+                      "type": "string",
+                      "description": "The unique identifier of the sync."
+                    }
+                  }
+                }
+              },
+              "next_cursor": {
+                "type": "string",
+                "description": "The value of the cursor parameter for the next page"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}

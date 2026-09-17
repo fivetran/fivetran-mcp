@@ -30,6 +30,11 @@
             "co.uk",
             "co.jp"
           ]
+        },
+        "specific_profiles": {
+          "title": "",
+          "type": "string",
+          "description": "The Amazon Advertising profiles whose data you want to sync. Leave this parameter blank to sync all profiles available to the authorized Amazon Attribution account. You cannot modify the value after you complete the connection setup."
         }
       },
       "description": ""

@@ -66,7 +66,7 @@
         "update_method": {
           "title": "",
           "type": "object",
-          "description": "The method used to detect new or changed rows. Supported values: - `BINARY_LOG_READER` - Fivetran reads Oracle redo logs to detect modified rows in the source tables. - `TELEPORT` - Fivetran's proprietary replication method that uses compressed snapshots to detect and apply changes.",
+          "description": "The method used to detect new or changed rows. Supported values: - `BINARY_LOG_READER` - Fivetran reads Oracle redo logs to detect modified rows in the source tables. - `TELEPORT` - Fivetran's proprietary replication method that uses compressed snapshots to detect and apply changes. - `XSTREAM_OUT` - Fivetran uses Oracle XStream Out to stream changes from the database.",
           "enum": [
             "BINARY_LOG_READER",
             "LOGMINER",

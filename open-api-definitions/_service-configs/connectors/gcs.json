@@ -204,7 +204,7 @@
         "signer_public_key": {
           "title": "",
           "type": "string",
-          "description": "The contents of the signer's public key file. Must be populated if `use_pgp_encryption_options` is set to `true` and PGP encrypted files are signed."
+          "description": "The contents of the signer's public key file. This is optional \u2014 if you don't provide the key, we decrypt the files without verifying their signatures."
         },
         "skip_after": {
           "title": "",
@@ -217,6 +217,11 @@
           "type": "integer",
           "description": "We will skip over the number of lines specified before syncing data.",
           "format": "int32"
+        },
+        "sync_inconsistent_rows": {
+          "title": "",
+          "type": "boolean",
+          "description": "When enabled, Fivetran syncs rows with fewer or more columns than the header row. For rows with fewer columns, Fivetran adds NULL values for the missing columns. For rows with extra columns, Fivetran names them `column_<position>`. When disabled, Fivetran handles inconsistent rows according to your error-handling settings."
         },
         "use_pgp_encryption_options": {
           "title": "",

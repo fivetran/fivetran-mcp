@@ -9,6 +9,14 @@
           "type": "string",
           "description": "Your Pylon Support Platform API token.",
           "format": "password"
+        },
+        "region": {
+          "type": "object",
+          "description": "The region of your Pylon Support Platform account. If your account is in the EU (tokens generated at app.eu.usepylon.com), provide `api.eu`. Otherwise provide `api`.",
+          "enum": [
+            "api.eu",
+            "api"
+          ]
         }
       },
       "description": ""

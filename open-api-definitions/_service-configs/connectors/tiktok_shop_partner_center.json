@@ -1,0 +1,46 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "app_key": {
+          "title": "",
+          "type": "string",
+          "description": "Your TikTok Shop Partner Center app key."
+        },
+        "app_secret": {
+          "title": "",
+          "type": "string",
+          "description": "Your TikTok Shop Partner Center app secret.",
+          "format": "password"
+        },
+        "authorization_url": {
+          "title": "",
+          "type": "string",
+          "description": "Your TikTok Shop Partner Center authorization URL."
+        },
+        "platform": {
+          "type": "object",
+          "description": "Your TikTok Shop Partner Center external order data.",
+          "enum": [
+            "SALESFORCE_COMMERCE_CLOUD",
+            "AMAZON",
+            "WAREHOUSE_MANAGEMENT_SYSTEM",
+            "BIGCOMMERCE",
+            "MAGENTO",
+            "ORDER_MANAGEMENT_SYSTEM",
+            "SHOPIFY",
+            "WOOCOMMERCE",
+            "CHANNEL_ADVISOR",
+            "ERP_SYSTEM"
+          ]
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "tiktok_shop_partner_center_config_V1"
+  ]
+}

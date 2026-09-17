@@ -4,6 +4,14 @@
     "config": {
       "type": "object",
       "properties": {
+        "api_to_sync_conversation_analytics_data": {
+          "type": "object",
+          "description": "Choose the Genesys API you want to use to sync conversation analytics data. Export API retrieves conversation records via an asynchronous export job and is recommended for historical data. Aggregate Query API fetches data using the analytics aggregate query endpoint and produces a different set of tables and schemas. You cannot change this value after you set up the connection.",
+          "enum": [
+            "export_api",
+            "aggregate_query_api"
+          ]
+        },
         "client_id": {
           "title": "",
           "type": "string",

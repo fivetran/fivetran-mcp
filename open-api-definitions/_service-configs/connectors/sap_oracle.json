@@ -1,0 +1,178 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "always_encrypted": {
+          "title": "",
+          "type": "boolean",
+          "description": "Require TLS for connections through the tunnel."
+        },
+        "asm_staging_directory": {
+          "title": "",
+          "type": "string",
+          "description": "ASM staging directory path. Required when the ASM option is enabled."
+        },
+        "cdb_database": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> CDB database name for TDE-encrypted containerized databases."
+        },
+        "cdb_password": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> Password for the CDB user.",
+          "format": "password"
+        },
+        "cdb_user": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> CDB user for TDE-encrypted containerized databases."
+        },
+        "client": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP NetWeaver client. Required when `sapConnectionMode` is `NETWEAVER`."
+        },
+        "connection_type": {
+          "title": "",
+          "type": "object",
+          "description": "Possible values:`Directly`, `PrivateLink`, `SshTunnel`. `SshTunnel` is used if this parameter is omitted and any of these parameters is provided: `tunnel_host`, `tunnel_port`, or `tunnel_user`. If the parameter is omitted  and none of those tunnel parameters are specified, `Directly` is used.",
+          "enum": [
+            "PrivateLink",
+            "SshTunnel",
+            "ProxyAgent"
+          ]
+        },
+        "convert_dats_type_to_date": {
+          "title": "",
+          "type": "boolean",
+          "description": "(Immutable) Whether SAP DATS columns are coerced to LocalDate on newly added tables. When false, DATS columns stay String. Cannot be changed after Save & Test. Default value: `true`."
+        },
+        "database": {
+          "title": "",
+          "type": "string",
+          "description": "The database name."
+        },
+        "enable_archive_log_only_mode": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` to capture changes exclusively from archived redo logs, without reading from the online redo log."
+        },
+        "enable_asm": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using ASM."
+        },
+        "enable_symbolic_links": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if you're using symbolic links."
+        },
+        "enable_tde_encryption": {
+          "title": "",
+          "type": "boolean",
+          "description": "Default value: `false`. Set to `true` if Transparent Data Encryption (TDE) is enabled."
+        },
+        "host": {
+          "title": "",
+          "type": "string",
+          "description": "Database instance host name or IP address."
+        },
+        "local_wallet_host": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> The host for the local Oracle Wallet."
+        },
+        "local_wallet_user": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> The user for the local Oracle Wallet."
+        },
+        "oracle2_update_method": {
+          "title": "",
+          "type": "object",
+          "description": "The update method for Oracle. Supported values: `BINARY_LOG_READER`. Default value: `BINARY_LOG_READER`.",
+          "enum": [
+            "BINARY_LOG_READER",
+            "XSTREAM_OUT",
+            "TELEPORT"
+          ]
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "The user's password.",
+          "format": "password"
+        },
+        "port": {
+          "title": "",
+          "type": "integer",
+          "description": "The port number.",
+          "format": "int32"
+        },
+        "sap_connection_mode": {
+          "title": "",
+          "type": "object",
+          "description": "The SAP Oracle connection mode. Supported values: `DIRECT`, `NETWEAVER`. Default value: `DIRECT`.",
+          "enum": [
+            "NETWEAVER",
+            "DIRECT"
+          ]
+        },
+        "sap_schema": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP schema name."
+        },
+        "symbolic_links_mapping": {
+          "title": "",
+          "type": "array",
+          "description": "Mapping of symbolic links to actual file paths. Required when symbolic links are enabled.",
+          "items": {
+            "type": "object",
+            "properties": {},
+            "description": ""
+          }
+        },
+        "sysnr": {
+          "title": "",
+          "type": "string",
+          "description": "The SAP NetWeaver system number. Required when `sapConnectionMode` is `NETWEAVER`."
+        },
+        "tde_wallet_password": {
+          "title": "",
+          "type": "string",
+          "description": "The TDE wallet password. Required for password-based wallets.",
+          "format": "password"
+        },
+        "tunnel_host": {
+          "title": "",
+          "type": "string",
+          "description": "SSH host. Specify only when connecting via an SSH tunnel (do not use a load balancer)."
+        },
+        "tunnel_port": {
+          "title": "",
+          "type": "integer",
+          "description": "SSH port. Specify only when connecting via an SSH tunnel.",
+          "format": "int32"
+        },
+        "tunnel_user": {
+          "title": "",
+          "type": "string",
+          "description": "SSH user. Specify only when connecting via an SSH tunnel."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "The user name."
+        }
+      },
+      "description": ""
+    }
+  },
+  "x-sources": [
+    "sap_oracle_config_V1"
+  ]
+}

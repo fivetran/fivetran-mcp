@@ -57,10 +57,27 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for workday password."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for workday username."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
     "workday_financial_management_config_V1",
-    "workday_financial_management_auth_V1"
+    "workday_financial_management_auth_V1",
+    "workday_financial_management_esm_keys_config_V1"
   ]
 }

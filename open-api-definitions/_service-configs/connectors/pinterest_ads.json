@@ -90,8 +90,21 @@
               },
               "report_type": {
                 "title": "",
-                "type": "string",
-                "description": "The breakdown level for the report (e.g. ADVERTISER, CAMPAIGN, AD_GROUP, PIN_PROMOTION, KEYWORD, PRODUCT_GROUP, PRODUCT_ITEM)."
+                "type": "object",
+                "description": "The breakdown level for the report (e.g. ADVERTISER, CAMPAIGN, AD_GROUP, PIN_PROMOTION, KEYWORD, PRODUCT_GROUP, PRODUCT_ITEM).",
+                "enum": [
+                  "PRODUCT_GROUP",
+                  "PIN_PROMOTION",
+                  "PRODUCT_GROUP_TARGETING",
+                  "ADVERTISER_TARGETING",
+                  "KEYWORD",
+                  "AD_GROUP_TARGETING",
+                  "AD_GROUP",
+                  "ADVERTISER",
+                  "CAMPAIGN",
+                  "PIN_PROMOTION_TARGETING",
+                  "CAMPAIGN_TARGETING"
+                ]
               },
               "table_name": {
                 "title": "",

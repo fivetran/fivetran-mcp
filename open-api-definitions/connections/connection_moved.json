@@ -1,0 +1,107 @@
+{
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Moves a connection from its current destination group to a different destination group. The connection must be paused before calling this endpoint. Use `sync_behavior` to control how data syncs after the move: `CONTINUE` preserves the existing sync cursor so the connection resumes incremental sync from where it left off; `BACKFILL` resets the cursor and triggers a historical sync; `CONTINUE_WITH_DATA` preserves the cursor and additionally migrates existing data to the new destination by starting an asynchronous job. Use the `job_id` returned in the response to monitor progress via the move-connection-job-status endpoint. `CONTINUE_WITH_DATA` is supported only when moving a connection from Snowflake Native tables to a MDLS-linked Snowflake Lakehouse destination.",
+  "path": "/v1/connections/{connectionId}/move",
+  "method": "POST",
+  "parameters": [
+    {
+      "name": "connectionId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "request_body": {
+    "content": {
+      "application/json": {
+        "required": [
+          "destination_group_id"
+        ],
+        "type": "object",
+        "properties": {
+          "destination_group_id": {
+            "type": "string",
+            "description": "The unique identifier of the destination group to move the connection to. Retrieve group IDs from the [List All Groups](https://fivetran.com/docs/rest-api/api-reference/groups/list-all-groups) endpoint."
+          },
+          "sync_behavior": {
+            "type": "string",
+            "description": "Controls how data syncs after the move. Use `CONTINUE` to preserve the existing sync cursor so the connection resumes incremental sync from where it left off. Use `BACKFILL` to reset the cursor and trigger a historical sync. Use `CONTINUE_WITH_DATA` to preserve the cursor and additionally migrate existing data to the new destination by starting an asynchronous job—use the `job_id` returned in the response to monitor progress. `CONTINUE_WITH_DATA` is supported only when moving a connection from Snowflake Native tables to a MDLS-linked Snowflake Lakehouse destination.",
+            "enum": [
+              "CONTINUE",
+              "BACKFILL",
+              "CONTINUE_WITH_DATA"
+            ]
+          },
+          "force_move": {
+            "type": "boolean",
+            "description": "Set to `true` to confirm that you have completed all prerequisite steps for moving connectors with credential dependencies. Required when moving connectors whose credentials reference the source group—for example, connectors with AWS IAM external IDs or GCP service account credentials. The error response for affected connectors describes the required steps."
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "connection_id",
+              "destination_group_id",
+              "source_group_id",
+              "sync_behavior"
+            ],
+            "type": "object",
+            "properties": {
+              "connection_id": {
+                "type": "string",
+                "description": "The unique identifier of the connection that was moved."
+              },
+              "source_group_id": {
+                "type": "string",
+                "description": "The unique identifier of the destination group the connection was moved from."
+              },
+              "destination_group_id": {
+                "type": "string",
+                "description": "The unique identifier of the destination group to move the connection to. Retrieve group IDs from the [List All Groups](https://fivetran.com/docs/rest-api/api-reference/groups/list-all-groups) endpoint."
+              },
+              "sync_behavior": {
+                "type": "string",
+                "description": "Controls how data syncs after the move. Use `CONTINUE` to preserve the existing sync cursor so the connection resumes incremental sync from where it left off. Use `BACKFILL` to reset the cursor and trigger a historical sync. Use `CONTINUE_WITH_DATA` to preserve the cursor and additionally migrate existing data to the new destination by starting an asynchronous job—use the `job_id` returned in the response to monitor progress. `CONTINUE_WITH_DATA` is supported only when moving a connection from Snowflake Native tables to a MDLS-linked Snowflake Lakehouse destination.",
+                "enum": [
+                  "CONTINUE",
+                  "BACKFILL",
+                  "CONTINUE_WITH_DATA"
+                ]
+              },
+              "moved_at": {
+                "type": "string",
+                "description": "The timestamp of when the connection was moved. Null when `sync_behavior` is `CONTINUE_WITH_DATA` (since the move runs asynchronously).",
+                "format": "date-time"
+              },
+              "job_id": {
+                "type": "string",
+                "description": "The unique identifier of the move job. Use this value to check the status of the move operation."
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}
