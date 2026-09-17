@@ -7,6 +7,10 @@ venv/
 # macOS
 .DS_Store
 
+# Editor swap files
+*.swp
+*.swo
+
 # Build artifacts
 build/
 dist/
