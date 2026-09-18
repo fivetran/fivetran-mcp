@@ -112,6 +112,34 @@ The tool name is a boundary: `connections_read(name="delete_connection")`
 returns an `ENDPOINT_TOOL_MISMATCH` error instead of executing. Without this
 check the tool namespace would be decorative.
 
+### Credentials
+
+Fivetran credentials are resolved per tool invocation by a pluggable resolver.
+`server.py` defines:
+
+- `Credentials(authorization: str)` — opaque, carries the full `Authorization`
+  header value. Basic for API key/secret today; Bearer once Fivetran's OAuth
+  lands.
+- `CredentialsResolver = Callable[[], Awaitable[Credentials]]` — a zero-arg
+  async factory. Transport-specific inputs (env vars, request headers, OAuth
+  tokens) are closed over when the resolver is registered.
+- `set_credentials_resolver(resolver)` — called once by the entrypoint for the
+  active transport. `async_main` (stdio) registers `env_resolver`.
+
+Three resolvers ship in `server.py`:
+
+- `env_resolver` — reads `FIVETRAN_API_KEY` / `FIVETRAN_API_SECRET` and builds
+  `Basic <b64(key:secret)>`. Used by the stdio entrypoint.
+- `header_resolver` — forwards the incoming HTTP `Authorization` header as-is,
+  reading from `mcp_server.request_context.request.headers`. For self-hosted
+  HTTP deployments where the caller already has valid Fivetran credentials.
+- `oauth_resolver` — reserved for marketplace hosting. Body is
+  `NotImplementedError` until the Fivetran OAuth broker is available.
+
+`list_endpoints` and `get_schema` read the local manifest and don't require
+credentials. `CredentialsError` only surfaces when an API-hitting tool is
+invoked, so clients can browse the tool surface before auth is wired.
+
 ### Error contract
 
 Caller-correctable errors return a shaped JSON dict rather than raising:

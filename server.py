@@ -14,9 +14,10 @@ import os
 import re
 import sys
 from collections import defaultdict
+from dataclasses import dataclass
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
-from typing import Any
+from typing import Any, Awaitable, Callable
 from urllib.parse import quote
 
 import httpx
@@ -33,11 +34,61 @@ from mcp.types import Tool, TextContent, ToolAnnotations
 
 load_dotenv()
 
-FIVETRAN_API_KEY = os.getenv("FIVETRAN_API_KEY")
-FIVETRAN_API_SECRET = os.getenv("FIVETRAN_API_SECRET")
 BASE_URL = "https://api.fivetran.com"
 SERVER_DIR = Path(__file__).parent
 OPENAPI_DIR = SERVER_DIR / "open-api-definitions"
+
+
+# Opaque Authorization header value ("Basic ..." today, "Bearer ..." once
+# Fivetran's OAuth lands). Kept opaque so switching auth schemes is a
+# resolver-side change with no downstream refactor.
+@dataclass(frozen=True, slots=True)
+class Credentials:
+    authorization: str
+
+
+CredentialsResolver = Callable[[], Awaitable[Credentials]]
+
+
+class CredentialsError(Exception):
+    """Resolver could not produce Fivetran credentials for this request."""
+
+
+_credentials_resolver: CredentialsResolver | None = None
+
+
+def set_credentials_resolver(resolver: CredentialsResolver) -> None:
+    """Register the resolver that supplies credentials for each API-hitting call.
+
+    Called once at process start by the entrypoint for the active transport
+    (stdio → env_resolver, HTTP → header_resolver, OAuth → oauth_resolver).
+    """
+    global _credentials_resolver
+    _credentials_resolver = resolver
+
+
+async def _resolve_credentials() -> Credentials:
+    if _credentials_resolver is None:
+        raise CredentialsError(
+            "No credentials resolver registered. Call set_credentials_resolver() "
+            "before serving requests."
+        )
+    return await _credentials_resolver()
+
+
+def env_resolver() -> CredentialsResolver:
+    async def _resolve() -> Credentials:
+        key = os.getenv("FIVETRAN_API_KEY")
+        secret = os.getenv("FIVETRAN_API_SECRET")
+        if not key or not secret:
+            raise CredentialsError(
+                "FIVETRAN_API_KEY and FIVETRAN_API_SECRET environment variables must be set. "
+                "Configure them in your .mcp.json or .env file."
+            )
+        encoded = base64.b64encode(f"{key}:{secret}".encode()).decode()
+        return Credentials(authorization=f"Basic {encoded}")
+
+    return _resolve
 
 
 def _load_manifest() -> tuple[
@@ -170,19 +221,16 @@ ALLOWED_GRANTS, SCOPE_ACTIONS, DISALLOWED = _build_allowed_grants(
 )
 
 
-def _get_auth_header() -> dict[str, str]:
-    if not FIVETRAN_API_KEY or not FIVETRAN_API_SECRET:
-        raise ValueError("FIVETRAN_API_KEY and FIVETRAN_API_SECRET must be set in environment")
-    credentials = f"{FIVETRAN_API_KEY}:{FIVETRAN_API_SECRET}"
-    encoded = base64.b64encode(credentials.encode()).decode()
+def _get_auth_header(creds: Credentials) -> dict[str, str]:
     return {
-        "Authorization": f"Basic {encoded}",
+        "Authorization": creds.authorization,
         "Accept": "application/json",
         "User-Agent": f"fivetran-official-mcp/{__version__}",
     }
 
 
 async def _fivetran_request(
+    creds: Credentials,
     method: str,
     endpoint: str,
     params: dict[str, Any] | None = None,
@@ -193,7 +241,7 @@ async def _fivetran_request(
         response = await client.request(
             method=method,
             url=url,
-            headers=_get_auth_header(),
+            headers=_get_auth_header(creds),
             params=params,
             json=json_body,
             timeout=30.0,
@@ -296,6 +344,7 @@ def do_get_schema(name: str, service: str | None = None) -> dict[str, Any]:
 
 
 async def do_call(
+    creds: Credentials,
     name: str,
     path_params: dict[str, Any] | None = None,
     query: dict[str, Any] | None = None,
@@ -379,6 +428,7 @@ async def do_call(
             raise ValueError(f"Invalid JSON in body: {e}")
 
     return await _fivetran_request(
+        creds,
         ep["method"],
         endpoint,
         params=query or None,
@@ -532,6 +582,43 @@ _SERVER_INSTRUCTIONS = (
 mcp_server = Server("fivetran", instructions=_SERVER_INSTRUCTIONS)
 
 
+def header_resolver() -> CredentialsResolver:
+    """Forward the incoming HTTP `Authorization` header as-is (Basic or Bearer).
+
+    For self-hosted HTTP deployments where the caller already provides valid
+    Fivetran credentials. Reads from `mcp_server.request_context.request.headers`
+    (starlette Request when running under streamable_http transport).
+    """
+    async def _resolve() -> Credentials:
+        try:
+            request = mcp_server.request_context.request
+        except LookupError as e:
+            raise CredentialsError("No request context available (running under stdio?)") from e
+        if request is None:
+            raise CredentialsError("Transport did not attach an HTTP request to the context")
+        auth = request.headers.get("Authorization", "")
+        if not auth:
+            raise CredentialsError("Missing Authorization header")
+        return Credentials(authorization=auth)
+
+    return _resolve
+
+
+def oauth_resolver() -> CredentialsResolver:
+    """Validate an OAuth Bearer token and produce Fivetran credentials.
+
+    Reserved for marketplace hosting. Implementation deferred until the OAuth
+    broker (Fivetran-native issuer + JWKS / introspection endpoint) is chosen.
+    """
+    async def _resolve() -> Credentials:
+        raise NotImplementedError(
+            "oauth_resolver validation is not implemented yet; "
+            "wire this up once Fivetran's OAuth broker is available."
+        )
+
+    return _resolve
+
+
 @mcp_server.list_tools()
 async def list_tools() -> list[Tool]:
     return _TOOLS
@@ -552,7 +639,9 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                 service=arguments.get("service"),
             )
         elif name in TOOLS_BY_NAME:
+            creds = await _resolve_credentials()
             result = await do_call(
+                creds,
                 name=arguments["name"],
                 path_params=arguments.get("path_params"),
                 query=arguments.get("query"),
@@ -563,6 +652,8 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             raise ValueError(f"Unknown tool: {name}")
         return [TextContent(type="text", text=json.dumps(result, indent=2))]
 
+    except CredentialsError as e:
+        return [TextContent(type="text", text=f"Authentication error: {e}")]
     except httpx.HTTPStatusError as e:
         error_msg = f"Fivetran API error: {e.response.status_code}"
         try:
@@ -576,11 +667,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
 
 async def async_main():
-    if not FIVETRAN_API_KEY or not FIVETRAN_API_SECRET:
-        raise ValueError(
-            "FIVETRAN_API_KEY and FIVETRAN_API_SECRET environment variables must be set. "
-            "Configure them in your .mcp.json or .env file."
-        )
+    set_credentials_resolver(env_resolver())
     async with stdio_server() as (read_stream, write_stream):
         await mcp_server.run(
             read_stream, write_stream, mcp_server.create_initialization_options()
