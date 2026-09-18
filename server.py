@@ -387,9 +387,9 @@ async def do_call(
 
 
 _TOOL_ANNOTATIONS: dict[str, ToolAnnotations] = {
-    "read":   ToolAnnotations(readOnlyHint=True),
-    "write":  ToolAnnotations(readOnlyHint=False),
-    "delete": ToolAnnotations(readOnlyHint=False, destructiveHint=True),
+    "read":   ToolAnnotations(readOnlyHint=True,  openWorldHint=False),
+    "write":  ToolAnnotations(readOnlyHint=False, openWorldHint=False),
+    "delete": ToolAnnotations(readOnlyHint=False, destructiveHint=True, openWorldHint=False),
 }
 
 _TOOLS = [
@@ -419,7 +419,7 @@ _TOOLS = [
                 },
             },
         },
-        annotations=ToolAnnotations(readOnlyHint=True),
+        annotations=ToolAnnotations(readOnlyHint=True, openWorldHint=False),
     ),
     Tool(
         name="get_schema",
@@ -443,7 +443,7 @@ _TOOLS = [
             },
             "required": ["name"],
         },
-        annotations=ToolAnnotations(readOnlyHint=True),
+        annotations=ToolAnnotations(readOnlyHint=True, openWorldHint=False),
     ),
 ]
 
@@ -520,7 +520,16 @@ TOOLS_BY_NAME: dict[str, tuple[str, str]] = {
 }
 
 
-mcp_server = Server("fivetran")
+_SERVER_INSTRUCTIONS = (
+    "Router over the Fivetran REST API. Tools are grouped by resource "
+    "(connections, destinations, groups, ...) and action (read/write/delete); "
+    "each dispatches to a specific endpoint by `name`. "
+    "Flow: call `list_endpoints` to browse or search, then `get_schema` for "
+    "the full request/response shape, then invoke the matching "
+    "resource:action tool. Confirm with the user before any write or delete."
+)
+
+mcp_server = Server("fivetran", instructions=_SERVER_INSTRUCTIONS)
 
 
 @mcp_server.list_tools()
