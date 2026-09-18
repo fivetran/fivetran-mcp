@@ -554,15 +554,28 @@ GENERATED_TOOLS = [
     if (t["resource"], t["action"]) in ALLOWED_GRANTS
 ]
 
+# _meta markers on specific tools. Kept separate from the resource:action loop
+# because these are per-tool overrides driven by client conventions, not the
+# manifest.
+#
+# openai/profile: ChatGPT calls this tool to identify the connected account
+# when a user has multiple sessions of the same connector, so it can show
+# "You're using Fivetran (Ryan)" vs "Fivetran (Acme)".
+_TOOL_META: dict[str, dict[str, Any]] = {
+    "account_read": {"openai/profile": True},
+}
+
 for _t in GENERATED_TOOLS:
-    _TOOLS.append(
-        Tool(
-            name=_t["name"],
-            description=_tool_description(_t),
-            inputSchema=_RESOURCE_ACTION_INPUT_SCHEMA,
-            annotations=_TOOL_ANNOTATIONS[_t["action"]],
-        )
-    )
+    kwargs: dict[str, Any] = {
+        "name": _t["name"],
+        "description": _tool_description(_t),
+        "inputSchema": _RESOURCE_ACTION_INPUT_SCHEMA,
+        "annotations": _TOOL_ANNOTATIONS[_t["action"]],
+    }
+    # Tool.meta is aliased to `_meta` in the MCP schema; must pass by alias.
+    if _t["name"] in _TOOL_META:
+        kwargs["_meta"] = _TOOL_META[_t["name"]]
+    _TOOLS.append(Tool(**kwargs))
 
 # tool_name -> (resource, action) for dispatch.
 TOOLS_BY_NAME: dict[str, tuple[str, str]] = {
