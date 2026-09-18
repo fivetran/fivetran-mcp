@@ -29,7 +29,7 @@ except PackageNotFoundError:
 from dotenv import load_dotenv
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
-from mcp.types import Tool, TextContent
+from mcp.types import Tool, TextContent, ToolAnnotations
 
 load_dotenv()
 
@@ -386,6 +386,12 @@ async def do_call(
     )
 
 
+_TOOL_ANNOTATIONS: dict[str, ToolAnnotations] = {
+    "read":   ToolAnnotations(readOnlyHint=True),
+    "write":  ToolAnnotations(readOnlyHint=False),
+    "delete": ToolAnnotations(readOnlyHint=False, destructiveHint=True),
+}
+
 _TOOLS = [
     Tool(
         name="list_endpoints",
@@ -413,6 +419,7 @@ _TOOLS = [
                 },
             },
         },
+        annotations=ToolAnnotations(readOnlyHint=True),
     ),
     Tool(
         name="get_schema",
@@ -436,6 +443,7 @@ _TOOLS = [
             },
             "required": ["name"],
         },
+        annotations=ToolAnnotations(readOnlyHint=True),
     ),
 ]
 
@@ -502,6 +510,7 @@ for _t in GENERATED_TOOLS:
             name=_t["name"],
             description=_tool_description(_t),
             inputSchema=_RESOURCE_ACTION_INPUT_SCHEMA,
+            annotations=_TOOL_ANNOTATIONS[_t["action"]],
         )
     )
 
