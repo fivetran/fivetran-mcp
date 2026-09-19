@@ -330,10 +330,10 @@ Restart Cursor to load the new MCP server configuration.
 
 ### Running over HTTP (advanced)
 
-Most users should stick with stdio (above). If you're self-hosting the
-server for multiple clients to reach over the network, run it with
-`--transport streamable-http` (or `MCP_TRANSPORT=streamable-http`) instead of
-launching it per-client over stdio:
+Most users should stick with stdio (above). If you'd rather point your AI
+client at a URL than run the server per-client over stdio — for example so
+several clients on a network can reach one running instance — run it with
+`--transport streamable-http` (or `MCP_TRANSPORT=streamable-http`):
 
 ```bash
 python /path/to/fivetran-mcp/server.py --transport streamable-http --host 0.0.0.0 --port 8000
@@ -349,12 +349,15 @@ python /path/to/fivetran-mcp/server.py --transport streamable-http --host 0.0.0.
 
 In streamable-http mode, credentials come from each request's incoming
 `Authorization` header rather than `FIVETRAN_API_KEY`/`FIVETRAN_API_SECRET` —
-do not set those two env vars for an HTTP deployment; the server refuses to
-start if it finds them, since a shared key baked into a multi-tenant HTTP
-process would apply one operator's credentials to every caller. If neither
-`MCP_ALLOWED_ORIGINS` nor `MCP_ALLOWED_HOSTS` is set, the server runs without
-DNS-rebinding protection and logs a startup warning. See `ARCHITECTURE.md`
-for how the HTTP transport is wired.
+your AI client sends the same API key/secret pair from step 3 as a Basic
+auth header instead of the server reading it from the environment. Do not
+set `FIVETRAN_API_KEY`/`FIVETRAN_API_SECRET` for an HTTP deployment; the
+server refuses to start if it finds them, since a shared key baked into a
+multi-tenant process would apply one operator's credentials to every
+caller. If neither `MCP_ALLOWED_ORIGINS` nor `MCP_ALLOWED_HOSTS` is set, the
+server runs without DNS-rebinding protection and logs a startup warning.
+See `ARCHITECTURE.md` for how the HTTP transport is wired, including OAuth
+resource-server mode.
 
 ---
 

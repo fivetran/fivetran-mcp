@@ -110,9 +110,9 @@ is the single source of truth both the arg parser's `choices` and
   balancer. The Starlette app's `lifespan` enters `http_client_lifespan()`
   (see "Outbound HTTP client" below) and `session_manager.run()` together, so
   each uvicorn worker owns its own HTTP client and session manager and closes
-  both on shutdown. Only `/mcp` is mounted today — `/health` (P9) and
-  `/.well-known/oauth-protected-resource` (P3) are added by those proposals
-  when they land, not stubbed in ahead of time.
+  both on shutdown. `/mcp` is always mounted; the OAuth well-known route is
+  added alongside it when `FIVETRAN_AUTH_ISSUER` is set (see "OAuth
+  resource-server mode" below). `/health` isn't added yet.
 - **Origin/Host validation**: `_build_security_settings(mode)` reads
   `MCP_ALLOWED_ORIGINS` / `MCP_ALLOWED_HOSTS` (comma-separated) and builds a
   `mcp.server.transport_security.TransportSecuritySettings` passed to the
@@ -212,24 +212,30 @@ Three resolvers ship in `server.py`:
 - `env_resolver` — reads `FIVETRAN_API_KEY` / `FIVETRAN_API_SECRET` and builds
   `Basic <b64(key:secret)>`. Used by the stdio entrypoint.
 - `header_resolver` — forwards the incoming HTTP `Authorization` header as-is,
-  reading from `mcp_server.request_context.request.headers`. For self-hosted
-  HTTP deployments where the caller already has valid Fivetran credentials.
-- `oauth_resolver` — reserved for marketplace hosting. Body is
-  `NotImplementedError` until the Fivetran OAuth broker is available.
+  reading from `mcp_server.request_context.request.headers`. This is the
+  interim path for streamable-http: it lets an existing GitHub-clone user
+  point an AI client at a hosted URL with their own Basic-auth credentials
+  in the `Authorization` header, before OAuth exists. Selected whenever
+  `FIVETRAN_AUTH_ISSUER` is unset.
+- `oauth_resolver` — forwards the incoming `Authorization` header the same
+  way `header_resolver` does, but only ever runs after the OAuth middleware
+  (see "OAuth resource-server mode" below) has already verified the bearer
+  token and rejected anything invalid with a 401 before dispatch. Selected
+  whenever `FIVETRAN_AUTH_ISSUER` is set.
 
 `select_credentials_resolver(mode)` — defined after all three resolver
 factories, right before tool dispatch — maps a transport mode to the
 resolver `set_credentials_resolver` should register: `stdio` →
-`env_resolver`, `streamable-http` → `header_resolver` (swaps to
-`oauth_resolver` once P3 lands). `async_main` (stdio) calls it with
-`mode="stdio"`; `build_http_app()` (streamable-http) calls it with
-`mode="streamable-http"`. Selecting `streamable-http` fails startup (`ValueError`) if
-`FIVETRAN_API_KEY` or `FIVETRAN_API_SECRET` is set in the environment — a
-shared key baked into a multi-tenant HTTP process would apply one
-operator's credentials to every caller, defeating per-request auth. This
-check runs eagerly at selection time, unlike the resolvers' own lazy,
-per-call checks, because it's a startup-time misconfiguration rather than a
-per-request condition.
+`env_resolver`; `streamable-http` → `oauth_resolver` if
+`FIVETRAN_AUTH_ISSUER` is set, else `header_resolver`. `async_main` (stdio)
+calls it with `mode="stdio"`; `build_http_app()` (streamable-http) calls it
+with `mode="streamable-http"`. Selecting `streamable-http` fails startup
+(`ValueError`) if `FIVETRAN_API_KEY` or `FIVETRAN_API_SECRET` is set in the
+environment — a shared key baked into a multi-tenant HTTP process would
+apply one operator's credentials to every caller, defeating per-request
+auth. This check runs eagerly at selection time, unlike the resolvers' own
+lazy, per-call checks, because it's a startup-time misconfiguration rather
+than a per-request condition.
 
 Two related invariants, both documentation-level today (no enforcement code
 exists yet to point at):
@@ -240,8 +246,67 @@ exists yet to point at):
   shared image, recreates the exact shared-key misconfiguration
   `select_credentials_resolver` rejects above.
 - `Authorization` header values must never be logged. No logging exists
-  yet — P9 adds structured per-call request logs — but when it lands it
-  must exclude header values entirely, not redact them.
+  yet — a future proposal adds structured per-call request logs — but when
+  it lands it must exclude header values entirely, not redact them.
+
+### OAuth resource-server mode
+
+Set `FIVETRAN_AUTH_ISSUER` (the URL of Fivetran's OAuth 2.1 authorization
+server) to switch streamable-http mode from the interim header-forwarding
+path into an OAuth resource server. Fivetran's MCP server is a resource
+server only — it never implements an authorization server, login, or
+dynamic client registration; those belong to the auth server. Unset, this
+mode does not exist and streamable-http behaves exactly as it does without
+any of what follows.
+
+`auth.py` holds everything OAuth-specific, imported only from
+`build_http_app()` when `FIVETRAN_AUTH_ISSUER` is set — stdio never touches
+it and needs no auth env vars. It builds on the `mcp` SDK's own
+resource-server primitives (`TokenVerifier`, `BearerAuthBackend`,
+`RequireAuthMiddleware`, `create_protected_resource_routes`) rather than
+reimplementing RFC 9728 or bearer-token gating by hand:
+
+- `oauth_authentication_middleware(resource_url, token_verifier)` — a
+  Starlette-level `Middleware` entry (installed on every request, before
+  routing) that authenticates the bearer token and populates
+  `scope["user"]`/`scope["auth"]`. It does not reject anything by itself —
+  a route that isn't wrapped by `require_oauth` stays open even behind it.
+- `require_oauth(app, resource_url)` — wraps just the `/mcp` app. Rejects
+  any request without a token `oauth_authentication_middleware` already
+  validated, returning 401 with `WWW-Authenticate: Bearer ...
+  resource_metadata="..."` pointing at the well-known route below.
+- `oauth_protected_resource_routes(issuer, resource_url)` — the RFC 9728
+  `GET /.well-known/oauth-protected-resource/mcp` route, listing `resource`
+  (`MCP_RESOURCE_URL`, default `https://mcp.fivetran.com/mcp`) and
+  `authorization_servers` (`[FIVETRAN_AUTH_ISSUER]`).
+- `FivetranOAuthTokenVerifier` — implements `TokenVerifier.verify_token`.
+  Its body is `NotImplementedError`: the auth server hasn't confirmed
+  token format (JWT+JWKS vs. opaque+introspection) yet, and every other
+  piece above is independent of that decision. `build_http_app()` accepts
+  an optional `token_verifier` argument so tests can substitute a fake
+  verifier and exercise the gate without real crypto; production always
+  gets the real (currently stub) verifier.
+
+`FIVETRAN_AUTH_ISSUER` is validated as a well-formed HTTPS URL at startup
+(fails loudly otherwise, matching this codebase's other startup checks).
+`MCP_RESOURCE_URL` and `FIVETRAN_AUTH_ISSUER` are hosted-deployment operator
+configuration — nobody self-hosting runs their own OAuth issuer against
+Fivetran's API — so they're documented here, not in the README.
+
+An upstream 401 from the Fivetran API mid-call (a bearer token that was
+valid at request time but the API itself now rejects — e.g. account-level
+MCP disable) is *not* turned into a raw HTTP 401. It stays exactly what the
+error contract below already produces: a shaped `UPSTREAM_UNAUTHORIZED`
+tool result, HTTP 200 at the transport level. There's no supported
+extension point in the SDK's low-level `Server`/`StreamableHTTPSessionManager`
+to rewrite an in-flight JSON-RPC response into a raw HTTP status from
+inside `do_call`, several layers below where that status is decided. The
+real entry-point gate — missing, invalid, or expired bearer token — is
+already enforced by `oauth_authentication_middleware`/`require_oauth` on
+every single request (stateless mode re-verifies fresh each time); account
+disablement is expected to rely on a short access-token TTL so the next
+request's fresh verification naturally 401s, not on this server catching
+a mid-call signal from the upstream API.
 
 `list_endpoints` and `get_schema` read the local manifest and don't require
 credentials. `CredentialsError` only surfaces when an API-hitting tool is

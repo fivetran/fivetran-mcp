@@ -25,4 +25,4 @@ dev = [
 fivetran-mcp = "server:main"
 
 [tool.hatch.build.targets.wheel]
-only-include = ["server.py", "open-api-definitions"]
+only-include = ["server.py", "auth.py", "open-api-definitions"]

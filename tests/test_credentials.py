@@ -1,10 +1,11 @@
-"""Coverage for select_credentials_resolver's mode dispatch (P2).
+"""Coverage for select_credentials_resolver's mode dispatch.
 
 Nothing previously exercised env_resolver/header_resolver/oauth_resolver
 directly; these tests pin the dispatch contract: stdio always gets
-env_resolver, streamable-http always gets header_resolver (until P3 swaps
-it to oauth_resolver) and refuses to start if a shared API key is set, and
-an unrecognized mode is a hard error.
+env_resolver; streamable-http gets header_resolver when FIVETRAN_AUTH_ISSUER
+is unset (the interim, non-OAuth path) or oauth_resolver when it's set, and
+refuses to start if a shared API key is set regardless; an unrecognized mode
+is a hard error.
 """
 import base64
 
@@ -31,10 +32,24 @@ async def test_stdio_mode_ignores_shared_key_guard(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_streamable_http_mode_dispatches_header_resolver_not_env(monkeypatch):
+async def test_streamable_http_mode_dispatches_header_resolver_when_issuer_unset(monkeypatch):
     monkeypatch.delenv("FIVETRAN_API_KEY", raising=False)
     monkeypatch.delenv("FIVETRAN_API_SECRET", raising=False)
+    monkeypatch.delenv("FIVETRAN_AUTH_ISSUER", raising=False)
     resolver = select_credentials_resolver("streamable-http")
+    with pytest.raises(CredentialsError, match="No request context available"):
+        await resolver()
+
+
+@pytest.mark.asyncio
+async def test_streamable_http_mode_dispatches_oauth_resolver_when_issuer_set(monkeypatch):
+    monkeypatch.delenv("FIVETRAN_API_KEY", raising=False)
+    monkeypatch.delenv("FIVETRAN_API_SECRET", raising=False)
+    monkeypatch.setenv("FIVETRAN_AUTH_ISSUER", "https://auth.fivetran.com")
+    resolver = select_credentials_resolver("streamable-http")
+    # oauth_resolver and header_resolver share the same request-context guard,
+    # so this error is what distinguishes "some resolver ran" from a crash;
+    # test_oauth.py covers oauth_resolver's actual header-forwarding body.
     with pytest.raises(CredentialsError, match="No request context available"):
         await resolver()
 

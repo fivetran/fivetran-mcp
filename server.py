@@ -844,16 +844,27 @@ def header_resolver() -> CredentialsResolver:
 
 
 def oauth_resolver() -> CredentialsResolver:
-    """Validate an OAuth Bearer token and produce Fivetran credentials.
+    """Forward the incoming HTTP `Authorization` header (already verified).
 
-    Reserved for marketplace hosting. Implementation deferred until the OAuth
-    broker (Fivetran-native issuer + JWKS / introspection endpoint) is chosen.
+    By the time this runs, the OAuth middleware wrapping the MCP app (see
+    auth.py) has already validated the bearer token against Fivetran's OAuth
+    issuer and rejected anything invalid with a 401 before dispatch ever
+    reaches here. This function's only job is forwarding the still-attached
+    header unchanged — same mechanics as header_resolver, since forwarding
+    doesn't depend on token format. Verifying the token's signature/claims
+    is auth.FivetranOAuthTokenVerifier's job, not this one.
     """
     async def _resolve() -> Credentials:
-        raise NotImplementedError(
-            "oauth_resolver validation is not implemented yet; "
-            "wire this up once Fivetran's OAuth broker is available."
-        )
+        try:
+            request = mcp_server.request_context.request
+        except LookupError as e:
+            raise CredentialsError("No request context available (running under stdio?)") from e
+        if request is None:
+            raise CredentialsError("Transport did not attach an HTTP request to the context")
+        auth = request.headers.get("Authorization", "")
+        if not auth:
+            raise CredentialsError("Missing Authorization header")
+        return Credentials(authorization=auth)
 
     return _resolve
 
@@ -865,9 +876,12 @@ def select_credentials_resolver(mode: str) -> CredentialsResolver:
     """Choose the credentials resolver for the active transport.
 
     stdio reads FIVETRAN_API_KEY/SECRET directly — one operator, one
-    process. streamable-http forwards the caller's incoming Authorization
-    header via header_resolver() until OAuth lands (P3 swaps this branch to
-    oauth_resolver()) — never both resolvers registered at once.
+    process. streamable-http picks between two resolvers depending on
+    whether FIVETRAN_AUTH_ISSUER is set: unset means the interim path
+    (header_resolver forwards whatever Authorization header the caller
+    already has); set means OAuth resource-server mode (oauth_resolver,
+    paired with the bearer-auth middleware build_http_app wraps the MCP app
+    in — see auth.py). Never more than one resolver registered at once.
 
     streamable-http fails here, at selection time, if FIVETRAN_API_KEY or
     FIVETRAN_API_SECRET is set: a shared key baked into a multi-tenant HTTP
@@ -884,9 +898,12 @@ def select_credentials_resolver(mode: str) -> CredentialsResolver:
             "FIVETRAN_API_KEY / FIVETRAN_API_SECRET must not be set in "
             "streamable-http mode: a shared key in a multi-tenant process "
             "is a misconfiguration. HTTP mode gets credentials from the "
-            "incoming Authorization header (or OAuth, once P3 lands)."
+            "incoming Authorization header, either forwarded as-is or via "
+            "OAuth once FIVETRAN_AUTH_ISSUER is configured."
         )
-    return header_resolver()  # TODO(P3): swap to oauth_resolver()
+    if os.getenv("FIVETRAN_AUTH_ISSUER"):
+        return oauth_resolver()
+    return header_resolver()
 
 
 @mcp_server.list_tools()
@@ -929,7 +946,19 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         )]
 
 
+def _warn_ignored_env_vars(var_names: tuple[str, ...], reason: str) -> None:
+    """Print a stderr warning listing whichever of `var_names` are set, or do
+    nothing if none are. Shared by both directions of the stdio/streamable-http
+    env-var split so the wording stays consistent."""
+    set_vars = [v for v in var_names if os.getenv(v)]
+    if set_vars:
+        print(f"Warning: {', '.join(set_vars)} set but ignored: {reason}", file=sys.stderr)
+
+
 async def async_main():
+    _warn_ignored_env_vars(
+        _HTTP_ONLY_ENV_VARS, "they only take effect with --transport streamable-http."
+    )
     scope_actions, pair_denies, endpoint_denies = _parse_scope_and_denies_from_env()
     configure(scope_actions, pair_denies, endpoint_denies, mode="stdio")
     set_credentials_resolver(select_credentials_resolver("stdio"))
@@ -966,28 +995,36 @@ def _build_security_settings(mode: str) -> TransportSecuritySettings | None:
 
 _STDIO_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_SCOPE", "DISALLOWED_ACTIONS", "FIVETRAN_ALLOW_WRITES")
 
+# HTTP-only: configure OAuth resource-server mode. Unset FIVETRAN_AUTH_ISSUER
+# means the interim path (header_resolver forwards the caller's own
+# Authorization header as-is); set means OAuth (oauth_resolver plus the
+# bearer-auth middleware wrapping the MCP app — see auth.py).
+_HTTP_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_AUTH_ISSUER", "MCP_RESOURCE_URL")
 
-def build_http_app() -> Starlette:
-    """Build the Starlette app for streamable-http mode: mounts /mcp only.
+_DEFAULT_RESOURCE_URL = "https://mcp.fivetran.com/mcp"
 
-    /health (P9) and /.well-known/oauth-protected-resource (P3) are added by
-    those proposals when they land, not stubbed in here.
+
+def build_http_app(token_verifier: Any = None) -> Starlette:
+    """Build the Starlette app for streamable-http mode: mounts /mcp, plus the
+    OAuth well-known route when FIVETRAN_AUTH_ISSUER is set.
+
+    `token_verifier` (an auth.TokenVerifier) lets tests substitute a fake
+    verifier to exercise the bearer-auth gate without real crypto; production
+    callers omit it and get auth.FivetranOAuthTokenVerifier(). /health is not
+    added here.
     """
-    set_vars = [v for v in _STDIO_ONLY_ENV_VARS if os.getenv(v)]
-    if set_vars:
-        print(
-            f"Warning: {', '.join(set_vars)} set but ignored in streamable-http mode; "
-            "hosted grants come from HOSTED_DISALLOWED_ACTIONS, not env vars.",
-            file=sys.stderr,
-        )
+    _warn_ignored_env_vars(
+        _STDIO_ONLY_ENV_VARS,
+        "hosted grants come from HOSTED_DISALLOWED_ACTIONS, not env vars.",
+    )
 
     all_resources = set(ENDPOINTS_BY_RESOURCE)
     pair_denies, endpoint_denies = _parse_disallowed_actions(
         HOSTED_DISALLOWED_ACTIONS, all_resources
     )
     configure(SCOPE_TIERS["read/write"], pair_denies, endpoint_denies, mode="streamable-http")
-    # Raises eagerly if a shared API key is set in the environment (P2) — enough
-    # to enforce the "no shared key in a multi-tenant HTTP process" startup guard.
+    # Raises eagerly if a shared API key is set in the environment — enough to
+    # enforce the "no shared key in a multi-tenant HTTP process" startup guard.
     set_credentials_resolver(select_credentials_resolver("streamable-http"))
 
     session_manager = StreamableHTTPSessionManager(
@@ -996,16 +1033,29 @@ def build_http_app() -> Starlette:
         security_settings=_build_security_settings("streamable-http"),
     )
 
+    mcp_app = session_manager.handle_request
+    routes = []
+    middleware = []
+    issuer = os.getenv("FIVETRAN_AUTH_ISSUER")
+    if issuer:
+        import auth
+
+        resource_url = os.getenv("MCP_RESOURCE_URL", _DEFAULT_RESOURCE_URL)
+        # oauth_authentication_middleware must run on every request, before
+        # routing, so it's installed at the Starlette level, not wrapped
+        # around mcp_app directly. require_oauth then gates just this app.
+        mcp_app = auth.require_oauth(mcp_app, resource_url)
+        middleware.append(auth.oauth_authentication_middleware(resource_url, token_verifier))
+        routes.extend(auth.oauth_protected_resource_routes(issuer, resource_url))
+    routes.append(Mount("/mcp", app=mcp_app))
+
     @contextlib.asynccontextmanager
     async def _lifespan(app: Starlette):
         async with http_client_lifespan():
             async with session_manager.run():
                 yield
 
-    return Starlette(
-        routes=[Mount("/mcp", app=session_manager.handle_request)],
-        lifespan=_lifespan,
-    )
+    return Starlette(routes=routes, middleware=middleware, lifespan=_lifespan)
 
 
 def _build_arg_parser() -> argparse.ArgumentParser:
