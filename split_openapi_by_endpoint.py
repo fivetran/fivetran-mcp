@@ -12,6 +12,11 @@ Takes the full OpenAPI spec and produces one file per endpoint containing:
 All $refs are resolved inline. Examples, tags, security, servers, non-JSON
 component metadata, and error response schemas are stripped.
 
+Optional `endpoint_overrides.json` (next to this file) maps operationId to a
+string that gets prepended to the endpoint description, after the ⚠️ category
+prefixes and before the OpenAPI-supplied text. Keys starting with `_` are
+ignored so the file can carry an inline `_comment`.
+
 Usage:
     python split_openapi_by_endpoint.py <input_file> <output_dir>
 
@@ -42,6 +47,39 @@ EXCLUDED_ENDPOINTS = frozenset({
     "rotate_user_api_key",
     "delete_user_api_keys",
 })
+
+
+ENDPOINT_OVERRIDES_FILE = Path(__file__).parent / 'endpoint_overrides.json'
+
+
+def _load_endpoint_overrides() -> dict[str, str]:
+    """Read endpoint_overrides.json if present. Returns {operationId: text}.
+
+    Silently returns {} when the file is missing. Keys starting with `_`
+    (e.g. `_comment`) are ignored so the file can carry inline docs. Entries
+    whose value isn't a non-empty string are skipped with a warning.
+    """
+    if not ENDPOINT_OVERRIDES_FILE.exists():
+        print(f'No {ENDPOINT_OVERRIDES_FILE.name} found; skipping description overrides.')
+        return {}
+    try:
+        raw = json.loads(ENDPOINT_OVERRIDES_FILE.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as e:
+        print(f'WARNING: {ENDPOINT_OVERRIDES_FILE.name} is not valid JSON ({e}); skipping.')
+        return {}
+    if not isinstance(raw, dict):
+        print(f'WARNING: {ENDPOINT_OVERRIDES_FILE.name} must be a JSON object; skipping.')
+        return {}
+    out: dict[str, str] = {}
+    for k, v in raw.items():
+        if k.startswith('_'):
+            continue
+        if not isinstance(v, str) or not v.strip():
+            print(f'WARNING: override for {k!r} is not a non-empty string; skipping.')
+            continue
+        out[k] = v.strip()
+    print(f'Loaded {len(out)} endpoint description override(s) from {ENDPOINT_OVERRIDES_FILE.name}.')
+    return out
 
 
 def resolve_ref(ref: str, components: dict) -> dict | None:
@@ -344,14 +382,22 @@ def _strip_large_enums_on_response(obj):
             _strip_large_enums_on_response(v)
 
 
-def extract_endpoint_schema(openapi_doc: dict, path: str, method: str) -> dict:
+def extract_endpoint_schema(
+    openapi_doc: dict,
+    path: str,
+    method: str,
+    overrides: dict[str, str] | None = None,
+) -> dict:
     """Extract a minimal endpoint doc with only what's needed to call the API."""
     path_item = openapi_doc['paths'][path]
     operation = path_item[method]
     components = openapi_doc.get('components', {})
+    overrides = overrides or {}
 
     method_upper = method.upper()
-    description = operation.get('description', operation.get('summary', ''))
+    base = operation.get('description', operation.get('summary', '')) or ''
+    override_text = overrides.get(operation.get('operationId', ''))
+    description = f'{override_text} {base}'.strip() if override_text else base
     if method_upper == 'DELETE':
         description = f'⚠️ DESTRUCTIVE - Confirm with user before calling. {description}'
     elif method_upper in ('POST', 'PATCH', 'PUT'):
@@ -594,6 +640,8 @@ def main():
     with open(input_file, encoding="utf-8") as f:
         openapi_doc = json.load(f)
 
+    endpoint_overrides = _load_endpoint_overrides()
+
     # Group endpoints by resource
     resources = {}
     for path, path_item in openapi_doc.get('paths', {}).items():
@@ -637,7 +685,9 @@ def main():
                     print(f'  Excluded: {operation_id} (in EXCLUDED_ENDPOINTS)')
                     continue
 
-                endpoint_doc = extract_endpoint_schema(resource_openapi, path, method)
+                endpoint_doc = extract_endpoint_schema(
+                    resource_openapi, path, method, endpoint_overrides
+                )
 
                 output_file = resource_output_dir / f'{operation_id}.json'
                 output_json = json.dumps(endpoint_doc, indent=2, ensure_ascii=False)

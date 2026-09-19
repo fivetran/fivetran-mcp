@@ -60,6 +60,25 @@ python split_openapi_by_endpoint.py fivetran-open-api-definition.json open-api-d
 The script snapshots the previous manifest before regenerating and prints a
 diff — added, removed, and modified endpoints — so spec drift is visible.
 
+### Description overrides
+
+`endpoint_overrides.json` (next to the splitter) is a flat map of
+`operationId → prepend text`. On the next split, that text lands in the
+endpoint's `description` between the ⚠️ category prefix and the OpenAPI
+description:
+
+```
+⚠️ WRITE OPERATION - Confirm with user before calling. <override text> <spec description>
+```
+
+Use it for agent-facing hints that don't belong in the upstream spec —
+"prefer using X together with Y", rate-limit notes, dataset caveats. Keys
+starting with `_` are ignored so the file can carry an inline `_comment`.
+Malformed entries (non-string or empty values) are skipped with a warning
+and the endpoint falls through to the spec description. The manifest's
+short `summary` is untouched — overrides only surface when an agent drills
+into an endpoint via `get_schema`.
+
 ## Runtime stage — `server.py`
 
 `_load_manifest()` reads `endpoints.json` at import; nothing walks

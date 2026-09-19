@@ -1,0 +1,3 @@
+{
+  "_comment": "Map of operationId -> text to prepend to that endpoint's description. Inserted after the ⚠️ WRITE/DESTRUCTIVE/PAGINATED prefixes and before the OpenAPI-supplied description. Keys starting with `_` are ignored."
+}
