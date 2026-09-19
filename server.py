@@ -440,7 +440,11 @@ def do_list_endpoints(
 def do_get_schema(name: str, service: str | None = None) -> dict[str, Any]:
     ep = ENDPOINTS_BY_NAME.get(name)
     if not ep:
-        raise ValueError(f"Unknown endpoint: {name!r}")
+        return {
+            "error": "UNKNOWN_ENDPOINT",
+            "endpoint": name,
+            "message": f"Unknown endpoint: {name!r}. Discoverable via list_endpoints.",
+        }
     schema = load_endpoint_schema(ep["schema_file"])
 
     if service:
@@ -459,6 +463,53 @@ def do_get_schema(name: str, service: str | None = None) -> dict[str, Any]:
     return schema
 
 
+def _shape_upstream_error(e: httpx.HTTPStatusError) -> dict[str, Any]:
+    """Classify a confirmed-4xx Fivetran API error into a shaped, caller-correctable dict.
+
+    5xx is handled by the caller (do_call) before this is reached — this
+    function never sees a 5xx and never raises.
+    """
+    status = e.response.status_code
+    try:
+        detail = e.response.json()
+    except Exception:
+        detail = {}
+    upstream_message = detail.get("message") if isinstance(detail, dict) else None
+    upstream_code = detail.get("code") if isinstance(detail, dict) else None
+
+    if status == 401:
+        return {
+            "error": "UPSTREAM_UNAUTHORIZED",
+            "status": status,
+            "message": upstream_message or "Fivetran rejected the request's credentials.",
+        }
+    if status == 403:
+        return {
+            "error": "UPSTREAM_FORBIDDEN",
+            "status": status,
+            "message": upstream_message or (
+                "Fivetran rejected this operation — check the authenticated "
+                "user's RBAC role in the Fivetran dashboard."
+            ),
+        }
+    if status == 429:
+        result: dict[str, Any] = {
+            "error": "UPSTREAM_RATE_LIMITED",
+            "status": status,
+            "message": upstream_message or "Fivetran rate-limited this request.",
+        }
+        retry_after = e.response.headers.get("Retry-After")
+        if retry_after is not None:
+            result["retry_after"] = retry_after
+        return result
+    return {
+        "error": "UPSTREAM_ERROR",
+        "status": status,
+        "code": upstream_code,
+        "message": upstream_message or e.response.text,
+    }
+
+
 async def do_call(
     creds: Credentials,
     name: str,
@@ -469,7 +520,11 @@ async def do_call(
 ) -> dict[str, Any]:
     ep = ENDPOINTS_BY_NAME.get(name)
     if not ep:
-        raise ValueError(f"Unknown endpoint: {name!r}")
+        return {
+            "error": "UNKNOWN_ENDPOINT",
+            "endpoint": name,
+            "message": f"Unknown endpoint: {name!r}. Discoverable via list_endpoints.",
+        }
 
     # The tool name is the boundary — reject if the caller invoked
     # `metadata_read(name="delete_connection")`. Without this check the tool
@@ -519,10 +574,15 @@ async def do_call(
     provided = set((path_params or {}).keys())
     missing = [p for p in expected if p not in provided]
     if missing:
-        raise ValueError(
-            f"Missing path_params {missing} for {ep['path']!r}; "
-            f"provided keys: {sorted(provided)}"
-        )
+        return {
+            "error": "MISSING_PATH_PARAM",
+            "endpoint": name,
+            "missing": missing,
+            "message": (
+                f"Missing path_params {missing} for {ep['path']!r}; "
+                f"provided keys: {sorted(provided)}"
+            ),
+        }
 
     endpoint = ep["path"]
     for k, v in (path_params or {}).items():
@@ -536,15 +596,22 @@ async def do_call(
         try:
             json_body = json.loads(json_body)
         except json.JSONDecodeError as e:
-            raise ValueError(f"Invalid JSON in body: {e}")
+            return {"error": "INVALID_BODY", "endpoint": name, "message": f"Invalid JSON in body: {e}"}
 
-    return await _fivetran_request(
-        creds,
-        ep["method"],
-        endpoint,
-        params=query or None,
-        json_body=json_body,
-    )
+    try:
+        return await _fivetran_request(
+            creds,
+            ep["method"],
+            endpoint,
+            params=query or None,
+            json_body=json_body,
+        )
+    except httpx.HTTPStatusError as e:
+        # 5xx is not caller-correctable — let it raise and surface as a
+        # genuine MCP tool error (isError=True) rather than a shaped result.
+        if e.response.status_code >= 500:
+            raise
+        return _shape_upstream_error(e)
 
 
 _TOOL_ANNOTATIONS: dict[str, ToolAnnotations] = {
@@ -613,7 +680,7 @@ _TOOLS = [
 
 _ACTION_WARNING = {
     "read": "",
-    "write": "WRITE OPERATIONS - confirm with user before calling. ",
+    "write": "WARNING. WRITE OPERATION. CONFIRM WITH USER BEFORE INITIATING ACTION. ",
     "delete": "DESTRUCTIVE - confirm with user before calling. ",
 }
 
@@ -852,21 +919,14 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
                 expected_pair=TOOLS_BY_NAME[name],
             )
         else:
-            raise ValueError(f"Unknown tool: {name}")
+            result = {"error": "UNKNOWN_TOOL", "message": f"Unknown tool: {name!r}"}
         return [TextContent(type="text", text=json.dumps(result, indent=2))]
 
     except CredentialsError as e:
-        return [TextContent(type="text", text=f"Authentication error: {e}")]
-    except httpx.HTTPStatusError as e:
-        error_msg = f"Fivetran API error: {e.response.status_code}"
-        try:
-            error_detail = e.response.json()
-            error_msg += f" - {error_detail.get('message', str(error_detail))}"
-        except Exception:
-            error_msg += f" - {e.response.text}"
-        return [TextContent(type="text", text=error_msg)]
-    except Exception as e:
-        return [TextContent(type="text", text=f"Error: {str(e)}")]
+        return [TextContent(
+            type="text",
+            text=json.dumps({"error": "CREDENTIALS_MISSING", "message": str(e)}, indent=2),
+        )]
 
 
 async def async_main():

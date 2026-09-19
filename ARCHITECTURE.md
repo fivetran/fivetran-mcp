@@ -249,7 +249,9 @@ invoked, so clients can browse the tool surface before auth is wired.
 
 ### Error contract
 
-Caller-correctable errors return a shaped JSON dict rather than raising:
+Every caller-correctable failure returns `{"error": <CODE>, "message": <str>, ...}`
+as the tool's JSON text result (`isError=False`) rather than raising — an
+agent can branch on `error` without re-parsing prose. Codes:
 
 - `GRANT_NOT_ALLOWED` — endpoint requires an action outside the current scope
   or is explicitly disallowed. Structured fields (`cause`, `required_grant`,
@@ -259,9 +261,34 @@ Caller-correctable errors return a shaped JSON dict rather than raising:
   per response.
 - `ENDPOINT_TOOL_MISMATCH` — endpoint doesn't belong to the calling tool's
   `(resource, action)` group.
+- `UNKNOWN_ENDPOINT` — `do_call`/`do_get_schema` given a `name` not in the
+  manifest.
+- `UNKNOWN_TOOL` — `call_tool` dispatched a name outside `list_endpoints`,
+  `get_schema`, and `TOOLS_BY_NAME` (a client calling a tool that doesn't
+  exist).
+- `MISSING_PATH_PARAM` — `do_call`'s `path_params` didn't cover every
+  `{placeholder}` in the endpoint's path; `missing` lists the gaps.
+- `INVALID_BODY` — `body` was a string that failed `json.loads`.
+- `CREDENTIALS_MISSING` — the registered `CredentialsResolver` raised
+  `CredentialsError` (no `FIVETRAN_API_KEY`/`SECRET` in stdio; no/empty
+  `Authorization` header in streamable-http).
+- `UPSTREAM_UNAUTHORIZED` / `UPSTREAM_FORBIDDEN` / `UPSTREAM_RATE_LIMITED` /
+  `UPSTREAM_ERROR` — Fivetran API returned 401 / 403 / 429 / another 4xx.
+  `_shape_upstream_error` classifies these from the raised
+  `httpx.HTTPStatusError`, pulling `code`/`message` out of the upstream JSON
+  body when present; 429 adds `retry_after` from the `Retry-After` header
+  when the upstream response sent one.
 
-Path-param and body validation still raise `ValueError` today (falls through
-to the generic error handler) — see "Room to improve" below.
+Everything else — Fivetran 5xx responses (`do_call` re-raises rather than
+shaping them), transport-level failures (connection errors, timeouts), and
+the two `do_get_schema` validation `ValueError`s that aren't in the list
+above (bad `service` argument combination; unknown service name) — is not
+shaped. It propagates out of `call_tool` uncaught, and the MCP SDK's own
+`@mcp_server.call_tool()` decorator turns it into a genuine
+`CallToolResult(isError=True, ...)`. This is a deliberate split: shaped
+`isError=False` results are for outcomes an agent should read and act on
+programmatically; `isError=True` is for failures — the client shouldn't
+try to parse the text as structured data.
 
 ### Outbound HTTP client
 
@@ -279,9 +306,3 @@ calls rather than opening one per request:
   enters the same context manager inside the Starlette app's `lifespan=`
   (alongside `session_manager.run()`), so each uvicorn worker owns and closes
   its own client the same way.
-
-## Room to improve
-
-- Unify caller-correctable errors under one shape (unknown endpoint name,
-  missing path params, invalid JSON body all still raise generic
-  `ValueError`s)
