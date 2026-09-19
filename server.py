@@ -158,31 +158,49 @@ def _parse_scope() -> tuple[str, ...]:
     return SCOPE_TIERS["read"]
 
 
-def _parse_disallowed_actions(all_resources: set[str]) -> set[tuple[str, str]]:
-    """DISALLOWED_ACTIONS is a comma-separated list of `resource:action` tokens.
+def _parse_disallowed_actions(
+    all_resources: set[str],
+) -> tuple[set[tuple[str, str]], set[str]]:
+    """DISALLOWED_ACTIONS is a comma-separated list of tokens. Two forms:
+
+      resource:action                 → deny that (resource, action) pair
+      resource:action:endpoint_name   → deny one specific endpoint in that pair
+
     Case-insensitive. Empty/unset => no denies. Validated against the manifest.
 
-    Each token cascades via ACTION_CASCADE — denying read also denies write and
+    Pair tokens cascade via ACTION_CASCADE — denying read also denies write and
     delete on the same resource; denying write also denies delete. Matches how
     FIVETRAN_SCOPE cascades positively (read/write implies read).
 
-    Some resources contain `-` (e.g. `system-keys`, `connector-sdk`) but never `:`,
-    so a single `:` is an unambiguous separator between resource and action.
+    The 3-part endpoint form does not cascade — it's a scalpel for silencing a
+    single endpoint without touching the rest of the pair. `endpoint_name` must
+    exist and belong to that exact (resource, action) pair, or the parse fails.
+
+    Some resources contain `-` (e.g. `system-keys`, `connector-sdk`) but never `:`;
+    endpoint names never contain `:`. So splitting on `:` up to twice is
+    unambiguous across both forms.
+
+    Returns (pair_denies, endpoint_denies). endpoint_denies is a set of
+    endpoint names; the (resource, action) they belong to is recoverable via
+    ENDPOINTS_BY_NAME when needed.
     """
     raw = os.getenv("DISALLOWED_ACTIONS", "").strip()
     if not raw:
-        return set()
-    denies: set[tuple[str, str]] = set()
+        return set(), set()
+    pair_denies: set[tuple[str, str]] = set()
+    endpoint_denies: set[str] = set()
     for token in raw.split(","):
         token = token.strip().lower()
         if not token:
             continue
-        if ":" not in token:
+        parts = token.split(":", 2)
+        if len(parts) < 2:
             raise ValueError(
                 f"Invalid DISALLOWED_ACTIONS token {token!r}. "
-                f"Expected `resource:action`."
+                f"Expected `resource:action` or `resource:action:endpoint_name`."
             )
-        resource, action = token.split(":", 1)
+        resource, action = parts[0], parts[1]
+        endpoint_name = parts[2] if len(parts) == 3 else None
         if resource not in all_resources:
             raise ValueError(
                 f"Unknown resource in DISALLOWED_ACTIONS token {token!r}: {resource!r}. "
@@ -193,32 +211,55 @@ def _parse_disallowed_actions(all_resources: set[str]) -> set[tuple[str, str]]:
                 f"Invalid action in DISALLOWED_ACTIONS token {token!r}: {action!r}. "
                 f"Valid: ['read', 'write', 'delete']."
             )
-        # Directly-written pairs must correspond to a real tool. A typo like
-        # `hvr:delete` (HVR has no DELETE endpoints) fails loudly here rather
-        # than silently disallowing something that never existed.
+        # Both forms: the (resource, action) pair must correspond to a real tool.
+        # A typo like `hvr:delete` (HVR has no DELETE endpoints) fails loudly here
+        # rather than silently disallowing something that never existed.
         if (resource, action) not in TOOL_PAIRS:
             raise ValueError(
                 f"DISALLOWED_ACTIONS token {token!r} does not correspond to any tool. "
                 f"Available pairs: {sorted(f'{r}:{a}' for r, a in TOOL_PAIRS)}."
             )
-        for cascaded in ACTION_CASCADE[action]:
-            denies.add((resource, cascaded))
-    return denies
+        if endpoint_name is None:
+            for cascaded in ACTION_CASCADE[action]:
+                pair_denies.add((resource, cascaded))
+        else:
+            ep = ENDPOINTS_BY_NAME.get(endpoint_name)
+            if ep is None:
+                raise ValueError(
+                    f"Unknown endpoint in DISALLOWED_ACTIONS token {token!r}: "
+                    f"{endpoint_name!r}. Discoverable via list_endpoints."
+                )
+            if (ep["resource"], ep["scope"]) != (resource, action):
+                raise ValueError(
+                    f"DISALLOWED_ACTIONS token {token!r} names an endpoint that "
+                    f"belongs to {ep['resource']}:{ep['scope']}, not {resource}:{action}."
+                )
+            endpoint_denies.add(endpoint_name)
+    return pair_denies, endpoint_denies
 
 
-def _build_allowed_grants(
-    all_resources: set[str],
-) -> tuple[set[tuple[str, str]], tuple[str, ...], set[tuple[str, str]]]:
-    """Product of scope × resources, minus DISALLOWED_ACTIONS."""
+def _parse_scope_and_denies_from_env() -> tuple[
+    tuple[str, ...], set[tuple[str, str]], set[str]
+]:
+    """Read FIVETRAN_SCOPE / FIVETRAN_ALLOW_WRITES / DISALLOWED_ACTIONS from env.
+
+    Returns (scope_actions, pair_denies, endpoint_denies). Wraps _parse_scope
+    and _parse_disallowed_actions so the mode-neutral core (configure) doesn't
+    touch os.environ. The HTTP entrypoint (P1) will build its own args and
+    pass them to configure() directly rather than calling this.
+    """
     scope_actions = _parse_scope()
-    denies = _parse_disallowed_actions(all_resources)
-    allowed = {(r, a) for r in all_resources for a in scope_actions} - denies
-    return allowed, scope_actions, denies
+    pair_denies, endpoint_denies = _parse_disallowed_actions(set(ENDPOINTS_BY_RESOURCE))
+    return scope_actions, pair_denies, endpoint_denies
 
 
-ALLOWED_GRANTS, SCOPE_ACTIONS, DISALLOWED = _build_allowed_grants(
-    set(ENDPOINTS_BY_RESOURCE)
-)
+# Grants and generated tools are populated by configure() at entrypoint time.
+# They start empty so `import server` in tests doesn't quietly hit os.environ.
+MODE: str = "stdio"
+ALLOWED_GRANTS: set[tuple[str, str]] = set()
+SCOPE_ACTIONS: tuple[str, ...] = ()
+DISALLOWED: set[tuple[str, str]] = set()
+ENDPOINT_DENIES: set[str] = set()
 
 
 def _get_auth_header(creds: Credentials) -> dict[str, str]:
@@ -280,6 +321,13 @@ def _splice_service_config(schema: dict, cfg: dict) -> None:
         body_props[k] = v
 
 
+def _is_callable(ep: dict) -> bool:
+    return (
+        (ep["resource"], ep["scope"]) in ALLOWED_GRANTS
+        and ep["name"] not in ENDPOINT_DENIES
+    )
+
+
 def do_list_endpoints(
     category: str | None = None,
     search: str | None = None,
@@ -287,11 +335,18 @@ def do_list_endpoints(
 ) -> dict[str, Any]:
     if not category and not search:
         counts: dict[str, int] = {}
+        callable_counts: dict[str, int] = {}
         for resource, eps in ENDPOINTS_BY_RESOURCE.items():
-            n = sum(1 for e in eps if include_deprecated or not e.get("deprecated"))
-            if n:
-                counts[resource] = n
-        return {"categories": counts, "total": sum(counts.values())}
+            visible = [e for e in eps if include_deprecated or not e.get("deprecated")]
+            if not visible:
+                continue
+            counts[resource] = len(visible)
+            callable_counts[resource] = sum(1 for e in visible if _is_callable(e))
+        return {
+            "categories": counts,
+            "callable_counts": callable_counts,
+            "total": sum(counts.values()),
+        }
 
     pool = ENDPOINTS
     if category:
@@ -315,6 +370,7 @@ def do_list_endpoints(
                 "path": e["path"],
                 "summary": e.get("summary", ""),
                 "scope": e["scope"],
+                "callable": _is_callable(e),
             }
             for e in pool
         ]
@@ -375,22 +431,13 @@ async def do_call(
         }
 
     required = (ep["resource"], ep["scope"])
-    if required not in ALLOWED_GRANTS:
-        required_grant = f"{ep['resource']}:{ep['scope']}"
-        if ep["scope"] not in SCOPE_ACTIONS:
-            cause = "SCOPE_TOO_LOW"
-            message = (
-                f"Endpoint {name!r} requires action {ep['scope']!r}, which is not "
-                f"in FIVETRAN_SCOPE={'/'.join(SCOPE_ACTIONS)!r}. "
-                f"Raise FIVETRAN_SCOPE to include it."
-            )
-        else:
-            cause = "EXPLICITLY_DISALLOWED"
-            message = (
-                f"Endpoint {name!r} is denied by DISALLOWED_ACTIONS "
-                f"(matched {required_grant!r}). "
-                f"Remove that token from DISALLOWED_ACTIONS to allow."
-            )
+    required_grant = f"{ep['resource']}:{ep['scope']}"
+    if name in ENDPOINT_DENIES or required not in ALLOWED_GRANTS:
+        cause = (
+            "EXPLICITLY_DISALLOWED"
+            if name in ENDPOINT_DENIES or required in DISALLOWED
+            else "SCOPE_TOO_LOW"
+        )
         return {
             "error": "GRANT_NOT_ALLOWED",
             "cause": cause,
@@ -398,7 +445,11 @@ async def do_call(
             "required_grant": required_grant,
             "scope": "/".join(SCOPE_ACTIONS),
             "disallowed": sorted(f"{r}:{a}" for r, a in DISALLOWED),
-            "message": message,
+            "endpoint_disallowed": sorted(ENDPOINT_DENIES),
+            "message": (
+                f"Endpoint {name!r} is not callable in the current configuration. "
+                f"See server instructions for how to direct the user."
+            ),
         }
 
     # Validate + URL-encode path params. Raw substitution would let a value like
@@ -447,9 +498,11 @@ _TOOLS = [
         name="list_endpoints",
         description=(
             "Discover Fivetran API endpoints. With no arguments, returns "
-            "{categories: {category: count}, total: N}. Provide `category` "
-            "(e.g. 'connections') for endpoints in that category, or `search` "
-            "to substring-match across name, summary, and path. Deprecated "
+            "{categories: {category: count}, callable_counts: {category: n}, total: N}. "
+            "Provide `category` (e.g. 'connections') for endpoints in that category, "
+            "or `search` to substring-match across name, summary, and path. Each "
+            "endpoint row carries `callable: bool` — false means the endpoint isn't "
+            "reachable through this MCP; see server instructions. Deprecated "
             "endpoints are hidden by default; set include_deprecated=true to show them."
         ),
         inputSchema={
@@ -506,7 +559,13 @@ _ACTION_WARNING = {
 
 
 def _tool_description(tool: dict) -> str:
-    """Generate a tool description at import time from the manifest."""
+    """Generate a tool description from the manifest. Called by configure().
+
+    Lists every non-deprecated endpoint in the pair, including any denied by
+    DISALLOWED_ACTIONS. Availability is marked per-row by list_endpoints and
+    signaled at call time by GRANT_NOT_ALLOWED — hiding endpoints here would
+    prevent the agent from telling the user what exists but isn't reachable.
+    """
     live = [
         e for e in ENDPOINTS_BY_RESOURCE.get(tool["resource"], [])
         if e["scope"] == tool["action"] and not e.get("deprecated")
@@ -546,14 +605,6 @@ _RESOURCE_ACTION_INPUT_SCHEMA = {
 }
 
 
-# Generate one Tool per surviving (resource, action) pair. Grant filter applied here
-# so the exposed tool list is exactly the reachable surface — the host can then
-# narrow further within the ceiling by hiding individual tools client-side.
-GENERATED_TOOLS = [
-    t for t in TOOLS_INDEX
-    if (t["resource"], t["action"]) in ALLOWED_GRANTS
-]
-
 # _meta markers on specific tools. Kept separate from the resource:action loop
 # because these are per-tool overrides driven by client conventions, not the
 # manifest.
@@ -565,22 +616,66 @@ _TOOL_META: dict[str, dict[str, Any]] = {
     "account_read": {"openai/profile": True},
 }
 
-for _t in GENERATED_TOOLS:
-    kwargs: dict[str, Any] = {
-        "name": _t["name"],
-        "description": _tool_description(_t),
-        "inputSchema": _RESOURCE_ACTION_INPUT_SCHEMA,
-        "annotations": _TOOL_ANNOTATIONS[_t["action"]],
-    }
-    # Tool.meta is aliased to `_meta` in the MCP schema; must pass by alias.
-    if _t["name"] in _TOOL_META:
-        kwargs["_meta"] = _TOOL_META[_t["name"]]
-    _TOOLS.append(Tool(**kwargs))
+# Snapshot of the always-present discovery tools. configure() truncates _TOOLS
+# back to this and appends generated tools; keeping the snapshot avoids
+# re-instantiating the discovery Tool objects on reconfigure.
+_DISCOVERY_TOOLS: tuple[Tool, ...] = tuple(_TOOLS)
 
-# tool_name -> (resource, action) for dispatch.
-TOOLS_BY_NAME: dict[str, tuple[str, str]] = {
-    t["name"]: (t["resource"], t["action"]) for t in GENERATED_TOOLS
-}
+# Populated by configure().
+GENERATED_TOOLS: list[dict] = []
+TOOLS_BY_NAME: dict[str, tuple[str, str]] = {}
+
+
+def configure(
+    scope_actions: tuple[str, ...],
+    pair_denies: set[tuple[str, str]],
+    endpoint_denies: set[str] | None = None,
+    mode: str = "stdio",
+) -> None:
+    """Compute grants and (re)build the generated tool list.
+
+    Sets ALLOWED_GRANTS, SCOPE_ACTIONS, DISALLOWED, ENDPOINT_DENIES, and MODE
+    from the arguments, then rebuilds GENERATED_TOOLS, TOOLS_BY_NAME, and
+    _TOOLS from scratch (truncating _TOOLS to the discovery tools before
+    appending generated ones). Idempotent: repeated calls with the same
+    arguments produce the same state.
+
+    ENDPOINT_DENIES surfaces on list_endpoints as `callable: false` per row
+    and is enforced at call time by do_call. MODE steers GRANT_NOT_ALLOWED
+    messages between stdio config advice and hosted-user redirects.
+
+    The stdio entrypoint calls this with env-parsed values and mode="stdio".
+    The HTTP entrypoint (P1) will call it with mode="streamable-http" and
+    SCOPE_TIERS["read/write"].
+    """
+    global ALLOWED_GRANTS, SCOPE_ACTIONS, DISALLOWED, ENDPOINT_DENIES, MODE
+    all_resources = set(ENDPOINTS_BY_RESOURCE)
+    ALLOWED_GRANTS = {(r, a) for r in all_resources for a in scope_actions} - pair_denies
+    SCOPE_ACTIONS = scope_actions
+    DISALLOWED = set(pair_denies)
+    ENDPOINT_DENIES = set(endpoint_denies or ())
+    MODE = mode
+
+    GENERATED_TOOLS.clear()
+    GENERATED_TOOLS.extend(
+        t for t in TOOLS_INDEX if (t["resource"], t["action"]) in ALLOWED_GRANTS
+    )
+
+    TOOLS_BY_NAME.clear()
+    TOOLS_BY_NAME.update((t["name"], (t["resource"], t["action"])) for t in GENERATED_TOOLS)
+
+    _TOOLS[:] = list(_DISCOVERY_TOOLS)
+    for _t in GENERATED_TOOLS:
+        kwargs: dict[str, Any] = {
+            "name": _t["name"],
+            "description": _tool_description(_t),
+            "inputSchema": _RESOURCE_ACTION_INPUT_SCHEMA,
+            "annotations": _TOOL_ANNOTATIONS[_t["action"]],
+        }
+        # Tool.meta is aliased to `_meta` in the MCP schema; must pass by alias.
+        if _t["name"] in _TOOL_META:
+            kwargs["_meta"] = _TOOL_META[_t["name"]]
+        _TOOLS.append(Tool(**kwargs))
 
 
 _SERVER_INSTRUCTIONS = (
@@ -589,7 +684,11 @@ _SERVER_INSTRUCTIONS = (
     "each dispatches to a specific endpoint by `name`. "
     "Flow: call `list_endpoints` to browse or search, then `get_schema` for "
     "the full request/response shape, then invoke the matching "
-    "resource:action tool. Confirm with the user before any write or delete."
+    "resource:action tool. Confirm with the user before any write or delete. "
+    "Every `list_endpoints` row carries `callable: bool`. When `callable: false`, "
+    "the endpoint cannot be invoked here — tell the user to use the Fivetran "
+    "dashboard or REST API directly for that operation. A call attempt on a "
+    "non-callable endpoint returns `error: GRANT_NOT_ALLOWED`."
 )
 
 mcp_server = Server("fivetran", instructions=_SERVER_INSTRUCTIONS)
@@ -680,6 +779,8 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 
 
 async def async_main():
+    scope_actions, pair_denies, endpoint_denies = _parse_scope_and_denies_from_env()
+    configure(scope_actions, pair_denies, endpoint_denies, mode="stdio")
     set_credentials_resolver(env_resolver())
     async with stdio_server() as (read_stream, write_stream):
         await mcp_server.run(

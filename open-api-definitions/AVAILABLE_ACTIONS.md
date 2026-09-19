@@ -2,6 +2,8 @@
 
 Generated from the OpenAPI spec by `split_openapi_by_endpoint.py`. Each row is a valid `resource:action` token you can use in `DISALLOWED_ACTIONS`.
 
+`DISALLOWED_ACTIONS` also accepts a 3-part `resource:action:endpoint_name` form (e.g. `connections:write:sync_connection`) to deny one specific endpoint. The endpoint must belong to that exact `resource:action` pair. Discoverable endpoint names come from `list_endpoints`.
+
 | resource:action | tool | endpoints |
 |-----------------|------|-----------|
 | account:read | `account_read` | 1 |

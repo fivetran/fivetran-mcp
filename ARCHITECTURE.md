@@ -91,13 +91,23 @@ per-endpoint files during startup. The manifest gives:
 
 ### Grant model
 
-Effective grants = (`FIVETRAN_SCOPE` × all resources) − `DISALLOWED_ACTIONS`.
+`configure(scope_actions, pair_denies, endpoint_denies, mode)` runs from the
+entrypoint (`async_main` for stdio) after env parsing, and populates
+`ALLOWED_GRANTS`, `ENDPOINT_DENIES`, `MODE`, `GENERATED_TOOLS`, and
+`TOOLS_BY_NAME`. Grants are process-static but built after argv is available,
+so the future HTTP entrypoint can pass its own scope and denies without touching
+env vars.
+
+Effective grants = (`FIVETRAN_SCOPE` × all resources) − pair denies − endpoint denies.
 
 - `FIVETRAN_SCOPE ∈ {read, read/write, read/write/delete}` grants positively
   (`read/write` implies `read`).
-- `DISALLOWED_ACTIONS` (comma-separated `resource:action` tokens) denies, and
-  each token cascades to higher actions on the same resource (denying `read`
-  also denies `write` and `delete`).
+- `DISALLOWED_ACTIONS` accepts two token forms:
+  - `resource:action` denies that pair and cascades to higher actions on the
+    same resource (denying `read` also denies `write` and `delete`).
+  - `resource:action:endpoint_name` denies one specific endpoint. No cascade.
+    The endpoint must belong to that exact `resource:action` pair or startup
+    fails loudly.
 
 **Why a denylist instead of an allowlist?** Scope tiers plus exceptions are
 easier to reason about than enumerating every allowed `(resource, action)`
@@ -110,16 +120,24 @@ resource, letting it `write` or `delete` blind is asking for trouble —
 the write would succeed against something the agent (and often the user)
 can't inspect first.
 
-Only `(resource, action)` pairs in `ALLOWED_GRANTS` produce a tool. That's
-what the client sees in `list_tools`.
+Only `(resource, action)` pairs in `ALLOWED_GRANTS` produce a tool. Endpoint
+denies do not drop tools — a tool remains generated even when every endpoint
+under it is denied, so the agent can still see the resource:action category and
+report the situation. Per-endpoint availability surfaces on `list_endpoints`
+rows as `callable: bool` and is enforced at call time by `do_call`.
 
 ### Tool surface
 
 Every session exposes:
 
-- `list_endpoints(category?, search?, include_deprecated?)` — discovery
-- `get_schema(name, service?)` — full schema for one endpoint
-- One `<resource>_<action>` tool per allowed pair — execution
+- `list_endpoints(category?, search?, include_deprecated?)` — discovery. Always
+  lists every non-deprecated endpoint regardless of grants or denies. Each row
+  carries `callable: bool` (true iff `(resource, scope)` is in `ALLOWED_GRANTS`
+  and the name isn't in `ENDPOINT_DENIES`). The no-argument summary returns
+  `categories` (total per resource) and `callable_counts` (currently callable
+  per resource).
+- `get_schema(name, service?)` — full schema for one endpoint, callable or not.
+- One `<resource>_<action>` tool per allowed pair — execution.
 
 **Why grouped tools instead of one per endpoint?** Fivetran has ~167
 endpoints. Exposing each as its own MCP tool would balloon the tool list,
@@ -164,9 +182,13 @@ invoked, so clients can browse the tool surface before auth is wired.
 Caller-correctable errors return a shaped JSON dict rather than raising:
 
 - `GRANT_NOT_ALLOWED` — endpoint requires an action outside the current scope
-  or explicitly disallowed
+  or is explicitly disallowed. Structured fields (`cause`, `required_grant`,
+  `scope`, `disallowed`, `endpoint_disallowed`) let the agent branch
+  programmatically; the human-facing "use the Fivetran dashboard or REST API"
+  redirect lives once in the server instructions rather than being repeated
+  per response.
 - `ENDPOINT_TOOL_MISMATCH` — endpoint doesn't belong to the calling tool's
-  `(resource, action)` group
+  `(resource, action)` group.
 
 Path-param and body validation still raise `ValueError` today (falls through
 to the generic error handler) — see "Room to improve" below.
