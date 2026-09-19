@@ -161,7 +161,8 @@ Fivetran credentials are resolved per tool invocation by a pluggable resolver.
   async factory. Transport-specific inputs (env vars, request headers, OAuth
   tokens) are closed over when the resolver is registered.
 - `set_credentials_resolver(resolver)` — called once by the entrypoint for the
-  active transport. `async_main` (stdio) registers `env_resolver`.
+  active transport. `async_main` (stdio) registers whatever
+  `select_credentials_resolver("stdio")` returns.
 
 Three resolvers ship in `server.py`:
 
@@ -172,6 +173,31 @@ Three resolvers ship in `server.py`:
   HTTP deployments where the caller already has valid Fivetran credentials.
 - `oauth_resolver` — reserved for marketplace hosting. Body is
   `NotImplementedError` until the Fivetran OAuth broker is available.
+
+`select_credentials_resolver(mode)` — defined after all three resolver
+factories, right before tool dispatch — maps a transport mode to the
+resolver `set_credentials_resolver` should register: `stdio` →
+`env_resolver`, `streamable-http` → `header_resolver` (swaps to
+`oauth_resolver` once P3 lands). `async_main` (stdio) calls it with
+`mode="stdio"`. Selecting `streamable-http` fails startup (`ValueError`) if
+`FIVETRAN_API_KEY` or `FIVETRAN_API_SECRET` is set in the environment — a
+shared key baked into a multi-tenant HTTP process would apply one
+operator's credentials to every caller, defeating per-request auth. This
+check runs eagerly at selection time, unlike the resolvers' own lazy,
+per-call checks, because it's a startup-time misconfiguration rather than a
+per-request condition.
+
+Two related invariants, both documentation-level today (no enforcement code
+exists yet to point at):
+
+- `load_dotenv()` runs once at import. Harmless in a container that only
+  ever runs one mode, but HTTP deployments must not rely on it — a `.env`
+  file carrying a real key/secret, left over from local dev or baked into a
+  shared image, recreates the exact shared-key misconfiguration
+  `select_credentials_resolver` rejects above.
+- `Authorization` header values must never be logged. No logging exists
+  yet — P9 adds structured per-call request logs — but when it lands it
+  must exclude header values entirely, not redact them.
 
 `list_endpoints` and `get_schema` read the local manifest and don't require
 credentials. `CredentialsError` only surfaces when an API-hitting tool is

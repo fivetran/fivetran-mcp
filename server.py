@@ -774,6 +774,37 @@ def oauth_resolver() -> CredentialsResolver:
     return _resolve
 
 
+TRANSPORT_MODES: tuple[str, ...] = ("stdio", "streamable-http")
+
+
+def select_credentials_resolver(mode: str) -> CredentialsResolver:
+    """Choose the credentials resolver for the active transport.
+
+    stdio reads FIVETRAN_API_KEY/SECRET directly — one operator, one
+    process. streamable-http forwards the caller's incoming Authorization
+    header via header_resolver() until OAuth lands (P3 swaps this branch to
+    oauth_resolver()) — never both resolvers registered at once.
+
+    streamable-http fails here, at selection time, if FIVETRAN_API_KEY or
+    FIVETRAN_API_SECRET is set: a shared key baked into a multi-tenant HTTP
+    process would silently apply one operator's credentials to every
+    caller. Checked eagerly (unlike env_resolver's own lazy, per-call
+    check) because it's a startup misconfiguration, not a per-request one.
+    """
+    if mode not in TRANSPORT_MODES:
+        raise ValueError(f"Unknown transport mode {mode!r}. Expected one of {TRANSPORT_MODES}.")
+    if mode == "stdio":
+        return env_resolver()
+    if os.getenv("FIVETRAN_API_KEY") or os.getenv("FIVETRAN_API_SECRET"):
+        raise ValueError(
+            "FIVETRAN_API_KEY / FIVETRAN_API_SECRET must not be set in "
+            "streamable-http mode: a shared key in a multi-tenant process "
+            "is a misconfiguration. HTTP mode gets credentials from the "
+            "incoming Authorization header (or OAuth, once P3 lands)."
+        )
+    return header_resolver()  # TODO(P3): swap to oauth_resolver()
+
+
 @mcp_server.list_tools()
 async def list_tools() -> list[Tool]:
     return _TOOLS
@@ -824,7 +855,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
 async def async_main():
     scope_actions, pair_denies, endpoint_denies = _parse_scope_and_denies_from_env()
     configure(scope_actions, pair_denies, endpoint_denies, mode="stdio")
-    set_credentials_resolver(env_resolver())
+    set_credentials_resolver(select_credentials_resolver("stdio"))
     async with http_client_lifespan():
         async with stdio_server() as (read_stream, write_stream):
             await mcp_server.run(
