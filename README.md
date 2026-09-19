@@ -326,6 +326,38 @@ Using a local clone (Option B):
 
 Restart Cursor to load the new MCP server configuration.
 
+---
+
+### Running over HTTP (advanced)
+
+Most users should stick with stdio (above). If you're self-hosting the
+server for multiple clients to reach over the network, run it with
+`--transport streamable-http` (or `MCP_TRANSPORT=streamable-http`) instead of
+launching it per-client over stdio:
+
+```bash
+python /path/to/fivetran-mcp/server.py --transport streamable-http --host 0.0.0.0 --port 8000
+```
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `MCP_TRANSPORT` | No | `stdio` | `stdio` or `streamable-http`. Same as `--transport`. |
+| `MCP_HOST` / `--host` | No | `127.0.0.1` | Bind host, streamable-http only. |
+| `MCP_PORT` / `--port` | No | `8000` | Bind port, streamable-http only. |
+| `MCP_ALLOWED_ORIGINS` | No | (empty) | Comma-separated list of allowed `Origin` header values. |
+| `MCP_ALLOWED_HOSTS` | No | (empty) | Comma-separated list of allowed `Host` header values. |
+
+In streamable-http mode, credentials come from each request's incoming
+`Authorization` header rather than `FIVETRAN_API_KEY`/`FIVETRAN_API_SECRET` —
+do not set those two env vars for an HTTP deployment; the server refuses to
+start if it finds them, since a shared key baked into a multi-tenant HTTP
+process would apply one operator's credentials to every caller. If neither
+`MCP_ALLOWED_ORIGINS` nor `MCP_ALLOWED_HOSTS` is set, the server runs without
+DNS-rebinding protection and logs a startup warning. See `ARCHITECTURE.md`
+for how the HTTP transport is wired.
+
+---
+
 ## Example Questions
 
 - "What connections are failing?"

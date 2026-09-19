@@ -11,6 +11,8 @@ dependencies = [
     "mcp>=1.25.0,<2",
     "httpx>=0.28.0",
     "python-dotenv>=1.0.0",
+    "starlette>=0.47.0",
+    "uvicorn>=0.31.0",
 ]
 
 [project.optional-dependencies]

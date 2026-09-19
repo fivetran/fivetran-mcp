@@ -8,6 +8,7 @@ Exposes two discovery tools plus generated resource/action tools:
 
 Generated tools are filtered by FIVETRAN_SCOPE and DISALLOWED_ACTIONS.
 """
+import argparse
 import base64
 import contextlib
 import json
@@ -31,7 +32,11 @@ except PackageNotFoundError:
 from dotenv import load_dotenv
 from mcp.server import Server
 from mcp.server.stdio import stdio_server
+from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
+from mcp.server.transport_security import TransportSecuritySettings
 from mcp.types import Tool, TextContent, ToolAnnotations
+from starlette.applications import Starlette
+from starlette.routing import Mount
 
 load_dotenv()
 
@@ -128,6 +133,12 @@ ACTION_CASCADE: dict[str, tuple[str, ...]] = {
     "delete": ("delete",),
 }
 
+# Hosted-mode denies, as a code constant (not env) — see local/hosted-mcp-plan.md
+# "Flag for future review": which credential-minting endpoints (get_user_api_key,
+# connect_card, etc.) to exclude from hosted read/write before preview. Empty until
+# that decision lands; populating it is a one-line change, tracked separately.
+HOSTED_DISALLOWED_ACTIONS: str = ""
+
 
 def _parse_scope() -> tuple[str, ...]:
     """Effective scope. Precedence:
@@ -160,14 +171,18 @@ def _parse_scope() -> tuple[str, ...]:
 
 
 def _parse_disallowed_actions(
+    raw: str,
     all_resources: set[str],
 ) -> tuple[set[tuple[str, str]], set[str]]:
-    """DISALLOWED_ACTIONS is a comma-separated list of tokens. Two forms:
+    """`raw` is a comma-separated list of tokens (the DISALLOWED_ACTIONS env var
+    for stdio, or HOSTED_DISALLOWED_ACTIONS for streamable-http). Two forms:
 
       resource:action                 → deny that (resource, action) pair
       resource:action:endpoint_name   → deny one specific endpoint in that pair
 
-    Case-insensitive. Empty/unset => no denies. Validated against the manifest.
+    Case-insensitive. Empty string => no denies. Validated against the manifest.
+    Mode-neutral — reads no env vars itself, so one function serves both the
+    env-parsed stdio path and the hosted code-constant path.
 
     Pair tokens cascade via ACTION_CASCADE — denying read also denies write and
     delete on the same resource; denying write also denies delete. Matches how
@@ -185,7 +200,7 @@ def _parse_disallowed_actions(
     endpoint names; the (resource, action) they belong to is recoverable via
     ENDPOINTS_BY_NAME when needed.
     """
-    raw = os.getenv("DISALLOWED_ACTIONS", "").strip()
+    raw = raw.strip()
     if not raw:
         return set(), set()
     pair_denies: set[tuple[str, str]] = set()
@@ -250,7 +265,9 @@ def _parse_scope_and_denies_from_env() -> tuple[
     pass them to configure() directly rather than calling this.
     """
     scope_actions = _parse_scope()
-    pair_denies, endpoint_denies = _parse_disallowed_actions(set(ENDPOINTS_BY_RESOURCE))
+    pair_denies, endpoint_denies = _parse_disallowed_actions(
+        os.getenv("DISALLOWED_ACTIONS", ""), set(ENDPOINTS_BY_RESOURCE)
+    )
     return scope_actions, pair_denies, endpoint_denies
 
 
@@ -863,9 +880,107 @@ async def async_main():
             )
 
 
+def _build_security_settings(mode: str) -> TransportSecuritySettings | None:
+    """Build DNS-rebinding protection from MCP_ALLOWED_ORIGINS/MCP_ALLOWED_HOSTS.
+
+    Both env vars are comma-separated. If neither is set, protection stays
+    off (the SDK's own backwards-compatible default) with a startup warning —
+    an empty allowed_origins/allowed_hosts list would otherwise reject every
+    request once protection is enabled.
+    """
+    origins = [o.strip() for o in os.getenv("MCP_ALLOWED_ORIGINS", "").split(",") if o.strip()]
+    hosts = [h.strip() for h in os.getenv("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()]
+    if not origins and not hosts:
+        print(
+            f"Warning: MCP_ALLOWED_ORIGINS/MCP_ALLOWED_HOSTS not set in {mode} mode; "
+            "running without DNS-rebinding protection.",
+            file=sys.stderr,
+        )
+        return None
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_origins=origins,
+        allowed_hosts=hosts,
+    )
+
+
+_STDIO_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_SCOPE", "DISALLOWED_ACTIONS", "FIVETRAN_ALLOW_WRITES")
+
+
+def build_http_app() -> Starlette:
+    """Build the Starlette app for streamable-http mode: mounts /mcp only.
+
+    /health (P9) and /.well-known/oauth-protected-resource (P3) are added by
+    those proposals when they land, not stubbed in here.
+    """
+    set_vars = [v for v in _STDIO_ONLY_ENV_VARS if os.getenv(v)]
+    if set_vars:
+        print(
+            f"Warning: {', '.join(set_vars)} set but ignored in streamable-http mode; "
+            "hosted grants come from HOSTED_DISALLOWED_ACTIONS, not env vars.",
+            file=sys.stderr,
+        )
+
+    all_resources = set(ENDPOINTS_BY_RESOURCE)
+    pair_denies, endpoint_denies = _parse_disallowed_actions(
+        HOSTED_DISALLOWED_ACTIONS, all_resources
+    )
+    configure(SCOPE_TIERS["read/write"], pair_denies, endpoint_denies, mode="streamable-http")
+    # Raises eagerly if a shared API key is set in the environment (P2) — enough
+    # to enforce the "no shared key in a multi-tenant HTTP process" startup guard.
+    set_credentials_resolver(select_credentials_resolver("streamable-http"))
+
+    session_manager = StreamableHTTPSessionManager(
+        app=mcp_server,
+        stateless=True,
+        security_settings=_build_security_settings("streamable-http"),
+    )
+
+    @contextlib.asynccontextmanager
+    async def _lifespan(app: Starlette):
+        async with http_client_lifespan():
+            async with session_manager.run():
+                yield
+
+    return Starlette(
+        routes=[Mount("/mcp", app=session_manager.handle_request)],
+        lifespan=_lifespan,
+    )
+
+
+def _build_arg_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="fivetran-mcp")
+    parser.add_argument(
+        "--transport",
+        choices=TRANSPORT_MODES,
+        default=os.getenv("MCP_TRANSPORT", "stdio"),
+        help="Transport to serve over. Default: stdio (or MCP_TRANSPORT).",
+    )
+    parser.add_argument(
+        "--host",
+        default=os.getenv("MCP_HOST", "127.0.0.1"),
+        help="Bind host for streamable-http mode. Default: 127.0.0.1 (or MCP_HOST).",
+    )
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=int(os.getenv("MCP_PORT", "8000")),
+        help="Bind port for streamable-http mode. Default: 8000 (or MCP_PORT).",
+    )
+    return parser
+
+
 def main():
     import asyncio
-    asyncio.run(async_main())
+
+    args = _build_arg_parser().parse_args()
+    if args.transport == "stdio":
+        asyncio.run(async_main())
+        return
+
+    import uvicorn
+
+    uvicorn.run(build_http_app(), host=args.host, port=args.port)
 
 
 if __name__ == "__main__":

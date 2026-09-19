@@ -89,14 +89,57 @@ per-endpoint files during startup. The manifest gives:
 - `tools`: one row per `(resource, action)` pair with ≥1 non-deprecated
   endpoint
 
+### Transport
+
+`main()` parses `--transport {stdio,streamable-http}` (default `stdio`, env
+`MCP_TRANSPORT`) plus `--host`/`--port` (env `MCP_HOST`/`MCP_PORT`, HTTP
+only) via `_build_arg_parser()`. `TRANSPORT_MODES = ("stdio", "streamable-http")`
+is the single source of truth both the arg parser's `choices` and
+`select_credentials_resolver` validate against.
+
+- **stdio** (default): `asyncio.run(async_main())`, unchanged from before P1.
+- **streamable-http**: `uvicorn.run(build_http_app(), host=..., port=...)`.
+  `build_http_app()` calls `configure(SCOPE_TIERS["read/write"], ...,
+  mode="streamable-http")` — hosted mode is always read/write, never delete —
+  and `select_credentials_resolver("streamable-http")` (fails eagerly per P2
+  if a shared API key is set), then wraps the existing low-level `mcp_server`
+  in `mcp.server.streamable_http_manager.StreamableHTTPSessionManager(stateless=True)`
+  and mounts it at `/mcp` in a Starlette app. `stateless=True` means every
+  HTTP request gets a fresh MCP session with no server-side state carried
+  between requests — required so instances are interchangeable behind a load
+  balancer. The Starlette app's `lifespan` enters `http_client_lifespan()`
+  (see "Outbound HTTP client" below) and `session_manager.run()` together, so
+  each uvicorn worker owns its own HTTP client and session manager and closes
+  both on shutdown. Only `/mcp` is mounted today — `/health` (P9) and
+  `/.well-known/oauth-protected-resource` (P3) are added by those proposals
+  when they land, not stubbed in ahead of time.
+- **Origin/Host validation**: `_build_security_settings(mode)` reads
+  `MCP_ALLOWED_ORIGINS` / `MCP_ALLOWED_HOSTS` (comma-separated) and builds a
+  `mcp.server.transport_security.TransportSecuritySettings` passed to the
+  session manager, which enforces it per HTTP request before MCP dispatch.
+  If neither env var is set, DNS-rebinding protection stays off (the SDK's
+  own backwards-compatible default — an enabled check with empty allow-lists
+  would reject every request) and a startup warning is printed instead of a
+  hard failure, so a quick local `--transport streamable-http` test isn't
+  blocked on configuring allow-lists.
+- **Hosted denies**: `HOSTED_DISALLOWED_ACTIONS` is a code constant (not env),
+  parsed by the same `_parse_disallowed_actions` function stdio uses — "one
+  mechanism for both modes." It ships empty; which credential-minting
+  endpoints (`get_user_api_key`, `connect_card`, etc.) it should exclude is
+  an open decision tracked in `local/hosted-mcp-plan.md` ("Flag for future
+  review"), unblocked by this constant's existence. `FIVETRAN_SCOPE`,
+  `DISALLOWED_ACTIONS`, and `FIVETRAN_ALLOW_WRITES` are stdio-only; if any is
+  set when `build_http_app()` runs, it's ignored and a startup warning is
+  printed rather than silently doing nothing.
+
 ### Grant model
 
 `configure(scope_actions, pair_denies, endpoint_denies, mode)` runs from the
-entrypoint (`async_main` for stdio) after env parsing, and populates
-`ALLOWED_GRANTS`, `ENDPOINT_DENIES`, `MODE`, `GENERATED_TOOLS`, and
-`TOOLS_BY_NAME`. Grants are process-static but built after argv is available,
-so the future HTTP entrypoint can pass its own scope and denies without touching
-env vars.
+entrypoint (`async_main` for stdio, `build_http_app` for streamable-http)
+after mode is known, and populates `ALLOWED_GRANTS`, `ENDPOINT_DENIES`,
+`MODE`, `GENERATED_TOOLS`, and `TOOLS_BY_NAME`. Grants are process-static but
+built after argv is available, so each transport passes its own scope and
+denies without either touching the other's env vars.
 
 Effective grants = (`FIVETRAN_SCOPE` × all resources) − pair denies − endpoint denies.
 
@@ -179,7 +222,8 @@ factories, right before tool dispatch — maps a transport mode to the
 resolver `set_credentials_resolver` should register: `stdio` →
 `env_resolver`, `streamable-http` → `header_resolver` (swaps to
 `oauth_resolver` once P3 lands). `async_main` (stdio) calls it with
-`mode="stdio"`. Selecting `streamable-http` fails startup (`ValueError`) if
+`mode="stdio"`; `build_http_app()` (streamable-http) calls it with
+`mode="streamable-http"`. Selecting `streamable-http` fails startup (`ValueError`) if
 `FIVETRAN_API_KEY` or `FIVETRAN_API_SECRET` is set in the environment — a
 shared key baked into a multi-tenant HTTP process would apply one
 operator's credentials to every caller, defeating per-request auth. This
@@ -231,9 +275,10 @@ calls rather than opening one per request:
   before the lifespan is entered, so a missing or leaked client fails loudly
   instead of silently reopening a connection pool per call.
 - `async_main` (stdio) enters `http_client_lifespan()` around
-  `stdio_server()`/`mcp_server.run(...)`. The HTTP transport (P1) will pass
-  the same context manager as the Starlette app's `lifespan=`, so each
-  uvicorn worker owns and closes its own client the same way.
+  `stdio_server()`/`mcp_server.run(...)`. `build_http_app()` (streamable-http)
+  enters the same context manager inside the Starlette app's `lifespan=`
+  (alongside `session_manager.run()`), so each uvicorn worker owns and closes
+  its own client the same way.
 
 ## Room to improve
 
