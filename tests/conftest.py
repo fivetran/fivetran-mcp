@@ -31,3 +31,4 @@ def reset_server_state():
     server.GENERATED_TOOLS.clear()
     server.TOOLS_BY_NAME.clear()
     server._TOOLS[:] = [t for t in server._TOOLS if t.name in _DISCOVERY_NAMES]
+    server._http_client = None

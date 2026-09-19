@@ -9,6 +9,7 @@ Exposes two discovery tools plus generated resource/action tools:
 Generated tools are filtered by FIVETRAN_SCOPE and DISALLOWED_ACTIONS.
 """
 import base64
+import contextlib
 import json
 import os
 import re
@@ -270,6 +271,49 @@ def _get_auth_header(creds: Credentials) -> dict[str, str]:
     }
 
 
+# Matches the timeout every call used to pass individually to
+# httpx.AsyncClient(...).request(). Uniform across connect/read/write/pool.
+_HTTP_TIMEOUT = httpx.Timeout(30.0)
+_HTTP_LIMITS = httpx.Limits()
+
+_http_client: httpx.AsyncClient | None = None
+
+
+def get_http_client() -> httpx.AsyncClient:
+    """Return the shared outbound httpx.AsyncClient.
+
+    Raises if called before http_client_lifespan() has been entered, so a
+    leaked or missing client fails loudly rather than silently reopening a
+    new connection pool per call.
+    """
+    if _http_client is None:
+        raise RuntimeError(
+            "HTTP client not started. Enter http_client_lifespan() before "
+            "serving requests."
+        )
+    return _http_client
+
+
+@contextlib.asynccontextmanager
+async def http_client_lifespan():
+    """Own the shared httpx.AsyncClient's lifecycle for one server run.
+
+    Standalone and transport-agnostic: takes no arguments, references no
+    Starlette app. stdio's async_main() enters it directly around
+    mcp_server.run(). The HTTP transport (P1) will pass this (or a thin
+    wrapper matching Starlette's lifespan signature) as the Starlette app's
+    `lifespan=` — each uvicorn worker then owns its own client and closes it
+    on shutdown via this same context manager.
+    """
+    global _http_client
+    _http_client = httpx.AsyncClient(timeout=_HTTP_TIMEOUT, limits=_HTTP_LIMITS)
+    try:
+        yield
+    finally:
+        await _http_client.aclose()
+        _http_client = None
+
+
 async def _fivetran_request(
     creds: Credentials,
     method: str,
@@ -278,21 +322,20 @@ async def _fivetran_request(
     json_body: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     url = f"{BASE_URL}{endpoint}"
-    async with httpx.AsyncClient() as client:
-        response = await client.request(
-            method=method,
-            url=url,
-            headers=_get_auth_header(creds),
-            params=params,
-            json=json_body,
-            timeout=30.0,
-        )
-        response.raise_for_status()
-        # Empty body (204 or otherwise) would raise JSONDecodeError and
-        # surface as an opaque "Expecting value" error.
-        if response.status_code == 204 or not response.content:
-            return {"status": "success", "code": response.status_code}
-        return response.json()
+    client = get_http_client()
+    response = await client.request(
+        method=method,
+        url=url,
+        headers=_get_auth_header(creds),
+        params=params,
+        json=json_body,
+    )
+    response.raise_for_status()
+    # Empty body (204 or otherwise) would raise JSONDecodeError and
+    # surface as an opaque "Expecting value" error.
+    if response.status_code == 204 or not response.content:
+        return {"status": "success", "code": response.status_code}
+    return response.json()
 
 
 def load_endpoint_schema(schema_file: str) -> dict[str, Any]:
@@ -782,10 +825,11 @@ async def async_main():
     scope_actions, pair_denies, endpoint_denies = _parse_scope_and_denies_from_env()
     configure(scope_actions, pair_denies, endpoint_denies, mode="stdio")
     set_credentials_resolver(env_resolver())
-    async with stdio_server() as (read_stream, write_stream):
-        await mcp_server.run(
-            read_stream, write_stream, mcp_server.create_initialization_options()
-        )
+    async with http_client_lifespan():
+        async with stdio_server() as (read_stream, write_stream):
+            await mcp_server.run(
+                read_stream, write_stream, mcp_server.create_initialization_options()
+            )
 
 
 def main():

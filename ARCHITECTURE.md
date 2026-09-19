@@ -193,10 +193,24 @@ Caller-correctable errors return a shaped JSON dict rather than raising:
 Path-param and body validation still raise `ValueError` today (falls through
 to the generic error handler) — see "Room to improve" below.
 
+### Outbound HTTP client
+
+`_fivetran_request` shares one module-level `httpx.AsyncClient` across all
+calls rather than opening one per request:
+
+- `http_client_lifespan()` — async context manager that owns the client's
+  lifecycle: opens it on enter with a fixed `httpx.Timeout`/`httpx.Limits`,
+  closes it on exit. Standalone and transport-agnostic; takes no arguments.
+- `get_http_client()` — the only accessor. Raises `RuntimeError` if called
+  before the lifespan is entered, so a missing or leaked client fails loudly
+  instead of silently reopening a connection pool per call.
+- `async_main` (stdio) enters `http_client_lifespan()` around
+  `stdio_server()`/`mcp_server.run(...)`. The HTTP transport (P1) will pass
+  the same context manager as the Starlette app's `lifespan=`, so each
+  uvicorn worker owns and closes its own client the same way.
+
 ## Room to improve
 
 - Unify caller-correctable errors under one shape (unknown endpoint name,
   missing path params, invalid JSON body all still raise generic
   `ValueError`s)
-- Reuse a single `httpx.AsyncClient` across requests rather than opening one
-  per call
