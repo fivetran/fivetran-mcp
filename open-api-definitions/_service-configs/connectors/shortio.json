@@ -9,12 +9,21 @@
           "type": "string",
           "description": "Your Short.io API key.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "shortio_config_V1"
+    "shortio_config_V1",
+    "schema_format_schema"
   ]
 }

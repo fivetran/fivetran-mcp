@@ -35,12 +35,21 @@
             "CHANNEL_ADVISOR",
             "ERP_SYSTEM"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "tiktok_shop_partner_center_config_V1"
+    "tiktok_shop_partner_center_config_V1",
+    "schema_format_schema"
   ]
 }

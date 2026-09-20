@@ -133,9 +133,17 @@
           "type": "string",
           "description": "",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -167,6 +175,7 @@
   },
   "x-sources": [
     "pardot_config_V1",
+    "schema_format_schema",
     "pardot_auth_V1"
   ]
 }

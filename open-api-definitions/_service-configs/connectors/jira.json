@@ -76,9 +76,17 @@
           "title": "",
           "type": "string",
           "description": "The Jira username."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "external_secrets_keys_config": {
       "type": "object",
@@ -99,6 +107,7 @@
   },
   "x-sources": [
     "jira_config_V1",
+    "schema_format_schema",
     "jira_esm_keys_config_V1"
   ]
 }

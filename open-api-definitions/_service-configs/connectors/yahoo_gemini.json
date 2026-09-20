@@ -35,9 +35,17 @@
             "TWELVE",
             "THREE"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -64,6 +72,7 @@
   },
   "x-sources": [
     "yahoo_gemini_config_V1",
+    "schema_format_schema",
     "yahoo_gemini_auth_V1"
   ]
 }

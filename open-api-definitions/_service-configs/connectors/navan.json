@@ -22,12 +22,27 @@
             "{\"header\":\"US\",\"host\":\"https:\\/\\/api.tripactions.com\"}",
             "{\"header\":\"EU\",\"host\":\"https:\\/\\/app-fra.tripactions.com\"}"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table"
+      ]
     }
   },
   "x-sources": [
-    "navan_config_V1"
+    "navan_config_V1",
+    "schema_format_schema_table"
   ]
 }

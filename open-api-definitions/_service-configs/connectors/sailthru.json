@@ -69,12 +69,21 @@
           "title": "",
           "type": "boolean",
           "description": "Enable this if you want to sync Sailthru Connect using your own\"  S3 bucket."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "sailthru_config_V1"
+    "sailthru_config_V1",
+    "schema_format_schema"
   ]
 }

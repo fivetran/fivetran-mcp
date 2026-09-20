@@ -24,12 +24,21 @@
           "type": "string",
           "description": "Your Udemy Business client secret.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "udemy_business_config_V1"
+    "udemy_business_config_V1",
+    "schema_format_schema"
   ]
 }

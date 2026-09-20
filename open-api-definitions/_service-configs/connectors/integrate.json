@@ -20,12 +20,21 @@
           "title": "",
           "type": "string",
           "description": "Your Integrate organization ID."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "integrate_config_V1"
+    "integrate_config_V1",
+    "schema_format_schema"
   ]
 }

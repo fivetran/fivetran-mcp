@@ -19,12 +19,21 @@
           "title": "",
           "type": "string",
           "description": "The Site ID of your WordPress hosted WooCommerce instance or the subdomain of your self-hosted WooCommerce instance."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "woocommerce_config_V1"
+    "woocommerce_config_V1",
+    "schema_format_schema"
   ]
 }

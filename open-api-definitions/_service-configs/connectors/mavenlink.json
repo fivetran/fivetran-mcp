@@ -3,10 +3,21 @@
   "properties": {
     "config": {
       "type": "object",
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ],
+      "properties": {
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        }
+      }
     }
   },
   "x-sources": [
-    "mavenlink_config_V1"
+    "mavenlink_config_V1",
+    "schema_format_schema"
   ]
 }

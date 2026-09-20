@@ -45,9 +45,17 @@
           "title": "",
           "type": "boolean",
           "description": "Enable this option to sync infrequently updated tables during every sync (default value = `false`)"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -79,6 +87,7 @@
   },
   "x-sources": [
     "salesforce_sandbox_config_V1",
+    "schema_format_schema",
     "salesforce_sandbox_auth_V1"
   ]
 }

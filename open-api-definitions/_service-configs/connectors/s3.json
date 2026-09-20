@@ -269,9 +269,22 @@
           "title": "",
           "type": "boolean",
           "description": "Set to `true` if files are encrypted using PGP in the S3 bucket. Default value: `false`."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table_group_name": {
+          "type": "string",
+          "description": "Combined with the schema to form the Fivetran connection name `<schema>.<table_group_name>`. Lets you create multiple Merge Mode connections per schema."
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table_group_name"
+      ]
     },
     "external_secrets_keys_config": {
       "type": "object",
@@ -292,6 +305,7 @@
   },
   "x-sources": [
     "s3_config_V1",
+    "schema_format_schema_table_group",
     "s3_esm_keys_config_V1"
   ]
 }

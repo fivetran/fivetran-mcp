@@ -48,12 +48,21 @@
           "title": "",
           "type": "string",
           "description": "Your UKG Pro Workforce Management username."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "ukg_pro_workforce_management_config_V1"
+    "ukg_pro_workforce_management_config_V1",
+    "schema_format_schema"
   ]
 }

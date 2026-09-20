@@ -17,9 +17,17 @@
             "US",
             "CA"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -51,6 +59,7 @@
   },
   "x-sources": [
     "zoho_crm_config_V1",
+    "schema_format_schema",
     "zoho_crm_auth_V1"
   ]
 }

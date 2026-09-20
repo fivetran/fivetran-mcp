@@ -22,12 +22,21 @@
           "title": "",
           "type": "string",
           "description": "Your Factbird custom base url."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "factbird_config_V1"
+    "factbird_config_V1",
+    "schema_format_schema"
   ]
 }

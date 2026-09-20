@@ -42,9 +42,17 @@
           "title": "",
           "type": "boolean",
           "description": "Specify if all versions of the records should be synced. If set to `true`, all versions of the records will be synced. If set to `false`, only the latest version of the records will be synced."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -70,6 +78,7 @@
   },
   "x-sources": [
     "microsoft_dynamics_365_fno_config_V1",
+    "schema_format_schema",
     "microsoft_dynamics_365_fno_auth_V1"
   ]
 }

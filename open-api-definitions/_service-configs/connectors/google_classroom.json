@@ -3,7 +3,23 @@
   "properties": {
     "config": {
       "type": "object",
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table"
+      ],
+      "properties": {
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
+        }
+      }
     },
     "auth": {
       "type": "object",
@@ -43,6 +59,7 @@
   },
   "x-sources": [
     "google_classroom_config_V1",
+    "schema_format_schema_table",
     "google_classroom_auth_V1"
   ]
 }

@@ -34,9 +34,17 @@
           "type": "string",
           "description": "Your DSV Tracking subscription key.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -59,6 +67,7 @@
   },
   "x-sources": [
     "dsv_config_V1",
+    "schema_format_schema",
     "dsv_auth_V1"
   ]
 }

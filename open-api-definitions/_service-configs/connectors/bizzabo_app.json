@@ -19,12 +19,21 @@
           "type": "string",
           "description": "Your Bizzabo client secret.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "bizzabo_app_config_V1"
+    "bizzabo_app_config_V1",
+    "schema_format_schema"
   ]
 }

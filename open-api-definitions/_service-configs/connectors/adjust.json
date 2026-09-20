@@ -28,12 +28,21 @@
           "type": "string",
           "description": "Used if the `export_storage_type` is `AWS_S3`, the Role ARN required for authentication.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "adjust_config_V1"
+    "adjust_config_V1",
+    "schema_format_schema"
   ]
 }

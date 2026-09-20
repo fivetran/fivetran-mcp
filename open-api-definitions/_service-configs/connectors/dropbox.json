@@ -181,9 +181,22 @@
           "title": "",
           "type": "boolean",
           "description": "<strong>Optional.</strong> Set this to true to sync files from nested folders within the specified folder."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table_group_name": {
+          "type": "string",
+          "description": "Combined with the schema to form the Fivetran connection name `<schema>.<table_group_name>`. Lets you create multiple Merge Mode connections per schema."
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table_group_name"
+      ]
     },
     "auth": {
       "type": "object",
@@ -215,6 +228,7 @@
   },
   "x-sources": [
     "dropbox_config_V1",
+    "schema_format_schema_table_group",
     "dropbox_auth_V1"
   ]
 }

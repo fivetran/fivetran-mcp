@@ -36,12 +36,21 @@
             "eu.samsara",
             "samsara"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "samsara_config_V1"
+    "samsara_config_V1",
+    "schema_format_schema"
   ]
 }

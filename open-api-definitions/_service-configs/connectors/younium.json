@@ -66,12 +66,21 @@
           "title": "",
           "type": "string",
           "description": "Your Younium username. Use this parameter only if you want the connection to authenticate using OAuth 2.0."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "younium_config_V1"
+    "younium_config_V1",
+    "schema_format_schema"
   ]
 }

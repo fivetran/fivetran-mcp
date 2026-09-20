@@ -24,12 +24,21 @@
           "title": "",
           "type": "string",
           "description": "Your Tableau Source subdomain."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "tableau_source_config_V1"
+    "tableau_source_config_V1",
+    "schema_format_schema"
   ]
 }

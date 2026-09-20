@@ -60,12 +60,21 @@
           "title": "Database User Username",
           "type": "string",
           "description": "Username for the user to authenticate as with the AF Server"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "aveva_pi_config_V1"
+    "aveva_pi_config_V1",
+    "schema_format_schema"
   ]
 }

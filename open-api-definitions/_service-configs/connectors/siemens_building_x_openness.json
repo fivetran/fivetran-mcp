@@ -14,12 +14,21 @@
           "type": "string",
           "description": "Your Siemens Building X Openness client secret.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "siemens_building_x_openness_config_V1"
+    "siemens_building_x_openness_config_V1",
+    "schema_format_schema"
   ]
 }

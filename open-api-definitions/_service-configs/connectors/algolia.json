@@ -22,12 +22,27 @@
             "analytics.us.algolia.com",
             "analytics.de.algolia.com"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table"
+      ]
     }
   },
   "x-sources": [
-    "algolia_config_V1"
+    "algolia_config_V1",
+    "schema_format_schema_table"
   ]
 }

@@ -269,12 +269,26 @@
           "title": "",
           "type": "boolean",
           "description": "When enabled, Fivetran syncs rows with fewer or more columns than the header row. For rows with fewer columns, Fivetran adds NULL values for the missing columns. For rows with extra columns, Fivetran names them `column_<position>`. When disabled, Fivetran handles inconsistent rows according to your error-handling settings."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table_group_name": {
+          "type": "string",
+          "description": "Combined with the schema to form the Fivetran connection name `<schema>.<table_group_name>`. Lets you create multiple Merge Mode connections per schema."
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table_group_name"
+      ]
     }
   },
   "x-sources": [
-    "email_config_V1"
+    "email_config_V1",
+    "schema_format_schema_table_group"
   ]
 }

@@ -139,12 +139,21 @@
           "type": "string",
           "description": "Kafka trusted certificate.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "apache_kafka_config_V1"
+    "apache_kafka_config_V1",
+    "schema_format_schema"
   ]
 }

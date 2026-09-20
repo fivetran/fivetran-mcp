@@ -218,9 +218,23 @@
             "type": "string",
             "description": ""
           }
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table"
+      ]
     },
     "auth": {
       "type": "object",
@@ -252,6 +266,7 @@
   },
   "x-sources": [
     "double_click_campaign_manager_config_V1",
+    "schema_format_schema_table",
     "double_click_campaign_manager_auth_V1"
   ]
 }

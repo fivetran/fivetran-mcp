@@ -19,9 +19,17 @@
           "title": "",
           "type": "string",
           "description": "Your Cube company ID."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -61,6 +69,7 @@
   },
   "x-sources": [
     "cube_software_config_V1",
+    "schema_format_schema",
     "cube_software_auth_V1"
   ]
 }

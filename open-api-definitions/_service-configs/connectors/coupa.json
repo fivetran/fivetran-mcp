@@ -25,9 +25,17 @@
           "title": "",
           "type": "string",
           "description": "The instance name of your Coupa account in the URL."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "external_secrets_keys_config": {
       "type": "object",
@@ -48,6 +56,7 @@
   },
   "x-sources": [
     "coupa_config_V1",
+    "schema_format_schema",
     "coupa_esm_keys_config_V1"
   ]
 }

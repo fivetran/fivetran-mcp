@@ -37,9 +37,17 @@
             "EUROPE",
             "FAR_EAST"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -70,6 +78,7 @@
   },
   "x-sources": [
     "amazon_selling_partner_config_V1",
+    "schema_format_schema",
     "amazon_selling_partner_auth_V1"
   ]
 }

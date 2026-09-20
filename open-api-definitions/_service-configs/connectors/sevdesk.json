@@ -14,12 +14,21 @@
           "title": "",
           "type": "string",
           "description": "The base URL for the sevdesk API, without the protocol prefix."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "sevdesk_config_V1"
+    "sevdesk_config_V1",
+    "schema_format_schema"
   ]
 }

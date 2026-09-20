@@ -124,9 +124,23 @@
             "TWELVE",
             "THREE"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table"
+      ]
     },
     "auth": {
       "type": "object",
@@ -158,6 +172,7 @@
   },
   "x-sources": [
     "google_display_and_video_360_config_V1",
+    "schema_format_schema_table",
     "google_display_and_video_360_auth_V1"
   ]
 }

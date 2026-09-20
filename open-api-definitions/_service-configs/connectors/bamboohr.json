@@ -14,12 +14,21 @@
           "title": "",
           "type": "string",
           "description": "The subdomain used to access your account. If you access BambooHR at 'https://mycompany.bamboohr.com', then the subdomain is 'mycompany'."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "bamboohr_config_V1"
+    "bamboohr_config_V1",
+    "schema_format_schema"
   ]
 }

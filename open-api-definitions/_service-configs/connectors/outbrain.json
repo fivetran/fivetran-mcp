@@ -31,12 +31,21 @@
           "title": "",
           "type": "string",
           "description": "The username or email of the Outbrain user."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "outbrain_config_V1"
+    "outbrain_config_V1",
+    "schema_format_schema"
   ]
 }

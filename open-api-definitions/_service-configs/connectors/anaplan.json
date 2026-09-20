@@ -65,12 +65,21 @@
           "title": "",
           "type": "string",
           "description": "Your Anaplan user ID. Must be populated if `auth_mode` is set to `Basic`."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "anaplan_config_V1"
+    "anaplan_config_V1",
+    "schema_format_schema"
   ]
 }

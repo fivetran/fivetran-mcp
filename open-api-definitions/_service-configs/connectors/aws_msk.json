@@ -135,12 +135,21 @@
           "type": "string",
           "description": "If `security_protocol` is set to `TLS`, add the `Truststore File` as Base64 encoded string.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "aws_msk_config_V1"
+    "aws_msk_config_V1",
+    "schema_format_schema"
   ]
 }

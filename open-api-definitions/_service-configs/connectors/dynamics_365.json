@@ -22,9 +22,17 @@
           "title": "",
           "type": "string",
           "description": "URL at which Dynamics 365 is accessed"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -56,6 +64,7 @@
   },
   "x-sources": [
     "dynamics_365_config_V1",
+    "schema_format_schema",
     "dynamics_365_auth_V1"
   ]
 }
