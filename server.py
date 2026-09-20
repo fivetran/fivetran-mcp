@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Fivetran MCP server — scope-filtered router over the endpoints manifest.
+"""Fivetran MCP server: a scope-filtered router over the endpoints manifest.
 
-Exposes two discovery tools plus generated resource/action tools:
-  - list_endpoints(category?, search?, include_deprecated?) — tiered discovery
-  - get_schema(name, service?) — full schema for a given endpoint
-  - one tool per allowed (resource, action) pair — execute an endpoint in that group
+Tools:
+  - list_endpoints(category?, search?, include_deprecated?)
+  - get_schema(name, service?)
+  - one tool per allowed (resource, action) pair, dispatching by endpoint name
 
 Generated tools are filtered by FIVETRAN_SCOPE and DISALLOWED_ACTIONS.
 """
@@ -44,12 +44,19 @@ BASE_URL = "https://api.fivetran.com"
 SERVER_DIR = Path(__file__).parent
 OPENAPI_DIR = SERVER_DIR / "open-api-definitions"
 
+TRANSPORT_MODES: tuple[str, ...] = ("stdio", "streamable-http")
+_STDIO_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_SCOPE", "DISALLOWED_ACTIONS", "FIVETRAN_ALLOW_WRITES")
+_HTTP_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_AUTH_ISSUER", "MCP_RESOURCE_URL")
+_DEFAULT_RESOURCE_URL = "https://mcp.fivetran.com/mcp"
 
-# Opaque Authorization header value ("Basic ..." today, "Bearer ..." once
-# Fivetran's OAuth lands). Kept opaque so switching auth schemes is a
-# resolver-side change with no downstream refactor.
+
+# ---------------------------------------------------------------------------
+# Credentials
+# ---------------------------------------------------------------------------
+
 @dataclass(frozen=True, slots=True)
 class Credentials:
+    """Full Authorization header value, e.g. "Basic ..." or "Bearer ..."."""
     authorization: str
 
 
@@ -64,11 +71,6 @@ _credentials_resolver: CredentialsResolver | None = None
 
 
 def set_credentials_resolver(resolver: CredentialsResolver) -> None:
-    """Register the resolver that supplies credentials for each API-hitting call.
-
-    Called once at process start by the entrypoint for the active transport
-    (stdio → env_resolver, HTTP → header_resolver, OAuth → oauth_resolver).
-    """
     global _credentials_resolver
     _credentials_resolver = resolver
 
@@ -83,6 +85,7 @@ async def _resolve_credentials() -> Credentials:
 
 
 def env_resolver() -> CredentialsResolver:
+    """Build Basic auth from FIVETRAN_API_KEY / FIVETRAN_API_SECRET."""
     async def _resolve() -> Credentials:
         key = os.getenv("FIVETRAN_API_KEY")
         secret = os.getenv("FIVETRAN_API_SECRET")
@@ -96,6 +99,63 @@ def env_resolver() -> CredentialsResolver:
 
     return _resolve
 
+
+async def _forward_authorization_header() -> Credentials:
+    """Return the incoming HTTP Authorization header unchanged."""
+    try:
+        request = mcp_server.request_context.request
+    except LookupError as e:
+        raise CredentialsError("No request context available (running under stdio?)") from e
+    if request is None:
+        raise CredentialsError("Transport did not attach an HTTP request to the context")
+    auth = request.headers.get("Authorization", "")
+    if not auth:
+        raise CredentialsError("Missing Authorization header")
+    return Credentials(authorization=auth)
+
+
+def header_resolver() -> CredentialsResolver:
+    """HTTP mode without OAuth: caller supplies valid Fivetran credentials."""
+    async def _resolve() -> Credentials:
+        return await _forward_authorization_header()
+
+    return _resolve
+
+
+def oauth_resolver() -> CredentialsResolver:
+    """HTTP mode with OAuth: the bearer token is already verified by auth.py middleware."""
+    async def _resolve() -> Credentials:
+        return await _forward_authorization_header()
+
+    return _resolve
+
+
+def select_credentials_resolver(mode: str) -> CredentialsResolver:
+    """stdio -> env credentials; HTTP -> OAuth if FIVETRAN_AUTH_ISSUER is set, else header forwarding.
+
+    HTTP mode refuses to start if a shared API key is set in the environment,
+    since it would apply one operator's credentials to every caller.
+    """
+    if mode not in TRANSPORT_MODES:
+        raise ValueError(f"Unknown transport mode {mode!r}. Expected one of {TRANSPORT_MODES}.")
+    if mode == "stdio":
+        return env_resolver()
+    if os.getenv("FIVETRAN_API_KEY") or os.getenv("FIVETRAN_API_SECRET"):
+        raise ValueError(
+            "FIVETRAN_API_KEY / FIVETRAN_API_SECRET must not be set in "
+            "streamable-http mode: a shared key in a multi-tenant process "
+            "is a misconfiguration. HTTP mode gets credentials from the "
+            "incoming Authorization header, either forwarded as-is or via "
+            "OAuth once FIVETRAN_AUTH_ISSUER is configured."
+        )
+    if os.getenv("FIVETRAN_AUTH_ISSUER"):
+        return oauth_resolver()
+    return header_resolver()
+
+
+# ---------------------------------------------------------------------------
+# Manifest
+# ---------------------------------------------------------------------------
 
 def _load_manifest() -> tuple[
     list[dict], dict[str, dict], dict[str, list[dict]], list[dict]
@@ -112,11 +172,13 @@ def _load_manifest() -> tuple[
 
 ENDPOINTS, ENDPOINTS_BY_NAME, ENDPOINTS_BY_RESOURCE, TOOLS_INDEX = _load_manifest()
 
-# (resource, action) pairs that correspond to at least one live tool.
-# Used to validate directly-written DISALLOWED_ACTIONS tokens (cascade-expanded
-# pairs are inert if they don't exist, so we only strict-check what the user typed).
+# (resource, action) pairs that have a tool. Used to validate DISALLOWED_ACTIONS.
 TOOL_PAIRS: set[tuple[str, str]] = {(t["resource"], t["action"]) for t in TOOLS_INDEX}
 
+
+# ---------------------------------------------------------------------------
+# Scope and deny parsing
+# ---------------------------------------------------------------------------
 
 SCOPE_TIERS: dict[str, tuple[str, ...]] = {
     "read": ("read",),
@@ -124,30 +186,23 @@ SCOPE_TIERS: dict[str, tuple[str, ...]] = {
     "read/write/delete": ("read", "write", "delete"),
 }
 
-# Denying an action cascades to all "higher" actions on the same resource,
-# mirroring FIVETRAN_SCOPE's positive cascade (read/write implies read).
-# "You can't observe it, so you can't touch it either."
+# Denying an action also denies every higher action on the same resource.
 ACTION_CASCADE: dict[str, tuple[str, ...]] = {
     "read": ("read", "write", "delete"),
     "write": ("write", "delete"),
     "delete": ("delete",),
 }
 
-# Hosted-mode denies, as a code constant (not env) — see local/hosted-mcp-plan.md
-# "Flag for future review": which credential-minting endpoints (get_user_api_key,
-# connect_card, etc.) to exclude from hosted read/write before preview. Empty until
-# that decision lands; populating it is a one-line change, tracked separately.
+# Denies applied in streamable-http mode. Same format as DISALLOWED_ACTIONS.
+# TODO: decide whether to deny credential-minting endpoints (get_user_api_key, connect_card).
 HOSTED_DISALLOWED_ACTIONS: str = ""
 
 
 def _parse_scope() -> tuple[str, ...]:
-    """Effective scope. Precedence:
-      1. FIVETRAN_SCOPE ∈ {read, read/write, read/write/delete}
-      2. FIVETRAN_ALLOW_WRITES=true  → read/write   (backwards compat)
-      3. default: read
+    """Return the allowed actions.
 
-    If both FIVETRAN_SCOPE and FIVETRAN_ALLOW_WRITES are set, FIVETRAN_SCOPE
-    wins and ALLOW_WRITES is ignored (with a stderr warning).
+    FIVETRAN_SCOPE takes precedence; FIVETRAN_ALLOW_WRITES=true is a legacy
+    alias for read/write. Default is read.
     """
     scope_raw = os.getenv("FIVETRAN_SCOPE", "").strip().lower()
     allow_writes = os.getenv("FIVETRAN_ALLOW_WRITES", "").strip().lower() == "true"
@@ -174,31 +229,13 @@ def _parse_disallowed_actions(
     raw: str,
     all_resources: set[str],
 ) -> tuple[set[tuple[str, str]], set[str]]:
-    """`raw` is a comma-separated list of tokens (the DISALLOWED_ACTIONS env var
-    for stdio, or HOSTED_DISALLOWED_ACTIONS for streamable-http). Two forms:
+    """Parse a comma-separated deny list.
 
-      resource:action                 → deny that (resource, action) pair
-      resource:action:endpoint_name   → deny one specific endpoint in that pair
+    Tokens are `resource:action` (cascades per ACTION_CASCADE) or
+    `resource:action:endpoint_name` (denies one endpoint, no cascade).
+    Case-insensitive; every token is validated against the manifest.
 
-    Case-insensitive. Empty string => no denies. Validated against the manifest.
-    Mode-neutral — reads no env vars itself, so one function serves both the
-    env-parsed stdio path and the hosted code-constant path.
-
-    Pair tokens cascade via ACTION_CASCADE — denying read also denies write and
-    delete on the same resource; denying write also denies delete. Matches how
-    FIVETRAN_SCOPE cascades positively (read/write implies read).
-
-    The 3-part endpoint form does not cascade — it's a scalpel for silencing a
-    single endpoint without touching the rest of the pair. `endpoint_name` must
-    exist and belong to that exact (resource, action) pair, or the parse fails.
-
-    Some resources contain `-` (e.g. `system-keys`, `connector-sdk`) but never `:`;
-    endpoint names never contain `:`. So splitting on `:` up to twice is
-    unambiguous across both forms.
-
-    Returns (pair_denies, endpoint_denies). endpoint_denies is a set of
-    endpoint names; the (resource, action) they belong to is recoverable via
-    ENDPOINTS_BY_NAME when needed.
+    Returns (pair_denies, endpoint_denies).
     """
     raw = raw.strip()
     if not raw:
@@ -227,9 +264,6 @@ def _parse_disallowed_actions(
                 f"Invalid action in DISALLOWED_ACTIONS token {token!r}: {action!r}. "
                 f"Valid: ['read', 'write', 'delete']."
             )
-        # Both forms: the (resource, action) pair must correspond to a real tool.
-        # A typo like `hvr:delete` (HVR has no DELETE endpoints) fails loudly here
-        # rather than silently disallowing something that never existed.
         if (resource, action) not in TOOL_PAIRS:
             raise ValueError(
                 f"DISALLOWED_ACTIONS token {token!r} does not correspond to any tool. "
@@ -257,13 +291,7 @@ def _parse_disallowed_actions(
 def _parse_scope_and_denies_from_env() -> tuple[
     tuple[str, ...], set[tuple[str, str]], set[str]
 ]:
-    """Read FIVETRAN_SCOPE / FIVETRAN_ALLOW_WRITES / DISALLOWED_ACTIONS from env.
-
-    Returns (scope_actions, pair_denies, endpoint_denies). Wraps _parse_scope
-    and _parse_disallowed_actions so the mode-neutral core (configure) doesn't
-    touch os.environ. The HTTP entrypoint (P1) will build its own args and
-    pass them to configure() directly rather than calling this.
-    """
+    """Return (scope_actions, pair_denies, endpoint_denies) from env vars."""
     scope_actions = _parse_scope()
     pair_denies, endpoint_denies = _parse_disallowed_actions(
         os.getenv("DISALLOWED_ACTIONS", ""), set(ENDPOINTS_BY_RESOURCE)
@@ -271,13 +299,22 @@ def _parse_scope_and_denies_from_env() -> tuple[
     return scope_actions, pair_denies, endpoint_denies
 
 
-# Grants and generated tools are populated by configure() at entrypoint time.
-# They start empty so `import server` in tests doesn't quietly hit os.environ.
+# Populated by configure(). Empty at import so tests don't read os.environ.
 MODE: str = "stdio"
 ALLOWED_GRANTS: set[tuple[str, str]] = set()
 SCOPE_ACTIONS: tuple[str, ...] = ()
 DISALLOWED: set[tuple[str, str]] = set()
 ENDPOINT_DENIES: set[str] = set()
+
+
+# ---------------------------------------------------------------------------
+# HTTP client
+# ---------------------------------------------------------------------------
+
+_HTTP_TIMEOUT = httpx.Timeout(30.0)
+_HTTP_LIMITS = httpx.Limits()
+
+_http_client: httpx.AsyncClient | None = None
 
 
 def _get_auth_header(creds: Credentials) -> dict[str, str]:
@@ -288,21 +325,7 @@ def _get_auth_header(creds: Credentials) -> dict[str, str]:
     }
 
 
-# Matches the timeout every call used to pass individually to
-# httpx.AsyncClient(...).request(). Uniform across connect/read/write/pool.
-_HTTP_TIMEOUT = httpx.Timeout(30.0)
-_HTTP_LIMITS = httpx.Limits()
-
-_http_client: httpx.AsyncClient | None = None
-
-
 def get_http_client() -> httpx.AsyncClient:
-    """Return the shared outbound httpx.AsyncClient.
-
-    Raises if called before http_client_lifespan() has been entered, so a
-    leaked or missing client fails loudly rather than silently reopening a
-    new connection pool per call.
-    """
     if _http_client is None:
         raise RuntimeError(
             "HTTP client not started. Enter http_client_lifespan() before "
@@ -313,15 +336,7 @@ def get_http_client() -> httpx.AsyncClient:
 
 @contextlib.asynccontextmanager
 async def http_client_lifespan():
-    """Own the shared httpx.AsyncClient's lifecycle for one server run.
-
-    Standalone and transport-agnostic: takes no arguments, references no
-    Starlette app. stdio's async_main() enters it directly around
-    mcp_server.run(). The HTTP transport (P1) will pass this (or a thin
-    wrapper matching Starlette's lifespan signature) as the Starlette app's
-    `lifespan=` — each uvicorn worker then owns its own client and closes it
-    on shutdown via this same context manager.
-    """
+    """Open the shared httpx client for the duration of a server run."""
     global _http_client
     _http_client = httpx.AsyncClient(timeout=_HTTP_TIMEOUT, limits=_HTTP_LIMITS)
     try:
@@ -348,17 +363,17 @@ async def _fivetran_request(
         json=json_body,
     )
     response.raise_for_status()
-    # Empty body (204 or otherwise) would raise JSONDecodeError and
-    # surface as an opaque "Expecting value" error.
+    # Empty bodies would otherwise raise an opaque JSONDecodeError.
     if response.status_code == 204 or not response.content:
         return {"status": "success", "code": response.status_code}
     return response.json()
 
 
+# ---------------------------------------------------------------------------
+# Schema loading
+# ---------------------------------------------------------------------------
+
 def load_endpoint_schema(schema_file: str) -> dict[str, Any]:
-    """Read one per-endpoint schema file. Kept as a discrete helper so a
-    'require prior get_schema before call' enforcement layer could be re-added
-    on top of it later without a rewrite."""
     path = OPENAPI_DIR / schema_file
     if not path.exists():
         raise ValueError(f"Schema file not found: '{schema_file}'")
@@ -380,6 +395,10 @@ def _splice_service_config(schema: dict, cfg: dict) -> None:
     for k, v in cfg.get("properties", {}).items():
         body_props[k] = v
 
+
+# ---------------------------------------------------------------------------
+# Tool handlers
+# ---------------------------------------------------------------------------
 
 def _is_callable(ep: dict) -> bool:
     return (
@@ -464,11 +483,7 @@ def do_get_schema(name: str, service: str | None = None) -> dict[str, Any]:
 
 
 def _shape_upstream_error(e: httpx.HTTPStatusError) -> dict[str, Any]:
-    """Classify a confirmed-4xx Fivetran API error into a shaped, caller-correctable dict.
-
-    5xx is handled by the caller (do_call) before this is reached — this
-    function never sees a 5xx and never raises.
-    """
+    """Convert a 4xx Fivetran error into a structured result the agent can act on."""
     status = e.response.status_code
     try:
         detail = e.response.json()
@@ -526,11 +541,8 @@ async def do_call(
             "message": f"Unknown endpoint: {name!r}. Discoverable via list_endpoints.",
         }
 
-    # The tool name is the boundary — reject if the caller invoked
-    # `metadata_read(name="delete_connection")`. Without this check the tool
-    # namespace is decorative. Returned as a shaped error rather than raised
-    # because the JSON Schema for `name` can't constrain it per generated tool,
-    # so agents will mis-route sometimes and need something to self-correct on.
+    # Reject endpoints called through the wrong tool, e.g. metadata_read(name="delete_connection").
+    # Returned rather than raised so the agent can self-correct.
     if expected_pair is not None and (ep["resource"], ep["scope"]) != expected_pair:
         expected_tool = f"{expected_pair[0].replace('-', '_')}_{expected_pair[1]}"
         actual_tool = f"{ep['resource'].replace('-', '_')}_{ep['scope']}"
@@ -567,9 +579,8 @@ async def do_call(
             ),
         }
 
-    # Validate + URL-encode path params. Raw substitution would let a value like
-    # "../groups/gr_123" reach a different resource and bypass DISALLOWED_ACTIONS
-    # (the grant check runs on the endpoint name, not the final URL).
+    # URL-encode path params. Raw substitution would let "../groups/gr_123"
+    # reach a different resource and bypass the grant check above.
     expected = re.findall(r"{([^{}]+)}", ep["path"])
     provided = set((path_params or {}).keys())
     missing = [p for p in expected if p not in provided]
@@ -607,12 +618,15 @@ async def do_call(
             json_body=json_body,
         )
     except httpx.HTTPStatusError as e:
-        # 5xx is not caller-correctable — let it raise and surface as a
-        # genuine MCP tool error (isError=True) rather than a shaped result.
+        # 5xx isn't caller-correctable; let it surface as an MCP tool error.
         if e.response.status_code >= 500:
             raise
         return _shape_upstream_error(e)
 
+
+# ---------------------------------------------------------------------------
+# Tool definitions
+# ---------------------------------------------------------------------------
 
 _TOOL_ANNOTATIONS: dict[str, ToolAnnotations] = {
     "read":   ToolAnnotations(readOnlyHint=True,  openWorldHint=False),
@@ -677,7 +691,6 @@ _TOOLS = [
     ),
 ]
 
-
 _ACTION_WARNING = {
     "read": "",
     "write": "WARNING. WRITE OPERATION. CONFIRM WITH USER BEFORE INITIATING ACTION. ",
@@ -686,13 +699,7 @@ _ACTION_WARNING = {
 
 
 def _tool_description(tool: dict) -> str:
-    """Generate a tool description from the manifest. Called by configure().
-
-    Lists every non-deprecated endpoint in the pair, including any denied by
-    DISALLOWED_ACTIONS. Availability is marked per-row by list_endpoints and
-    signaled at call time by GRANT_NOT_ALLOWED — hiding endpoints here would
-    prevent the agent from telling the user what exists but isn't reachable.
-    """
+    # Lists denied endpoints too, so the agent can tell the user what exists but isn't reachable.
     live = [
         e for e in ENDPOINTS_BY_RESOURCE.get(tool["resource"], [])
         if e["scope"] == tool["action"] and not e.get("deprecated")
@@ -731,21 +738,11 @@ _RESOURCE_ACTION_INPUT_SCHEMA = {
     "required": ["name"],
 }
 
-
-# _meta markers on specific tools. Kept separate from the resource:action loop
-# because these are per-tool overrides driven by client conventions, not the
-# manifest.
-#
-# openai/profile: ChatGPT calls this tool to identify the connected account
-# when a user has multiple sessions of the same connector, so it can show
-# "You're using Fivetran (Ryan)" vs "Fivetran (Acme)".
+# ChatGPT uses openai/profile to identify which account a connector session belongs to.
 _TOOL_META: dict[str, dict[str, Any]] = {
     "account_read": {"openai/profile": True},
 }
 
-# Snapshot of the always-present discovery tools. configure() truncates _TOOLS
-# back to this and appends generated tools; keeping the snapshot avoids
-# re-instantiating the discovery Tool objects on reconfigure.
 _DISCOVERY_TOOLS: tuple[Tool, ...] = tuple(_TOOLS)
 
 # Populated by configure().
@@ -759,22 +756,7 @@ def configure(
     endpoint_denies: set[str] | None = None,
     mode: str = "stdio",
 ) -> None:
-    """Compute grants and (re)build the generated tool list.
-
-    Sets ALLOWED_GRANTS, SCOPE_ACTIONS, DISALLOWED, ENDPOINT_DENIES, and MODE
-    from the arguments, then rebuilds GENERATED_TOOLS, TOOLS_BY_NAME, and
-    _TOOLS from scratch (truncating _TOOLS to the discovery tools before
-    appending generated ones). Idempotent: repeated calls with the same
-    arguments produce the same state.
-
-    ENDPOINT_DENIES surfaces on list_endpoints as `callable: false` per row
-    and is enforced at call time by do_call. MODE steers GRANT_NOT_ALLOWED
-    messages between stdio config advice and hosted-user redirects.
-
-    The stdio entrypoint calls this with env-parsed values and mode="stdio".
-    The HTTP entrypoint (P1) will call it with mode="streamable-http" and
-    SCOPE_TIERS["read/write"].
-    """
+    """Set grants and rebuild the tool list. Idempotent."""
     global ALLOWED_GRANTS, SCOPE_ACTIONS, DISALLOWED, ENDPOINT_DENIES, MODE
     all_resources = set(ENDPOINTS_BY_RESOURCE)
     ALLOWED_GRANTS = {(r, a) for r in all_resources for a in scope_actions} - pair_denies
@@ -799,11 +781,15 @@ def configure(
             "inputSchema": _RESOURCE_ACTION_INPUT_SCHEMA,
             "annotations": _TOOL_ANNOTATIONS[_t["action"]],
         }
-        # Tool.meta is aliased to `_meta` in the MCP schema; must pass by alias.
+        # Tool.meta must be passed by its schema alias, `_meta`.
         if _t["name"] in _TOOL_META:
             kwargs["_meta"] = _TOOL_META[_t["name"]]
         _TOOLS.append(Tool(**kwargs))
 
+
+# ---------------------------------------------------------------------------
+# MCP server
+# ---------------------------------------------------------------------------
 
 _SERVER_INSTRUCTIONS = (
     "Router over the Fivetran REST API. Tools are grouped by resource "
@@ -819,91 +805,6 @@ _SERVER_INSTRUCTIONS = (
 )
 
 mcp_server = Server("fivetran", instructions=_SERVER_INSTRUCTIONS)
-
-
-def header_resolver() -> CredentialsResolver:
-    """Forward the incoming HTTP `Authorization` header as-is (Basic or Bearer).
-
-    For self-hosted HTTP deployments where the caller already provides valid
-    Fivetran credentials. Reads from `mcp_server.request_context.request.headers`
-    (starlette Request when running under streamable_http transport).
-    """
-    async def _resolve() -> Credentials:
-        try:
-            request = mcp_server.request_context.request
-        except LookupError as e:
-            raise CredentialsError("No request context available (running under stdio?)") from e
-        if request is None:
-            raise CredentialsError("Transport did not attach an HTTP request to the context")
-        auth = request.headers.get("Authorization", "")
-        if not auth:
-            raise CredentialsError("Missing Authorization header")
-        return Credentials(authorization=auth)
-
-    return _resolve
-
-
-def oauth_resolver() -> CredentialsResolver:
-    """Forward the incoming HTTP `Authorization` header (already verified).
-
-    By the time this runs, the OAuth middleware wrapping the MCP app (see
-    auth.py) has already validated the bearer token against Fivetran's OAuth
-    issuer and rejected anything invalid with a 401 before dispatch ever
-    reaches here. This function's only job is forwarding the still-attached
-    header unchanged — same mechanics as header_resolver, since forwarding
-    doesn't depend on token format. Verifying the token's signature/claims
-    is auth.FivetranOAuthTokenVerifier's job, not this one.
-    """
-    async def _resolve() -> Credentials:
-        try:
-            request = mcp_server.request_context.request
-        except LookupError as e:
-            raise CredentialsError("No request context available (running under stdio?)") from e
-        if request is None:
-            raise CredentialsError("Transport did not attach an HTTP request to the context")
-        auth = request.headers.get("Authorization", "")
-        if not auth:
-            raise CredentialsError("Missing Authorization header")
-        return Credentials(authorization=auth)
-
-    return _resolve
-
-
-TRANSPORT_MODES: tuple[str, ...] = ("stdio", "streamable-http")
-
-
-def select_credentials_resolver(mode: str) -> CredentialsResolver:
-    """Choose the credentials resolver for the active transport.
-
-    stdio reads FIVETRAN_API_KEY/SECRET directly — one operator, one
-    process. streamable-http picks between two resolvers depending on
-    whether FIVETRAN_AUTH_ISSUER is set: unset means the interim path
-    (header_resolver forwards whatever Authorization header the caller
-    already has); set means OAuth resource-server mode (oauth_resolver,
-    paired with the bearer-auth middleware build_http_app wraps the MCP app
-    in — see auth.py). Never more than one resolver registered at once.
-
-    streamable-http fails here, at selection time, if FIVETRAN_API_KEY or
-    FIVETRAN_API_SECRET is set: a shared key baked into a multi-tenant HTTP
-    process would silently apply one operator's credentials to every
-    caller. Checked eagerly (unlike env_resolver's own lazy, per-call
-    check) because it's a startup misconfiguration, not a per-request one.
-    """
-    if mode not in TRANSPORT_MODES:
-        raise ValueError(f"Unknown transport mode {mode!r}. Expected one of {TRANSPORT_MODES}.")
-    if mode == "stdio":
-        return env_resolver()
-    if os.getenv("FIVETRAN_API_KEY") or os.getenv("FIVETRAN_API_SECRET"):
-        raise ValueError(
-            "FIVETRAN_API_KEY / FIVETRAN_API_SECRET must not be set in "
-            "streamable-http mode: a shared key in a multi-tenant process "
-            "is a misconfiguration. HTTP mode gets credentials from the "
-            "incoming Authorization header, either forwarded as-is or via "
-            "OAuth once FIVETRAN_AUTH_ISSUER is configured."
-        )
-    if os.getenv("FIVETRAN_AUTH_ISSUER"):
-        return oauth_resolver()
-    return header_resolver()
 
 
 @mcp_server.list_tools()
@@ -946,10 +847,12 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
         )]
 
 
+# ---------------------------------------------------------------------------
+# Entrypoints
+# ---------------------------------------------------------------------------
+
 def _warn_ignored_env_vars(var_names: tuple[str, ...], reason: str) -> None:
-    """Print a stderr warning listing whichever of `var_names` are set, or do
-    nothing if none are. Shared by both directions of the stdio/streamable-http
-    env-var split so the wording stays consistent."""
+    """Warn on stderr about any of `var_names` that are set but unused in this mode."""
     set_vars = [v for v in var_names if os.getenv(v)]
     if set_vars:
         print(f"Warning: {', '.join(set_vars)} set but ignored: {reason}", file=sys.stderr)
@@ -970,12 +873,9 @@ async def async_main():
 
 
 def _build_security_settings(mode: str) -> TransportSecuritySettings | None:
-    """Build DNS-rebinding protection from MCP_ALLOWED_ORIGINS/MCP_ALLOWED_HOSTS.
+    """DNS-rebinding protection from MCP_ALLOWED_ORIGINS / MCP_ALLOWED_HOSTS.
 
-    Both env vars are comma-separated. If neither is set, protection stays
-    off (the SDK's own backwards-compatible default) with a startup warning —
-    an empty allowed_origins/allowed_hosts list would otherwise reject every
-    request once protection is enabled.
+    Off if neither is set, since empty allow-lists would reject every request.
     """
     origins = [o.strip() for o in os.getenv("MCP_ALLOWED_ORIGINS", "").split(",") if o.strip()]
     hosts = [h.strip() for h in os.getenv("MCP_ALLOWED_HOSTS", "").split(",") if h.strip()]
@@ -993,25 +893,11 @@ def _build_security_settings(mode: str) -> TransportSecuritySettings | None:
     )
 
 
-_STDIO_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_SCOPE", "DISALLOWED_ACTIONS", "FIVETRAN_ALLOW_WRITES")
-
-# HTTP-only: configure OAuth resource-server mode. Unset FIVETRAN_AUTH_ISSUER
-# means the interim path (header_resolver forwards the caller's own
-# Authorization header as-is); set means OAuth (oauth_resolver plus the
-# bearer-auth middleware wrapping the MCP app — see auth.py).
-_HTTP_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_AUTH_ISSUER", "MCP_RESOURCE_URL")
-
-_DEFAULT_RESOURCE_URL = "https://mcp.fivetran.com/mcp"
-
-
 def build_http_app(token_verifier: Any = None) -> Starlette:
-    """Build the Starlette app for streamable-http mode: mounts /mcp, plus the
-    OAuth well-known route when FIVETRAN_AUTH_ISSUER is set.
+    """Build the streamable-http Starlette app.
 
-    `token_verifier` (an auth.TokenVerifier) lets tests substitute a fake
-    verifier to exercise the bearer-auth gate without real crypto; production
-    callers omit it and get auth.FivetranOAuthTokenVerifier(). /health is not
-    added here.
+    Mounts /mcp, plus OAuth routes when FIVETRAN_AUTH_ISSUER is set.
+    `token_verifier` is a test hook; production uses auth.FivetranOAuthTokenVerifier.
     """
     _warn_ignored_env_vars(
         _STDIO_ONLY_ENV_VARS,
@@ -1023,8 +909,6 @@ def build_http_app(token_verifier: Any = None) -> Starlette:
         HOSTED_DISALLOWED_ACTIONS, all_resources
     )
     configure(SCOPE_TIERS["read/write"], pair_denies, endpoint_denies, mode="streamable-http")
-    # Raises eagerly if a shared API key is set in the environment — enough to
-    # enforce the "no shared key in a multi-tenant HTTP process" startup guard.
     set_credentials_resolver(select_credentials_resolver("streamable-http"))
 
     session_manager = StreamableHTTPSessionManager(
@@ -1041,9 +925,8 @@ def build_http_app(token_verifier: Any = None) -> Starlette:
         import auth
 
         resource_url = os.getenv("MCP_RESOURCE_URL", _DEFAULT_RESOURCE_URL)
-        # oauth_authentication_middleware must run on every request, before
-        # routing, so it's installed at the Starlette level, not wrapped
-        # around mcp_app directly. require_oauth then gates just this app.
+        # Authentication middleware runs on every request, before routing;
+        # require_oauth then gates only the /mcp app.
         mcp_app = auth.require_oauth(mcp_app, resource_url)
         middleware.append(auth.oauth_authentication_middleware(resource_url, token_verifier))
         routes.extend(auth.oauth_protected_resource_routes(issuer, resource_url))
