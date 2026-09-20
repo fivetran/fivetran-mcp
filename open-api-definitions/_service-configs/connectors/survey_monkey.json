@@ -8,9 +8,17 @@
           "title": "",
           "type": "boolean",
           "description": "The SurveyMonkey account region. Specify `true`, if your account is hosted in the EU region. Default value is `false`."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -42,6 +50,7 @@
   },
   "x-sources": [
     "survey_monkey_config_V1",
+    "schema_format_schema",
     "survey_monkey_auth_V1"
   ]
 }

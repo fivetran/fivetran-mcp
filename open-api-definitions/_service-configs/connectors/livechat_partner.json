@@ -9,12 +9,27 @@
           "type": "string",
           "description": "Your Livechat Partner API Token.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table"
+      ]
     }
   },
   "x-sources": [
-    "livechat_partner_config_V1"
+    "livechat_partner_config_V1",
+    "schema_format_schema_table"
   ]
 }

@@ -39,9 +39,23 @@
           "type": "string",
           "description": "The Role ARN required for authentication.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table"
+      ]
     },
     "external_secrets_keys_config": {
       "type": "object",
@@ -62,6 +76,7 @@
   },
   "x-sources": [
     "aws_cost_report_config_V1",
+    "schema_format_schema_table",
     "aws_cost_report_esm_keys_config_V1"
   ]
 }

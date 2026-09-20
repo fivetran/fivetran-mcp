@@ -80,12 +80,21 @@
           "title": "",
           "type": "boolean",
           "description": "Use Custom Bucket. Set it to 'true' if the data is being synced to your S3 bucket instead of an AppsFlyer-managed bucket."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "appsflyer_config_V1"
+    "appsflyer_config_V1",
+    "schema_format_schema"
   ]
 }

@@ -167,12 +167,21 @@
           "title": "",
           "type": "string",
           "description": "The user name."
+        },
+        "schema_prefix": {
+          "title": "Destination schema prefix",
+          "type": "string",
+          "description": "Destination schema prefix. Prefix for each replicated schema. For example with prefix 'x', source schemas 'foo' and 'bar' get replicated as 'x_foo' and 'x_bar'. The prefix is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema_prefix"
+      ]
     }
   },
   "x-sources": [
-    "sap_oracle_config_V1"
+    "sap_oracle_config_V1",
+    "schema_format_schema_prefix"
   ]
 }

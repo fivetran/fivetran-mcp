@@ -8,9 +8,17 @@
           "title": "",
           "type": "string",
           "description": "Your OneDrive folder URL"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -42,6 +50,7 @@
   },
   "x-sources": [
     "one_drive_config_V1",
+    "schema_format_schema",
     "one_drive_auth_V1"
   ]
 }

@@ -31,9 +31,17 @@
             "SpecificPages",
             "AllPages"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -70,6 +78,7 @@
   },
   "x-sources": [
     "facebook_pages_config_V1",
+    "schema_format_schema",
     "facebook_pages_auth_V1"
   ]
 }

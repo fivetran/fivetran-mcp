@@ -56,9 +56,17 @@
           "type": "string",
           "description": "The Role ARN required for IAM role authentication.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "external_secrets_keys_config": {
       "type": "object",
@@ -79,6 +87,7 @@
   },
   "x-sources": [
     "guidewire_cloud_data_access_config_V1",
+    "schema_format_schema",
     "guidewire_cloud_data_access_esm_keys_config_V1"
   ]
 }

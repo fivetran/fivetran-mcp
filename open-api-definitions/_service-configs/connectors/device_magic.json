@@ -14,12 +14,21 @@
           "title": "",
           "type": "string",
           "description": "Your Device Magic organization ID."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "device_magic_config_V1"
+    "device_magic_config_V1",
+    "schema_format_schema"
   ]
 }

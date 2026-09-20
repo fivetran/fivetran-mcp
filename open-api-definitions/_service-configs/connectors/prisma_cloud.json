@@ -41,12 +41,21 @@
           "title": "",
           "type": "string",
           "description": "Your Prisma Cloud console URL."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "prisma_cloud_config_V1"
+    "prisma_cloud_config_V1",
+    "schema_format_schema"
   ]
 }

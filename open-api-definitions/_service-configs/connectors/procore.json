@@ -23,12 +23,21 @@
             "api",
             "api-monthly"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "procore_config_V1"
+    "procore_config_V1",
+    "schema_format_schema"
   ]
 }

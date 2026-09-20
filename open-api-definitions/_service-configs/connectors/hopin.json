@@ -9,12 +9,21 @@
           "type": "string",
           "description": "Your Hopin API key.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "hopin_config_V1"
+    "hopin_config_V1",
+    "schema_format_schema"
   ]
 }

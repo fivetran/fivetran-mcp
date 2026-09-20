@@ -69,9 +69,17 @@
           "title": "",
           "type": "string",
           "description": "The user name."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -108,6 +116,7 @@
   },
   "x-sources": [
     "elastic_cloud_serverless_config_V1",
+    "schema_format_schema",
     "elastic_cloud_serverless_auth_V1",
     "elastic_cloud_serverless_esm_keys_config_V1"
   ]

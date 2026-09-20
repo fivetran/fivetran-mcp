@@ -69,12 +69,21 @@
           "title": "",
           "type": "string",
           "description": "The API username with the necessary access permissions."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "zuora_sandbox_config_V1"
+    "zuora_sandbox_config_V1",
+    "schema_format_schema"
   ]
 }

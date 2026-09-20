@@ -31,12 +31,21 @@
           "title": "",
           "type": "string",
           "description": "Your Coalesce custom base URL."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "coalesce_config_V1"
+    "coalesce_config_V1",
+    "schema_format_schema"
   ]
 }

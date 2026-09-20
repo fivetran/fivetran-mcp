@@ -14,12 +14,21 @@
           "title": "",
           "type": "string",
           "description": "Your GlobalMeet Username."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "globalmeet_config_V1"
+    "globalmeet_config_V1",
+    "schema_format_schema"
   ]
 }

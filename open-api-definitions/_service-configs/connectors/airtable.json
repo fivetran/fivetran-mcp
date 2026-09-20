@@ -3,7 +3,17 @@
   "properties": {
     "config": {
       "type": "object",
-      "description": ""
+      "description": "",
+      "required": [
+        "schema_prefix"
+      ],
+      "properties": {
+        "schema_prefix": {
+          "title": "Destination schema prefix",
+          "type": "string",
+          "description": "Destination schema prefix. Prefix for each replicated schema. For example with prefix 'x', source schemas 'foo' and 'bar' get replicated as 'x_foo' and 'x_bar'. The prefix is permanent and cannot be changed after connection creation"
+        }
+      }
     },
     "auth": {
       "type": "object",
@@ -35,6 +45,7 @@
   },
   "x-sources": [
     "airtable_config_V1",
+    "schema_format_schema_prefix",
     "airtable_auth_V1"
   ]
 }

@@ -9,12 +9,21 @@
           "type": "string",
           "description": "Your Lob API key.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "lob_config_V1"
+    "lob_config_V1",
+    "schema_format_schema"
   ]
 }

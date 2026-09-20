@@ -14,9 +14,17 @@
           "type": "string",
           "description": "Your Yahoo Display Ads on Yahoo Japan client secret.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -56,6 +64,7 @@
   },
   "x-sources": [
     "yahoo_display_ads_on_yahoo_japan_config_V1",
+    "schema_format_schema",
     "yahoo_display_ads_on_yahoo_japan_auth_V1"
   ]
 }

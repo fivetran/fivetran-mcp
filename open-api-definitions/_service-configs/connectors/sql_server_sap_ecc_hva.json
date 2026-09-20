@@ -171,12 +171,21 @@
           "title": "",
           "type": "string",
           "description": "The user name.  For Azure Databases, the format must be `user@domain`."
+        },
+        "schema_prefix": {
+          "title": "Destination schema prefix",
+          "type": "string",
+          "description": "Destination schema prefix. Prefix for each replicated schema. For example with prefix 'x', source schemas 'foo' and 'bar' get replicated as 'x_foo' and 'x_bar'. The prefix is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema_prefix"
+      ]
     }
   },
   "x-sources": [
-    "sql_server_sap_ecc_hva_config_V1"
+    "sql_server_sap_ecc_hva_config_V1",
+    "schema_format_schema_prefix"
   ]
 }

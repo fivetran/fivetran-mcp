@@ -14,12 +14,21 @@
           "title": "",
           "type": "string",
           "description": "The [store hash](/docs/connectors/applications/big-commerce/setup-guide#createaccesstoken) in your API path."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "big_commerce_config_V1"
+    "big_commerce_config_V1",
+    "schema_format_schema"
   ]
 }

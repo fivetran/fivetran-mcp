@@ -132,12 +132,21 @@
           "title": "",
           "type": "boolean",
           "description": "Toggle field to determine whether connector is syncing from API or from Data Sync"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "pendo_config_V1"
+    "pendo_config_V1",
+    "schema_format_schema"
   ]
 }

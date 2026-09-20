@@ -11,9 +11,17 @@
             "45",
             "480"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -53,6 +61,7 @@
   },
   "x-sources": [
     "calendly_config_V1",
+    "schema_format_schema",
     "calendly_auth_V1"
   ]
 }

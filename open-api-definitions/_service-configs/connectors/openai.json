@@ -26,12 +26,21 @@
           "title": "",
           "type": "string",
           "description": "Your ChatGPT Enterprise Workspace ID."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "openai_config_V1"
+    "openai_config_V1",
+    "schema_format_schema"
   ]
 }

@@ -14,12 +14,21 @@
           "type": "string",
           "description": "Secret key of your PayPal client application.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "paypal_sandbox_config_V1"
+    "paypal_sandbox_config_V1",
+    "schema_format_schema"
   ]
 }

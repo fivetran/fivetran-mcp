@@ -25,9 +25,17 @@
           "title": "",
           "type": "string",
           "description": "The Name of the SharePoint site. The Site Name is the `name` field in the Graph API response for sites."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -64,6 +72,7 @@
   },
   "x-sources": [
     "microsoft_lists_config_V1",
+    "schema_format_schema",
     "microsoft_lists_auth_V1"
   ]
 }

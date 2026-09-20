@@ -59,12 +59,21 @@
           "title": "",
           "type": "string",
           "description": "(Optional) Target Vault DNS if different from default (only when authentication_method is `OAuth2`)"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "veeva_vault_config_V1"
+    "veeva_vault_config_V1",
+    "schema_format_schema"
   ]
 }

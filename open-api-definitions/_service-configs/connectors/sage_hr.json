@@ -14,12 +14,21 @@
           "title": "",
           "type": "string",
           "description": "Your Sage HR subdomain."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "sage_hr_config_V1"
+    "sage_hr_config_V1",
+    "schema_format_schema"
   ]
 }

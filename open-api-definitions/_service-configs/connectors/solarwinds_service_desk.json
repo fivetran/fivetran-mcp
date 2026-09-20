@@ -17,12 +17,21 @@
           "type": "string",
           "description": "Your SolarWinds Service Desk token.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "solarwinds_service_desk_config_V1"
+    "solarwinds_service_desk_config_V1",
+    "schema_format_schema"
   ]
 }

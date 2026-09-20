@@ -30,12 +30,21 @@
             "79040b4d-3e2b-4480-a061-2e230eeb83b2",
             "8ed17dce-9eca-4383-a9e1-54f82c362b6d"
           ]
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "culture_amp_config_V1"
+    "culture_amp_config_V1",
+    "schema_format_schema"
   ]
 }

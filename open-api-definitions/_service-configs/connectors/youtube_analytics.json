@@ -13,9 +13,17 @@
           "title": "",
           "type": "string",
           "description": "The name of report of which connector will sync the data."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -47,6 +55,7 @@
   },
   "x-sources": [
     "youtube_analytics_config_V1",
+    "schema_format_schema",
     "youtube_analytics_auth_V1"
   ]
 }

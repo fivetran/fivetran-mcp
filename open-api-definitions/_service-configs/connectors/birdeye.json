@@ -15,12 +15,21 @@
           "type": "string",
           "description": "Your Birdeye query-param-value.",
           "format": "password"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "birdeye_config_V1"
+    "birdeye_config_V1",
+    "schema_format_schema"
   ]
 }

@@ -20,12 +20,21 @@
           "title": "",
           "type": "string",
           "description": "Your Appfigures Username."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "appfigures_config_V1"
+    "appfigures_config_V1",
+    "schema_format_schema"
   ]
 }

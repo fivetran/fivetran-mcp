@@ -85,12 +85,21 @@
           "title": "",
           "type": "string",
           "description": "The name of the schema that belongs to the workspace database where the temporary tables will be created."
+        },
+        "schema_prefix": {
+          "title": "Destination schema prefix",
+          "type": "string",
+          "description": "Destination schema prefix. Prefix for each replicated schema. For example with prefix 'x', source schemas 'foo' and 'bar' get replicated as 'x_foo' and 'x_bar'. The prefix is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema_prefix"
+      ]
     }
   },
   "x-sources": [
-    "snowflake_db_config_V1"
+    "snowflake_db_config_V1",
+    "schema_format_schema_prefix"
   ]
 }

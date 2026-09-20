@@ -23,9 +23,17 @@
           "title": "",
           "type": "string",
           "description": "The subdomain of your Gainsight Customer Success account."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -57,6 +65,7 @@
   },
   "x-sources": [
     "gainsight_customer_success_config_V1",
+    "schema_format_schema",
     "gainsight_customer_success_auth_V1"
   ]
 }

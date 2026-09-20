@@ -19,12 +19,21 @@
           "title": "",
           "type": "string",
           "description": "Your Mailgun API username."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "mailgun_config_V1"
+    "mailgun_config_V1",
+    "schema_format_schema"
   ]
 }

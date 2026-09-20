@@ -22,9 +22,23 @@
           "title": "",
           "type": "string",
           "description": "The URL of the sheet that can be copied from the browser address bar, or the ID of the sheet that can be found in the sheet's URL between **/d/** and **/edit**."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema",
+        "table"
+      ]
     },
     "auth": {
       "type": "object",
@@ -56,6 +70,7 @@
   },
   "x-sources": [
     "google_sheets_config_V1",
+    "schema_format_schema_table",
     "google_sheets_auth_V1"
   ]
 }

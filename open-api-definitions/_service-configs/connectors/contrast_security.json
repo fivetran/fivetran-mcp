@@ -25,12 +25,21 @@
           "title": "",
           "type": "string",
           "description": "Your Contrast Security API Username."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "contrast_security_config_V1"
+    "contrast_security_config_V1",
+    "schema_format_schema"
   ]
 }

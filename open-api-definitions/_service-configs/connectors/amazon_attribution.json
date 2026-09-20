@@ -35,9 +35,17 @@
           "title": "",
           "type": "string",
           "description": "The Amazon Advertising profiles whose data you want to sync. Leave this parameter blank to sync all profiles available to the authorized Amazon Attribution account. You cannot modify the value after you complete the connection setup."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -77,6 +85,7 @@
   },
   "x-sources": [
     "amazon_attribution_config_V1",
+    "schema_format_schema",
     "amazon_attribution_auth_V1"
   ]
 }

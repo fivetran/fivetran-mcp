@@ -19,12 +19,21 @@
           "title": "",
           "type": "string",
           "description": "Your GreenPowerMonitor username."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "green_power_monitor_config_V1"
+    "green_power_monitor_config_V1",
+    "schema_format_schema"
   ]
 }

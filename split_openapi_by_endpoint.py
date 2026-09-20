@@ -118,14 +118,47 @@ def strip_discriminator_mappings(obj):
     return obj
 
 
+_SHARED_INCLUDE_PREFIXES = ('schema_format_',)
+
+
+def _merge_object_schema(a: dict, b: dict) -> dict:
+    """Deep-merge two JSON-schema object nodes: union `properties` and `required`.
+
+    Used when two allOf sources both contribute to the same top-level property (e.g.
+    `config`) — a flat overwrite would silently drop whichever source lost the collision,
+    which is exactly how `schema`/`schema_prefix` (from `schema_format_*`) used to
+    disappear when a service-specific config also defined `config`. Scalar keys (like
+    `description`) fall back to `b` winning; `properties`/`required` are unioned instead.
+    """
+    merged = {**a, **b}
+    props_a, props_b = a.get('properties'), b.get('properties')
+    if isinstance(props_a, dict) or isinstance(props_b, dict):
+        merged_props = dict(props_a or {})
+        merged_props.update(props_b or {})
+        merged['properties'] = merged_props
+    req_a, req_b = a.get('required') or [], b.get('required') or []
+    if req_a or req_b:
+        merged_required = list(req_a)
+        for r in req_b:
+            if r not in merged_required:
+                merged_required.append(r)
+        merged['required'] = merged_required
+    return merged
+
+
 def _merge_service_config(service: str, request_schema_name: str, components: dict) -> dict | None:
     """Assemble one per-service config file by pulling service-specific pieces out of
     `{service}_NewConnectorRequestV1` / `{service}_NewDestinationRequest`.
 
-    Walks the request schema's `allOf` and keeps only refs whose target name is
-    service-prefixed — dropping the shared base (`NewConnectorRequestV1`,
-    `NewDestinationRequest`, `schema_format_schema_prefix`). Merges the kept parts'
-    properties and required lists into a single flat object. For 32 connectors this
+    Walks the request schema's `allOf` and keeps refs whose target name is either
+    service-prefixed or one of the shared `schema_format_*` schemas (which carry the
+    destination `schema`/`schema_prefix`/`table`/`table_group_name` field(s) and the one
+    genuine unconditional `required` in the whole config, e.g. `required: ["schema"]`) —
+    dropping only the shared request base (`NewConnectorRequestV1`, `NewDestinationRequest`).
+    Merges the kept parts' properties and required lists into a single flat object; when two
+    sources both define the same top-level property (typically `config`, from both a
+    service-specific piece and a `schema_format_*` piece) they're deep-merged via
+    `_merge_object_schema` rather than one overwriting the other. For 32 connectors this
     also folds in `{service}_esm_keys_config_V1` so the agent gets one file per service.
 
     `components` is the top-level `spec['components']` object (with `schemas` inside),
@@ -146,14 +179,18 @@ def _merge_service_config(service: str, request_schema_name: str, components: di
         if not ref:
             continue
         target = ref.split('/')[-1]
-        if not target.startswith(f'{service}_'):
+        if not (target.startswith(f'{service}_') or target.startswith(_SHARED_INCLUDE_PREFIXES)):
             continue
         resolved = resolve_refs_inline(item, components)
         if not isinstance(resolved, dict):
             continue
         sources.append(target)
         for prop_name, prop_schema in resolved.get('properties', {}).items():
-            merged_props[prop_name] = prop_schema
+            existing = merged_props.get(prop_name)
+            if isinstance(existing, dict) and isinstance(prop_schema, dict):
+                merged_props[prop_name] = _merge_object_schema(existing, prop_schema)
+            else:
+                merged_props[prop_name] = prop_schema
         for req in resolved.get('required', []):
             if req not in merged_required:
                 merged_required.append(req)

@@ -43,9 +43,17 @@
           "title": "",
           "type": "string",
           "description": "Username of your Workday Integration System User account"
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     },
     "auth": {
       "type": "object",
@@ -87,6 +95,7 @@
   },
   "x-sources": [
     "workday_hcm_config_V1",
+    "schema_format_schema",
     "workday_hcm_auth_V1",
     "workday_hcm_esm_keys_config_V1"
   ]

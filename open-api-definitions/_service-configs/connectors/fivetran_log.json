@@ -8,12 +8,21 @@
           "title": "",
           "type": "boolean",
           "description": "(Optional) Retrieve account-level logs."
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
       },
-      "description": ""
+      "description": "",
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [
-    "fivetran_log_config_V1"
+    "fivetran_log_config_V1",
+    "schema_format_schema"
   ]
 }
