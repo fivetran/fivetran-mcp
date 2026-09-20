@@ -11,10 +11,13 @@ Generated tools are filtered by FIVETRAN_SCOPE and DISALLOWED_ACTIONS.
 import argparse
 import base64
 import contextlib
+import hashlib
 import json
 import os
 import re
 import sys
+import time
+import uuid
 from collections import defaultdict
 from dataclasses import dataclass
 from importlib.metadata import PackageNotFoundError, version
@@ -36,7 +39,9 @@ from mcp.server.streamable_http_manager import StreamableHTTPSessionManager
 from mcp.server.transport_security import TransportSecuritySettings
 from mcp.types import Tool, TextContent, ToolAnnotations
 from starlette.applications import Starlette
-from starlette.routing import Mount
+from starlette.requests import Request
+from starlette.responses import JSONResponse
+from starlette.routing import Mount, Route
 
 load_dotenv()
 
@@ -114,6 +119,27 @@ async def _forward_authorization_header() -> Credentials:
     return Credentials(authorization=auth)
 
 
+def _resolve_client_name() -> str:
+    """Best-effort caller identity for logging.
+
+    HTTP: the incoming User-Agent header — stateless sessions never
+    populate client_params (a fresh ServerSession per request, so the
+    InitializeRequest that would have set it lands on a different session
+    than the tool call). stdio: the session's declared clientInfo.name,
+    since a stdio session persists for the connection's lifetime. Falls
+    back to "unknown" outside a real request/session (e.g. a direct call
+    in a test, or a transport that never attached one).
+    """
+    try:
+        if MODE == "streamable-http":
+            request = mcp_server.request_context.request
+            return request.headers.get("User-Agent", "unknown") if request else "unknown"
+        client_params = mcp_server.request_context.session.client_params
+        return client_params.clientInfo.name if client_params else "unknown"
+    except LookupError:
+        return "unknown"
+
+
 def header_resolver() -> CredentialsResolver:
     """HTTP mode without OAuth: caller supplies valid Fivetran credentials."""
     async def _resolve() -> Credentials:
@@ -158,19 +184,27 @@ def select_credentials_resolver(mode: str) -> CredentialsResolver:
 # ---------------------------------------------------------------------------
 
 def _load_manifest() -> tuple[
-    list[dict], dict[str, dict], dict[str, list[dict]], list[dict]
+    list[dict], dict[str, dict], dict[str, list[dict]], list[dict], str
 ]:
-    doc = json.loads((OPENAPI_DIR / "endpoints.json").read_text(encoding="utf-8"))
+    """Also returns a sha256 checksum of the manifest bytes, for /health.
+
+    Computed once here, not per-request: the process never reloads the
+    file, so a live-recomputed hash would just describe a manifest the
+    server isn't running.
+    """
+    raw = (OPENAPI_DIR / "endpoints.json").read_bytes()
+    doc = json.loads(raw)
     entries = doc["endpoints"]
     tools = doc.get("tools", [])
     by_name = {e["name"]: e for e in entries}
     by_resource: dict[str, list[dict]] = defaultdict(list)
     for e in entries:
         by_resource[e["resource"]].append(e)
-    return entries, by_name, dict(by_resource), tools
+    checksum = hashlib.sha256(raw).hexdigest()
+    return entries, by_name, dict(by_resource), tools, checksum
 
 
-ENDPOINTS, ENDPOINTS_BY_NAME, ENDPOINTS_BY_RESOURCE, TOOLS_INDEX = _load_manifest()
+ENDPOINTS, ENDPOINTS_BY_NAME, ENDPOINTS_BY_RESOURCE, TOOLS_INDEX, MANIFEST_CHECKSUM = _load_manifest()
 
 # (resource, action) pairs that have a tool. Used to validate DISALLOWED_ACTIONS.
 TOOL_PAIRS: set[tuple[str, str]] = {(t["resource"], t["action"]) for t in TOOLS_INDEX}
@@ -812,8 +846,45 @@ async def list_tools() -> list[Tool]:
     return _TOOLS
 
 
+def _build_call_record(
+    request_id: str,
+    tool: str,
+    endpoint: str | None,
+    upstream_status: int | None,
+    latency_ms: float,
+) -> dict[str, Any]:
+    return {
+        "request_id": request_id,
+        "mode": MODE,
+        "tool": tool,
+        "endpoint": endpoint,
+        "upstream_status": upstream_status,
+        "latency_ms": latency_ms,
+        "client": _resolve_client_name(),
+    }
+
+
+def _record_tool_call(record: dict[str, Any]) -> None:
+    """One structured JSON log line per tool call.
+
+    Also the single hook where future metrics attach (calls by
+    tool/status, upstream codes, 401s, init failures) — no counters or
+    exporter exist yet. Only ever receives the whitelisted fields
+    _build_call_record assembles; never arguments or headers.
+
+    stdio's stdout is the MCP protocol channel itself, so stdio logs go to
+    stderr (matching this module's existing warning-print convention);
+    streamable-http's stdout is free for structured logs.
+    """
+    stream = sys.stdout if MODE == "streamable-http" else sys.stderr
+    print(json.dumps(record), file=stream)
+
+
 @mcp_server.call_tool()
 async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
+    request_id = uuid.uuid4().hex
+    start = time.monotonic()
+    upstream_status: int | None = None
     try:
         if name == "list_endpoints":
             result = do_list_endpoints(
@@ -838,6 +909,8 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             )
         else:
             result = {"error": "UNKNOWN_TOOL", "message": f"Unknown tool: {name!r}"}
+        if isinstance(result.get("status"), int):
+            upstream_status = result["status"]
         return [TextContent(type="text", text=json.dumps(result, indent=2))]
 
     except CredentialsError as e:
@@ -845,6 +918,19 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             type="text",
             text=json.dumps({"error": "CREDENTIALS_MISSING", "message": str(e)}, indent=2),
         )]
+    except httpx.HTTPStatusError as e:
+        # Not caller-correctable (5xx) — capture the status for the log line, then
+        # let it propagate unchanged into a genuine isError=True result (P8).
+        upstream_status = e.response.status_code
+        raise
+    finally:
+        _record_tool_call(_build_call_record(
+            request_id=request_id,
+            tool=name,
+            endpoint=arguments.get("name"),
+            upstream_status=upstream_status,
+            latency_ms=round((time.monotonic() - start) * 1000, 1),
+        ))
 
 
 # ---------------------------------------------------------------------------
@@ -893,6 +979,14 @@ def _build_security_settings(mode: str) -> TransportSecuritySettings | None:
     )
 
 
+async def _health(request: Request) -> JSONResponse:
+    return JSONResponse({
+        "status": "ok",
+        "version": __version__,
+        "manifest_checksum": MANIFEST_CHECKSUM,
+    })
+
+
 def build_http_app(token_verifier: Any = None) -> Starlette:
     """Build the streamable-http Starlette app.
 
@@ -918,7 +1012,9 @@ def build_http_app(token_verifier: Any = None) -> Starlette:
     )
 
     mcp_app = session_manager.handle_request
-    routes = []
+    # Unauthenticated: added straight to routes, never passed through
+    # auth.require_oauth, so it's reachable regardless of OAuth config.
+    routes = [Route("/health", _health, methods=["GET"])]
     middleware = []
     issuer = os.getenv("FIVETRAN_AUTH_ISSUER")
     if issuer:

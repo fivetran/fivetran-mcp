@@ -110,9 +110,10 @@ is the single source of truth both the arg parser's `choices` and
   balancer. The Starlette app's `lifespan` enters `http_client_lifespan()`
   (see "Outbound HTTP client" below) and `session_manager.run()` together, so
   each uvicorn worker owns its own HTTP client and session manager and closes
-  both on shutdown. `/mcp` is always mounted; the OAuth well-known route is
-  added alongside it when `FIVETRAN_AUTH_ISSUER` is set (see "OAuth
-  resource-server mode" below). `/health` isn't added yet.
+  both on shutdown. `/mcp` and `/health` (see "Operational surface" below)
+  are always mounted; the OAuth well-known route is added alongside them
+  when `FIVETRAN_AUTH_ISSUER` is set (see "OAuth resource-server mode"
+  below).
 - **Origin/Host validation**: `_build_security_settings(mode)` reads
   `MCP_ALLOWED_ORIGINS` / `MCP_ALLOWED_HOSTS` (comma-separated) and builds a
   `mcp.server.transport_security.TransportSecuritySettings` passed to the
@@ -223,8 +224,7 @@ Three resolvers ship in `server.py`:
   token and rejected anything invalid with a 401 before dispatch. Selected
   whenever `FIVETRAN_AUTH_ISSUER` is set.
 
-`select_credentials_resolver(mode)` — defined after all three resolver
-factories, right before tool dispatch — maps a transport mode to the
+`select_credentials_resolver(mode)` maps a transport mode to the
 resolver `set_credentials_resolver` should register: `stdio` →
 `env_resolver`; `streamable-http` → `oauth_resolver` if
 `FIVETRAN_AUTH_ISSUER` is set, else `header_resolver`. `async_main` (stdio)
@@ -245,9 +245,9 @@ exists yet to point at):
   file carrying a real key/secret, left over from local dev or baked into a
   shared image, recreates the exact shared-key misconfiguration
   `select_credentials_resolver` rejects above.
-- `Authorization` header values must never be logged. No logging exists
-  yet — a future proposal adds structured per-call request logs — but when
-  it lands it must exclude header values entirely, not redact them.
+- `Authorization` header values must never be logged. The structured
+  per-call logging added in "Operational surface" below excludes header
+  values entirely (a fixed field whitelist, not redaction).
 
 ### OAuth resource-server mode
 
@@ -311,6 +311,74 @@ a mid-call signal from the upstream API.
 `list_endpoints` and `get_schema` read the local manifest and don't require
 credentials. `CredentialsError` only surfaces when an API-hitting tool is
 invoked, so clients can browse the tool surface before auth is wired.
+
+### Operational surface
+
+Hosted-deployment concerns only — nobody self-hosting stdio needs any of
+this, so (matching how `MCP_RESOURCE_URL`/`FIVETRAN_AUTH_ISSUER` are handled
+above) it's documented here, not in the README.
+
+- **`GET /health`** — added straight to `build_http_app()`'s `routes` list,
+  never passed through `auth.require_oauth`, so it's reachable regardless of
+  OAuth configuration (same treatment the `/.well-known/oauth-protected-resource/mcp`
+  route already gets). No auth. Returns `{"status": "ok", "version":
+  __version__, "manifest_checksum": MANIFEST_CHECKSUM}`. `MANIFEST_CHECKSUM`
+  is a sha256 hex digest of `endpoints.json`'s raw bytes, computed once at
+  import inside `_load_manifest()` and cached as a module constant — the
+  process never reloads the file at runtime, so a live-recomputed hash per
+  request would just describe a manifest the server isn't running.
+- **Structured per-call JSON logs** — `call_tool` generates a fresh
+  `uuid.uuid4()` request id and a `time.monotonic()` timer per invocation
+  (the JSON-RPC `request_id` on `RequestContext` is client-assigned and not
+  globally unique — collisions are expected across different clients or
+  stateless HTTP sessions — so it isn't used as the correlation id), then
+  emits one JSON line via `_record_tool_call(_build_call_record(...))` in a
+  `finally` block, so it fires on every path including uncaught exceptions.
+  Fields: `request_id`, `mode`, `tool` (the dispatched MCP tool name),
+  `endpoint` (the `name` argument, when the tool takes one — `None` for
+  `list_endpoints`), `upstream_status`, `latency_ms`, `client`. Only these
+  whitelisted fields are logged — never `arguments` (which can carry a
+  request body) and never headers.
+  - **Destination is transport-dependent, not uniformly stdout.** stdio's
+    stdout is the MCP JSON-RPC protocol channel itself; writing log lines
+    there would corrupt every stdio client's connection. HTTP mode logs to
+    stdout; stdio mode logs to stderr, matching this module's existing
+    `print(..., file=sys.stderr)` warning convention.
+  - **`client`** is a stand-in until a future proposal normalizes it: HTTP
+    mode uses the raw incoming `User-Agent` header; stdio mode uses
+    `mcp_server.request_context.session.client_params.clientInfo.name`.
+    These aren't interchangeable by accident — `StreamableHTTPSessionManager`
+    runs `stateless=True` here, so every HTTP request gets a brand-new
+    `ServerSession`; the `InitializeRequest` that populates `client_params`
+    and the later `tools/call` request land on two different sessions, so
+    `client_params` is `None` on every HTTP tool call. stdio's session
+    persists for the whole connection, so `client_params` is reliable
+    there. `_resolve_client_name()` falls back to `"unknown"` outside a
+    real request/session (e.g. a direct call in a test).
+  - **`upstream_status` scope boundary**: populated only for the server's
+    own classified 4xx dicts (`_shape_upstream_error`'s `"status"` field)
+    and a caught-then-reraised 5xx; `None` for everything else, including
+    every successful call. `_fivetran_request` returns a successful
+    response's JSON body directly with no status side-channel, and adding
+    one would mean either reshaping `do_call`'s return contract (breaking
+    the shapes `tests/test_http_client.py` and `tests/test_error_contract.py`
+    pin) or guess-parsing arbitrary Fivetran response bodies for a
+    `"status"`-like field — risking misattributing a real business field as
+    an HTTP status. Not attempted.
+- **Metrics** — `_record_tool_call` is the single hook where future metrics
+  attach (calls by tool/status, upstream codes, 401s, init failures). It's
+  an instrumentation seam only today: no counters, no exporter, no new
+  dependency.
+- **`FIVETRAN_AUTH_ISSUER` stays optional.** Unaffected by any of the above
+  — P3b (real token verification) is still `NotImplementedError`, so
+  requiring the issuer at HTTP startup would force every deployment through
+  a verifier that unconditionally fails. Revisit once P3b lands.
+- **`Dockerfile`** (repo root) — single-stage `python:3.12-slim`, installs
+  the package via `pip install .` (matching `[tool.hatch.build.targets.wheel]
+  only-include`'s file list), runs as a non-root user, and defaults to
+  `fivetran-mcp --transport streamable-http --host 0.0.0.0 --port 8000`.
+  TLS terminates upstream (load balancer/ingress) — nothing TLS-related in
+  the image itself.
 
 ### Error contract
 
