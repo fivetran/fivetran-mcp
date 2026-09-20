@@ -120,16 +120,10 @@ async def _forward_authorization_header() -> Credentials:
 
 
 def _raw_client_identifier() -> str | None:
-    """Raw signal for the connecting client, if any — shared by the P9 log
-    line's `client` field and P11's outbound User-Agent slug.
+    """Identify the connecting client, or None if unavailable.
 
-    HTTP: the incoming User-Agent header — stateless sessions never
-    populate client_params (a fresh ServerSession per request, so the
-    InitializeRequest that would have set it lands on a different session
-    than the tool call). stdio: the session's declared clientInfo.name,
-    since a stdio session persists for the connection's lifetime. None
-    outside a real request/session (e.g. a direct call in a test, or a
-    transport that never attached one).
+    HTTP: the User-Agent header (stateless sessions never receive clientInfo).
+    stdio: the session's clientInfo.name.
     """
     try:
         if MODE == "streamable-http":
@@ -194,12 +188,7 @@ def select_credentials_resolver(mode: str) -> CredentialsResolver:
 def _load_manifest() -> tuple[
     list[dict], dict[str, dict], dict[str, list[dict]], list[dict], str
 ]:
-    """Also returns a sha256 checksum of the manifest bytes, for /health.
-
-    Computed once here, not per-request: the process never reloads the
-    file, so a live-recomputed hash would just describe a manifest the
-    server isn't running.
-    """
+    """Also returns a sha256 of the loaded bytes, for /health. The file is never reread."""
     raw = (OPENAPI_DIR / "endpoints.json").read_bytes()
     doc = json.loads(raw)
     entries = doc["endpoints"]
@@ -359,9 +348,7 @@ _HTTP_LIMITS = httpx.Limits()
 _http_client: httpx.AsyncClient | None = None
 
 
-# Known AI clients, matched by substring against the raw incoming
-# User-Agent header in HTTP mode (stdio uses clientInfo.name directly —
-# already a clean, self-reported name, no header to parse).
+# Known AI clients, matched by substring against the incoming User-Agent in HTTP mode.
 _HTTP_CLIENT_MARKERS: tuple[tuple[str, str], ...] = (
     ("claude", "claude"),
     ("chatgpt", "chatgpt"),
@@ -371,8 +358,7 @@ _HTTP_CLIENT_MARKERS: tuple[tuple[str, str], ...] = (
     ("gemini", "gemini"),
 )
 
-# Short label for the outbound User-Agent only — every other use of MODE
-# in this module keeps the full "stdio"/"streamable-http" value.
+# Short mode label, used only in the outbound User-Agent.
 _MODE_UA_LABEL: dict[str, str] = {"stdio": "stdio", "streamable-http": "http"}
 
 
@@ -382,13 +368,9 @@ def _sanitize_client_slug(name: str) -> str:
 
 
 def _resolve_ua_client_slug() -> str:
-    """Client identifier for the outbound User-Agent (P11).
+    """Client slug for the outbound User-Agent.
 
-    stdio: clientInfo.name, sanitized into a slug. HTTP: the raw
-    User-Agent header is matched against known AI clients by substring;
-    an unrecognized client's raw header is used verbatim (not sanitized)
-    rather than reported as "unknown" — "unknown" is reserved for no
-    User-Agent at all.
+    HTTP: known clients matched by substring. stdio: clientInfo.name, sanitized.
     """
     raw = _raw_client_identifier()
     if raw is None:
@@ -917,16 +899,9 @@ def _build_call_record(
 
 
 def _record_tool_call(record: dict[str, Any]) -> None:
-    """One structured JSON log line per tool call.
+    """Emit one JSON log line per tool call.
 
-    Also the single hook where future metrics attach (calls by
-    tool/status, upstream codes, 401s, init failures) — no counters or
-    exporter exist yet. Only ever receives the whitelisted fields
-    _build_call_record assembles; never arguments or headers.
-
-    stdio's stdout is the MCP protocol channel itself, so stdio logs go to
-    stderr (matching this module's existing warning-print convention);
-    streamable-http's stdout is free for structured logs.
+    stdout in HTTP mode; stderr in stdio, where stdout is the MCP channel.
     """
     stream = sys.stdout if MODE == "streamable-http" else sys.stderr
     print(json.dumps(record), file=stream)
@@ -971,8 +946,7 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             text=json.dumps({"error": "CREDENTIALS_MISSING", "message": str(e)}, indent=2),
         )]
     except httpx.HTTPStatusError as e:
-        # Not caller-correctable (5xx) — capture the status for the log line, then
-        # let it propagate unchanged into a genuine isError=True result (P8).
+        # 5xx: record the status, then re-raise so the SDK returns isError=True.
         upstream_status = e.response.status_code
         raise
     finally:
