@@ -27,7 +27,7 @@ Write and delete tool descriptions and endpoint summaries contain advisory confi
 
 We have plugins that use this MCP server to make complicated tasks easier, compatible with Claude Code and Codex. Each plugin lives in its own repository with its own README.
 
-- **[copy-connections](https://github.com/fivetran/copy-connections)**. Copy existing Fivetran connections to a new destination.  Keep their configs and schemas intact or modify them as you like.
+- **[copy-connections](https://github.com/fivetran/copy-connections)**. Copy existing Fivetran connections to a new destination. Keep their configs and schemas intact or modify them as you like.
 
 ## Regenerating API Schema Files
 
@@ -77,7 +77,7 @@ You can generate credentials within https://fivetran.com/dashboard/user/api-conf
 
 ### 3. Prepare your environment variables
 
-Before configuring any client, decide on the values you will pass to the server. Every client config below expects the same five variables, so figure them out once here and reuse them.
+Before configuring any client, decide on the values you will pass to the server. Every client config below expects the same set of variables, so figure them out once here and reuse them.
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
@@ -113,7 +113,7 @@ Using uvx (Option A):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write"
+        "DISALLOWED_ACTIONS": "system-keys:read"
       }
     }
   }
@@ -132,7 +132,7 @@ Using a local clone (Option B):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write"
+        "DISALLOWED_ACTIONS": "system-keys:read"
       }
     }
   }
@@ -155,7 +155,7 @@ claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:write \
+  --env DISALLOWED_ACTIONS=system-keys:read \
   -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
@@ -166,7 +166,7 @@ claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:write \
+  --env DISALLOWED_ACTIONS=system-keys:read \
   -- python /path/to/fivetran-mcp/server.py
 ```
 
@@ -182,7 +182,7 @@ Or add it directly to your `~/.claude.json` configuration:
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write"
+        "DISALLOWED_ACTIONS": "system-keys:read"
       }
     }
   }
@@ -219,7 +219,7 @@ codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:write \
+  --env DISALLOWED_ACTIONS=system-keys:read \
   -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
@@ -230,7 +230,7 @@ codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:write \
+  --env DISALLOWED_ACTIONS=system-keys:read \
   -- python /path/to/fivetran-mcp/server.py
 ```
 
@@ -247,7 +247,7 @@ args = ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"
 FIVETRAN_API_KEY = "your-api-key"
 FIVETRAN_API_SECRET = "your-api-secret"
 FIVETRAN_SCOPE = "read"
-DISALLOWED_ACTIONS = "system-keys:write"
+DISALLOWED_ACTIONS = "system-keys:read"
 ```
 
 Using a local clone (Option B):
@@ -261,7 +261,7 @@ args = ["/path/to/fivetran-mcp/server.py"]
 FIVETRAN_API_KEY = "your-api-key"
 FIVETRAN_API_SECRET = "your-api-secret"
 FIVETRAN_SCOPE = "read"
-DISALLOWED_ACTIONS = "system-keys:write"
+DISALLOWED_ACTIONS = "system-keys:read"
 ```
 
 Verify configuration:
@@ -293,7 +293,7 @@ Using uvx (Option A):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write"
+        "DISALLOWED_ACTIONS": "system-keys:read"
       }
     }
   }
@@ -312,7 +312,7 @@ Using a local clone (Option B):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write"
+        "DISALLOWED_ACTIONS": "system-keys:read"
       }
     }
   }
@@ -337,8 +337,10 @@ several clients on a network can reach one running instance — run it with
 `--transport streamable-http` (or `MCP_TRANSPORT=streamable-http`):
 
 ```bash
-python /path/to/fivetran-mcp/server.py --transport streamable-http --host 0.0.0.0 --port 8000
+fivetran-mcp --transport streamable-http --host 0.0.0.0 --port 8000
 ```
+
+(Works the same way for both install options in step 1 — `fivetran-mcp` is the console script both `uvx` and `pip install .` provide.)
 
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
