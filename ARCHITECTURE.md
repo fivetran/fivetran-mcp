@@ -2,7 +2,7 @@
 
 fivetran-mcp is a two-stage pipeline: a build-time splitter that converts
 Fivetran's OpenAPI spec into a manifest, and a runtime server that generates
-MCP tools from that manifest.
+MCP tools from that manifest and serves them over stdio or streamable-http.
 
 ```
 fivetran-open-api-definition.json
@@ -20,9 +20,63 @@ fivetran-open-api-definition.json
               ▼
       server.py                          (runtime)
               │
-              ▼
-      MCP tools over stdio
+        ┌─────┴─────┐
+        ▼           ▼
+   MCP tools    MCP tools
+   over stdio   over streamable-http
 ```
+
+## Repo map
+
+- `server.py` — the runtime MCP server: manifest loading, grant/scope model,
+  tool generation, request handling, both transport entrypoints.
+- `auth.py` — OAuth 2.1 resource-server plumbing for streamable-http mode.
+  Imported only when `FIVETRAN_AUTH_ISSUER` is set.
+- `split_openapi_by_endpoint.py` — build-time script that turns the full
+  OpenAPI spec into `open-api-definitions/`.
+- `endpoint_overrides.json` — flat `operationId → prepend text` map consumed
+  by the splitter.
+- `fivetran-open-api-definition.json` — the full upstream OpenAPI spec, input
+  to the splitter.
+- `open-api-definitions/` — generated output: one schema file per endpoint,
+  `_service-configs/` per-service connector/destination configs, the
+  `endpoints.json` manifest, and `AVAILABLE_ACTIONS.md`.
+- `tests/` — pytest suite covering the grant model, credential resolvers,
+  the error contract, HTTP transport, OAuth, logging, and the splitter.
+- `Dockerfile` — single-stage image for the streamable-http deployment.
+- `pyproject.toml` — package metadata, dependencies, and the wheel's file
+  list (`server.py`, `auth.py`, `open-api-definitions`).
+
+## Getting started
+
+See the README's [Setup](./README.md#setup) section for running the server
+locally against a real Fivetran account.
+
+To run the test suite:
+
+```bash
+pip install -e ".[dev]"
+pytest tests/
+```
+
+## Configuration reference
+
+Every environment variable the code reads, and what it does.
+
+| Variable | Mode | Default | Effect |
+|---|---|---|---|
+| `FIVETRAN_API_KEY` | stdio | — | Paired with `FIVETRAN_API_SECRET` to build the `Basic` auth header `env_resolver` sends upstream. Must be unset in streamable-http mode; startup fails if it's set. |
+| `FIVETRAN_API_SECRET` | stdio | — | See `FIVETRAN_API_KEY`. |
+| `FIVETRAN_SCOPE` | stdio | `read` | Selects the `SCOPE_TIERS` ceiling (`read` / `read/write` / `read/write/delete`) `configure()` grants. Ignored (with a startup warning) in streamable-http mode. |
+| `FIVETRAN_ALLOW_WRITES` | stdio | `false` | Legacy alias: `true` behaves like `FIVETRAN_SCOPE=read/write`. Ignored if `FIVETRAN_SCOPE` is also set. Ignored (with a startup warning) in streamable-http mode. |
+| `DISALLOWED_ACTIONS` | stdio | — | Comma-separated `resource:action` or `resource:action:endpoint_name` denials carved out of the scope ceiling. Ignored (with a startup warning) in streamable-http mode. |
+| `MCP_TRANSPORT` | both | `stdio` | Selects `stdio` or `streamable-http`. Same as `--transport`. |
+| `MCP_HOST` | streamable-http | `127.0.0.1` | uvicorn bind host. Same as `--host`. |
+| `MCP_PORT` | streamable-http | `8000` | uvicorn bind port. Same as `--port`. |
+| `MCP_ALLOWED_ORIGINS` | streamable-http | — | Comma-separated allowed `Origin` header values for DNS-rebinding protection. Unset (with neither this nor `MCP_ALLOWED_HOSTS` set) disables the check and prints a startup warning. |
+| `MCP_ALLOWED_HOSTS` | streamable-http | — | Comma-separated allowed `Host` header values; same protection as `MCP_ALLOWED_ORIGINS`. |
+| `FIVETRAN_AUTH_ISSUER` | streamable-http | — | Fivetran's OAuth 2.1 authorization server URL. Setting it switches streamable-http from header-forwarding (`header_resolver`) to OAuth resource-server mode (`oauth_resolver` plus `auth.py`'s middleware). Ignored (with a startup warning) in stdio mode. |
+| `MCP_RESOURCE_URL` | streamable-http | `https://mcp.fivetran.com/mcp` | The resource identifier advertised in the RFC 9728 well-known route. The SDK's `BearerAuthBackend` will check it against a verified token's audience, but that check only runs once `FivetranOAuthTokenVerifier.verify_token` actually returns a token — today it always raises first (see "Open decisions"). Only meaningful with `FIVETRAN_AUTH_ISSUER` set. Ignored (with a startup warning) in stdio mode. |
 
 ## Build stage — `split_openapi_by_endpoint.py`
 
@@ -97,13 +151,13 @@ only) via `_build_arg_parser()`. `TRANSPORT_MODES = ("stdio", "streamable-http")
 is the single source of truth both the arg parser's `choices` and
 `select_credentials_resolver` validate against.
 
-- **stdio** (default): `asyncio.run(async_main())`, unchanged from before P1.
+- **stdio** (default): `asyncio.run(async_main())`.
 - **streamable-http**: `uvicorn.run(build_http_app(), host=..., port=...)`.
   `build_http_app()` calls `configure(SCOPE_TIERS["read/write"], ...,
   mode="streamable-http")` — hosted mode is always read/write, never delete —
-  and `select_credentials_resolver("streamable-http")` (fails eagerly per P2
-  if a shared API key is set), then wraps the existing low-level `mcp_server`
-  in `mcp.server.streamable_http_manager.StreamableHTTPSessionManager(stateless=True)`
+  and `select_credentials_resolver("streamable-http")`, then wraps the
+  existing low-level `mcp_server` in
+  `mcp.server.streamable_http_manager.StreamableHTTPSessionManager(stateless=True)`
   and mounts it at `/mcp` in a Starlette app. `stateless=True` means every
   HTTP request gets a fresh MCP session with no server-side state carried
   between requests — required so instances are interchangeable behind a load
@@ -124,14 +178,11 @@ is the single source of truth both the arg parser's `choices` and
   hard failure, so a quick local `--transport streamable-http` test isn't
   blocked on configuring allow-lists.
 - **Hosted denies**: `HOSTED_DISALLOWED_ACTIONS` is a code constant (not env),
-  parsed by the same `_parse_disallowed_actions` function stdio uses — "one
-  mechanism for both modes." It ships empty; which credential-minting
-  endpoints (`get_user_api_key`, `connect_card`, etc.) it should exclude is
-  an open decision tracked in `local/hosted-mcp-plan.md` ("Flag for future
-  review"), unblocked by this constant's existence. `FIVETRAN_SCOPE`,
-  `DISALLOWED_ACTIONS`, and `FIVETRAN_ALLOW_WRITES` are stdio-only; if any is
-  set when `build_http_app()` runs, it's ignored and a startup warning is
-  printed rather than silently doing nothing.
+  parsed by the same `_parse_disallowed_actions` function stdio uses — one
+  mechanism for both modes. It ships empty (see "Open decisions" below).
+  `FIVETRAN_SCOPE`, `DISALLOWED_ACTIONS`, and `FIVETRAN_ALLOW_WRITES` are
+  stdio-only; if any is set when `build_http_app()` runs, it's ignored and a
+  startup warning is printed rather than silently doing nothing.
 
 ### Grant model
 
@@ -158,10 +209,9 @@ easier to reason about than enumerating every allowed `(resource, action)`
 pair. Users pick a broad ceiling and carve holes in it, rather than assembling
 permissions from scratch.
 
-**Why does denying a lower action cascade to higher ones?** "You can't
-observe it, so you can't touch it either." If an agent can't `read` a
-resource, letting it `write` or `delete` blind is asking for trouble —
-the write would succeed against something the agent (and often the user)
+**Why does denying a lower action cascade to higher ones?** If an agent
+can't `read` a resource, letting it `write` or `delete` blind means the
+write would succeed against something the agent — and often the user —
 can't inspect first.
 
 Only `(resource, action)` pairs in `ALLOWED_GRANTS` produce a tool. Endpoint
@@ -237,17 +287,12 @@ auth. This check runs eagerly at selection time, unlike the resolvers' own
 lazy, per-call checks, because it's a startup-time misconfiguration rather
 than a per-request condition.
 
-Two related invariants, both documentation-level today (no enforcement code
-exists yet to point at):
-
-- `load_dotenv()` runs once at import. Harmless in a container that only
-  ever runs one mode, but HTTP deployments must not rely on it — a `.env`
-  file carrying a real key/secret, left over from local dev or baked into a
-  shared image, recreates the exact shared-key misconfiguration
-  `select_credentials_resolver` rejects above.
-- `Authorization` header values must never be logged. The structured
-  per-call logging added in "Operational surface" below excludes header
-  values entirely (a fixed field whitelist, not redaction).
+`Authorization` header values must never be logged. The structured per-call
+logging in "Operational surface" below enforces this: it emits a fixed
+field whitelist rather than redacting, so headers are never in scope to
+begin with. `User-Agent` is the one header value that is logged, as the
+`client` field. See "Open decisions" below for the one remaining
+documentation-only invariant in this area (`load_dotenv()`).
 
 ### OAuth resource-server mode
 
@@ -278,7 +323,11 @@ reimplementing RFC 9728 or bearer-token gating by hand:
 - `oauth_protected_resource_routes(issuer, resource_url)` — the RFC 9728
   `GET /.well-known/oauth-protected-resource/mcp` route, listing `resource`
   (`MCP_RESOURCE_URL`, default `https://mcp.fivetran.com/mcp`) and
-  `authorization_servers` (`[FIVETRAN_AUTH_ISSUER]`).
+  `authorization_servers` (`[FIVETRAN_AUTH_ISSUER]`). Building this route
+  calls the SDK's `validate_issuer_url`, which requires `https://` unless
+  the issuer's host is `localhost` or starts with `127.0.0.1` (`http://`
+  allowed there for local testing), and rejects a fragment or query string
+  in the issuer URL. Startup fails loudly on a rejected issuer.
 - `FivetranOAuthTokenVerifier` — implements `TokenVerifier.verify_token`.
   Its body is `NotImplementedError`: the auth server hasn't confirmed
   token format (JWT+JWKS vs. opaque+introspection) yet, and every other
@@ -287,26 +336,20 @@ reimplementing RFC 9728 or bearer-token gating by hand:
   verifier and exercise the gate without real crypto; production always
   gets the real (currently stub) verifier.
 
-`FIVETRAN_AUTH_ISSUER` is validated as a well-formed HTTPS URL at startup
-(fails loudly otherwise, matching this codebase's other startup checks).
 `MCP_RESOURCE_URL` and `FIVETRAN_AUTH_ISSUER` are hosted-deployment operator
 configuration — nobody self-hosting runs their own OAuth issuer against
 Fivetran's API — so they're documented here, not in the README.
 
-An upstream 401 from the Fivetran API mid-call (a bearer token that was
-valid at request time but the API itself now rejects — e.g. account-level
-MCP disable) is *not* turned into a raw HTTP 401. It stays exactly what the
-error contract below already produces: a shaped `UPSTREAM_UNAUTHORIZED`
-tool result, HTTP 200 at the transport level. There's no supported
-extension point in the SDK's low-level `Server`/`StreamableHTTPSessionManager`
-to rewrite an in-flight JSON-RPC response into a raw HTTP status from
-inside `do_call`, several layers below where that status is decided. The
-real entry-point gate — missing, invalid, or expired bearer token — is
-already enforced by `oauth_authentication_middleware`/`require_oauth` on
-every single request (stateless mode re-verifies fresh each time); account
-disablement is expected to rely on a short access-token TTL so the next
-request's fresh verification naturally 401s, not on this server catching
-a mid-call signal from the upstream API.
+An upstream 401 mid-call (a bearer token valid at request time that the
+Fivetran API now rejects, e.g. account-level MCP disable) is not turned
+into a raw HTTP 401 — it stays a shaped `UPSTREAM_UNAUTHORIZED` tool result
+(HTTP 200 at the transport level), since there's no supported way to
+rewrite an in-flight JSON-RPC response into a transport-level status from
+inside `do_call`. The real entry-point gate — missing, invalid, or expired
+token — is already enforced fresh on every stateless request by
+`oauth_authentication_middleware`/`require_oauth`; account disablement is
+expected to rely on a short access-token TTL so the next request's
+verification naturally 401s.
 
 `list_endpoints` and `get_schema` read the local manifest and don't require
 credentials. `CredentialsError` only surfaces when an API-hitting tool is
@@ -318,61 +361,36 @@ Hosted-deployment concerns only — nobody self-hosting stdio needs any of
 this, so (matching how `MCP_RESOURCE_URL`/`FIVETRAN_AUTH_ISSUER` are handled
 above) it's documented here, not in the README.
 
-- **`GET /health`** — added straight to `build_http_app()`'s `routes` list,
-  never passed through `auth.require_oauth`, so it's reachable regardless of
-  OAuth configuration (same treatment the `/.well-known/oauth-protected-resource/mcp`
-  route already gets). No auth. Returns `{"status": "ok", "version":
-  __version__, "manifest_checksum": MANIFEST_CHECKSUM}`. `MANIFEST_CHECKSUM`
-  is a sha256 hex digest of `endpoints.json`'s raw bytes, computed once at
-  import inside `_load_manifest()` and cached as a module constant — the
-  process never reloads the file at runtime, so a live-recomputed hash per
-  request would just describe a manifest the server isn't running.
-- **Structured per-call JSON logs** — `call_tool` generates a fresh
-  `uuid.uuid4()` request id and a `time.monotonic()` timer per invocation
-  (the JSON-RPC `request_id` on `RequestContext` is client-assigned and not
-  globally unique — collisions are expected across different clients or
-  stateless HTTP sessions — so it isn't used as the correlation id), then
-  emits one JSON line via `_record_tool_call(_build_call_record(...))` in a
-  `finally` block, so it fires on every path including uncaught exceptions.
-  Fields: `request_id`, `mode`, `tool` (the dispatched MCP tool name),
-  `endpoint` (the `name` argument, when the tool takes one — `None` for
-  `list_endpoints`), `upstream_status`, `latency_ms`, `client`. Only these
-  whitelisted fields are logged — never `arguments` (which can carry a
-  request body) and never headers.
-  - **Destination is transport-dependent, not uniformly stdout.** stdio's
-    stdout is the MCP JSON-RPC protocol channel itself; writing log lines
-    there would corrupt every stdio client's connection. HTTP mode logs to
-    stdout; stdio mode logs to stderr, matching this module's existing
-    `print(..., file=sys.stderr)` warning convention.
-  - **`client`** is a stand-in until a future proposal normalizes it: HTTP
-    mode uses the raw incoming `User-Agent` header; stdio mode uses
-    `mcp_server.request_context.session.client_params.clientInfo.name`.
-    These aren't interchangeable by accident — `StreamableHTTPSessionManager`
-    runs `stateless=True` here, so every HTTP request gets a brand-new
-    `ServerSession`; the `InitializeRequest` that populates `client_params`
-    and the later `tools/call` request land on two different sessions, so
-    `client_params` is `None` on every HTTP tool call. stdio's session
-    persists for the whole connection, so `client_params` is reliable
-    there. `_resolve_client_name()` falls back to `"unknown"` outside a
-    real request/session (e.g. a direct call in a test).
-  - **`upstream_status` scope boundary**: populated only for the server's
-    own classified 4xx dicts (`_shape_upstream_error`'s `"status"` field)
-    and a caught-then-reraised 5xx; `None` for everything else, including
-    every successful call. `_fivetran_request` returns a successful
-    response's JSON body directly with no status side-channel, and adding
-    one would mean either reshaping `do_call`'s return contract (breaking
-    the shapes `tests/test_http_client.py` and `tests/test_error_contract.py`
-    pin) or guess-parsing arbitrary Fivetran response bodies for a
-    `"status"`-like field — risking misattributing a real business field as
-    an HTTP status. Not attempted.
-- **Metrics** — `_record_tool_call` is the single hook where future metrics
-  attach (calls by tool/status, upstream codes, 401s, init failures). It's
-  an instrumentation seam only today: no counters, no exporter, no new
-  dependency.
-- **`FIVETRAN_AUTH_ISSUER` stays optional.** Unaffected by any of the above
-  — P3b (real token verification) is still `NotImplementedError`, so
-  requiring the issuer at HTTP startup would force every deployment through
-  a verifier that unconditionally fails. Revisit once P3b lands.
+- **`GET /health`** — unauthenticated (never passed through
+  `auth.require_oauth`, same treatment as the OAuth well-known route).
+  Returns `{"status": "ok", "version": __version__, "manifest_checksum":
+  MANIFEST_CHECKSUM}`. `MANIFEST_CHECKSUM` is computed once at import from
+  `endpoints.json`'s raw bytes and cached — the process never reloads the
+  file, so a per-request hash would just describe a manifest the server
+  isn't running.
+- **Structured per-call JSON logs** — `call_tool` assigns a `uuid.uuid4()`
+  request id per invocation (the JSON-RPC `request_id` is client-assigned
+  and not globally unique, so it isn't used as the correlation id) and logs
+  one JSON line in a `finally` block, so it fires on every path including
+  uncaught exceptions. Fields: `request_id`, `mode`, `tool`, `endpoint`
+  (`None` for `list_endpoints`), `upstream_status`, `latency_ms`, `client`
+  — a fixed whitelist that never includes `arguments` or the `Authorization`
+  header.
+  - **Destination is transport-dependent**: stdio's stdout is the MCP
+    JSON-RPC channel itself, so log lines there would corrupt the
+    connection. HTTP mode logs to stdout; stdio logs to stderr.
+  - **`client`** comes from `_resolve_client_name()`. stdio's session
+    persists for the whole connection, so `clientInfo.name` is reliable.
+    HTTP mode is stateless — every request gets a brand-new `ServerSession`,
+    so `client_params` is always `None` there — so it logs the raw incoming
+    `User-Agent` header instead.
+  - **`upstream_status`** is set in `_fivetran_request` from
+    `response.status_code`, right before `raise_for_status()`, so it's
+    captured for every upstream call that gets a response back, success or
+    failure. It's `None` only when no upstream call happened at all:
+    `list_endpoints`, `get_schema`, a validation short-circuit inside
+    `do_call`, `CREDENTIALS_MISSING`, or a transport failure that never got
+    a response.
 - **`Dockerfile`** (repo root) — single-stage `python:3.12-slim`, installs
   the package via `pip install .` (matching `[tool.hatch.build.targets.wheel]
   only-include`'s file list), runs as a non-root user, and defaults to
@@ -443,21 +461,43 @@ calls rather than opening one per request:
 **Outbound `User-Agent`** — `_get_auth_header` sends
 `fivetran-official-mcp-{mode}-{client}/{__version__}` on every Fivetran API
 call, e.g. `fivetran-official-mcp-stdio-claude-code/0.3.1` or
-`fivetran-official-mcp-http-cursor/0.3.1`. `{mode}` is a short label from
-`_MODE_UA_LABEL` (`stdio` stays `stdio`; `streamable-http` becomes `http`
-here only — every other use of `MODE` in this module keeps the full value).
-`{client}` comes from `_resolve_ua_client_slug()`, built on
-`_raw_client_identifier()` — the same raw signal the "Operational surface"
-section's per-call log `client` field uses (stdio: `clientInfo.name`; HTTP:
-the incoming `User-Agent` header, since stateless sessions never populate
-`clientInfo` — see that section) — but sanitized differently for this use:
-stdio's `clientInfo.name` is slugified (`_sanitize_client_slug`, lowercased
-with non-alphanumerics collapsed to hyphens); HTTP's raw header is matched
-by substring against `_HTTP_CLIENT_MARKERS` (claude, chatgpt/openai,
-cursor, codex, gemini), falling through to the **raw header value
-verbatim** — not sanitized, not `"unknown"` — when nothing matches.
-`"unknown"` is reserved for when there's no `User-Agent` at all to report.
-Since an unrecognized client's raw header can itself contain `/`, spaces,
-or parentheses, a downstream consumer (e.g. a BigQuery query) parsing this
-header can't safely split on the first or last `/` to isolate the version —
-it should match by substring instead.
+`fivetran-official-mcp-http-cursor/0.3.1`. `{client}` comes from two
+different sources depending on transport, both routed through
+`_raw_client_identifier()`: stdio uses `clientInfo.name` from the session,
+sanitized into a slug; streamable-http uses the incoming `User-Agent`
+header, matched by substring against a small table of known AI clients
+(claude, chatgpt/openai, cursor, codex, gemini). See "Open decisions" below
+for what happens on an HTTP request whose `User-Agent` matches none of
+those.
+
+## Open decisions / known gaps
+
+- `FivetranOAuthTokenVerifier.verify_token` (`auth.py`) is a
+  `NotImplementedError` stub. Real verification is blocked on the auth
+  server team confirming token format (JWT+JWKS vs. opaque+introspection).
+- `HOSTED_DISALLOWED_ACTIONS` ships empty. Several read/write endpoints
+  return or mint credentials — `get_user_api_key`, `list_api_keys`
+  (`users_read`); `connect_card`, `regenerate_secrets_proxy_agent`,
+  `reset_hybrid_deployment_agent_credentials`, `re_auth_hybrid_deployment_agent`
+  (`*_write`) — and an OAuth session that can read a permanent API key
+  defeats the reason customers asked for OAuth. Whether to deny some or all
+  of these in hosted mode is undecided.
+- `FIVETRAN_AUTH_ISSUER` stays optional at streamable-http startup because
+  `verify_token` isn't implemented yet; requiring it would force every
+  deployment through a verifier that unconditionally fails. Revisit once
+  real token verification lands.
+- **Known bug**: in streamable-http mode, `_resolve_ua_client_slug()`
+  returns an unrecognized client's raw `User-Agent` header value verbatim,
+  unsanitized, for use in the outbound `User-Agent` sent to Fivetran. Two
+  problems: the raw header can contain `/`, spaces, or parentheses, which
+  breaks the `fivetran-official-mcp-{mode}-{client}/{version}` format for
+  any downstream parser expecting one `/`-delimited version suffix; and it
+  forwards a client-controlled string upstream unmodified. stdio sanitizes
+  its equivalent (`clientInfo.name`) into a slug before use; HTTP mode
+  should do the same instead of falling through to the raw value.
+- `load_dotenv()` runs once at import (`server.py`). Harmless in a container
+  that only ever runs one mode, but nothing stops a `.env` file carrying a
+  real key/secret — left over from local dev, or baked into a shared image —
+  from reintroducing the exact shared-key misconfiguration
+  `select_credentials_resolver` otherwise rejects in streamable-http mode.
+  Documented only; not enforced in code.
