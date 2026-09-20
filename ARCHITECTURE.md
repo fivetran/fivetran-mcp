@@ -439,3 +439,25 @@ calls rather than opening one per request:
   enters the same context manager inside the Starlette app's `lifespan=`
   (alongside `session_manager.run()`), so each uvicorn worker owns and closes
   its own client the same way.
+
+**Outbound `User-Agent`** — `_get_auth_header` sends
+`fivetran-official-mcp-{mode}-{client}/{__version__}` on every Fivetran API
+call, e.g. `fivetran-official-mcp-stdio-claude-code/0.3.1` or
+`fivetran-official-mcp-http-cursor/0.3.1`. `{mode}` is a short label from
+`_MODE_UA_LABEL` (`stdio` stays `stdio`; `streamable-http` becomes `http`
+here only — every other use of `MODE` in this module keeps the full value).
+`{client}` comes from `_resolve_ua_client_slug()`, built on
+`_raw_client_identifier()` — the same raw signal the "Operational surface"
+section's per-call log `client` field uses (stdio: `clientInfo.name`; HTTP:
+the incoming `User-Agent` header, since stateless sessions never populate
+`clientInfo` — see that section) — but sanitized differently for this use:
+stdio's `clientInfo.name` is slugified (`_sanitize_client_slug`, lowercased
+with non-alphanumerics collapsed to hyphens); HTTP's raw header is matched
+by substring against `_HTTP_CLIENT_MARKERS` (claude, chatgpt/openai,
+cursor, codex, gemini), falling through to the **raw header value
+verbatim** — not sanitized, not `"unknown"` — when nothing matches.
+`"unknown"` is reserved for when there's no `User-Agent` at all to report.
+Since an unrecognized client's raw header can itself contain `/`, spaces,
+or parentheses, a downstream consumer (e.g. a BigQuery query) parsing this
+header can't safely split on the first or last `/` to isolate the version —
+it should match by substring instead.

@@ -119,25 +119,33 @@ async def _forward_authorization_header() -> Credentials:
     return Credentials(authorization=auth)
 
 
-def _resolve_client_name() -> str:
-    """Best-effort caller identity for logging.
+def _raw_client_identifier() -> str | None:
+    """Raw signal for the connecting client, if any — shared by the P9 log
+    line's `client` field and P11's outbound User-Agent slug.
 
     HTTP: the incoming User-Agent header — stateless sessions never
     populate client_params (a fresh ServerSession per request, so the
     InitializeRequest that would have set it lands on a different session
     than the tool call). stdio: the session's declared clientInfo.name,
-    since a stdio session persists for the connection's lifetime. Falls
-    back to "unknown" outside a real request/session (e.g. a direct call
-    in a test, or a transport that never attached one).
+    since a stdio session persists for the connection's lifetime. None
+    outside a real request/session (e.g. a direct call in a test, or a
+    transport that never attached one).
     """
     try:
         if MODE == "streamable-http":
             request = mcp_server.request_context.request
-            return request.headers.get("User-Agent", "unknown") if request else "unknown"
+            if request is None:
+                return None
+            return request.headers.get("User-Agent") or None
         client_params = mcp_server.request_context.session.client_params
-        return client_params.clientInfo.name if client_params else "unknown"
+        return client_params.clientInfo.name if client_params else None
     except LookupError:
-        return "unknown"
+        return None
+
+
+def _resolve_client_name() -> str:
+    """Best-effort caller identity for logging."""
+    return _raw_client_identifier() or "unknown"
 
 
 def header_resolver() -> CredentialsResolver:
@@ -351,11 +359,55 @@ _HTTP_LIMITS = httpx.Limits()
 _http_client: httpx.AsyncClient | None = None
 
 
+# Known AI clients, matched by substring against the raw incoming
+# User-Agent header in HTTP mode (stdio uses clientInfo.name directly —
+# already a clean, self-reported name, no header to parse).
+_HTTP_CLIENT_MARKERS: tuple[tuple[str, str], ...] = (
+    ("claude", "claude"),
+    ("chatgpt", "chatgpt"),
+    ("openai", "chatgpt"),
+    ("cursor", "cursor"),
+    ("codex", "codex"),
+    ("gemini", "gemini"),
+)
+
+# Short label for the outbound User-Agent only — every other use of MODE
+# in this module keeps the full "stdio"/"streamable-http" value.
+_MODE_UA_LABEL: dict[str, str] = {"stdio": "stdio", "streamable-http": "http"}
+
+
+def _sanitize_client_slug(name: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    return slug or "unknown"
+
+
+def _resolve_ua_client_slug() -> str:
+    """Client identifier for the outbound User-Agent (P11).
+
+    stdio: clientInfo.name, sanitized into a slug. HTTP: the raw
+    User-Agent header is matched against known AI clients by substring;
+    an unrecognized client's raw header is used verbatim (not sanitized)
+    rather than reported as "unknown" — "unknown" is reserved for no
+    User-Agent at all.
+    """
+    raw = _raw_client_identifier()
+    if raw is None:
+        return "unknown"
+    if MODE == "streamable-http":
+        lowered = raw.lower()
+        for marker, slug in _HTTP_CLIENT_MARKERS:
+            if marker in lowered:
+                return slug
+        return raw
+    return _sanitize_client_slug(raw)
+
+
 def _get_auth_header(creds: Credentials) -> dict[str, str]:
+    mode_label = _MODE_UA_LABEL.get(MODE, MODE)
     return {
         "Authorization": creds.authorization,
         "Accept": "application/json",
-        "User-Agent": f"fivetran-official-mcp/{__version__}",
+        "User-Agent": f"fivetran-official-mcp-{mode_label}-{_resolve_ua_client_slug()}/{__version__}",
     }
 
 
