@@ -170,6 +170,36 @@ ALLOWED_GRANTS, SCOPE_ACTIONS, DISALLOWED = _build_allowed_grants(
 )
 
 
+def _raw_client_identifier() -> str | None:
+    """The connecting client's self-reported name, if any.
+
+    stdio sessions declare `clientInfo.name` at initialization and keep it
+    for the connection's lifetime. Returns None outside a real session
+    (e.g. a direct call in a test) or if the client never set a name.
+    """
+    try:
+        client_params = mcp_server.request_context.session.client_params
+        return client_params.clientInfo.name if client_params else None
+    except LookupError:
+        return None
+
+
+def _sanitize_client_slug(name: str) -> str:
+    slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    return slug or "unknown"
+
+
+def _resolve_ua_client_slug() -> str:
+    """Client identifier for the outbound User-Agent.
+
+    Sanitizes whatever name the client reported, recognized or not —
+    stdio's clientInfo.name is already a clean, self-reported name.
+    "unknown" is reserved for when there's no client info at all.
+    """
+    raw = _raw_client_identifier()
+    return _sanitize_client_slug(raw) if raw is not None else "unknown"
+
+
 def _get_auth_header() -> dict[str, str]:
     if not FIVETRAN_API_KEY or not FIVETRAN_API_SECRET:
         raise ValueError("FIVETRAN_API_KEY and FIVETRAN_API_SECRET must be set in environment")
@@ -178,7 +208,7 @@ def _get_auth_header() -> dict[str, str]:
     return {
         "Authorization": f"Basic {encoded}",
         "Accept": "application/json",
-        "User-Agent": f"fivetran-official-mcp/{__version__}",
+        "User-Agent": f"fivetran-official-mcp-{_resolve_ua_client_slug()}/{__version__}",
     }
 
 

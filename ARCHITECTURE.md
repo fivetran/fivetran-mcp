@@ -124,6 +124,17 @@ Caller-correctable errors return a shaped JSON dict rather than raising:
 Path-param and body validation still raise `ValueError` today (falls through
 to the generic error handler) — see "Room to improve" below.
 
+### Outbound `User-Agent`
+
+`_get_auth_header` sends `fivetran-official-mcp-{client}/{__version__}` on
+every Fivetran API call, e.g. `fivetran-official-mcp-claude-code/0.3.2`, so
+usage reports can be broken down by calling AI client. `{client}` comes
+from `_resolve_ua_client_slug()`: the stdio session's `clientInfo.name`,
+sanitized (`_sanitize_client_slug` — lowercased, non-alphanumerics
+collapsed to hyphens) and used as-is whether or not it's a recognized
+client. `"unknown"` is reserved for when there's no client info at all
+(e.g. no active session).
+
 ## Room to improve
 
 - Unify caller-correctable errors under one shape (unknown endpoint name,
