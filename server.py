@@ -11,6 +11,7 @@ Generated tools are filtered by FIVETRAN_SCOPE and DISALLOWED_ACTIONS.
 import argparse
 import base64
 import contextlib
+import contextvars
 import hashlib
 import json
 import os
@@ -347,6 +348,11 @@ _HTTP_LIMITS = httpx.Limits()
 
 _http_client: httpx.AsyncClient | None = None
 
+# HTTP status of the upstream call made during the current tool invocation, for logging.
+_upstream_status: contextvars.ContextVar[int | None] = contextvars.ContextVar(
+    "_upstream_status", default=None
+)
+
 
 # Known AI clients, matched by substring against the incoming User-Agent in HTTP mode.
 _HTTP_CLIENT_MARKERS: tuple[tuple[str, str], ...] = (
@@ -430,6 +436,7 @@ async def _fivetran_request(
         params=params,
         json=json_body,
     )
+    _upstream_status.set(response.status_code)
     response.raise_for_status()
     # Empty bodies would otherwise raise an opaque JSONDecodeError.
     if response.status_code == 204 or not response.content:
@@ -911,7 +918,7 @@ def _record_tool_call(record: dict[str, Any]) -> None:
 async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
     request_id = uuid.uuid4().hex
     start = time.monotonic()
-    upstream_status: int | None = None
+    _upstream_status.set(None)
     try:
         if name == "list_endpoints":
             result = do_list_endpoints(
@@ -936,8 +943,6 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             )
         else:
             result = {"error": "UNKNOWN_TOOL", "message": f"Unknown tool: {name!r}"}
-        if isinstance(result.get("status"), int):
-            upstream_status = result["status"]
         return [TextContent(type="text", text=json.dumps(result, indent=2))]
 
     except CredentialsError as e:
@@ -945,16 +950,12 @@ async def call_tool(name: str, arguments: dict[str, Any]) -> list[TextContent]:
             type="text",
             text=json.dumps({"error": "CREDENTIALS_MISSING", "message": str(e)}, indent=2),
         )]
-    except httpx.HTTPStatusError as e:
-        # 5xx: record the status, then re-raise so the SDK returns isError=True.
-        upstream_status = e.response.status_code
-        raise
     finally:
         _record_tool_call(_build_call_record(
             request_id=request_id,
             tool=name,
             endpoint=arguments.get("name"),
-            upstream_status=upstream_status,
+            upstream_status=_upstream_status.get(),
             latency_ms=round((time.monotonic() - start) * 1000, 1),
         ))
 

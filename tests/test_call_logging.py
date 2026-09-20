@@ -184,6 +184,23 @@ async def test_call_tool_logs_upstream_403(capsys, monkeypatch):
 
 
 @pytest.mark.asyncio
+async def test_call_tool_logs_upstream_200(capsys, monkeypatch):
+    server.MODE = "stdio"
+    _grant_write()
+    set_credentials_resolver(_fake_resolver)
+    req = httpx.Request("POST", "https://api.fivetran.com/v1/connections/x/sync")
+    resp = httpx.Response(200, request=req, json={"code": "Success"})
+    _install_fake_client(monkeypatch, resp)
+
+    tool_name = next(n for n, pair in server.TOOLS_BY_NAME.items() if pair == ("connections", "write"))
+    await call_tool(tool_name, {"name": "sync_connection", "path_params": {"connectionId": "x"}})
+
+    captured = capsys.readouterr()
+    record = json.loads(captured.err.strip())
+    assert record["upstream_status"] == 200
+
+
+@pytest.mark.asyncio
 async def test_call_tool_logs_upstream_5xx_before_raising(capsys, monkeypatch):
     server.MODE = "stdio"
     _grant_write()
