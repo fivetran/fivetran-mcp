@@ -71,6 +71,15 @@ def test_build_http_app_configures_hosted_grants():
     assert not any(name.endswith("_delete") for name in tool_names)
 
 
+def test_build_http_app_discovery_marks_delete_unavailable():
+    build_http_app()
+
+    result = server.do_list_endpoints(category="connections")
+    delete_rows = [e for e in result["endpoints"] if e["scope"] == "delete"]
+    assert delete_rows
+    assert all(not e["callable"] for e in delete_rows)
+
+
 def test_build_http_app_fails_if_shared_key_env_set(monkeypatch):
     monkeypatch.setenv("FIVETRAN_API_KEY", "key123")
     monkeypatch.setenv("FIVETRAN_API_SECRET", "secret456")

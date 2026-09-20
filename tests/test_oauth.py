@@ -31,6 +31,24 @@ class _FakeVerifier:
         return AccessToken(token=token, client_id="test-client", scopes=[], resource=RESOURCE_URL)
 
 
+class _FakeVerifierWrongAudience:
+    """Accepts the literal token "good" but issues it for a different resource.
+
+    Exercises the SDK's own BearerAuthBackend.authenticate audience check
+    (mcp/server/auth/middleware/bearer_auth.py), which compares
+    AccessToken.resource against resource_server_url independently of
+    verify_token's body — testable today even though
+    FivetranOAuthTokenVerifier.verify_token itself is still NotImplementedError.
+    """
+
+    async def verify_token(self, token: str) -> AccessToken | None:
+        if token != "good":
+            return None
+        return AccessToken(
+            token=token, client_id="test-client", scopes=[], resource="https://other-server.example/mcp"
+        )
+
+
 @pytest.fixture(autouse=True)
 def _oauth_env(monkeypatch):
     monkeypatch.delenv("FIVETRAN_API_KEY", raising=False)
@@ -115,6 +133,15 @@ async def test_oauth_mode_on_invalid_token_401(monkeypatch):
     monkeypatch.setenv("MCP_RESOURCE_URL", RESOURCE_URL)
     app = build_http_app(token_verifier=_FakeVerifier())
     resp = await _post_mcp(app, headers={"Authorization": "Bearer wrong"})
+    assert resp.status_code == 401
+
+
+@pytest.mark.asyncio
+async def test_oauth_mode_on_audience_mismatch_401(monkeypatch):
+    monkeypatch.setenv("FIVETRAN_AUTH_ISSUER", ISSUER)
+    monkeypatch.setenv("MCP_RESOURCE_URL", RESOURCE_URL)
+    app = build_http_app(token_verifier=_FakeVerifierWrongAudience())
+    resp = await _post_mcp(app, headers={"Authorization": "Bearer good"})
     assert resp.status_code == 401
 
 

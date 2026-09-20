@@ -131,6 +131,41 @@ def test_parse_scope_and_denies_from_env_defaults(monkeypatch):
     assert endpoint_denies == set()
 
 
+def test_parse_scope_and_denies_from_env_allow_writes_compat(monkeypatch):
+    monkeypatch.delenv("FIVETRAN_SCOPE", raising=False)
+    monkeypatch.setenv("FIVETRAN_ALLOW_WRITES", "true")
+    monkeypatch.delenv("DISALLOWED_ACTIONS", raising=False)
+
+    scope_actions, pair_denies, endpoint_denies = server._parse_scope_and_denies_from_env()
+
+    assert scope_actions == ("read", "write")
+    assert pair_denies == set()
+    assert endpoint_denies == set()
+
+
+def test_tool_not_dropped_when_all_its_endpoints_denied():
+    # P5 Chunk B (see PROGRESS.md): endpoint_denies never remove a generated
+    # tool, even when every endpoint under it is denied — the tool stays
+    # visible so agents can tell the user the category exists but isn't
+    # reachable, rather than the tool silently disappearing.
+    all_write_names = {
+        e["name"] for e in server.ENDPOINTS_BY_RESOURCE["connections"] if e["scope"] == "write"
+    }
+    assert all_write_names  # sanity: the manifest actually has some
+
+    token = ",".join(f"connections:write:{n}" for n in all_write_names)
+    pair_denies, endpoint_denies = server._parse_disallowed_actions(
+        token, set(server.ENDPOINTS_BY_RESOURCE)
+    )
+    assert endpoint_denies == all_write_names
+    assert pair_denies == set()
+
+    configure(SCOPE_TIERS["read/write"], pair_denies, endpoint_denies)
+
+    assert ("connections", "write") in server.ALLOWED_GRANTS
+    assert "connections_write" in server.TOOLS_BY_NAME
+
+
 def test_parse_scope_and_denies_from_env_disallowed_cascades(monkeypatch):
     monkeypatch.setenv("FIVETRAN_SCOPE", "read/write/delete")
     monkeypatch.setenv("DISALLOWED_ACTIONS", "connections:write")
