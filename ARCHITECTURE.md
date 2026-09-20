@@ -460,8 +460,8 @@ calls rather than opening one per request:
 
 **Outbound `User-Agent`** — `_get_auth_header` sends
 `fivetran-official-mcp-{mode}-{client}/{__version__}` on every Fivetran API
-call, e.g. `fivetran-official-mcp-stdio-claude-code/0.3.1` or
-`fivetran-official-mcp-http-cursor/0.3.1`. `{client}` comes from two
+call, e.g. `fivetran-official-mcp-stdio-claude-code/0.3.2` or
+`fivetran-official-mcp-http-cursor/0.3.2`. `{client}` comes from two
 different sources depending on transport, both routed through
 `_raw_client_identifier()`: stdio uses `clientInfo.name` from the session,
 sanitized into a slug; streamable-http uses the incoming `User-Agent`
