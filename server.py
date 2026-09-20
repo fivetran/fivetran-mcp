@@ -51,7 +51,6 @@ SERVER_DIR = Path(__file__).parent
 OPENAPI_DIR = SERVER_DIR / "open-api-definitions"
 
 TRANSPORT_MODES: tuple[str, ...] = ("stdio", "streamable-http")
-_STDIO_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_SCOPE", "DISALLOWED_ACTIONS", "FIVETRAN_ALLOW_WRITES")
 _HTTP_ONLY_ENV_VARS: tuple[str, ...] = ("FIVETRAN_AUTH_ISSUER", "MCP_RESOURCE_URL")
 _DEFAULT_RESOURCE_URL = "https://mcp.fivetran.com/mcp"
 
@@ -224,10 +223,6 @@ ACTION_CASCADE: dict[str, tuple[str, ...]] = {
     "write": ("write", "delete"),
     "delete": ("delete",),
 }
-
-# Denies applied in streamable-http mode. Same format as DISALLOWED_ACTIONS.
-# TODO: decide whether to deny credential-minting endpoints (get_user_api_key, connect_card).
-HOSTED_DISALLOWED_ACTIONS: str = ""
 
 
 def _parse_scope() -> tuple[str, ...]:
@@ -1020,16 +1015,8 @@ def build_http_app(token_verifier: Any = None) -> Starlette:
     Mounts /mcp, plus OAuth routes when FIVETRAN_AUTH_ISSUER is set.
     `token_verifier` is a test hook; production uses auth.FivetranOAuthTokenVerifier.
     """
-    _warn_ignored_env_vars(
-        _STDIO_ONLY_ENV_VARS,
-        "hosted grants come from HOSTED_DISALLOWED_ACTIONS, not env vars.",
-    )
-
-    all_resources = set(ENDPOINTS_BY_RESOURCE)
-    pair_denies, endpoint_denies = _parse_disallowed_actions(
-        HOSTED_DISALLOWED_ACTIONS, all_resources
-    )
-    configure(SCOPE_TIERS["read/write"], pair_denies, endpoint_denies, mode="streamable-http")
+    scope_actions, pair_denies, endpoint_denies = _parse_scope_and_denies_from_env()
+    configure(scope_actions, pair_denies, endpoint_denies, mode="streamable-http")
     set_credentials_resolver(select_credentials_resolver("streamable-http"))
 
     session_manager = StreamableHTTPSessionManager(

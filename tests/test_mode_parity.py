@@ -1,9 +1,9 @@
-"""P10: parity across both configure() entry points (stdio vs. hosted).
+"""Parity across both configure() entry points (stdio vs. streamable-http).
 
 Prior tests exercise configure() directly with hand-built scope/deny args.
-These drive the two *real* entry points instead — _parse_scope_and_denies_from_env()
-(stdio) and build_http_app()'s HOSTED_DISALLOWED_ACTIONS parsing (hosted) — so a
-wiring bug in either entry point itself, not just in configure(), would be caught.
+These drive the two *real* entry points instead — both of which call
+_parse_scope_and_denies_from_env() — so a wiring bug in either entry point
+itself, not just in configure(), would be caught.
 """
 import pytest
 
@@ -22,45 +22,46 @@ def _configure_stdio(monkeypatch, scope="read/write/delete", disallowed=""):
     server.configure(scope_actions, pair_denies, endpoint_denies, mode="stdio")
 
 
-def _configure_hosted(monkeypatch, disallowed=""):
+def _configure_http(monkeypatch, scope="read/write/delete", disallowed=""):
     monkeypatch.delenv("FIVETRAN_API_KEY", raising=False)
     monkeypatch.delenv("FIVETRAN_API_SECRET", raising=False)
     monkeypatch.delenv("FIVETRAN_AUTH_ISSUER", raising=False)
-    monkeypatch.setattr(server, "HOSTED_DISALLOWED_ACTIONS", disallowed)
+    monkeypatch.setenv("FIVETRAN_SCOPE", scope)
+    monkeypatch.setenv("DISALLOWED_ACTIONS", disallowed)
+    monkeypatch.delenv("FIVETRAN_ALLOW_WRITES", raising=False)
     build_http_app()
 
 
-@pytest.mark.parametrize("configure_mode", ["stdio", "hosted"])
+@pytest.mark.parametrize("configure_mode", ["stdio", "http"])
 def test_discovery_never_filters_by_availability(monkeypatch, configure_mode):
     if configure_mode == "stdio":
         _configure_stdio(monkeypatch, disallowed="connections:write:sync_connection")
     else:
-        _configure_hosted(monkeypatch, disallowed="connections:write:sync_connection")
+        _configure_http(monkeypatch, disallowed="connections:write:sync_connection")
 
     result = do_list_endpoints(category="connections")
     row = next(e for e in result["endpoints"] if e["name"] == "sync_connection")
     assert row["callable"] is False
 
 
-@pytest.mark.parametrize("configure_mode", ["stdio", "hosted"])
+@pytest.mark.parametrize("configure_mode", ["stdio", "http"])
 def test_summary_carries_callable_counts_peer(monkeypatch, configure_mode):
     if configure_mode == "stdio":
         _configure_stdio(monkeypatch)
     else:
-        _configure_hosted(monkeypatch)
+        _configure_http(monkeypatch)
 
     result = do_list_endpoints()
     assert set(result["callable_counts"]) == set(result["categories"])
 
 
 @pytest.mark.asyncio
-@pytest.mark.parametrize("configure_mode", ["stdio", "hosted"])
+@pytest.mark.parametrize("configure_mode", ["stdio", "http"])
 async def test_grant_not_allowed_shape_identical_across_modes(monkeypatch, configure_mode):
     if configure_mode == "stdio":
         _configure_stdio(monkeypatch, scope="read", disallowed="")
     else:
-        # Hosted scope is always read/write; deny the same endpoint explicitly instead.
-        _configure_hosted(monkeypatch, disallowed="connections:write:sync_connection")
+        _configure_http(monkeypatch, scope="read", disallowed="")
 
     result = await do_call(CREDS, name="sync_connection", path_params={"connectionId": "x"})
 
@@ -82,13 +83,16 @@ def test_invalid_disallowed_actions_token_rejected_in_both_entry_points(monkeypa
     monkeypatch.delenv("FIVETRAN_API_KEY", raising=False)
     monkeypatch.delenv("FIVETRAN_API_SECRET", raising=False)
     monkeypatch.delenv("FIVETRAN_AUTH_ISSUER", raising=False)
-    monkeypatch.setattr(server, "HOSTED_DISALLOWED_ACTIONS", bad_token)
     with pytest.raises(ValueError):
         build_http_app()
 
 
-def test_hosted_disallowed_actions_applied(monkeypatch):
-    _configure_hosted(monkeypatch, disallowed="connections:write:sync_connection")
+@pytest.mark.parametrize("configure_mode", ["stdio", "http"])
+def test_disallowed_actions_applied(monkeypatch, configure_mode):
+    if configure_mode == "stdio":
+        _configure_stdio(monkeypatch, disallowed="connections:write:sync_connection")
+    else:
+        _configure_http(monkeypatch, disallowed="connections:write:sync_connection")
 
     assert "sync_connection" in server.ENDPOINT_DENIES
     result = do_list_endpoints(category="connections")

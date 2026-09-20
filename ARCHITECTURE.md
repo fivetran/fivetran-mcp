@@ -67,9 +67,9 @@ Every environment variable the code reads, and what it does.
 |---|---|---|---|
 | `FIVETRAN_API_KEY` | stdio | — | Paired with `FIVETRAN_API_SECRET` to build the `Basic` auth header `env_resolver` sends upstream. Must be unset in streamable-http mode; startup fails if it's set. |
 | `FIVETRAN_API_SECRET` | stdio | — | See `FIVETRAN_API_KEY`. |
-| `FIVETRAN_SCOPE` | stdio | `read` | Selects the `SCOPE_TIERS` ceiling (`read` / `read/write` / `read/write/delete`) `configure()` grants. Ignored (with a startup warning) in streamable-http mode. |
-| `FIVETRAN_ALLOW_WRITES` | stdio | `false` | Legacy alias: `true` behaves like `FIVETRAN_SCOPE=read/write`. Ignored if `FIVETRAN_SCOPE` is also set. Ignored (with a startup warning) in streamable-http mode. |
-| `DISALLOWED_ACTIONS` | stdio | — | Comma-separated `resource:action` or `resource:action:endpoint_name` denials carved out of the scope ceiling. Ignored (with a startup warning) in streamable-http mode. |
+| `FIVETRAN_SCOPE` | both | `read` | Selects the `SCOPE_TIERS` ceiling (`read` / `read/write` / `read/write/delete`) `configure()` grants. Read the same way by both transports via `_parse_scope_and_denies_from_env()`. |
+| `FIVETRAN_ALLOW_WRITES` | both | `false` | Legacy alias: `true` behaves like `FIVETRAN_SCOPE=read/write`. Ignored if `FIVETRAN_SCOPE` is also set. |
+| `DISALLOWED_ACTIONS` | both | — | Comma-separated `resource:action` or `resource:action:endpoint_name` denials carved out of the scope ceiling. Read the same way by both transports. |
 | `MCP_TRANSPORT` | both | `stdio` | Selects `stdio` or `streamable-http`. Same as `--transport`. |
 | `MCP_HOST` | streamable-http | `127.0.0.1` | uvicorn bind host. Same as `--host`. |
 | `MCP_PORT` | streamable-http | `8000` | uvicorn bind port. Same as `--port`. |
@@ -153,9 +153,11 @@ is the single source of truth both the arg parser's `choices` and
 
 - **stdio** (default): `asyncio.run(async_main())`.
 - **streamable-http**: `uvicorn.run(build_http_app(), host=..., port=...)`.
-  `build_http_app()` calls `configure(SCOPE_TIERS["read/write"], ...,
-  mode="streamable-http")` — hosted mode is always read/write, never delete —
-  and `select_credentials_resolver("streamable-http")`, then wraps the
+  `build_http_app()` calls `_parse_scope_and_denies_from_env()` and
+  `configure(scope_actions, pair_denies, endpoint_denies,
+  mode="streamable-http")` — the same env-var-driven grants stdio uses,
+  defaulting to read-only when nothing is set — and
+  `select_credentials_resolver("streamable-http")`, then wraps the
   existing low-level `mcp_server` in
   `mcp.server.streamable_http_manager.StreamableHTTPSessionManager(stateless=True)`
   and mounts it at `/mcp` in a Starlette app. `stateless=True` means every
@@ -177,12 +179,6 @@ is the single source of truth both the arg parser's `choices` and
   would reject every request) and a startup warning is printed instead of a
   hard failure, so a quick local `--transport streamable-http` test isn't
   blocked on configuring allow-lists.
-- **Hosted denies**: `HOSTED_DISALLOWED_ACTIONS` is a code constant (not env),
-  parsed by the same `_parse_disallowed_actions` function stdio uses — one
-  mechanism for both modes. It ships empty (see "Open decisions" below).
-  `FIVETRAN_SCOPE`, `DISALLOWED_ACTIONS`, and `FIVETRAN_ALLOW_WRITES` are
-  stdio-only; if any is set when `build_http_app()` runs, it's ignored and a
-  startup warning is printed rather than silently doing nothing.
 
 ### Grant model
 
@@ -190,8 +186,9 @@ is the single source of truth both the arg parser's `choices` and
 entrypoint (`async_main` for stdio, `build_http_app` for streamable-http)
 after mode is known, and populates `ALLOWED_GRANTS`, `ENDPOINT_DENIES`,
 `MODE`, `GENERATED_TOOLS`, and `TOOLS_BY_NAME`. Grants are process-static but
-built after argv is available, so each transport passes its own scope and
-denies without either touching the other's env vars.
+built after argv is parsed, so the transport is known before any tool is
+generated. Both entrypoints read the same env vars through
+`_parse_scope_and_denies_from_env()`.
 
 Effective grants = (`FIVETRAN_SCOPE` × all resources) − pair denies − endpoint denies.
 
@@ -336,9 +333,9 @@ reimplementing RFC 9728 or bearer-token gating by hand:
   verifier and exercise the gate without real crypto; production always
   gets the real (currently stub) verifier.
 
-`MCP_RESOURCE_URL` and `FIVETRAN_AUTH_ISSUER` are hosted-deployment operator
-configuration — nobody self-hosting runs their own OAuth issuer against
-Fivetran's API — so they're documented here, not in the README.
+`MCP_RESOURCE_URL` and `FIVETRAN_AUTH_ISSUER` are documented here rather than
+in the README: the README covers running over HTTP, but nobody self-hosting
+runs their own OAuth issuer against Fivetran's API.
 
 An upstream 401 mid-call (a bearer token valid at request time that the
 Fivetran API now rejects, e.g. account-level MCP disable) is not turned
@@ -475,13 +472,16 @@ those.
 - `FivetranOAuthTokenVerifier.verify_token` (`auth.py`) is a
   `NotImplementedError` stub. Real verification is blocked on the auth
   server team confirming token format (JWT+JWKS vs. opaque+introspection).
-- `HOSTED_DISALLOWED_ACTIONS` ships empty. Several read/write endpoints
-  return or mint credentials — `get_user_api_key`, `list_api_keys`
-  (`users_read`); `connect_card`, `regenerate_secrets_proxy_agent`,
-  `reset_hybrid_deployment_agent_credentials`, `re_auth_hybrid_deployment_agent`
-  (`*_write`) — and an OAuth session that can read a permanent API key
-  defeats the reason customers asked for OAuth. Whether to deny some or all
-  of these in hosted mode is undecided.
+- Fivetran's own public deployment's `DISALLOWED_ACTIONS` value is a
+  deployment-configuration decision, not a code question. Several
+  read/write endpoints return or mint credentials — `get_user_api_key`,
+  `list_api_keys` (`users_read`); `connect_card`,
+  `regenerate_secrets_proxy_agent`, `reset_hybrid_deployment_agent_credentials`,
+  `re_auth_hybrid_deployment_agent` (`*_write`) — and an OAuth session that
+  can read a permanent API key defeats the reason customers asked for OAuth.
+  Whether to deny some or all of these on `mcp.fivetran.com` specifically is
+  undecided; whoever configures that deployment sets its `DISALLOWED_ACTIONS`
+  env var accordingly before launch.
 - `FIVETRAN_AUTH_ISSUER` stays optional at streamable-http startup because
   `verify_token` isn't implemented yet; requiring it would force every
   deployment through a verifier that unconditionally fails. Revisit once

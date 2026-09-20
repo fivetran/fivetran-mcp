@@ -359,8 +359,13 @@ server refuses to start if it finds them, since a shared key baked into a
 multi-tenant process would apply one operator's credentials to every
 caller. If neither `MCP_ALLOWED_ORIGINS` nor `MCP_ALLOWED_HOSTS` is set, the
 server runs without DNS-rebinding protection and logs a startup warning.
-See `ARCHITECTURE.md` for how the HTTP transport is wired, including OAuth
-resource-server mode.
+
+`FIVETRAN_SCOPE`, `DISALLOWED_ACTIONS`, and `FIVETRAN_ALLOW_WRITES` from
+step 3 work identically in streamable-http mode: the same defaults apply
+(read-only unless you raise `FIVETRAN_SCOPE`), and the same
+`DISALLOWED_ACTIONS` grammar carves exceptions out of whatever scope you
+choose. Set them the same way you would for stdio. See `ARCHITECTURE.md`
+for how the HTTP transport is wired, including OAuth resource-server mode.
 
 ---
 

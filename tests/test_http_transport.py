@@ -61,7 +61,8 @@ def _no_shared_key(monkeypatch):
     monkeypatch.delenv("MCP_ALLOWED_HOSTS", raising=False)
 
 
-def test_build_http_app_configures_hosted_grants():
+def test_build_http_app_configures_grants_from_env(monkeypatch):
+    monkeypatch.setenv("FIVETRAN_SCOPE", "read/write")
     build_http_app()
 
     assert server.MODE == "streamable-http"
@@ -71,7 +72,8 @@ def test_build_http_app_configures_hosted_grants():
     assert not any(name.endswith("_delete") for name in tool_names)
 
 
-def test_build_http_app_discovery_marks_delete_unavailable():
+def test_build_http_app_discovery_marks_delete_unavailable(monkeypatch):
+    monkeypatch.setenv("FIVETRAN_SCOPE", "read/write")
     build_http_app()
 
     result = server.do_list_endpoints(category="connections")
@@ -88,7 +90,8 @@ def test_build_http_app_fails_if_shared_key_env_set(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_mcp_initialize_and_tools_list_over_http():
+async def test_mcp_initialize_and_tools_list_over_http(monkeypatch):
+    monkeypatch.setenv("FIVETRAN_SCOPE", "read/write")
     async with _running_app() as session:
         result = await session.list_tools()
         names = {t.name for t in result.tools}
@@ -147,21 +150,6 @@ def test_no_origin_config_warns_and_disables_protection(capsys):
     server.build_http_app()
     captured = capsys.readouterr()
     assert "MCP_ALLOWED_ORIGINS" in captured.err
-
-
-def test_stdio_only_env_vars_warn_but_are_ignored_in_http_mode(monkeypatch, capsys):
-    monkeypatch.setenv("FIVETRAN_SCOPE", "read/write/delete")
-    monkeypatch.setenv("DISALLOWED_ACTIONS", "connections:write")
-
-    server.build_http_app()
-
-    captured = capsys.readouterr()
-    assert "FIVETRAN_SCOPE" in captured.err
-    assert "DISALLOWED_ACTIONS" in captured.err
-    # Ignored, not honored: hosted scope is always read/write, and the
-    # DISALLOWED_ACTIONS token above is never applied.
-    assert server.SCOPE_ACTIONS == ("read", "write")
-    assert ("connections", "write") not in server.DISALLOWED
 
 
 @pytest.mark.asyncio
