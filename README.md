@@ -1,8 +1,9 @@
 # Fivetran MCP Server
 
-> **Upgrading from version 0.2?** Two things changed:
-> - **Tool selection is now scope-driven.** You no longer edit `server.py` to enable tools.  The available toolset is derived from `FIVETRAN_SCOPE` and `DISALLOWED_ACTIONS`. See the env var table in [Setup](#setup).
-> - **`FIVETRAN_SCOPE` replaces `FIVETRAN_ALLOW_WRITES` for managing permissions.**  `FIVETRAN_ALLOW_WRITES` still exists for backwards compatibility.  It no longer allows deletes when set.
+> **Upgrading from version 0.3?** Three things worth knowing:
+> - **`get_schema(service=X)` used to drop required destination-schema fields.** Fixed in 0.3.2 — per-service connector configs were silently missing the shared `schema_format_*` refs, which carry the only unconditional `required` field in the whole config. If connector creation through `get_schema`/`connections_write` ever failed or came back incomplete, that's now fixed.
+> - **The server can now run as a hosted HTTP server**, via `--transport streamable-http` (or `MCP_TRANSPORT`), instead of only stdio. See [Running over HTTP (advanced)](#running-over-http-advanced).
+> - **OAuth resource-server support is infrastructure scaffolding only, not yet functional.** Real token verification isn't implemented yet, so streamable-http mode today only works in its interim header-forwarding form (leave `FIVETRAN_AUTH_ISSUER` unset).
 
 An MCP server that you can use to interact with your Fivetran environment. It allows you to ask read-only questions like "when was the last time my postgres connection completed a sync?" and "are any of my connections broken?" Set `FIVETRAN_SCOPE` to `read/write` or `read/write/delete` to unlock write and delete operations, and use `DISALLOWED_ACTIONS` to carve exceptions out of that tier (for example, `system-keys:write` to deny both write and delete operations on system keys). Write and delete operations are marked with advisory instructions telling the client model to confirm with you before execution; the server does not enforce confirmation.
 
