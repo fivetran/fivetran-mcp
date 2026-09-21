@@ -122,7 +122,7 @@ Using uvx (Option A):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:read"
+        "DISALLOWED_ACTIONS": "system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys"
       }
     }
   }
@@ -141,7 +141,7 @@ Using a local clone (Option B):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:read"
+        "DISALLOWED_ACTIONS": "system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys"
       }
     }
   }
@@ -164,7 +164,7 @@ claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:read \
+  --env DISALLOWED_ACTIONS=system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys \
   -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
@@ -175,7 +175,7 @@ claude mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:read \
+  --env DISALLOWED_ACTIONS=system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys \
   -- python /path/to/fivetran-mcp/server.py
 ```
 
@@ -191,7 +191,7 @@ Or add it directly to your `~/.claude.json` configuration:
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:read"
+        "DISALLOWED_ACTIONS": "system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys"
       }
     }
   }
@@ -228,7 +228,7 @@ codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:read \
+  --env DISALLOWED_ACTIONS=system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys \
   -- uvx --from git+https://github.com/fivetran/fivetran-mcp fivetran-mcp
 ```
 
@@ -239,7 +239,7 @@ codex mcp add fivetran \
   --env FIVETRAN_API_KEY=your-api-key \
   --env FIVETRAN_API_SECRET=your-api-secret \
   --env FIVETRAN_SCOPE=read \
-  --env DISALLOWED_ACTIONS=system-keys:read \
+  --env DISALLOWED_ACTIONS=system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys \
   -- python /path/to/fivetran-mcp/server.py
 ```
 
@@ -256,7 +256,7 @@ args = ["--from", "git+https://github.com/fivetran/fivetran-mcp", "fivetran-mcp"
 FIVETRAN_API_KEY = "your-api-key"
 FIVETRAN_API_SECRET = "your-api-secret"
 FIVETRAN_SCOPE = "read"
-DISALLOWED_ACTIONS = "system-keys:read"
+DISALLOWED_ACTIONS = "system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys"
 ```
 
 Using a local clone (Option B):
@@ -270,7 +270,7 @@ args = ["/path/to/fivetran-mcp/server.py"]
 FIVETRAN_API_KEY = "your-api-key"
 FIVETRAN_API_SECRET = "your-api-secret"
 FIVETRAN_SCOPE = "read"
-DISALLOWED_ACTIONS = "system-keys:read"
+DISALLOWED_ACTIONS = "system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys"
 ```
 
 Verify configuration:
@@ -302,7 +302,7 @@ Using uvx (Option A):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:read"
+        "DISALLOWED_ACTIONS": "system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys"
       }
     }
   }
@@ -321,7 +321,7 @@ Using a local clone (Option B):
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:read"
+        "DISALLOWED_ACTIONS": "system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys"
       }
     }
   }
