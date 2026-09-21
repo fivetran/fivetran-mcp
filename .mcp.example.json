@@ -7,7 +7,7 @@
         "FIVETRAN_API_KEY": "your-api-key",
         "FIVETRAN_API_SECRET": "your-api-secret",
         "FIVETRAN_SCOPE": "read",
-        "DISALLOWED_ACTIONS": "system-keys:write"
+        "DISALLOWED_ACTIONS": "system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys"
       }
     }
   }

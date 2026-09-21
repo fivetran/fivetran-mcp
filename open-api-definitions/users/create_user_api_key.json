@@ -1,0 +1,84 @@
+{
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Creates a new API key for the specified service account. The secret is\nreturned once at creation and cannot be retrieved again.\n\n> Note: Only a regular user can perform this operation.\n",
+  "path": "/v1/users/{userId}/api-keys",
+  "method": "POST",
+  "parameters": [
+    {
+      "name": "userId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier for the user within the account.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "expiration_period_days": {
+            "type": "integer",
+            "description": "The number of days until the API key expires. Defaults to 90. Maximum is 365.",
+            "format": "int32"
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "data"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "created_at",
+              "key_secret",
+              "key_status",
+              "key_value"
+            ],
+            "type": "object",
+            "properties": {
+              "key_value": {
+                "type": "string",
+                "description": "The public identifier of the API key."
+              },
+              "key_secret": {
+                "type": "string",
+                "description": "The secret portion of the API key. Only returned at creation time and cannot be retrieved again."
+              },
+              "key_status": {
+                "type": "string",
+                "description": "The status of the API key. Possible values: `ACTIVE`: The key has a single active secret, `ACTIVE_GRACE`:  The key has two active secrets during rotation overlap, and `EXPIRED`: The key has expired."
+              },
+              "created_at": {
+                "type": "string",
+                "description": "The timestamp that the user created their API key",
+                "format": "date-time"
+              },
+              "expires_at": {
+                "type": "string",
+                "description": "The timestamp when the API key expires.",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}

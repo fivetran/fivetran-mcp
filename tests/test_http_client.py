@@ -44,9 +44,16 @@ class _FakeAsyncClient:
         self._response = response
         self.calls = []
 
-    async def request(self, *, method, url, headers, params, json):
+    async def request(self, *, method, url, headers, params, json, timeout=None):
         self.calls.append(
-            {"method": method, "url": url, "headers": headers, "params": params, "json": json}
+            {
+                "method": method,
+                "url": url,
+                "headers": headers,
+                "params": params,
+                "json": json,
+                "timeout": timeout,
+            }
         )
         return self._response
 
@@ -101,3 +108,28 @@ async def test_fivetran_request_propagates_http_status_error(monkeypatch):
     # directly off the raised exception — pin that shape here too.
     assert exc_info.value.response.status_code == 404
     assert exc_info.value.response.json() == {"code": "NotFound_Object", "message": "not found"}
+
+
+# --- per-method timeout budget ------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_read_uses_read_timeout(monkeypatch):
+    req = httpx.Request("GET", "https://api.fivetran.com/v1/connections/x")
+    fake = _install_fake_client(monkeypatch, httpx.Response(200, request=req, json={}))
+
+    await _fivetran_request(CREDS, "GET", "/v1/connections/x")
+
+    assert fake.calls[0]["timeout"] == server._HTTP_TIMEOUT
+
+
+@pytest.mark.asyncio
+async def test_write_uses_longer_write_timeout(monkeypatch):
+    """Setup tests on create_destination/create_connection outlast a read budget."""
+    req = httpx.Request("POST", "https://api.fivetran.com/v1/destinations")
+    fake = _install_fake_client(monkeypatch, httpx.Response(200, request=req, json={}))
+
+    await _fivetran_request(CREDS, "POST", "/v1/destinations", json_body={"group_id": "g"})
+
+    assert fake.calls[0]["timeout"] == server._HTTP_WRITE_TIMEOUT
+    assert server._HTTP_WRITE_TIMEOUT.read > server._HTTP_TIMEOUT.read

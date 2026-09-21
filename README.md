@@ -1,6 +1,7 @@
 # Fivetran MCP Server
 
-> **Upgrading from version 0.3?** Three things worth knowing:
+> **Upgrading from version 0.3?** Four things worth knowing:
+> - **Credential endpoints are governed by `DISALLOWED_ACTIONS`.** The manifest carries every endpoint in the Fivetran API, so system-key and user-API-key operations are reachable within whatever `FIVETRAN_SCOPE` you grant. Set the [recommended denylist](#recommended-denylist-for-credential-endpoints) to keep them out of reach; the server warns at startup while any remain callable. `system-keys:write` and `system-keys:delete` are valid `DISALLOWED_ACTIONS` tokens.
 > - **`get_schema(service=X)` used to drop required destination-schema fields.** Fixed in 0.3.2 — per-service connector configs were silently missing the shared `schema_format_*` refs, which carry the only unconditional `required` field in the whole config. If connector creation through `get_schema`/`connections_write` ever failed or came back incomplete, that's now fixed.
 > - **The server can now run as a hosted HTTP server**, via `--transport streamable-http` (or `MCP_TRANSPORT`), instead of only stdio. See [Running over HTTP (advanced)](#running-over-http-advanced).
 > - **OAuth resource-server support is infrastructure scaffolding only, not yet functional.** Real token verification isn't implemented yet, so streamable-http mode today only works in its interim header-forwarding form (leave `FIVETRAN_AUTH_ISSUER` unset).
@@ -88,6 +89,14 @@ Before configuring any client, decide on the values you will pass to the server.
 | `FIVETRAN_ALLOW_WRITES` | No | `false` | Backwards-compatibility flag from earlier releases. `true` is equivalent to `FIVETRAN_SCOPE=read/write`. Prefer `FIVETRAN_SCOPE` for new configs. If both are set, `FIVETRAN_SCOPE` wins and this is ignored. |
 
 The server marks write and delete operations with advisory confirmation warnings, but does not enforce confirmation.
+
+#### Recommended denylist for credential endpoints
+
+Some endpoints read, mint, or rotate API keys that outlive the session, and `DISALLOWED_ACTIONS` is the only thing keeping them from an agent:
+
+```
+system-keys:read,users:read:get_user_api_key,users:read:list_api_keys,users:write:create_user_api_key,users:write:rotate_user_api_key,users:delete:delete_user_api_keys
+```
 
 ### 4. Connect to your AI client
 

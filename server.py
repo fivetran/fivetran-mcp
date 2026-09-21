@@ -72,6 +72,15 @@ class CredentialsError(Exception):
     """Resolver could not produce Fivetran credentials for this request."""
 
 
+class UpstreamTimeout(httpx.TimeoutException):
+    """Fivetran did not answer within the request's timeout.
+
+    Subclasses the httpx exception so transport-level handling is unchanged;
+    exists only to carry a message, since httpx's own timeout exceptions
+    stringify to "" and reach the caller as an error with no text.
+    """
+
+
 _credentials_resolver: CredentialsResolver | None = None
 
 
@@ -339,6 +348,14 @@ ENDPOINT_DENIES: set[str] = set()
 # ---------------------------------------------------------------------------
 
 _HTTP_TIMEOUT = httpx.Timeout(30.0)
+
+# Writes whose upstream work runs setup tests — create_destination,
+# create_connection, run_setup_tests — take longer than a read does. Fivetran
+# applies the change even after we stop waiting, so a budget that cuts them off
+# reports a failure for a write that landed. The client's own per-tool timeout
+# still bounds this.
+_HTTP_WRITE_TIMEOUT = httpx.Timeout(30.0, read=180.0)
+
 _HTTP_LIMITS = httpx.Limits()
 
 _http_client: httpx.AsyncClient | None = None
@@ -424,13 +441,21 @@ async def _fivetran_request(
 ) -> dict[str, Any]:
     url = f"{BASE_URL}{endpoint}"
     client = get_http_client()
-    response = await client.request(
-        method=method,
-        url=url,
-        headers=_get_auth_header(creds),
-        params=params,
-        json=json_body,
-    )
+    timeout = _HTTP_TIMEOUT if method.upper() == "GET" else _HTTP_WRITE_TIMEOUT
+    try:
+        response = await client.request(
+            method=method,
+            url=url,
+            headers=_get_auth_header(creds),
+            params=params,
+            json=json_body,
+            timeout=timeout,
+        )
+    except httpx.TimeoutException as e:
+        raise UpstreamTimeout(
+            "The request timed out but the action may still have been "
+            "successful upstream. Check before retrying."
+        ) from e
     _upstream_status.set(response.status_code)
     response.raise_for_status()
     # Empty bodies would otherwise raise an opaque JSONDecodeError.
@@ -966,12 +991,48 @@ def _warn_ignored_env_vars(var_names: tuple[str, ...], reason: str) -> None:
         print(f"Warning: {', '.join(set_vars)} set but ignored: {reason}", file=sys.stderr)
 
 
+# Endpoints that return, mint, rotate, or destroy a credential outliving the
+# session. Reachable only as the configured scope and denies allow, so this list
+# drives a startup warning rather than any enforcement of its own.
+CREDENTIAL_ENDPOINTS: tuple[str, ...] = (
+    "get_user_api_key",
+    "list_api_keys",
+    "create_user_api_key",
+    "rotate_user_api_key",
+    "delete_user_api_keys",
+    "create_system_key",
+    "update_system_key",
+    "rotate_system_key",
+    "delete_system_key",
+)
+
+
+def _warn_reachable_credential_endpoints() -> None:
+    """Warn on stderr about credential endpoints the current grants leave callable.
+
+    Call after configure(); silent once DISALLOWED_ACTIONS covers them.
+    """
+    reachable = [
+        name for name in CREDENTIAL_ENDPOINTS
+        if (ep := ENDPOINTS_BY_NAME.get(name)) is not None and _is_callable(ep)
+    ]
+    if reachable:
+        print(
+            f"Warning: credential endpoints callable in this configuration: "
+            f"{', '.join(reachable)}. An agent reaching these can read or mint "
+            f"credentials that outlive the session. Deny them with "
+            f"DISALLOWED_ACTIONS; see the README's recommended denylist.",
+            file=sys.stderr,
+        )
+
+
 async def async_main():
     _warn_ignored_env_vars(
         _HTTP_ONLY_ENV_VARS, "they only take effect with --transport streamable-http."
     )
     scope_actions, pair_denies, endpoint_denies = _parse_scope_and_denies_from_env()
     configure(scope_actions, pair_denies, endpoint_denies, mode="stdio")
+    _warn_reachable_credential_endpoints()
     set_credentials_resolver(select_credentials_resolver("stdio"))
     async with http_client_lifespan():
         async with stdio_server() as (read_stream, write_stream):
@@ -1017,6 +1078,7 @@ def build_http_app(token_verifier: Any = None) -> Starlette:
     """
     scope_actions, pair_denies, endpoint_denies = _parse_scope_and_denies_from_env()
     configure(scope_actions, pair_denies, endpoint_denies, mode="streamable-http")
+    _warn_reachable_credential_endpoints()
     set_credentials_resolver(select_credentials_resolver("streamable-http"))
 
     session_manager = StreamableHTTPSessionManager(

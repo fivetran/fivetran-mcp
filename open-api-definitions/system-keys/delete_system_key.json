@@ -1,0 +1,37 @@
+{
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes a system key from your Fivetran account.",
+  "path": "/v1/system-keys/{keyId}",
+  "method": "DELETE",
+  "parameters": [
+    {
+      "name": "keyId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier for the system key within your Fivetran account.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}

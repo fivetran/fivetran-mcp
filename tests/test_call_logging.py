@@ -31,7 +31,7 @@ class _FakeAsyncClient:
     def __init__(self, response):
         self._response = response
 
-    async def request(self, *, method, url, headers, params, json):
+    async def request(self, *, method, url, headers, params, json, timeout=None):
         return self._response
 
 

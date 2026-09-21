@@ -5,25 +5,35 @@ Fivetran's OpenAPI spec into a manifest, and a runtime server that generates
 MCP tools from that manifest and serves them over stdio or streamable-http.
 
 ```
-fivetran-open-api-definition.json
-              │
-              ▼
-   split_openapi_by_endpoint.py         (build)
-              │
-              ▼
-   open-api-definitions/
-     ├── <resource>/<operation_id>.json      (one per endpoint)
-     ├── _service-configs/{connectors,destinations}/{svc}.json
-     ├── endpoints.json                       (manifest: {tools, endpoints})
-     └── AVAILABLE_ACTIONS.md                 (human reference)
-              │
-              ▼
-      server.py                          (runtime)
-              │
-        ┌─────┴─────┐
-        ▼           ▼
-   MCP tools    MCP tools
-   over stdio   over streamable-http
+fivetran-open-api-definition.json  +  endpoint_overrides.json
+                       │
+                       ▼
+        split_openapi_by_endpoint.py          (build)
+                       │
+                       ▼
+        open-api-definitions/
+          ├── <resource>/<operation_id>.json      (one per endpoint)
+          ├── _service-configs/{connectors,destinations}/{svc}.json
+          ├── endpoints.json                       (manifest: {tools, endpoints})
+          └── AVAILABLE_ACTIONS.md                 (human reference)
+                       │
+                       ▼
+                  server.py                    (runtime)
+                       │
+         ┌─────────────┴─────────────┐
+         ▼                           ▼
+       stdio                  streamable-http
+  MCP tools over          Starlette app
+  stdin/stdout              ├── /mcp     (MCP tools)
+                            ├── /health  (unauthenticated)
+                            └── /.well-known/oauth-protected-resource/mcp
+                                     │
+                                     ▼
+                                  auth.py
+                            imported only when
+                         FIVETRAN_AUTH_ISSUER is set;
+                         supplies the well-known route
+                          and the bearer gate on /mcp
 ```
 
 ## Repo map
@@ -43,6 +53,8 @@ fivetran-open-api-definition.json
   `endpoints.json` manifest, and `AVAILABLE_ACTIONS.md`.
 - `tests/` — pytest suite covering the grant model, credential resolvers,
   the error contract, HTTP transport, OAuth, logging, and the splitter.
+- `.mcp.example.json`, `.codex/config.example.toml` — copy-paste stdio client
+  configs the README's Setup section points users at.
 - `Dockerfile` — single-stage image for the streamable-http deployment.
 - `pyproject.toml` — package metadata, dependencies, and the wheel's file
   list (`server.py`, `auth.py`, `open-api-definitions`).
@@ -94,10 +106,6 @@ manifest. During the split:
 - Examples, tags, security, and non-JSON metadata are stripped
 - Descriptions on write/delete methods get a ⚠️ warning prefix
 - Large informational enums on response `service` fields are dropped
-- `EXCLUDED_ENDPOINTS` (currently `create_system_key`, `rotate_system_key`)
-  are skipped at build time — they never enter the manifest, so no runtime
-  scope config can accidentally expose them. Session-outliving credentials
-  aren't safe to expose to any agent.
 
 Per-service configs (`_service-configs/connectors/<svc>.json`) are
 pre-assembled at build time from `<service>_NewConnectorRequestV1` allOf refs.
@@ -211,6 +219,15 @@ can't `read` a resource, letting it `write` or `delete` blind means the
 write would succeed against something the agent — and often the user —
 can't inspect first.
 
+Because grants are the only thing standing between an agent and an endpoint,
+`_warn_reachable_credential_endpoints()` runs after `configure()` in both
+entrypoints and prints one stderr line naming any endpoint in
+`CREDENTIAL_ENDPOINTS` the resolved grants leave callable. It reads
+`_is_callable`, so it accounts for both scope and denies, and goes silent
+once a config covers them. stderr in both modes — stdout is the MCP channel
+under stdio. It warns rather than refuses: which credential endpoints a
+deployment wants reachable is its own call.
+
 Only `(resource, action)` pairs in `ALLOWED_GRANTS` produce a tool. Endpoint
 denies do not drop tools — a tool remains generated even when every endpoint
 under it is denied, so the agent can still see the resource:action category and
@@ -230,11 +247,13 @@ Every session exposes:
 - `get_schema(name, service?)` — full schema for one endpoint, callable or not.
 - One `<resource>_<action>` tool per allowed pair — execution.
 
-**Why grouped tools instead of one per endpoint?** Fivetran has ~167
-endpoints. Exposing each as its own MCP tool would balloon the tool list,
-slow client startup, and make the surface hard for an agent to scan. Grouping
-into ~30 `<resource>_<action>` tools keeps the top-level discoverable while
-`list_endpoints` and `get_schema` handle the drill-down.
+**Why grouped tools instead of one per endpoint?** The manifest carries well
+over a hundred endpoints across more than twenty resources. Exposing each as
+its own MCP tool would balloon the tool list, slow client startup, and make
+the surface hard for an agent to scan. Grouping into `<resource>_<action>`
+tools cuts that to a few dozen pairs, and a session sees only the ones its
+scope grants — fewest at the default `read`, all of them at
+`read/write/delete`. `list_endpoints` and `get_schema` handle the drill-down.
 
 The tool name is a boundary: `connections_read(name="delete_connection")`
 returns an `ENDPOINT_TOOL_MISMATCH` error instead of executing. Without this
@@ -444,8 +463,8 @@ try to parse the text as structured data.
 calls rather than opening one per request:
 
 - `http_client_lifespan()` — async context manager that owns the client's
-  lifecycle: opens it on enter with a fixed `httpx.Timeout`/`httpx.Limits`,
-  closes it on exit. Standalone and transport-agnostic; takes no arguments.
+  lifecycle: opens it on enter with `_HTTP_TIMEOUT`/`httpx.Limits`, closes it
+  on exit. Standalone and transport-agnostic; takes no arguments.
 - `get_http_client()` — the only accessor. Raises `RuntimeError` if called
   before the lifespan is entered, so a missing or leaked client fails loudly
   instead of silently reopening a connection pool per call.
@@ -457,8 +476,8 @@ calls rather than opening one per request:
 
 **Outbound `User-Agent`** — `_get_auth_header` sends
 `fivetran-official-mcp-{mode}-{client}/{__version__}` on every Fivetran API
-call, e.g. `fivetran-official-mcp-stdio-claude-code/0.3.2` or
-`fivetran-official-mcp-http-cursor/0.3.2`. `{client}` comes from two
+call, e.g. `fivetran-official-mcp-stdio-claude-code/<version>` or
+`fivetran-official-mcp-http-cursor/<version>`. `{client}` comes from two
 different sources depending on transport, both routed through
 `_raw_client_identifier()`: stdio uses `clientInfo.name` from the session,
 sanitized into a slug; streamable-http uses the incoming `User-Agent`
@@ -473,15 +492,16 @@ those.
   `NotImplementedError` stub. Real verification is blocked on the auth
   server team confirming token format (JWT+JWKS vs. opaque+introspection).
 - Fivetran's own public deployment's `DISALLOWED_ACTIONS` value is a
-  deployment-configuration decision, not a code question. Several
-  read/write endpoints return or mint credentials — `get_user_api_key`,
-  `list_api_keys` (`users_read`); `connect_card`,
-  `regenerate_secrets_proxy_agent`, `reset_hybrid_deployment_agent_credentials`,
-  `re_auth_hybrid_deployment_agent` (`*_write`) — and an OAuth session that
-  can read a permanent API key defeats the reason customers asked for OAuth.
-  Whether to deny some or all of these on `mcp.fivetran.com` specifically is
-  undecided; whoever configures that deployment sets its `DISALLOWED_ACTIONS`
-  env var accordingly before launch.
+  deployment-configuration decision, not a code question. The README's
+  recommended denylist covers the API-key endpoints named in
+  `CREDENTIAL_ENDPOINTS`, but several other write endpoints also return or
+  mint credentials — `connect_card`, `regenerate_secrets_proxy_agent`,
+  `reset_hybrid_deployment_agent_credentials`,
+  `re_auth_hybrid_deployment_agent` — and an OAuth session that can read a
+  permanent API key defeats the reason customers asked for OAuth. Whether to
+  deny those on `mcp.fivetran.com` specifically is undecided; whoever
+  configures that deployment sets its `DISALLOWED_ACTIONS` env var
+  accordingly before launch.
 - `FIVETRAN_AUTH_ISSUER` stays optional at streamable-http startup because
   `verify_token` isn't implemented yet; requiring it would force every
   deployment through a verifier that unconditionally fails. Revisit once

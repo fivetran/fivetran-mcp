@@ -1,0 +1,37 @@
+{
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Deletes all API keys for the specified user.\n\n> Note: Only a regular user can perform this operation.\n",
+  "path": "/v1/users/{userId}/api-keys",
+  "method": "DELETE",
+  "parameters": [
+    {
+      "name": "userId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier for the user within the account.",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}
