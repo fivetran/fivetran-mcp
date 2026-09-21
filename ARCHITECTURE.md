@@ -444,8 +444,8 @@ try to parse the text as structured data.
 calls rather than opening one per request:
 
 - `http_client_lifespan()` — async context manager that owns the client's
-  lifecycle: opens it on enter with a fixed `httpx.Timeout`/`httpx.Limits`,
-  closes it on exit. Standalone and transport-agnostic; takes no arguments.
+  lifecycle: opens it on enter with `_HTTP_TIMEOUT`/`httpx.Limits`, closes it
+  on exit. Standalone and transport-agnostic; takes no arguments.
 - `get_http_client()` — the only accessor. Raises `RuntimeError` if called
   before the lifespan is entered, so a missing or leaked client fails loudly
   instead of silently reopening a connection pool per call.
