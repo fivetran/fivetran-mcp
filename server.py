@@ -72,15 +72,6 @@ class CredentialsError(Exception):
     """Resolver could not produce Fivetran credentials for this request."""
 
 
-class UpstreamTimeout(httpx.TimeoutException):
-    """Fivetran did not answer within the request's timeout.
-
-    Subclasses the httpx exception so transport-level handling is unchanged;
-    exists only to carry a message, since httpx's own timeout exceptions
-    stringify to "" and reach the caller as an error with no text.
-    """
-
-
 _credentials_resolver: CredentialsResolver | None = None
 
 
@@ -348,14 +339,6 @@ ENDPOINT_DENIES: set[str] = set()
 # ---------------------------------------------------------------------------
 
 _HTTP_TIMEOUT = httpx.Timeout(30.0)
-
-# Writes whose upstream work runs setup tests — create_destination,
-# create_connection, run_setup_tests — take longer than a read does. Fivetran
-# applies the change even after we stop waiting, so a budget that cuts them off
-# reports a failure for a write that landed. The client's own per-tool timeout
-# still bounds this.
-_HTTP_WRITE_TIMEOUT = httpx.Timeout(30.0, read=180.0)
-
 _HTTP_LIMITS = httpx.Limits()
 
 _http_client: httpx.AsyncClient | None = None
@@ -441,21 +424,13 @@ async def _fivetran_request(
 ) -> dict[str, Any]:
     url = f"{BASE_URL}{endpoint}"
     client = get_http_client()
-    timeout = _HTTP_TIMEOUT if method.upper() == "GET" else _HTTP_WRITE_TIMEOUT
-    try:
-        response = await client.request(
-            method=method,
-            url=url,
-            headers=_get_auth_header(creds),
-            params=params,
-            json=json_body,
-            timeout=timeout,
-        )
-    except httpx.TimeoutException as e:
-        raise UpstreamTimeout(
-            "The request timed out but the action may still have been "
-            "successful upstream. Check before retrying."
-        ) from e
+    response = await client.request(
+        method=method,
+        url=url,
+        headers=_get_auth_header(creds),
+        params=params,
+        json=json_body,
+    )
     _upstream_status.set(response.status_code)
     response.raise_for_status()
     # Empty bodies would otherwise raise an opaque JSONDecodeError.

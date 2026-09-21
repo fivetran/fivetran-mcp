@@ -25,7 +25,7 @@ class _FakeAsyncClient:
     """Echoes back the Authorization header it was called with, after
     yielding control, so overlapping calls actually interleave."""
 
-    async def request(self, *, method, url, headers, params, json, timeout=None):
+    async def request(self, *, method, url, headers, params, json):
         await asyncio.sleep(0)
         req = httpx.Request(method, url)
         return httpx.Response(200, request=req, json={"seen_auth": headers["Authorization"]})

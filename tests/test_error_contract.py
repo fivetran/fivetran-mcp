@@ -33,7 +33,7 @@ class _FakeAsyncClient:
     def __init__(self, response):
         self._response = response
 
-    async def request(self, *, method, url, headers, params, json, timeout=None):
+    async def request(self, *, method, url, headers, params, json):
         return self._response
 
 
@@ -150,29 +150,6 @@ async def test_do_call_other_4xx_shapes_upstream_error(monkeypatch):
         "code": "Invalid_Config",
         "message": "bad config",
     }
-
-
-@pytest.mark.asyncio
-async def test_do_call_timeout_raises_with_readable_message(monkeypatch):
-    """httpx timeout exceptions stringify to "", which reaches the caller as an
-    error with no text — indistinguishable from a write that never ran."""
-    _grant_write()
-
-    class _TimingOutClient:
-        async def request(self, *, method, url, headers, params, json, timeout=None):
-            raise httpx.ReadTimeout("", request=httpx.Request(method, url))
-
-    monkeypatch.setattr(server, "_http_client", _TimingOutClient())
-
-    with pytest.raises(server.UpstreamTimeout) as exc_info:
-        await do_call(CREDS, name="sync_connection", path_params={"connectionId": "x"})
-
-    assert str(exc_info.value) == (
-        "The request timed out but the action may still have been "
-        "successful upstream. Check before retrying."
-    )
-    # Still an httpx transport error, so existing handling is unchanged.
-    assert isinstance(exc_info.value, httpx.TimeoutException)
 
 
 @pytest.mark.asyncio
