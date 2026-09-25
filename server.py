@@ -366,16 +366,6 @@ _upstream_status: contextvars.ContextVar[int | None] = contextvars.ContextVar(
 )
 
 
-# Known AI clients, matched by substring against the incoming User-Agent in HTTP mode.
-_HTTP_CLIENT_MARKERS: tuple[tuple[str, str], ...] = (
-    ("claude", "claude"),
-    ("chatgpt", "chatgpt"),
-    ("openai", "chatgpt"),
-    ("cursor", "cursor"),
-    ("codex", "codex"),
-    ("gemini", "gemini"),
-)
-
 # Short mode label, used only in the outbound User-Agent.
 _MODE_UA_LABEL: dict[str, str] = {"stdio": "stdio", "streamable-http": "http"}
 
@@ -388,16 +378,12 @@ def _sanitize_client_slug(name: str) -> str:
 def _resolve_ua_client_slug() -> str:
     """Client slug for the outbound User-Agent.
 
-    HTTP: known clients matched by substring. stdio: clientInfo.name, sanitized.
+    HTTP: the raw incoming User-Agent header, unchanged. stdio: clientInfo.name, sanitized.
     """
     raw = _raw_client_identifier()
     if raw is None:
         return "unknown"
     if MODE == "streamable-http":
-        lowered = raw.lower()
-        for marker, slug in _HTTP_CLIENT_MARKERS:
-            if marker in lowered:
-                return slug
         return raw
     return _sanitize_client_slug(raw)
 

@@ -96,28 +96,20 @@ def test_resolve_ua_client_slug_stdio_no_request_context(monkeypatch):
 
 
 @pytest.mark.parametrize(
-    "user_agent,expected",
+    "user_agent",
     [
-        ("Claude-User/1.0", "claude"),
-        ("ChatGPT-User/2.0", "chatgpt"),
-        ("OpenAI/1.0", "chatgpt"),
-        ("Cursor/1.2.3", "cursor"),
-        ("codex-cli/0.9", "codex"),
-        ("Gemini-CLI/1.0", "gemini"),
+        "Claude-User/1.0",
+        "ChatGPT-User/2.0",
+        "Cursor/1.2.3",
+        "codex-cli/0.9",
+        "Gemini-CLI/1.0",
+        "SomeTool/2.1",
     ],
 )
-def test_resolve_ua_client_slug_http_known_clients(monkeypatch, user_agent, expected):
+def test_resolve_ua_client_slug_http_passes_raw_user_agent_through(monkeypatch, user_agent):
     monkeypatch.setattr(server, "MODE", "streamable-http")
     monkeypatch.setattr(server, "mcp_server", _FakeServer(_RequestContext(request=_fake_request(user_agent))))
-    assert _resolve_ua_client_slug() == expected
-
-
-def test_resolve_ua_client_slug_http_unrecognized_client_returns_raw(monkeypatch):
-    monkeypatch.setattr(server, "MODE", "streamable-http")
-    monkeypatch.setattr(
-        server, "mcp_server", _FakeServer(_RequestContext(request=_fake_request("SomeTool/2.1")))
-    )
-    assert _resolve_ua_client_slug() == "SomeTool/2.1"
+    assert _resolve_ua_client_slug() == user_agent
 
 
 def test_resolve_ua_client_slug_http_no_request(monkeypatch):
@@ -150,4 +142,4 @@ def test_get_auth_header_http_format(monkeypatch):
     monkeypatch.setattr(server, "MODE", "streamable-http")
     monkeypatch.setattr(server, "mcp_server", _FakeServer(_RequestContext(request=_fake_request("Cursor/1.2"))))
     header = server._get_auth_header(CREDS)
-    assert header["User-Agent"] == f"fivetran-official-mcp-http-cursor/{server.__version__}"
+    assert header["User-Agent"] == f"fivetran-official-mcp-http-Cursor/1.2/{server.__version__}"
