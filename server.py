@@ -775,7 +775,7 @@ _TOOLS = [
 _ACTION_WARNING = {
     "read": "",
     "write": "WARNING. WRITE OPERATION. CONFIRM WITH USER BEFORE INITIATING ACTION. ",
-    "delete": "DESTRUCTIVE - confirm with user before calling. ",
+    "delete": "WARNING. DESTRUCTIVE OPERATION. CONFIRM WITH USER BEFORE CALLING. ",
 }
 
 

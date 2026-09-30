@@ -111,6 +111,18 @@ def test_write_tool_description_carries_prd_warning_text():
     )
 
 
+def test_delete_tool_description_carries_warning_text():
+    configure(SCOPE_TIERS["read/write/delete"], set())
+
+    delete_tool = next(
+        t for t in server._TOOLS
+        if server.TOOLS_BY_NAME.get(t.name, (None, None))[1] == "delete"
+    )
+    assert delete_tool.description.startswith(
+        "WARNING. DESTRUCTIVE OPERATION. CONFIRM WITH USER BEFORE CALLING. "
+    )
+
+
 def test_account_read_carries_openai_profile_meta():
     # _TOOL_META splice survives the refactor.
     configure(SCOPE_TIERS["read"], set())
