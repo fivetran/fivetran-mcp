@@ -123,6 +123,31 @@ def test_delete_tool_description_carries_warning_text():
     )
 
 
+def test_tool_annotation_hints_match_action():
+    # destructiveHint defaults to true when omitted, so every tier sets it explicitly.
+    configure(SCOPE_TIERS["read/write/delete"], set())
+
+    expected = {
+        "discovery": (True, False),
+        "read": (True, False),
+        "write": (False, False),
+        "delete": (False, True),
+    }
+    seen = set()
+    for tool in server._TOOLS:
+        action = (
+            "discovery" if tool.name in DISCOVERY_NAMES
+            else server.TOOLS_BY_NAME[tool.name][1]
+        )
+        read_only, destructive = expected[action]
+        assert tool.annotations.readOnlyHint is read_only, tool.name
+        assert tool.annotations.destructiveHint is destructive, tool.name
+        assert tool.annotations.openWorldHint is False, tool.name
+        seen.add(action)
+
+    assert seen == set(expected)
+
+
 def test_account_read_carries_openai_profile_meta():
     # _TOOL_META splice survives the refactor.
     configure(SCOPE_TIERS["read"], set())

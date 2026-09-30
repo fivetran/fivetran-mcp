@@ -710,9 +710,9 @@ async def do_call(
 # ---------------------------------------------------------------------------
 
 _TOOL_ANNOTATIONS: dict[str, ToolAnnotations] = {
-    "read":   ToolAnnotations(readOnlyHint=True,  openWorldHint=False),
-    "write":  ToolAnnotations(readOnlyHint=False, openWorldHint=False),
-    "delete": ToolAnnotations(readOnlyHint=False, destructiveHint=True, openWorldHint=False),
+    "read":   ToolAnnotations(readOnlyHint=True,  destructiveHint=False, openWorldHint=False),
+    "write":  ToolAnnotations(readOnlyHint=False, destructiveHint=False, openWorldHint=False),
+    "delete": ToolAnnotations(readOnlyHint=False, destructiveHint=True,  openWorldHint=False),
 }
 
 _TOOLS = [
@@ -744,7 +744,7 @@ _TOOLS = [
                 },
             },
         },
-        annotations=ToolAnnotations(readOnlyHint=True, openWorldHint=False),
+        annotations=ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False),
     ),
     Tool(
         name="get_schema",
@@ -768,7 +768,7 @@ _TOOLS = [
             },
             "required": ["name"],
         },
-        annotations=ToolAnnotations(readOnlyHint=True, openWorldHint=False),
+        annotations=ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False),
     ),
 ]
 
