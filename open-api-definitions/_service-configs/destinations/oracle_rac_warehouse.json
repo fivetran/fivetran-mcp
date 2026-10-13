@@ -15,7 +15,8 @@
           "description": "Connection method. Default value: `Directly`.",
           "enum": [
             "Directly",
-            "SshTunnel"
+            "SshTunnel",
+            "ProxyAgent"
           ]
         },
         "database": {
@@ -39,6 +40,15 @@
           "type": "integer",
           "description": "Server port number",
           "format": "int32"
+        },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
         },
         "tunnel_host": {
           "title": "",

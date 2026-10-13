@@ -126,6 +126,15 @@
           "type": "string",
           "description": "The SAP schema name."
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "symbolic_links_mapping": {
           "title": "",
           "type": "array",
@@ -178,10 +187,27 @@
       "required": [
         "schema_prefix"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
     "sap_oracle_config_V1",
-    "schema_format_schema_prefix"
+    "schema_format_schema_prefix",
+    "sap_oracle_esm_keys_config_V1"
   ]
 }

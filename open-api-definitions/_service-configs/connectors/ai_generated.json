@@ -3,16 +3,21 @@
   "properties": {
     "config": {
       "type": "object",
-      "required": [
-        "schema"
-      ],
       "properties": {
+        "sync_files": {
+          "title": "",
+          "type": "boolean",
+          "description": ""
+        },
         "schema": {
           "title": "Destination schema name",
           "type": "string",
           "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
         }
-      }
+      },
+      "required": [
+        "schema"
+      ]
     }
   },
   "x-sources": [

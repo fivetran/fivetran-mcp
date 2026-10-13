@@ -121,6 +121,15 @@
           "description": "The ARN of the IAM role that has access to the S3 bucket.",
           "format": "password"
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tde_certificate_backup": {
           "title": "",
           "type": "string",

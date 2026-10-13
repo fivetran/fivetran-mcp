@@ -7,25 +7,30 @@
         "api_key": {
           "title": "",
           "type": "string",
-          "description": "Your OpenAI Admin API key.",
+          "description": "Your OpenAI Platform Admin API key.",
           "format": "password"
         },
         "api_key_2": {
           "title": "",
           "type": "string",
-          "description": "The project-specific API key for the OpenAI Platform project whose data you want to sync.",
+          "description": "The API key for the OpenAI Platform project whose data you want to sync.",
           "format": "password"
         },
         "api_key_3": {
           "title": "",
           "type": "string",
-          "description": "The API key scoped to `codex.enterprise.analytics.read` for syncing Codex Enterprise Analytics data from a specific ChatGPT workspace.",
+          "description": "Your ChatGPT Admin key for syncing Codex Enterprise Analytics API and Compliance Platform data.",
           "format": "password"
+        },
+        "organization_id": {
+          "title": "",
+          "type": "string",
+          "description": "The ID of the OpenAI API Platform organization whose organization-level Compliance Platform data you want to sync."
         },
         "workspace_id": {
           "title": "",
           "type": "string",
-          "description": "Your ChatGPT Enterprise Workspace ID."
+          "description": "The ID of the ChatGPT Enterprise or Edu workspace whose data you want to sync."
         },
         "schema": {
           "title": "Destination schema name",

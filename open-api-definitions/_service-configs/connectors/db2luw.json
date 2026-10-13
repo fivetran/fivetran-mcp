@@ -46,6 +46,15 @@
           "type": "string",
           "description": "The schema name."
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tunnel_host": {
           "title": "",
           "type": "string",

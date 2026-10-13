@@ -4,6 +4,21 @@
     "config": {
       "type": "object",
       "properties": {
+        "authentication_method": {
+          "title": "",
+          "type": "object",
+          "description": "The authentication method to use. Can be either `OAUTH` or `PERSONAL_ACCESS_TOKEN`.",
+          "enum": [
+            "PERSONAL_ACCESS_TOKEN",
+            "OAUTH"
+          ]
+        },
+        "personal_access_token": {
+          "title": "",
+          "type": "string",
+          "description": "Your Asana `Personal Access Token`. Required if `authenticationMethod` is set to `PERSONAL_ACCESS_TOKEN`.",
+          "format": "password"
+        },
         "projects": {
           "title": "",
           "type": "array",

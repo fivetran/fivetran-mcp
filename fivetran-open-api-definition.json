@@ -18,11 +18,11 @@
   "tags": [
     {
       "name": "updated",
-      "description": "2026-09-17T12:35:52.501Z"
+      "description": "2026-10-13T20:08:43.611Z"
     },
     {
       "name": "hash",
-      "description": "4a9757f09fd85dc9eff387c72c78c4870918ed26ec87a50228dbcb28508fdca5"
+      "description": "cd24bf70fd2e997549dd734ea8b57a0b2857668bf7a958a055e2728f17ab2323"
     }
   ],
   "paths": {
@@ -2508,7 +2508,7 @@
           "Connection Schema Management"
         ],
         "summary": "Retrieve Source Table Columns Config",
-        "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields.\n\nTo determine whether this endpoint is available for a table, first [retrieve the connection schema config](/docs/rest-api/api-reference/connection-schema/connection-schema-config) and check the table's public [`supports_columns_config` response field](/docs/rest-api/api-reference/connection-schema/connection-schema-config#supports_columns_config). Column-level schema metadata support is reported per table rather than as a static connector-wide list. If `supports_columns_config` is `false`, column metadata is not available for that table.\n\n> NOTE: This endpoint works only for an existing connection that is in a 'Connected' state.\n\n> NOTE: The connection schema config response includes every schema and table, but includes only columns that were explicitly overridden. Use this endpoint when you need the exhaustive real-time column list for a table that supports column-level configuration.\n",
+        "description": "Returns the real-time column list for one source table by querying the source. The response includes the current enabled and hashed flags, and the patchable fields.\n\nTo determine whether this endpoint is available for a table, first [retrieve the connection schema config](/docs/rest-api/api-reference/connection-schema/connection-schema-config) and check the table's public [`supports_columns_config` response field](/docs/rest-api/api-reference/connection-schema/connection-schema-config#supports_columns_config). Column-level schema metadata support is reported per table rather than as a static connector-wide list. If `supports_columns_config` is `false`, column metadata is not available for that table.\n\n> NOTE: This endpoint works only for an existing connection that is in a `Connected` state.\n\n> NOTE: The connection schema config response includes every schema and table, but includes only columns that were explicitly overridden. Use this endpoint when you need the exhaustive real-time column list for a table that supports column-level configuration.\n",
         "operationId": "connection_column_config",
         "parameters": [
           {
@@ -2809,7 +2809,7 @@
                 "schema": {
                   "required": [
                     "code",
-                    "message"
+                    "data"
                   ],
                   "properties": {
                     "code": {
@@ -2821,6 +2821,9 @@
                       "type": "string",
                       "description": "Response status text",
                       "example": "Sync has been successfully triggered for connection with id 'string'"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/ConnectorSyncTriggerResponse"
                     }
                   }
                 }
@@ -3081,7 +3084,7 @@
           "Connection Management"
         ],
         "summary": "Retrieve Connection Warnings",
-        "description": "PRIVATE PREVIEW.  THE ACCOUNT MUST BE ALLOWLISTED TO USE THIS FEATURE. Retrieve all active warnings for a connection, grouped by destination table. Each warning includes a code, message, error details, and creation timestamp.",
+        "description": "Retrieve all active warnings for a connection, grouped by destination table. Each warning includes a code, message, error details, and creation timestamp.",
         "operationId": "connection_warnings",
         "parameters": [
           {
@@ -3155,7 +3158,7 @@
           "Connection Management"
         ],
         "summary": "Dismiss Connection Warnings by Type",
-        "description": "PRIVATE PREVIEW.  THE ACCOUNT MUST BE ALLOWLISTED TO USE THIS FEATURE. Dismiss all active warnings of a specific type for a connection. Requires the warning type to be registered in the warning type registry.",
+        "description": "Dismiss all active warnings of a specific type for a connection. Requires the warning type to be registered in the warning type registry.",
         "operationId": "dismiss_connection_warning",
         "parameters": [
           {
@@ -3379,6 +3382,23 @@
                       "$ref": "#/components/schemas/ConnectorSdkPackageResponse"
                     }
                   }
+                },
+                "examples": {
+                  "create_connector_sdk_package_response": {
+                    "value": {
+                      "code": "Success",
+                      "data": {
+                        "id": "package_id",
+                        "connection_id": null,
+                        "connection_ids": [],
+                        "created_by": "user_id",
+                        "last_updated_by": "user_id",
+                        "created_at": "2024-01-14T19:30:00.000Z",
+                        "updated_at": "2024-01-14T19:30:00.000Z",
+                        "file_sha256_hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -3521,7 +3541,7 @@
           "Connector SDK Package Resource"
         ],
         "summary": "Update Connector SDK Package",
-        "description": "Updates an existing Connector SDK package by uploading a new version of the connector code.\n\nAll connections using this package will automatically use the updated code on their next sync.\n",
+        "description": "Updates an existing Connector SDK package by uploading a new version of the connector code.\n\nConnection using this package will automatically use the updated code on their next sync.\n",
         "operationId": "update_connector_sdk_package",
         "parameters": [
           {
@@ -14703,7 +14723,7 @@
           },
           "schedule_type": {
             "type": "string",
-            "description": "The connection schedule configuration type. Supported values: auto, manual",
+            "description": "Controls whether Fivetran automatically schedules syncs. `auto` - Fivetran schedules syncs based on the `schedule` object. `manual` - automatic scheduling is disabled; syncs run only when triggered via the [Sync Connection](https://fivetran.com/docs/rest-api/api-reference/connections/sync-connection) endpoint.",
             "example": "auto",
             "enum": [
               "auto",
@@ -14753,6 +14773,11 @@
             "type": "string",
             "description": "The unique identifier of the [External Secrets Manager](/docs/rest-api/api-reference/external-secrets-managers) instance. Connector service must [support](/docs/core-concepts/features/external-secret-managers#connectors) External Secrets Manager feature to use this field.",
             "example": "esm_id"
+          },
+          "data_checks": {
+            "type": "boolean",
+            "description": "Enables or disables automated data validation (compare) for this connection. When set to `true`, Fivetran compares source and destination data after each sync to detect discrepancies. When set to `false`, validation is skipped. Returned only for connector and destination types that support data validation; absent otherwise. Supported sources: MySQL, Oracle, PostgreSQL, SQL Server, SAP HANA, Snowflake DB. Supported destinations: Snowflake, BigQuery, Redshift, Databricks, PostgreSQL, Managed Data Lake.",
+            "example": true
           }
         },
         "discriminator": {
@@ -14944,6 +14969,7 @@
             "crunchbase": "#/components/schemas/crunchbase_NewConnectorRequestV1",
             "cube_software": "#/components/schemas/cube_software_NewConnectorRequestV1",
             "culture_amp": "#/components/schemas/culture_amp_NewConnectorRequestV1",
+            "cursor": "#/components/schemas/cursor_NewConnectorRequestV1",
             "customerio": "#/components/schemas/customerio_NewConnectorRequestV1",
             "cvent": "#/components/schemas/cvent_NewConnectorRequestV1",
             "d2l_brightspace": "#/components/schemas/d2l_brightspace_NewConnectorRequestV1",
@@ -15211,7 +15237,7 @@
             "notion": "#/components/schemas/notion_NewConnectorRequestV1",
             "nylas": "#/components/schemas/nylas_NewConnectorRequestV1",
             "odoo": "#/components/schemas/odoo_NewConnectorRequestV1",
-            "odoo_native": "#/components/schemas/odoo_native_NewConnectorRequestV1",
+            "odoo_synconics": "#/components/schemas/odoo_synconics_NewConnectorRequestV1",
             "okendo": "#/components/schemas/okendo_NewConnectorRequestV1",
             "okta": "#/components/schemas/okta_NewConnectorRequestV1",
             "ometria": "#/components/schemas/ometria_NewConnectorRequestV1",
@@ -15581,7 +15607,7 @@
           },
           "force_move": {
             "type": "boolean",
-            "description": "Set to `true` to confirm that you have completed all prerequisite steps for moving connectors with credential dependencies. Required when moving connectors whose credentials reference the source group—for example, connectors with AWS IAM external IDs or GCP service account credentials. The error response for affected connectors describes the required steps.",
+            "description": "Set to `true` to acknowledge move warnings and confirm that you want to proceed. Required if the connector's credentials depend on the current source group, or if the connection and its current destination support unstructured file replication but the target destination doesn't. If you don't provide the confirmation, the API returns an error describing the required action and the functionality you'd lose. Default: `false`",
             "example": true
           }
         }
@@ -15723,7 +15749,7 @@
           },
           "schedule_type": {
             "type": "string",
-            "description": "The connection schedule configuration type. Supported values: auto, manual",
+            "description": "Controls whether Fivetran automatically schedules syncs. `auto` - Fivetran schedules syncs based on the `schedule` object. `manual` - automatic scheduling is disabled; syncs run only when triggered via the [Sync Connection](https://fivetran.com/docs/rest-api/api-reference/connections/sync-connection) endpoint.",
             "example": "auto",
             "enum": [
               "auto",
@@ -15768,6 +15794,11 @@
           },
           "external_secrets_keys_config": {
             "description": "The setup configuration keys to be stored in external secrets manager. Check possible config formats in [create method](/docs/rest-api/api-reference/connections/create-connection/)"
+          },
+          "data_checks": {
+            "type": "boolean",
+            "description": "Enables or disables automated data validation (compare) for this connection. When set to `true`, Fivetran compares source and destination data after each sync to detect discrepancies. When set to `false`, validation is skipped. Returned only for connector and destination types that support data validation; absent otherwise. Supported sources: MySQL, Oracle, PostgreSQL, SQL Server, SAP HANA, Snowflake DB. Supported destinations: Snowflake, BigQuery, Redshift, Databricks, PostgreSQL, Managed Data Lake.",
+            "example": true
           }
         }
       },
@@ -15881,6 +15912,14 @@
               }
             ]
           },
+          "schedule": {
+            "description": "The connection's sync schedule configuration",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ConnectorSchedule"
+              }
+            ]
+          },
           "group_id": {
             "type": "string",
             "description": "The unique identifier of the destination group this connection belongs to. Use this value with the [List All Groups](https://fivetran.com/docs/rest-api/api-reference/groups/list-all-groups) or [Retrieve Group Details](https://fivetran.com/docs/rest-api/api-reference/groups/group-details) endpoints.",
@@ -15985,7 +16024,7 @@
           },
           "schedule_type": {
             "type": "string",
-            "description": "The connection schedule configuration type. Supported values: auto, manual",
+            "description": "Controls whether Fivetran automatically schedules syncs. `auto` - Fivetran schedules syncs based on the `schedule` object. `manual` - automatic scheduling is disabled; syncs run only when triggered via the [Sync Connection](https://fivetran.com/docs/rest-api/api-reference/connections/sync-connection) endpoint.",
             "example": "auto"
           },
           "setup_tests": {
@@ -16026,6 +16065,11 @@
             "type": "string",
             "description": "The unique identifier of the [External Secrets Manager](/docs/rest-api/api-reference/external-secrets-managers) instance. Connector service must [support](/docs/core-concepts/features/external-secret-managers#connectors) External Secrets Manager feature to use this field.",
             "example": "esm_id"
+          },
+          "data_checks": {
+            "type": "boolean",
+            "description": "Enables or disables automated data validation (compare) for this connection. When set to `true`, Fivetran compares source and destination data after each sync to detect discrepancies. When set to `false`, validation is skipped. Returned only for connector and destination types that support data validation; absent otherwise. Supported sources: MySQL, Oracle, PostgreSQL, SQL Server, SAP HANA, Snowflake DB. Supported destinations: Snowflake, BigQuery, Redshift, Databricks, PostgreSQL, Managed Data Lake.",
+            "example": true
           }
         },
         "discriminator": {
@@ -16217,6 +16261,7 @@
             "crunchbase": "#/components/schemas/crunchbase_ConnectorResponseV1",
             "cube_software": "#/components/schemas/cube_software_ConnectorResponseV1",
             "culture_amp": "#/components/schemas/culture_amp_ConnectorResponseV1",
+            "cursor": "#/components/schemas/cursor_ConnectorResponseV1",
             "customerio": "#/components/schemas/customerio_ConnectorResponseV1",
             "cvent": "#/components/schemas/cvent_ConnectorResponseV1",
             "d2l_brightspace": "#/components/schemas/d2l_brightspace_ConnectorResponseV1",
@@ -16484,7 +16529,7 @@
             "notion": "#/components/schemas/notion_ConnectorResponseV1",
             "nylas": "#/components/schemas/nylas_ConnectorResponseV1",
             "odoo": "#/components/schemas/odoo_ConnectorResponseV1",
-            "odoo_native": "#/components/schemas/odoo_native_ConnectorResponseV1",
+            "odoo_synconics": "#/components/schemas/odoo_synconics_ConnectorResponseV1",
             "okendo": "#/components/schemas/okendo_ConnectorResponseV1",
             "okta": "#/components/schemas/okta_ConnectorResponseV1",
             "ometria": "#/components/schemas/ometria_ConnectorResponseV1",
@@ -16812,6 +16857,64 @@
             "zoom": "#/components/schemas/zoom_ConnectorResponseV1",
             "zuora": "#/components/schemas/zuora_ConnectorResponseV1",
             "zuora_sandbox": "#/components/schemas/zuora_sandbox_ConnectorResponseV1"
+          }
+        }
+      },
+      "ConnectorSchedule": {
+        "type": "object",
+        "properties": {
+          "cron": {
+            "type": "string",
+            "description": "A UNIX cron expression defining the sync schedule. Set when `schedule_type` is `CRON`.",
+            "example": "0 */6 * * *"
+          },
+          "interval": {
+            "type": "integer",
+            "description": "The sync interval in minutes. Set when `schedule_type` is `INTERVAL`.",
+            "format": "int32",
+            "example": 360
+          },
+          "schedule_type": {
+            "type": "string",
+            "description": "The type of sync schedule. Determines which other `schedule` fields are populated. Possible values: `INTERVAL` - syncs repeat on a fixed cadence; `interval` is set. `TIME_OF_DAY` - syncs run at a specific time on the configured `days_of_week`; `time_of_day` is set. `CRON` - syncs run on a cron expression (requires an Enterprise or Business Critical plan); `cron` is set. `MANUAL` - automatic scheduling is disabled; syncs run only when triggered via the Sync Connection endpoint; `days_of_week` and `interval` are not set.",
+            "example": "INTERVAL",
+            "enum": [
+              "TIME_OF_DAY",
+              "INTERVAL",
+              "CRON",
+              "MANUAL"
+            ]
+          },
+          "days_of_week": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "The days of the week on which the connection can sync. Set only when `schedule_type` is `INTERVAL` or `TIME_OF_DAY`. When omitted or empty in the request with these schedule types set, the connection syncs on all days.",
+            "example": [
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY",
+              "SUNDAY"
+            ],
+            "items": {
+              "type": "string",
+              "enum": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ]
+            }
+          },
+          "time_of_day": {
+            "type": "string",
+            "description": "The time of day at which the connection syncs, in `HH:MM` format. Interpreted in the destination group's configured UTC offset. Set when `schedule_type` is `TIME_OF_DAY`.",
+            "example": "14:00"
           }
         }
       },
@@ -17210,6 +17313,9 @@
             },
             "description": "The connection setup configuration."
           },
+          "schedule": {
+            "$ref": "#/components/schemas/ConnectorSchedule"
+          },
           "group_id": {
             "type": "string",
             "description": "The unique identifier for the group within the Fivetran system.",
@@ -17334,6 +17440,9 @@
             "additionalProperties": {
               "type": "string"
             }
+          },
+          "data_checks": {
+            "type": "boolean"
           }
         }
       },
@@ -17381,6 +17490,26 @@
             "type": "string",
             "description": "The unique identifier of the move job. Use this value to check the status of the move operation.",
             "example": "01234567-89ab-cdef-0123-456789abcdef"
+          }
+        }
+      },
+      "ConnectorSyncTriggerResponse": {
+        "required": [
+          "result"
+        ],
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "string",
+            "description": "The result of starting a connection sync. Available values are:\n- `STARTED` – the sync started successfully.\n- `PAUSED` – the sync has not started because the connection is paused.\n- `INCOMPLETE` – the sync has not started because the connection setup is incomplete.\n- `ALREADY_RUNNING` – the sync has not started because it is already running.\n- `NOT_STARTED` – the sync has not started without a specific reason.",
+            "example": "STARTED",
+            "enum": [
+              "STARTED",
+              "PAUSED",
+              "INCOMPLETE",
+              "ALREADY_RUNNING",
+              "NOT_STARTED"
+            ]
           }
         }
       },
@@ -17768,7 +17897,7 @@
           "name_in_destination": {
             "type": "string",
             "description": "The schema name within your destination in accordance with Fivetran conventional rules",
-            "example": "column_name_in_destination"
+            "example": "email_address"
           },
           "enabled": {
             "type": "boolean",
@@ -18007,6 +18136,7 @@
       },
       "ConnectorSdkPackageResponse": {
         "required": [
+          "connection_ids",
           "created_at",
           "created_by",
           "id",
@@ -18022,8 +18152,18 @@
           },
           "connection_id": {
             "type": "string",
-            "description": "The connection identifier associated with this package. Each package can only be associated with one connection at a time. Returns null if the package is not yet associated with any connection.",
+            "description": "Deprecated. The connection identifier associated with this package. Each package can only be associated with one connection at a time. Returns null if the package is not yet associated with any connection. Use `connection_ids` instead.",
             "example": "connection_id"
+          },
+          "connection_ids": {
+            "type": "array",
+            "description": "The connection identifiers associated with this package. Empty if the package is not yet associated with any connection.",
+            "example": [
+              "connection_id"
+            ],
+            "items": {
+              "type": "string"
+            }
           },
           "created_by": {
             "type": "string",
@@ -18193,6 +18333,9 @@
             "description": "The date (yyyy-MM-dd) the connector status was updated to the current availability status",
             "format": "date-time"
           },
+          "supports_schema_reload": {
+            "type": "boolean"
+          },
           "external_secrets_keys_config": {
             "type": "object"
           }
@@ -18299,6 +18442,9 @@
             "type": "string",
             "description": "The date (yyyy-MM-dd) the connector status was updated to the current availability status",
             "format": "date-time"
+          },
+          "supports_schema_reload": {
+            "type": "boolean"
           }
         }
       },
@@ -22331,6 +22477,16 @@
                 "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`.",
                 "example": "arn:aws:iam::123456789012:role/MyRole"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -22418,6 +22574,16 @@
                 "description": "Server port number",
                 "format": "int32",
                 "example": 443
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -22722,6 +22888,16 @@
                 "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`.",
                 "example": "arn:aws:iam::123456789012:role/MyRole"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -22809,6 +22985,16 @@
                 "description": "Server port number",
                 "format": "int32",
                 "example": 443
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "storage_account_key": {
                 "title": "",
@@ -22910,6 +23096,16 @@
                 "description": "",
                 "format": "int32",
                 "example": 0
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -23024,6 +23220,16 @@
                 "description": "",
                 "format": "int32",
                 "example": 0
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -24315,6 +24521,16 @@
                 "format": "int32",
                 "example": 0
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -24402,6 +24618,16 @@
                 "description": "",
                 "format": "int32",
                 "example": 0
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -24545,6 +24771,16 @@
                 "format": "int32",
                 "example": 443
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -24633,6 +24869,16 @@
                 "format": "int32",
                 "example": 443
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -24688,10 +24934,11 @@
                 "title": "",
                 "type": "object",
                 "description": "Connection method. Default value: `Directly`.",
-                "example": "Directly | SshTunnel",
+                "example": "Directly | SshTunnel | ProxyAgent",
                 "enum": [
                   "Directly",
-                  "SshTunnel"
+                  "SshTunnel",
+                  "ProxyAgent"
                 ]
               },
               "database": {
@@ -24719,6 +24966,16 @@
                 "description": "Server port number",
                 "format": "int32",
                 "example": 1521
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -24775,10 +25032,11 @@
                 "title": "",
                 "type": "object",
                 "description": "Connection method. Default value: `Directly`.",
-                "example": "Directly | SshTunnel",
+                "example": "Directly | SshTunnel | ProxyAgent",
                 "enum": [
                   "Directly",
-                  "SshTunnel"
+                  "SshTunnel",
+                  "ProxyAgent"
                 ]
               },
               "database": {
@@ -24806,6 +25064,16 @@
                 "description": "Server port number",
                 "format": "int32",
                 "example": 1521
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -24862,10 +25130,11 @@
                 "title": "",
                 "type": "object",
                 "description": "Connection method. Default value: `Directly`.",
-                "example": "Directly | SshTunnel",
+                "example": "Directly | SshTunnel | ProxyAgent",
                 "enum": [
                   "Directly",
-                  "SshTunnel"
+                  "SshTunnel",
+                  "ProxyAgent"
                 ]
               },
               "database": {
@@ -24893,6 +25162,16 @@
                 "description": "Server port number",
                 "format": "int32",
                 "example": 1521
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -25010,6 +25289,16 @@
                 "type": "string",
                 "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`.",
                 "example": "arn:aws:iam::123456789012:role/MyRole"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -25129,6 +25418,16 @@
                 "type": "string",
                 "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`.",
                 "example": "arn:aws:iam::123456789012:role/MyRole"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -25300,6 +25599,16 @@
                 "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`.",
                 "example": "arn:aws:iam::123456789012:role/MyRole"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -25355,7 +25664,7 @@
                 "title": "",
                 "type": "object",
                 "description": "Authentication method. Default value: `PASSWORD`.",
-                "example": "ENTRA_ID",
+                "example": "PASSWORD",
                 "enum": [
                   "ENTRA_ID",
                   "PASSWORD",
@@ -25419,6 +25728,16 @@
                 "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`.",
                 "example": "arn:aws:iam::123456789012:role/MyRole"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -25474,70 +25793,19 @@
                 "title": "",
                 "type": "object",
                 "description": "Authentication method. Supported values: `PASSWORD`, `AWS_IAM`. Default: `PASSWORD`.",
-                "example": "PASSWORD | AWS_IAM",
+                "example": "AWS_IAM",
                 "enum": [
+                  "ENTRA_ID",
                   "PASSWORD",
+                  "CLIENT_CERTIFICATE",
                   "AWS_IAM"
                 ]
               },
               "aws_region_code": {
                 "title": "",
-                "type": "object",
+                "type": "string",
                 "description": "AWS region code. Required when `auth_method` is set to `AWS_IAM`",
-                "example": "us-east-1",
-                "enum": [
-                  "me-central-1",
-                  "aws-cn-global",
-                  "us-isof-south-1",
-                  "ap-east-2",
-                  "us-west-1",
-                  "us-west-2",
-                  "af-south-1",
-                  "ap-northeast-3",
-                  "ap-northeast-2",
-                  "ap-northeast-1",
-                  "me-south-1",
-                  "sa-east-1",
-                  "cn-north-1",
-                  "ap-southeast-1",
-                  "ap-southeast-2",
-                  "ap-southeast-3",
-                  "ap-southeast-4",
-                  "ap-southeast-5",
-                  "us-east-1",
-                  "us-east-2",
-                  "ap-southeast-7",
-                  "aws-iso-e-global",
-                  "cn-northwest-1",
-                  "ap-south-2",
-                  "ap-south-1",
-                  "eu-south-1",
-                  "eu-south-2",
-                  "us-gov-east-1",
-                  "il-central-1",
-                  "ca-central-1",
-                  "mx-central-1",
-                  "eu-central-1",
-                  "eusc-de-east-1",
-                  "us-iso-west-1",
-                  "eu-central-2",
-                  "eu-isoe-west-1",
-                  "aws-global",
-                  "eu-north-1",
-                  "eu-west-3",
-                  "eu-west-2",
-                  "eu-west-1",
-                  "aws-iso-global",
-                  "ap-east-1",
-                  "ca-west-1",
-                  "us-gov-west-1",
-                  "us-iso-east-1",
-                  "aws-iso-b-global",
-                  "aws-iso-f-global",
-                  "aws-us-gov-global",
-                  "us-isob-east-1",
-                  "us-isof-east-1"
-                ]
+                "example": "us-east-1"
               },
               "connection_type": {
                 "title": "",
@@ -25588,6 +25856,16 @@
                 "type": "string",
                 "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`",
                 "example": "arn:aws:iam::123456789012:role/FivetranRole"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -25757,6 +26035,16 @@
                 "enum": [
                   "IAM_ROLE",
                   "IAM_USER"
+                ]
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
                 ]
               },
               "tunnel_host": {
@@ -26164,6 +26452,16 @@
                 "format": "int32",
                 "example": 443
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -26277,6 +26575,16 @@
                 "description": "Server port number",
                 "format": "int32",
                 "example": 443
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -27808,6 +28116,28 @@
           }
         }
       },
+      "adobe_analytics_esm_keys_config_V1": {
+        "properties": {
+          "external_secrets_keys_config": {
+            "type": "object",
+            "properties": {
+              "client_id": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for client ID from the OAuth Server-to-Server credentials of your Adobe Project.",
+                "example": "CLIENT_ID_KEY"
+              },
+              "client_secret": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for client Secret from the OAuth Server-to-Server credentials of your Adobe Project.",
+                "example": "CLIENT_SECRET_KEY"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "adobe_analytics_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -27818,6 +28148,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema"
+          },
+          {
+            "$ref": "#/components/schemas/adobe_analytics_esm_keys_config_V1"
           }
         ]
       },
@@ -27961,6 +28294,16 @@
                   "AZURE_BLOB_STORAGE",
                   "FTP",
                   "SFTP"
+                ]
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
                 ]
               }
             },
@@ -28502,7 +28845,15 @@
       "ai_generated_config_V1": {
         "properties": {
           "config": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+              "sync_files": {
+                "title": "",
+                "type": "boolean",
+                "description": "",
+                "example": true
+              }
+            }
           }
         }
       },
@@ -29064,10 +29415,14 @@
                 ]
               },
               "specific_profiles": {
-                "title": "",
-                "type": "string",
+                "type": "array",
                 "description": "The Amazon Advertising profiles whose data you want to sync. Leave this parameter blank to sync all profiles available to the authorized Amazon Attribution account. You cannot modify the value after you complete the connection setup.",
-                "example": "string"
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": "The Amazon Advertising profiles whose data you want to sync. Leave this parameter blank to sync all profiles available to the authorized Amazon Attribution account. You cannot modify the value after you complete the connection setup.",
+                  "example": "string"
+                }
               }
             },
             "description": ""
@@ -29157,10 +29512,14 @@
                 ]
               },
               "profiles": {
-                "title": "",
-                "type": "string",
+                "type": "array",
                 "description": "your Amazon DSP profiles pass it inside an Array list.",
-                "example": "your_amazon_dsp_profiles_in_array"
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": "your Amazon DSP profiles pass it inside an Array list.",
+                  "example": "your_amazon_dsp_profiles_in_array"
+                }
               },
               "token_url_region": {
                 "type": "object",
@@ -29665,21 +30024,21 @@
               "analytics_api_key": {
                 "title": "",
                 "type": "string",
-                "description": "Your Analytics API key for syncing Claude Enterprise organization-level analytics data. May also carry Compliance API scope, in which case it is used to sync compliance and audit data as well.",
+                "description": "Your Claude Enterprise Admin API key for syncing analytics, spend limit, compliance, and audit data based on the scopes assigned to the key.",
                 "format": "password",
-                "example": "your_analytics_api_key"
+                "example": "your_claude_enterprise_admin_api_key"
               },
               "api_admin_key": {
                 "title": "",
                 "type": "string",
-                "description": "Your Claude Admin API key for syncing organization-level management and reporting data.",
+                "description": "Your Claude Platform Admin API key for syncing organization-level management and reporting data.",
                 "format": "password",
-                "example": "your_admin_api_key"
+                "example": "your_claude_admin_api_key"
               },
               "api_key": {
                 "title": "",
                 "type": "string",
-                "description": "Your API key for syncing data from a specific Claude workspace.",
+                "description": "Your workspace-scoped API key for syncing data from a specific Claude workspace.",
                 "format": "password",
                 "example": "your_workspace_api_key"
               }
@@ -29877,6 +30236,16 @@
                   "description": "",
                   "example": "string"
                 }
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "sync_type": {
                 "title": "",
@@ -30328,6 +30697,23 @@
           "config": {
             "type": "object",
             "properties": {
+              "authentication_method": {
+                "title": "",
+                "type": "object",
+                "description": "The authentication method to use. Can be either `OAUTH` or `PERSONAL_ACCESS_TOKEN`.",
+                "example": "PERSONAL_ACCESS_TOKEN | OAUTH",
+                "enum": [
+                  "PERSONAL_ACCESS_TOKEN",
+                  "OAUTH"
+                ]
+              },
+              "personal_access_token": {
+                "title": "",
+                "type": "string",
+                "description": "Your Asana `Personal Access Token`. Required if `authenticationMethod` is set to `PERSONAL_ACCESS_TOKEN`.",
+                "format": "password",
+                "example": "my_personal_access_token"
+              },
               "projects": {
                 "title": "",
                 "type": "array",
@@ -30980,6 +31366,16 @@
                 "format": "password",
                 "example": "arn"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -31161,6 +31557,16 @@
                 "type": "string",
                 "description": "Replication slot name. Specify only for `\"updated_method\": \"WAL\"` or `\"WAL_PGOUTPUT\"`.",
                 "example": "test_replication_slot"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -31453,6 +31859,16 @@
                 "description": "Port number at which the AF Server is running",
                 "format": "int32",
                 "example": 443
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -32056,6 +32472,16 @@
                   "example": "string"
                 }
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "sync_type": {
                 "title": "",
                 "type": "object",
@@ -32107,12 +32533,6 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "auth_method": {
                 "title": "",
                 "type": "object",
@@ -32155,7 +32575,7 @@
               "connection_string": {
                 "title": "",
                 "type": "string",
-                "description": "The blob storage container connection string.",
+                "description": "Connect using a SAS URL or connection string. The SAS determines whether Fivetran can access the storage account or only the specified container",
                 "format": "password",
                 "example": "BlobEndpoint=https://abc123.blob.core.windows.net/;TableEndpoint=https://abc123.table.core.windows.net/;SharedAccessSignature=xxxxxxxxx"
               },
@@ -32301,12 +32721,6 @@
                   "skip"
                 ]
               },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
-              },
               "pgp_pass_phrase": {
                 "title": "",
                 "type": "string",
@@ -32364,6 +32778,16 @@
                 "description": "We will skip over the number of lines specified before syncing data.",
                 "format": "int32",
                 "example": 0
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "storage_account_name": {
                 "title": "",
@@ -32554,6 +32978,16 @@
                 "description": "Password used for source database authentication.",
                 "format": "password",
                 "example": "test_password"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -32925,6 +33359,16 @@
                 "description": "Replication slot name. Specify only for `\"updated_method\": \"WAL_PGOUTPUT\"`.",
                 "example": "test_replication_slot"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -33105,6 +33549,16 @@
                   "example": "string"
                 }
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "subscriber_name": {
                 "title": "subscriber_name",
                 "type": "string",
@@ -33250,6 +33704,16 @@
                 "description": "The port number.",
                 "format": "int32",
                 "example": 1433
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tenant_id": {
                 "title": "",
@@ -33451,6 +33915,16 @@
                 "description": "The port number.",
                 "format": "int32",
                 "example": 1433
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tenant_id": {
                 "title": "",
@@ -34396,12 +34870,6 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "compression": {
                 "title": "",
                 "type": "object",
@@ -34542,12 +35010,6 @@
                   "fail",
                   "skip"
                 ]
-              },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
               },
               "prefix": {
                 "title": "",
@@ -37432,6 +37894,16 @@
                 "format": "int32",
                 "example": 0
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -37964,6 +38436,16 @@
                   "description": "",
                   "example": "string"
                 }
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "sync_type": {
                 "title": "",
@@ -39487,65 +39969,69 @@
                 "example": "your_criteo_retail_media_client_secret"
               },
               "dimensions": {
-                "type": "object",
+                "type": "array",
                 "description": "Your Criteo Retail Media report revenue dimensions.",
-                "enum": [
-                  "date",
-                  "taxonomy1Id",
-                  "attributionSettings",
-                  "taxonomy5Id",
-                  "lineItemName",
-                  "taxonomy3Id",
-                  "taxonomy2Name",
-                  "retailerCategoryName",
-                  "accountTypeName",
-                  "salesChannel",
-                  "advProductMpn",
-                  "taxonomy3Name",
-                  "lineItemStatus",
-                  "keyword",
-                  "advertiserType",
-                  "campaignEndDate",
-                  "brandName",
-                  "campaignId",
-                  "taxonomyBreadcrumb",
-                  "lineItemEndDate",
-                  "accountId",
-                  "retailerCategoryId",
-                  "taxonomy1Name",
-                  "brandId",
-                  "advProductId",
-                  "skuRelation",
-                  "taxonomy6Id",
-                  "advProductGtin",
-                  "taxonomy7Name",
-                  "placementId",
-                  "taxonomy4Id",
-                  "accountName",
-                  "taxonomy2Id",
-                  "soldBy",
-                  "targetedKeywordType",
-                  "parentAccount",
-                  "hour",
-                  "taxonomy6Name",
-                  "placementName",
-                  "retailerName",
-                  "pageTypeName",
-                  "pageCategory",
-                  "lineItemId",
-                  "lineItemStartDate",
-                  "taxonomy4Name",
-                  "retailerId",
-                  "environment",
-                  "campaignTypeName",
-                  "taxonomy5Name",
-                  "buyType",
-                  "taxonomy7Id",
-                  "activityType",
-                  "campaignName",
-                  "campaignStartDate",
-                  "advProductName"
-                ]
+                "items": {
+                  "type": "object",
+                  "description": "Your Criteo Retail Media report revenue dimensions.",
+                  "enum": [
+                    "date",
+                    "taxonomy1Id",
+                    "attributionSettings",
+                    "taxonomy5Id",
+                    "lineItemName",
+                    "taxonomy3Id",
+                    "taxonomy2Name",
+                    "retailerCategoryName",
+                    "accountTypeName",
+                    "salesChannel",
+                    "advProductMpn",
+                    "taxonomy3Name",
+                    "lineItemStatus",
+                    "keyword",
+                    "advertiserType",
+                    "campaignEndDate",
+                    "brandName",
+                    "campaignId",
+                    "taxonomyBreadcrumb",
+                    "lineItemEndDate",
+                    "accountId",
+                    "retailerCategoryId",
+                    "taxonomy1Name",
+                    "brandId",
+                    "advProductId",
+                    "skuRelation",
+                    "taxonomy6Id",
+                    "advProductGtin",
+                    "taxonomy7Name",
+                    "placementId",
+                    "taxonomy4Id",
+                    "accountName",
+                    "taxonomy2Id",
+                    "soldBy",
+                    "targetedKeywordType",
+                    "parentAccount",
+                    "hour",
+                    "taxonomy6Name",
+                    "placementName",
+                    "retailerName",
+                    "pageTypeName",
+                    "pageCategory",
+                    "lineItemId",
+                    "lineItemStartDate",
+                    "taxonomy4Name",
+                    "retailerId",
+                    "environment",
+                    "campaignTypeName",
+                    "taxonomy5Name",
+                    "buyType",
+                    "taxonomy7Id",
+                    "activityType",
+                    "campaignName",
+                    "campaignStartDate",
+                    "advProductName"
+                  ]
+                }
               },
               "version": {
                 "title": "",
@@ -39839,6 +40325,36 @@
           },
           {
             "$ref": "#/components/schemas/culture_amp_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/schema_format_schema"
+          }
+        ]
+      },
+      "cursor_config_V1": {
+        "properties": {
+          "config": {
+            "type": "object",
+            "properties": {
+              "api_key": {
+                "title": "",
+                "type": "string",
+                "description": "Your Cursor API key.",
+                "format": "password",
+                "example": "your_cursor_api_key"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "cursor_NewConnectorRequestV1": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/NewConnectorRequestV1"
+          },
+          {
+            "$ref": "#/components/schemas/cursor_config_V1"
           },
           {
             "$ref": "#/components/schemas/schema_format_schema"
@@ -40255,6 +40771,16 @@
                 "description": "The SAP schema.",
                 "example": "string"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -40291,6 +40817,28 @@
           }
         }
       },
+      "db2i_hva_esm_keys_config_V1": {
+        "properties": {
+          "external_secrets_keys_config": {
+            "type": "object",
+            "properties": {
+              "password": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the user's password.",
+                "example": "PASSWORD_KEY"
+              },
+              "user": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the user name.",
+                "example": "USER_KEY"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "db2i_hva_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -40301,6 +40849,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema_prefix"
+          },
+          {
+            "$ref": "#/components/schemas/db2i_hva_esm_keys_config_V1"
           }
         ]
       },
@@ -40402,6 +40953,16 @@
                 "description": "SAP schema name.",
                 "example": "test_sap_schema"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -40438,6 +40999,28 @@
           }
         }
       },
+      "db2i_sap_hva_esm_keys_config_V1": {
+        "properties": {
+          "external_secrets_keys_config": {
+            "type": "object",
+            "properties": {
+              "password": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the user's password.",
+                "example": "PASSWORD_KEY"
+              },
+              "user": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the username.",
+                "example": "USER_KEY"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "db2i_sap_hva_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -40448,6 +41031,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema_prefix"
+          },
+          {
+            "$ref": "#/components/schemas/db2i_sap_hva_esm_keys_config_V1"
           }
         ]
       },
@@ -40504,6 +41090,16 @@
                 "type": "string",
                 "description": "The schema name.",
                 "example": "string"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -40636,6 +41232,16 @@
                 "description": "Application secret key registered in RACF for the application. Used to generate a PassTicket when `authentication_method` is `LEGACY_PASS_TICKET` or `ENHANCED_PASS_TICKET`.",
                 "format": "password",
                 "example": "string"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -41234,9 +41840,8 @@
                 "title": "",
                 "type": "object",
                 "description": "Whether to sync all tables in unpacked mode only or all tables in packed mode only. Default value: `UseUnpackedModeOnly`.",
-                "example": "UseUnpackedModeOnly",
+                "example": "UsePackedModeOnly | UseUnpackedModeOnly",
                 "enum": [
-                  "SelectTablesForPackedMode",
                   "UsePackedModeOnly",
                   "UseUnpackedModeOnly"
                 ]
@@ -41254,6 +41859,16 @@
                 "description": "Port number. Ignored if `hosts` value is provided.",
                 "format": "int32",
                 "example": 27017
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "sync_pack_mode": {
                 "title": "",
@@ -42139,12 +42754,6 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "compression": {
                 "title": "",
                 "type": "object",
@@ -42275,12 +42884,6 @@
                   "fail",
                   "skip"
                 ]
-              },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
               },
               "prefix": {
                 "title": "",
@@ -42937,6 +43540,16 @@
                 "format": "int32",
                 "example": 443
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -43086,6 +43699,16 @@
                 "description": "The port number.",
                 "format": "int32",
                 "example": 443
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -43276,12 +43899,6 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "azure_credential": {
                 "title": "",
                 "type": "object",
@@ -43421,7 +44038,7 @@
                     "link_pattern": {
                       "title": "",
                       "type": "string",
-                      "description": "URLs present in email bodies matching this pattern will be fetched and synced as files to this table. Leave this field blank to match all URLs.",
+                      "description": "URLs in email bodies that match this pattern are fetched and synced as files to this table.",
                       "example": "string"
                     },
                     "selected_range": {
@@ -43480,12 +44097,6 @@
                 "type": "string",
                 "description": "If your CSVs use a special value indicating null, you can specify it here.",
                 "example": "string"
-              },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
               },
               "quote_char": {
                 "title": "",
@@ -43691,6 +44302,16 @@
                 "format": "int32",
                 "example": 0
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -43713,12 +44334,13 @@
               "update_method": {
                 "title": "",
                 "type": "object",
-                "description": "(Optional) The incremental update method the connector will use. The possible values are `\"TELEPORT\"` or `\"NATIVE_UPDATE\"`. The type defaults to `\"NATIVE_UPDATE\"` if the value is set to `null` or not specified.",
-                "example": "BINARY_LOG_READER | MIXED_TELEPORT_CSA | NATIVE_UPDATE | TELEPORT | EPIC_COGITO",
+                "description": "Required. The incremental update method the connector will use. The possible values are `\"MIXED_TELEPORT_CSA\"` for [CSA and Teleport](/docs/connectors/databases/epic_clarity#csaandteleport) and `\"EPIC_COGITO\"` for [Epic Cogito](/docs/connectors/databases/epic_clarity#epiccogito). There is no default; setup fails if the value is omitted or set to `null`.",
+                "example": "MIXED_TELEPORT_CSA",
                 "enum": [
                   "BINARY_LOG_READER",
                   "MIXED_TELEPORT_CSA",
                   "NATIVE_UPDATE",
+                  "EPIC_CSA",
                   "TELEPORT",
                   "EPIC_COGITO"
                 ]
@@ -43828,6 +44450,16 @@
                 "description": "The port number.",
                 "format": "int32",
                 "example": 443
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -44447,13 +45079,13 @@
                       "type": "array",
                       "description": "List of fields which connector will sync. [Possible field values](/docs/connectors/applications/facebook-ads#fields).",
                       "example": [
-                        "cost_per_estimated_ad_recallers | optimization_goal | video_thruplay_watched_actions | reach | click_to_app_store | cost_per_unique_action_type | total_actions | website_clicks | place_page_name | social_impressions | buying_type | objective | video_30_sec_watched_actions | canvas_component_avg_pct_view | cost_per_thruplay | instant_experience_outbound_clicks | unique_clicks | unique_outbound_clicks | total_unique_actions | video_p75_watched_actions | cost_per_unique_inline_link_click | canvas_avg_view_time | social_clicks | inline_link_click_ctr | newsfeed_avg_position | ctr | instagram_upcoming_event_reminders_set | deeplink_clicks | video_avg_time_watched_actions | unique_impressions | video_play_retention_20_to_60s_actions | ad_click_actions | labels | cost_per_ad_click | newsfeed_impressions | unique_link_clicks_ctr | video_p95_watched_actions | ad_id | full_view_reach | catalog_segment_value | cost_per_unique_outbound_click | inline_post_engagement | auction_competitiveness | actions | catalog_segment_value_omni_purchase_roas | video_continuous_2_sec_watched_actions | unique_outbound_clicks_ctr | objective_result_rate | conversions | video_10_sec_watched_actions | estimated_ad_recall_rate | attribution_setting | video_play_retention_0_to_15s_actions | cost_per_action_type | dda_countby_convs | outbound_clicks_ctr | unique_inline_link_click_ctr | cost_per_result | catalog_segment_actions | cost_per_15_sec_video_view | social_reach | objective_results | account_name | video_time_watched_actions | wish_bid | unique_inline_link_clicks | video_p100_watched_actions | cost_per_conversion | video_p50_watched_actions | outbound_clicks | cost_per_one_thousand_ad_impression | app_store_clicks | interactive_component_tap | converted_product_quantity | unique_social_clicks | qualifying_question_qualify_answer_rate | ad_name | impressions | full_view_impressions | cost_per_10_sec_video_view | account_id | website_purchase_roas | instant_experience_clicks_to_open | adset_name | social_spend | video_play_curve_actions | frequency | action_values | call_to_action_clicks | cpc | cost_per_dda_countby_convs | campaign_id | cpm | created_time | cpp | conversion_rate_ranking | click_to_app_deeplink | cost_per_inline_link_click | video_play_retention_graph_actions | date_start | conversion_values | adset_id | purchase_roas | estimated_ad_recallers | cost_per_unique_click | account_currency | inline_link_clicks | video_15_sec_watched_actions | website_ctr | auction_max_competitor_bid | converted_product_value | auction_bid | catalog_segment_value_website_purchase_roas | campaign_name | cost_per_inline_post_engagement | unique_actions | click_to_website | video_avg_percent_watched_actions | spend | date_stop | video_play_actions | catalog_segment_value_mobile_purchase_roas | video_p25_watched_actions | cost_per_outbound_click | canvas_avg_view_percent | quality_ranking | total_action_value | unique_ctr | user_segment_key | cost_per_total_action | instant_experience_clicks_to_start | cost_per_2_sec_continuous_video_view | relevance_score | newsfeed_clicks | clicks | engagement_rate_ranking | location | gender_targeting | mobile_app_purchase_roas | ad_impression_actions"
+                        "cost_per_estimated_ad_recallers | optimization_goal | video_thruplay_watched_actions | reach | click_to_app_store | cost_per_unique_action_type | total_actions | website_clicks | place_page_name | social_impressions | buying_type | converted_promoted_product_app_custom_event_fb_mobile_purchase_value | objective | video_30_sec_watched_actions | canvas_component_avg_pct_view | cost_per_thruplay | instant_experience_outbound_clicks | unique_clicks | unique_outbound_clicks | total_unique_actions | video_p75_watched_actions | cost_per_unique_inline_link_click | converted_promoted_product_omni_purchase_values | canvas_avg_view_time | social_clicks | inline_link_click_ctr | newsfeed_avg_position | ctr | instagram_upcoming_event_reminders_set | deeplink_clicks | video_avg_time_watched_actions | unique_impressions | video_play_retention_20_to_60s_actions | ad_click_actions | labels | cost_per_ad_click | newsfeed_impressions | unique_link_clicks_ctr | video_p95_watched_actions | ad_id | full_view_reach | converted_product_app_custom_event_fb_mobile_purchase | catalog_segment_value | cost_per_unique_outbound_click | inline_post_engagement | auction_competitiveness | actions | catalog_segment_value_omni_purchase_roas | video_continuous_2_sec_watched_actions | unique_outbound_clicks_ctr | objective_result_rate | conversions | converted_promoted_product_website_pixel_purchase | video_10_sec_watched_actions | estimated_ad_recall_rate | attribution_setting | video_play_retention_0_to_15s_actions | cost_per_action_type | dda_countby_convs | outbound_clicks_ctr | unique_inline_link_click_ctr | cost_per_result | catalog_segment_actions | cost_per_15_sec_video_view | social_reach | objective_results | account_name | video_time_watched_actions | wish_bid | unique_inline_link_clicks | video_p100_watched_actions | cost_per_conversion | video_p50_watched_actions | outbound_clicks | cost_per_one_thousand_ad_impression | app_store_clicks | interactive_component_tap | product_retailer_id | converted_product_quantity | product_content_id | unique_social_clicks | qualifying_question_qualify_answer_rate | ad_name | impressions | full_view_impressions | converted_product_offline_purchase | cost_per_10_sec_video_view | account_id | website_purchase_roas | converted_product_app_custom_event_fb_mobile_purchase_value | converted_product_offline_purchase_value | instant_experience_clicks_to_open | adset_name | social_spend | video_play_curve_actions | converted_product_omni_purchase_values | frequency | action_values | call_to_action_clicks | cpc | converted_promoted_product_website_pixel_purchase_value | cost_per_dda_countby_convs | campaign_id | cpm | created_time | cpp | conversion_rate_ranking | click_to_app_deeplink | cost_per_inline_link_click | video_play_retention_graph_actions | product_name | converted_product_omni_purchase | date_start | conversion_values | converted_product_website_pixel_purchase | adset_id | purchase_roas | estimated_ad_recallers | cost_per_unique_click | account_currency | inline_link_clicks | video_15_sec_watched_actions | website_ctr | auction_max_competitor_bid | converted_product_value | converted_promoted_product_app_custom_event_fb_mobile_purchase | auction_bid | catalog_segment_value_website_purchase_roas | campaign_name | cost_per_inline_post_engagement | converted_product_website_pixel_purchase_value | unique_actions | click_to_website | video_avg_percent_watched_actions | spend | date_stop | video_play_actions | catalog_segment_value_mobile_purchase_roas | converted_promoted_product_omni_purchase | converted_promoted_product_offline_purchase | video_p25_watched_actions | cost_per_outbound_click | canvas_avg_view_percent | quality_ranking | total_action_value | unique_ctr | user_segment_key | cost_per_total_action | instant_experience_clicks_to_start | cost_per_2_sec_continuous_video_view | relevance_score | converted_promoted_product_offline_purchase_value | newsfeed_clicks | clicks | engagement_rate_ranking | location | gender_targeting | mobile_app_purchase_roas | ad_impression_actions"
                       ],
                       "items": {
                         "title": "",
                         "type": "object",
                         "description": "",
-                        "example": "cost_per_estimated_ad_recallers | optimization_goal | video_thruplay_watched_actions | reach | click_to_app_store | cost_per_unique_action_type | total_actions | website_clicks | place_page_name | social_impressions | buying_type | objective | video_30_sec_watched_actions | canvas_component_avg_pct_view | cost_per_thruplay | instant_experience_outbound_clicks | unique_clicks | unique_outbound_clicks | total_unique_actions | video_p75_watched_actions | cost_per_unique_inline_link_click | canvas_avg_view_time | social_clicks | inline_link_click_ctr | newsfeed_avg_position | ctr | instagram_upcoming_event_reminders_set | deeplink_clicks | video_avg_time_watched_actions | unique_impressions | video_play_retention_20_to_60s_actions | ad_click_actions | labels | cost_per_ad_click | newsfeed_impressions | unique_link_clicks_ctr | video_p95_watched_actions | ad_id | full_view_reach | catalog_segment_value | cost_per_unique_outbound_click | inline_post_engagement | auction_competitiveness | actions | catalog_segment_value_omni_purchase_roas | video_continuous_2_sec_watched_actions | unique_outbound_clicks_ctr | objective_result_rate | conversions | video_10_sec_watched_actions | estimated_ad_recall_rate | attribution_setting | video_play_retention_0_to_15s_actions | cost_per_action_type | dda_countby_convs | outbound_clicks_ctr | unique_inline_link_click_ctr | cost_per_result | catalog_segment_actions | cost_per_15_sec_video_view | social_reach | objective_results | account_name | video_time_watched_actions | wish_bid | unique_inline_link_clicks | video_p100_watched_actions | cost_per_conversion | video_p50_watched_actions | outbound_clicks | cost_per_one_thousand_ad_impression | app_store_clicks | interactive_component_tap | converted_product_quantity | unique_social_clicks | qualifying_question_qualify_answer_rate | ad_name | impressions | full_view_impressions | cost_per_10_sec_video_view | account_id | website_purchase_roas | instant_experience_clicks_to_open | adset_name | social_spend | video_play_curve_actions | frequency | action_values | call_to_action_clicks | cpc | cost_per_dda_countby_convs | campaign_id | cpm | created_time | cpp | conversion_rate_ranking | click_to_app_deeplink | cost_per_inline_link_click | video_play_retention_graph_actions | date_start | conversion_values | adset_id | purchase_roas | estimated_ad_recallers | cost_per_unique_click | account_currency | inline_link_clicks | video_15_sec_watched_actions | website_ctr | auction_max_competitor_bid | converted_product_value | auction_bid | catalog_segment_value_website_purchase_roas | campaign_name | cost_per_inline_post_engagement | unique_actions | click_to_website | video_avg_percent_watched_actions | spend | date_stop | video_play_actions | catalog_segment_value_mobile_purchase_roas | video_p25_watched_actions | cost_per_outbound_click | canvas_avg_view_percent | quality_ranking | total_action_value | unique_ctr | user_segment_key | cost_per_total_action | instant_experience_clicks_to_start | cost_per_2_sec_continuous_video_view | relevance_score | newsfeed_clicks | clicks | engagement_rate_ranking | location | gender_targeting | mobile_app_purchase_roas | ad_impression_actions",
+                        "example": "cost_per_estimated_ad_recallers | optimization_goal | video_thruplay_watched_actions | reach | click_to_app_store | cost_per_unique_action_type | total_actions | website_clicks | place_page_name | social_impressions | buying_type | converted_promoted_product_app_custom_event_fb_mobile_purchase_value | objective | video_30_sec_watched_actions | canvas_component_avg_pct_view | cost_per_thruplay | instant_experience_outbound_clicks | unique_clicks | unique_outbound_clicks | total_unique_actions | video_p75_watched_actions | cost_per_unique_inline_link_click | converted_promoted_product_omni_purchase_values | canvas_avg_view_time | social_clicks | inline_link_click_ctr | newsfeed_avg_position | ctr | instagram_upcoming_event_reminders_set | deeplink_clicks | video_avg_time_watched_actions | unique_impressions | video_play_retention_20_to_60s_actions | ad_click_actions | labels | cost_per_ad_click | newsfeed_impressions | unique_link_clicks_ctr | video_p95_watched_actions | ad_id | full_view_reach | converted_product_app_custom_event_fb_mobile_purchase | catalog_segment_value | cost_per_unique_outbound_click | inline_post_engagement | auction_competitiveness | actions | catalog_segment_value_omni_purchase_roas | video_continuous_2_sec_watched_actions | unique_outbound_clicks_ctr | objective_result_rate | conversions | converted_promoted_product_website_pixel_purchase | video_10_sec_watched_actions | estimated_ad_recall_rate | attribution_setting | video_play_retention_0_to_15s_actions | cost_per_action_type | dda_countby_convs | outbound_clicks_ctr | unique_inline_link_click_ctr | cost_per_result | catalog_segment_actions | cost_per_15_sec_video_view | social_reach | objective_results | account_name | video_time_watched_actions | wish_bid | unique_inline_link_clicks | video_p100_watched_actions | cost_per_conversion | video_p50_watched_actions | outbound_clicks | cost_per_one_thousand_ad_impression | app_store_clicks | interactive_component_tap | product_retailer_id | converted_product_quantity | product_content_id | unique_social_clicks | qualifying_question_qualify_answer_rate | ad_name | impressions | full_view_impressions | converted_product_offline_purchase | cost_per_10_sec_video_view | account_id | website_purchase_roas | converted_product_app_custom_event_fb_mobile_purchase_value | converted_product_offline_purchase_value | instant_experience_clicks_to_open | adset_name | social_spend | video_play_curve_actions | converted_product_omni_purchase_values | frequency | action_values | call_to_action_clicks | cpc | converted_promoted_product_website_pixel_purchase_value | cost_per_dda_countby_convs | campaign_id | cpm | created_time | cpp | conversion_rate_ranking | click_to_app_deeplink | cost_per_inline_link_click | video_play_retention_graph_actions | product_name | converted_product_omni_purchase | date_start | conversion_values | converted_product_website_pixel_purchase | adset_id | purchase_roas | estimated_ad_recallers | cost_per_unique_click | account_currency | inline_link_clicks | video_15_sec_watched_actions | website_ctr | auction_max_competitor_bid | converted_product_value | converted_promoted_product_app_custom_event_fb_mobile_purchase | auction_bid | catalog_segment_value_website_purchase_roas | campaign_name | cost_per_inline_post_engagement | converted_product_website_pixel_purchase_value | unique_actions | click_to_website | video_avg_percent_watched_actions | spend | date_stop | video_play_actions | catalog_segment_value_mobile_purchase_roas | converted_promoted_product_omni_purchase | converted_promoted_product_offline_purchase | video_p25_watched_actions | cost_per_outbound_click | canvas_avg_view_percent | quality_ranking | total_action_value | unique_ctr | user_segment_key | cost_per_total_action | instant_experience_clicks_to_start | cost_per_2_sec_continuous_video_view | relevance_score | converted_promoted_product_offline_purchase_value | newsfeed_clicks | clicks | engagement_rate_ranking | location | gender_targeting | mobile_app_purchase_roas | ad_impression_actions",
                         "enum": [
                           "cost_per_estimated_ad_recallers",
                           "optimization_goal",
@@ -44466,6 +45098,7 @@
                           "place_page_name",
                           "social_impressions",
                           "buying_type",
+                          "converted_promoted_product_app_custom_event_fb_mobile_purchase_value",
                           "objective",
                           "video_30_sec_watched_actions",
                           "canvas_component_avg_pct_view",
@@ -44476,6 +45109,7 @@
                           "total_unique_actions",
                           "video_p75_watched_actions",
                           "cost_per_unique_inline_link_click",
+                          "converted_promoted_product_omni_purchase_values",
                           "canvas_avg_view_time",
                           "social_clicks",
                           "inline_link_click_ctr",
@@ -44494,6 +45128,7 @@
                           "video_p95_watched_actions",
                           "ad_id",
                           "full_view_reach",
+                          "converted_product_app_custom_event_fb_mobile_purchase",
                           "catalog_segment_value",
                           "cost_per_unique_outbound_click",
                           "inline_post_engagement",
@@ -44504,6 +45139,7 @@
                           "unique_outbound_clicks_ctr",
                           "objective_result_rate",
                           "conversions",
+                          "converted_promoted_product_website_pixel_purchase",
                           "video_10_sec_watched_actions",
                           "estimated_ad_recall_rate",
                           "attribution_setting",
@@ -44528,23 +45164,30 @@
                           "cost_per_one_thousand_ad_impression",
                           "app_store_clicks",
                           "interactive_component_tap",
+                          "product_retailer_id",
                           "converted_product_quantity",
+                          "product_content_id",
                           "unique_social_clicks",
                           "qualifying_question_qualify_answer_rate",
                           "ad_name",
                           "impressions",
                           "full_view_impressions",
+                          "converted_product_offline_purchase",
                           "cost_per_10_sec_video_view",
                           "account_id",
                           "website_purchase_roas",
+                          "converted_product_app_custom_event_fb_mobile_purchase_value",
+                          "converted_product_offline_purchase_value",
                           "instant_experience_clicks_to_open",
                           "adset_name",
                           "social_spend",
                           "video_play_curve_actions",
+                          "converted_product_omni_purchase_values",
                           "frequency",
                           "action_values",
                           "call_to_action_clicks",
                           "cpc",
+                          "converted_promoted_product_website_pixel_purchase_value",
                           "cost_per_dda_countby_convs",
                           "campaign_id",
                           "cpm",
@@ -44554,8 +45197,11 @@
                           "click_to_app_deeplink",
                           "cost_per_inline_link_click",
                           "video_play_retention_graph_actions",
+                          "product_name",
+                          "converted_product_omni_purchase",
                           "date_start",
                           "conversion_values",
+                          "converted_product_website_pixel_purchase",
                           "adset_id",
                           "purchase_roas",
                           "estimated_ad_recallers",
@@ -44566,10 +45212,12 @@
                           "website_ctr",
                           "auction_max_competitor_bid",
                           "converted_product_value",
+                          "converted_promoted_product_app_custom_event_fb_mobile_purchase",
                           "auction_bid",
                           "catalog_segment_value_website_purchase_roas",
                           "campaign_name",
                           "cost_per_inline_post_engagement",
+                          "converted_product_website_pixel_purchase_value",
                           "unique_actions",
                           "click_to_website",
                           "video_avg_percent_watched_actions",
@@ -44577,6 +45225,8 @@
                           "date_stop",
                           "video_play_actions",
                           "catalog_segment_value_mobile_purchase_roas",
+                          "converted_promoted_product_omni_purchase",
+                          "converted_promoted_product_offline_purchase",
                           "video_p25_watched_actions",
                           "cost_per_outbound_click",
                           "canvas_avg_view_percent",
@@ -44588,6 +45238,7 @@
                           "instant_experience_clicks_to_start",
                           "cost_per_2_sec_continuous_video_view",
                           "relevance_score",
+                          "converted_promoted_product_offline_purchase_value",
                           "newsfeed_clicks",
                           "clicks",
                           "engagement_rate_ranking",
@@ -46143,12 +46794,6 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "compression": {
                 "title": "",
                 "type": "object",
@@ -46170,7 +46815,7 @@
                 "title": "",
                 "type": "object",
                 "description": "The method used to connect to your FTP server. Use `DIRECT` to connect directly, or `PROXY_AGENT` to connect via a Fivetran Proxy Agent.",
-                "example": "DIRECT",
+                "example": "PROXY_AGENT | DIRECT",
                 "enum": [
                   "PROXY_AGENT",
                   "DIRECT"
@@ -46312,12 +46957,6 @@
                 "description": "FTP password.",
                 "format": "password",
                 "example": "password"
-              },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
               },
               "pgp_pass_phrase": {
                 "title": "",
@@ -46654,12 +47293,6 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "auth_type": {
                 "title": "",
                 "type": "object",
@@ -46816,12 +47449,6 @@
                   "fail",
                   "skip"
                 ]
-              },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
               },
               "pgp_pass_phrase": {
                 "title": "",
@@ -48512,6 +49139,16 @@
                 "format": "int32",
                 "example": 4573961
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -48692,6 +49329,16 @@
                 "description": "Replication slot name. Specify only for `\"updated_method\": \"WAL_PGOUTPUT\"`.",
                 "example": "test_replication_slot"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -48818,6 +49465,16 @@
                 "description": "The port number.",
                 "format": "int32",
                 "example": 1433
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -49114,12 +49771,6 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "compression": {
                 "title": "",
                 "type": "object",
@@ -49266,12 +49917,6 @@
                   "fail",
                   "skip"
                 ]
-              },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
               },
               "prefix": {
                 "title": "",
@@ -50201,12 +50846,6 @@
                 "description": "Your Greenhouse client secret.",
                 "format": "password",
                 "example": "your_greenhouse_harvest_v3_client_secret"
-              },
-              "use_harvest_api_v3": {
-                "title": "",
-                "type": "string",
-                "description": "The confirmation that you want to connect to Harvest V3 API. Possible values: `true`, `false`.",
-                "example": "false"
               }
             },
             "description": ""
@@ -50304,6 +50943,12 @@
                 "format": "password",
                 "example": "access_key_secret_value"
               },
+              "application_path": {
+                "title": "",
+                "type": "string",
+                "description": "Path to the CDA application folder relative to the bucket root. Do not include the deployment timestamp folder. Fivetran automatically identifies the active deployment and follows it when Guidewire redeploys CDA.",
+                "example": "application_path"
+              },
               "auth_type": {
                 "title": "",
                 "type": "object",
@@ -50338,12 +50983,6 @@
                 "type": "boolean",
                 "description": "Set to `true` if you want to connect to S3 bucket over PrivateLink. Default value: `false`.",
                 "example": true
-              },
-              "manifest_path": {
-                "title": "",
-                "type": "string",
-                "description": "The path to the Guidewire CDA manifest.json file in the S3 bucket.",
-                "example": "<planet_name>/<application_name>/<time_of_deployment_epoch>/manifest.json"
               },
               "role_arn": {
                 "title": "",
@@ -50994,6 +51633,16 @@
                   "example": "string"
                 }
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "sync_type": {
                 "title": "",
                 "type": "object",
@@ -51136,6 +51785,16 @@
                 "type": "string",
                 "description": "Replication slot name. Specify only for `\"updated_method\": \"WAL_PGOUTPUT\"`.",
                 "example": "test_replication_slot"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -51599,6 +52258,14 @@
           "config": {
             "type": "object",
             "properties": {
+              "auth_type": {
+                "type": "object",
+                "description": "Your Impact Brand auth type.",
+                "enum": [
+                  "oauth_2",
+                  "basic"
+                ]
+              },
               "password": {
                 "title": "",
                 "type": "string",
@@ -51617,6 +52284,50 @@
           }
         }
       },
+      "impact_auth_V1": {
+        "properties": {
+          "auth": {
+            "type": "object",
+            "properties": {
+              "access_token": {
+                "title": "",
+                "type": "string",
+                "description": "Your Impact Brand access token.",
+                "format": "password",
+                "example": "string"
+              },
+              "client_access": {
+                "title": "",
+                "type": "object",
+                "properties": {
+                  "client_id": {
+                    "title": "",
+                    "type": "string",
+                    "description": "",
+                    "example": "string"
+                  },
+                  "client_secret": {
+                    "title": "",
+                    "type": "string",
+                    "description": "",
+                    "format": "password",
+                    "example": "string"
+                  }
+                },
+                "description": "Your Impact Brand client access."
+              },
+              "refresh_token": {
+                "title": "",
+                "type": "string",
+                "description": "Your Impact Brand refresh token.",
+                "format": "password",
+                "example": "string"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "impact_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -51627,6 +52338,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema"
+          },
+          {
+            "$ref": "#/components/schemas/impact_auth_V1"
           }
         ]
       },
@@ -52682,6 +53396,28 @@
           }
         }
       },
+      "jira_auth_V1": {
+        "properties": {
+          "auth": {
+            "type": "object",
+            "properties": {
+              "client_id": {
+                "title": "",
+                "type": "string",
+                "description": "The `Client ID` of your Jira service account. Required if `auth_type` is set to `SERVICE_ACCOUNT`.",
+                "example": "my_client_id"
+              },
+              "client_secret": {
+                "title": "",
+                "type": "string",
+                "description": "The `Client secret` of your Jira service account. Required if `auth_type` is set to `SERVICE_ACCOUNT`.",
+                "example": "my_client_secret"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "jira_esm_keys_config_V1": {
         "properties": {
           "external_secrets_keys_config": {
@@ -52714,6 +53450,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema"
+          },
+          {
+            "$ref": "#/components/schemas/jira_auth_V1"
           },
           {
             "$ref": "#/components/schemas/jira_esm_keys_config_V1"
@@ -54971,6 +55710,16 @@
                 "format": "int32",
                 "example": 4573961
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -55199,6 +55948,16 @@
                 "description": "The ARN of the IAM role with RDS permissions. Required if the authentication method is `AWS_IAM` in the SaaS Deployment model.",
                 "format": "password",
                 "example": "arn"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -55615,6 +56374,16 @@
                 "format": "int32",
                 "example": 4573961
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -55773,6 +56542,16 @@
                 "description": "Unique ID within the MySQL replica set. Must be an integer different from all other master and replica servers within the same group.",
                 "format": "int32",
                 "example": 4573961
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -56002,6 +56781,16 @@
                 "description": "The ARN of the IAM role with RDS permissions. Required if the authentication method is `AWS_IAM` in the SaaS Deployment model.",
                 "format": "password",
                 "example": "arn"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -57265,6 +58054,16 @@
                 "format": "password",
                 "example": "test_password"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -57385,6 +58184,16 @@
                 "description": "The user's password.",
                 "format": "password",
                 "example": "test_password"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -57635,6 +58444,16 @@
                 "format": "int32",
                 "example": 4573961
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -57793,6 +58612,16 @@
                 "description": "Unique ID within the MySQL replica set. Must be an integer different from all other master and replica servers within the same group.",
                 "format": "int32",
                 "example": 4573961
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -58022,6 +58851,16 @@
                 "description": "The ARN of the IAM role with RDS permissions. Required if the authentication method is `AWS_IAM` in the SaaS Deployment model.",
                 "format": "password",
                 "example": "arn"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -58439,35 +59278,6 @@
           }
         }
       },
-      "notion_auth_V1": {
-        "properties": {
-          "auth": {
-            "type": "object",
-            "properties": {
-              "client_access": {
-                "title": "",
-                "type": "object",
-                "properties": {
-                  "client_id": {
-                    "title": "",
-                    "type": "string",
-                    "description": "",
-                    "example": "string"
-                  },
-                  "client_secret": {
-                    "title": "",
-                    "type": "string",
-                    "description": "",
-                    "format": "password",
-                    "example": "string"
-                  }
-                }
-              }
-            },
-            "description": ""
-          }
-        }
-      },
       "notion_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -58477,10 +59287,7 @@
             "$ref": "#/components/schemas/notion_config_V1"
           },
           {
-            "$ref": "#/components/schemas/schema_format_schema"
-          },
-          {
-            "$ref": "#/components/schemas/notion_auth_V1"
+            "$ref": "#/components/schemas/schema_format_schema_table"
           }
         ]
       },
@@ -58527,6 +59334,43 @@
           "config": {
             "type": "object",
             "properties": {
+              "api_key": {
+                "title": "",
+                "type": "string",
+                "description": "Your Odoo API key.",
+                "format": "password",
+                "example": "your_odoo_api_key"
+              },
+              "sub_domain": {
+                "title": "",
+                "type": "string",
+                "description": "Your Odoo subdomain.",
+                "format": "password",
+                "example": "your_odoo_subdomain"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
+      "odoo_NewConnectorRequestV1": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/NewConnectorRequestV1"
+          },
+          {
+            "$ref": "#/components/schemas/odoo_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/schema_format_schema"
+          }
+        ]
+      },
+      "odoo_synconics_config_V1": {
+        "properties": {
+          "config": {
+            "type": "object",
+            "properties": {
               "consumer_key": {
                 "title": "",
                 "type": "string",
@@ -58551,7 +59395,7 @@
           }
         }
       },
-      "odoo_auth_V1": {
+      "odoo_synconics_auth_V1": {
         "properties": {
           "auth": {
             "type": "object",
@@ -58594,56 +59438,19 @@
           }
         }
       },
-      "odoo_NewConnectorRequestV1": {
+      "odoo_synconics_NewConnectorRequestV1": {
         "allOf": [
           {
             "$ref": "#/components/schemas/NewConnectorRequestV1"
           },
           {
-            "$ref": "#/components/schemas/odoo_config_V1"
+            "$ref": "#/components/schemas/odoo_synconics_config_V1"
           },
           {
             "$ref": "#/components/schemas/schema_format_schema"
           },
           {
-            "$ref": "#/components/schemas/odoo_auth_V1"
-          }
-        ]
-      },
-      "odoo_native_config_V1": {
-        "properties": {
-          "config": {
-            "type": "object",
-            "properties": {
-              "api_key": {
-                "title": "",
-                "type": "string",
-                "description": "Your Odoo API key.",
-                "format": "password",
-                "example": "your_odoo_api_key"
-              },
-              "sub_domain": {
-                "title": "",
-                "type": "string",
-                "description": "Your Odoo subdomain.",
-                "format": "password",
-                "example": "your_odoo_subdomain"
-              }
-            },
-            "description": ""
-          }
-        }
-      },
-      "odoo_native_NewConnectorRequestV1": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/NewConnectorRequestV1"
-          },
-          {
-            "$ref": "#/components/schemas/odoo_native_config_V1"
-          },
-          {
-            "$ref": "#/components/schemas/schema_format_schema"
+            "$ref": "#/components/schemas/odoo_synconics_auth_V1"
           }
         ]
       },
@@ -59216,28 +60023,34 @@
               "api_key": {
                 "title": "",
                 "type": "string",
-                "description": "Your OpenAI Admin API key.",
+                "description": "Your OpenAI Platform Admin API key.",
                 "format": "password",
-                "example": "your_admin_api_key"
+                "example": "your_openai_platform_admin_api_key"
               },
               "api_key_2": {
                 "title": "",
                 "type": "string",
-                "description": "The project-specific API key for the OpenAI Platform project whose data you want to sync.",
+                "description": "The API key for the OpenAI Platform project whose data you want to sync.",
                 "format": "password",
-                "example": "your_project_specific_api_key"
+                "example": "your_openai_platform_project_api_key"
               },
               "api_key_3": {
                 "title": "",
                 "type": "string",
-                "description": "The API key scoped to `codex.enterprise.analytics.read` for syncing Codex Enterprise Analytics data from a specific ChatGPT workspace.",
+                "description": "Your ChatGPT Admin key for syncing Codex Enterprise Analytics API and Compliance Platform data.",
                 "format": "password",
-                "example": "your_api_key_for_analytics_data"
+                "example": "your_chatgpt_admin_key"
+              },
+              "organization_id": {
+                "title": "",
+                "type": "string",
+                "description": "The ID of the OpenAI API Platform organization whose organization-level Compliance Platform data you want to sync.",
+                "example": "your_openai_platform_organization_id"
               },
               "workspace_id": {
                 "title": "",
                 "type": "string",
-                "description": "Your ChatGPT Enterprise Workspace ID.",
+                "description": "The ID of the ChatGPT Enterprise or Edu workspace whose data you want to sync.",
                 "example": "your_workspace_id"
               }
             },
@@ -59356,6 +60169,16 @@
                 "description": "The port number.",
                 "format": "int32",
                 "example": 443
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -59482,6 +60305,16 @@
                 "format": "int32",
                 "example": 443
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -59555,12 +60388,6 @@
           "config": {
             "type": "object",
             "properties": {
-              "account_id": {
-                "title": "",
-                "type": "string",
-                "description": "Your Optimizely account ID.",
-                "example": "test_account_id"
-              },
               "enriched_export": {
                 "title": "",
                 "type": "string",
@@ -60215,6 +61042,28 @@
           }
         }
       },
+      "oracle_fusion_cloud_apps_crm_esm_keys_config_V1": {
+        "properties": {
+          "external_secrets_keys_config": {
+            "type": "object",
+            "properties": {
+              "password": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the Oracle Fusion Cloud user password.",
+                "example": "PASSWORD_KEY"
+              },
+              "username": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the Oracle Fusion Cloud username.",
+                "example": "USERNAME_KEY"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "oracle_fusion_cloud_apps_crm_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -60225,6 +61074,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema_prefix"
+          },
+          {
+            "$ref": "#/components/schemas/oracle_fusion_cloud_apps_crm_esm_keys_config_V1"
           }
         ]
       },
@@ -60328,6 +61180,28 @@
           }
         }
       },
+      "oracle_fusion_cloud_apps_fscm_esm_keys_config_V1": {
+        "properties": {
+          "external_secrets_keys_config": {
+            "type": "object",
+            "properties": {
+              "password": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the Oracle Fusion Cloud user password.",
+                "example": "PASSWORD_KEY"
+              },
+              "username": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the Oracle Fusion Cloud username.",
+                "example": "USERNAME_KEY"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "oracle_fusion_cloud_apps_fscm_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -60338,6 +61212,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema_prefix"
+          },
+          {
+            "$ref": "#/components/schemas/oracle_fusion_cloud_apps_fscm_esm_keys_config_V1"
           }
         ]
       },
@@ -60441,6 +61318,28 @@
           }
         }
       },
+      "oracle_fusion_cloud_apps_hcm_esm_keys_config_V1": {
+        "properties": {
+          "external_secrets_keys_config": {
+            "type": "object",
+            "properties": {
+              "password": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the Oracle Fusion Cloud user password.",
+                "example": "PASSWORD_KEY"
+              },
+              "username": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the Oracle Fusion Cloud username.",
+                "example": "USERNAME_KEY"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "oracle_fusion_cloud_apps_hcm_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -60451,6 +61350,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema_prefix"
+          },
+          {
+            "$ref": "#/components/schemas/oracle_fusion_cloud_apps_hcm_esm_keys_config_V1"
           }
         ]
       },
@@ -63407,7 +64309,7 @@
                     "report_type": {
                       "title": "",
                       "type": "object",
-                      "description": "The breakdown level for the report (e.g. ADVERTISER, CAMPAIGN, AD_GROUP, PIN_PROMOTION, KEYWORD, PRODUCT_GROUP, PRODUCT_ITEM).",
+                      "description": "The breakdown level for the report (e.g. ADVERTISER, CAMPAIGN, AD_GROUP, PIN_PROMOTION, KEYWORD, PRODUCT_GROUP, ADVERTISER_TARGETING, CAMPAIGN_TARGETING, AD_GROUP_TARGETING, PIN_PROMOTION_TARGETING, PRODUCT_GROUP_TARGETING, PRODUCT_ITEM_TARGETING).",
                       "example": "CAMPAIGN",
                       "enum": [
                         "PRODUCT_GROUP",
@@ -63416,6 +64318,7 @@
                         "ADVERTISER_TARGETING",
                         "KEYWORD",
                         "AD_GROUP_TARGETING",
+                        "PRODUCT_ITEM_TARGETING",
                         "AD_GROUP",
                         "ADVERTISER",
                         "CAMPAIGN",
@@ -63428,6 +64331,31 @@
                       "type": "string",
                       "description": "Destination table name for this custom report.",
                       "example": "my_campaign_report"
+                    },
+                    "targeting_type": {
+                      "title": "",
+                      "type": "object",
+                      "description": "The single targeting type to report on. Required for HOUR granularity on targeting breakdown levels and for the PRODUCT_ITEM_TARGETING level at any granularity; ignored otherwise. PRODUCT_ITEM_TARGETING supports only MEDIA_TYPE, APPTYPE, PLACEMENT, AGE_BUCKET, and GENDER.",
+                      "example": "LOCATION | AUDIENCE_MULTIPLIER | TARGETED_INTEREST | AUDIENCE_INCLUDE | AGE_BUCKET | AGE_BUCKET_AND_GENDER | KEYWORD | REGION | CREATIVE_ENHANCEMENTS | GEO | PINNER_INTEREST | PLACEMENT | COUNTRY | MEDIA_TYPE | GENDER | LOCAL_ADS_STORE_CODE | APPTYPE",
+                      "enum": [
+                        "LOCATION",
+                        "AUDIENCE_MULTIPLIER",
+                        "TARGETED_INTEREST",
+                        "AUDIENCE_INCLUDE",
+                        "AGE_BUCKET",
+                        "AGE_BUCKET_AND_GENDER",
+                        "KEYWORD",
+                        "REGION",
+                        "CREATIVE_ENHANCEMENTS",
+                        "GEO",
+                        "PINNER_INTEREST",
+                        "PLACEMENT",
+                        "COUNTRY",
+                        "MEDIA_TYPE",
+                        "GENDER",
+                        "LOCAL_ADS_STORE_CODE",
+                        "APPTYPE"
+                      ]
                     },
                     "view_attribution_window": {
                       "title": "",
@@ -64200,6 +65128,16 @@
                 "description": "Replication slot name. Specify only for `\"updated_method\": \"WAL_PGOUTPUT\"`.",
                 "example": "test_replication_slot"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tunnel_host": {
                 "title": "",
                 "type": "string",
@@ -64381,6 +65319,16 @@
                 "type": "string",
                 "description": "Replication slot name. Specify only for `\"updated_method\": \"WAL_PGOUTPUT\"`.",
                 "example": "test_replication_slot"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -66834,12 +67782,6 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "auth_type": {
                 "title": "",
                 "type": "object",
@@ -67032,12 +67974,6 @@
                   "skip"
                 ]
               },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
-              },
               "pgp_pass_phrase": {
                 "title": "",
                 "type": "string",
@@ -67186,12 +68122,6 @@
                   "upsert_file",
                   "append_file"
                 ]
-              },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
               },
               "auth_type": {
                 "title": "",
@@ -68068,6 +68998,16 @@
                 "description": "User",
                 "example": "string"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "sync_mode": {
                 "title": "",
                 "type": "object",
@@ -68576,6 +69516,16 @@
                 "description": "",
                 "example": "string"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "sysnr": {
                 "title": "",
                 "type": "string",
@@ -68709,6 +69659,16 @@
                 "description": "The port number of the SAP OData service.",
                 "format": "int32",
                 "example": 44300
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -68914,7 +69874,7 @@
                 "title": "",
                 "type": "object",
                 "description": "The SAP Oracle connection mode. Supported values: `DIRECT`, `NETWEAVER`. Default value: `DIRECT`.",
-                "example": "DIRECT",
+                "example": "NETWEAVER | DIRECT",
                 "enum": [
                   "NETWEAVER",
                   "DIRECT"
@@ -68925,6 +69885,16 @@
                 "type": "string",
                 "description": "The SAP schema name.",
                 "example": "string"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "symbolic_links_mapping": {
                 "title": "",
@@ -68979,6 +69949,28 @@
           }
         }
       },
+      "sap_oracle_esm_keys_config_V1": {
+        "properties": {
+          "external_secrets_keys_config": {
+            "type": "object",
+            "properties": {
+              "password": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the user's password.",
+                "example": "PASSWORD_KEY"
+              },
+              "user": {
+                "title": "",
+                "type": "string",
+                "description": "ESM key for the user name.",
+                "example": "USER_KEY"
+              }
+            },
+            "description": ""
+          }
+        }
+      },
       "sap_oracle_NewConnectorRequestV1": {
         "allOf": [
           {
@@ -68989,6 +69981,9 @@
           },
           {
             "$ref": "#/components/schemas/schema_format_schema_prefix"
+          },
+          {
+            "$ref": "#/components/schemas/sap_oracle_esm_keys_config_V1"
           }
         ]
       },
@@ -69443,17 +70438,11 @@
                   "append_file"
                 ]
               },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
-              },
               "auth_method": {
                 "title": "",
                 "type": "object",
                 "description": "The authentication method to use. Supported values: `PASSWORD`, `FIVETRAN_MANAGED_KEYPAIR`, `CUSTOMER_SUPPLIED_KEYPAIR`.",
-                "example": "PASSWORD",
+                "example": "PASSWORD | CUSTOMER_SUPPLIED_KEYPAIR | FIVETRAN_MANAGED_KEYPAIR",
                 "enum": [
                   "PASSWORD",
                   "CUSTOMER_SUPPLIED_KEYPAIR",
@@ -69481,9 +70470,10 @@
                 "title": "",
                 "type": "object",
                 "description": "The connection method used to connect to SFTP Server.",
-                "example": "SSH_TUNNEL | DIRECT",
+                "example": "SSH_TUNNEL | PROXY_AGENT | DIRECT",
                 "enum": [
                   "SSH_TUNNEL",
+                  "PROXY_AGENT",
                   "DIRECT"
                 ]
               },
@@ -69640,12 +70630,6 @@
                 "format": "password",
                 "example": "password"
               },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
-              },
               "pgp_pass_phrase": {
                 "title": "",
                 "type": "string",
@@ -69710,6 +70694,20 @@
                 "description": "We will skip over the number of lines specified before syncing data.",
                 "format": "int32",
                 "example": 0
+              },
+              "ssh_private_key": {
+                "title": "",
+                "type": "string",
+                "description": "The contents of the SSH private key file. Required when `auth_method` is `CUSTOMER_SUPPLIED_KEYPAIR`.",
+                "format": "password",
+                "example": "string"
+              },
+              "ssh_private_key_passphrase": {
+                "title": "",
+                "type": "string",
+                "description": "The passphrase for the SSH private key. Required when `auth_method` is `CUSTOMER_SUPPLIED_KEYPAIR` and the private key is passphrase-protected.",
+                "format": "password",
+                "example": "string"
               },
               "sync_inconsistent_rows": {
                 "title": "",
@@ -69824,12 +70822,6 @@
                   "upsert_file",
                   "append_file"
                 ]
-              },
-              "archive_pattern": {
-                "title": "",
-                "type": "string",
-                "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "regex_pattern"
               },
               "client_certificate": {
                 "title": "",
@@ -70002,12 +70994,6 @@
                   "fail",
                   "skip"
                 ]
-              },
-              "pattern": {
-                "title": "",
-                "type": "string",
-                "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026.",
-                "example": "file_pattern"
               },
               "prefix": {
                 "title": "",
@@ -72715,6 +73701,16 @@
                 "format": "password",
                 "example": "arn:aws:iam::123456789012:role/rolename"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tde_certificate_backup": {
                 "title": "",
                 "type": "string",
@@ -73007,6 +74003,16 @@
                 "description": "Server name. Used when authenticating with Windows Authentication.",
                 "example": "string"
               },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
+              },
               "tde_certificate": {
                 "title": "",
                 "type": "string",
@@ -73134,6 +74140,16 @@
                 "description": "The port number.",
                 "format": "int32",
                 "example": 1433
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tunnel_host": {
                 "title": "",
@@ -73353,6 +74369,16 @@
                 "type": "string",
                 "description": "Server name. Used when authenticating with Windows Authentication.",
                 "example": "string"
+              },
+              "ssh_algorithm": {
+                "title": "",
+                "type": "object",
+                "description": "SSH Key Type",
+                "example": "RSA | ECDSA",
+                "enum": [
+                  "RSA",
+                  "ECDSA"
+                ]
               },
               "tde_certificate": {
                 "title": "",
@@ -73794,6 +74820,12 @@
                   "DATE_LIMIT"
                 ]
               },
+              "invoice_weekly_resync": {
+                "title": "",
+                "type": "boolean",
+                "description": "Resync the `INVOICE` table weekly to fetch the `hosted_invoice_url` and `invoice_pdf` column data. For more information, see [our documentation](/docs/connectors/applications/stripe#limitations).",
+                "example": true
+              },
               "support_connected_accounts_sync": {
                 "title": "",
                 "type": "boolean",
@@ -73852,6 +74884,12 @@
                   "ALL_TIME",
                   "DATE_LIMIT"
                 ]
+              },
+              "invoice_weekly_resync": {
+                "title": "",
+                "type": "boolean",
+                "description": "Resync the `INVOICE` table weekly to fetch the `hosted_invoice_url` and `invoice_pdf` column data. For more information, see [our documentation](/docs/connectors/applications/stripe#limitations).",
+                "example": true
               },
               "support_connected_accounts_sync": {
                 "title": "",
@@ -75040,35 +76078,39 @@
                 ]
               },
               "business_category": {
-                "type": "object",
+                "type": "array",
                 "description": "The TikTok business category whose data you want to sync.",
-                "enum": [
-                  "CLOTHING_AND_ACCESSORIES",
-                  "FINANCE_AND_INVESTING",
-                  "HEALTH_AND_WELLNESS",
-                  "SHOPPING_AND_RETAIL",
-                  "BABY",
-                  "PROFESSIONAL_SERVICES",
-                  "GAMING",
-                  "PETS",
-                  "EDUCATION_AND_TRAINING",
-                  "PUBLIC_ADMINISTRATION",
-                  "PERSONAL_BLOG",
-                  "SPORTS_FITNESS_AND_OUTDOORS",
-                  "ELECTRONICS",
-                  "REAL_ESTATE",
-                  "TRAVEL_AND_TOURISM",
-                  "MACHINERY_AND_EQUIPMENT",
-                  "RESTAURANTS_AND_BARS",
-                  "ART_AND_CRAFTS",
-                  "HOME_FURNITURE_AND_APPLIANCES",
-                  "OTHERS",
-                  "BEAUTY",
-                  "SOFTWARE_AND_APPS",
-                  "FOOD_AND_BEVERAGE",
-                  "MEDIA_AND_ENTERTAINMENT",
-                  "AUTOMOTIVE_AND_TRANSPORTATION"
-                ]
+                "items": {
+                  "type": "object",
+                  "description": "The TikTok business category whose data you want to sync.",
+                  "enum": [
+                    "CLOTHING_AND_ACCESSORIES",
+                    "FINANCE_AND_INVESTING",
+                    "HEALTH_AND_WELLNESS",
+                    "SHOPPING_AND_RETAIL",
+                    "BABY",
+                    "PROFESSIONAL_SERVICES",
+                    "GAMING",
+                    "PETS",
+                    "EDUCATION_AND_TRAINING",
+                    "PUBLIC_ADMINISTRATION",
+                    "PERSONAL_BLOG",
+                    "SPORTS_FITNESS_AND_OUTDOORS",
+                    "ELECTRONICS",
+                    "REAL_ESTATE",
+                    "TRAVEL_AND_TOURISM",
+                    "MACHINERY_AND_EQUIPMENT",
+                    "RESTAURANTS_AND_BARS",
+                    "ART_AND_CRAFTS",
+                    "HOME_FURNITURE_AND_APPLIANCES",
+                    "OTHERS",
+                    "BEAUTY",
+                    "SOFTWARE_AND_APPS",
+                    "FOOD_AND_BEVERAGE",
+                    "MEDIA_AND_ENTERTAINMENT",
+                    "AUTOMOTIVE_AND_TRANSPORTATION"
+                  ]
+                }
               }
             },
             "description": ""
@@ -75166,20 +76208,24 @@
                 "example": "https://services.tiktokshops.us/open/authorize?service_id=7369437808455026474"
               },
               "platform": {
-                "type": "object",
+                "type": "array",
                 "description": "Your TikTok Shop Partner Center external order data.",
-                "enum": [
-                  "SALESFORCE_COMMERCE_CLOUD",
-                  "AMAZON",
-                  "WAREHOUSE_MANAGEMENT_SYSTEM",
-                  "BIGCOMMERCE",
-                  "MAGENTO",
-                  "ORDER_MANAGEMENT_SYSTEM",
-                  "SHOPIFY",
-                  "WOOCOMMERCE",
-                  "CHANNEL_ADVISOR",
-                  "ERP_SYSTEM"
-                ]
+                "items": {
+                  "type": "object",
+                  "description": "Your TikTok Shop Partner Center external order data.",
+                  "enum": [
+                    "SALESFORCE_COMMERCE_CLOUD",
+                    "AMAZON",
+                    "WAREHOUSE_MANAGEMENT_SYSTEM",
+                    "BIGCOMMERCE",
+                    "MAGENTO",
+                    "ORDER_MANAGEMENT_SYSTEM",
+                    "SHOPIFY",
+                    "WOOCOMMERCE",
+                    "CHANNEL_ADVISOR",
+                    "ERP_SYSTEM"
+                  ]
+                }
               }
             },
             "description": ""
@@ -81257,6 +82303,9 @@
           },
           {
             "$ref": "#/components/schemas/adobe_analytics_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/adobe_analytics_esm_keys_config_V1"
           }
         ]
       },
@@ -83466,6 +84515,16 @@
           }
         ]
       },
+      "cursor_ConnectorResponseV1": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ConnectorResponseV1"
+          },
+          {
+            "$ref": "#/components/schemas/cursor_config_V1"
+          }
+        ]
+      },
       "customerio_ConnectorResponseV1": {
         "allOf": [
           {
@@ -83552,6 +84611,9 @@
           },
           {
             "$ref": "#/components/schemas/db2i_hva_readonly_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/db2i_hva_esm_keys_config_V1"
           }
         ]
       },
@@ -83581,6 +84643,9 @@
           },
           {
             "$ref": "#/components/schemas/db2i_sap_hva_readonly_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/db2i_sap_hva_esm_keys_config_V1"
           }
         ]
       },
@@ -86827,13 +87892,13 @@
           }
         ]
       },
-      "odoo_native_ConnectorResponseV1": {
+      "odoo_synconics_ConnectorResponseV1": {
         "allOf": [
           {
             "$ref": "#/components/schemas/ConnectorResponseV1"
           },
           {
-            "$ref": "#/components/schemas/odoo_native_config_V1"
+            "$ref": "#/components/schemas/odoo_synconics_config_V1"
           }
         ]
       },
@@ -87102,6 +88167,9 @@
           },
           {
             "$ref": "#/components/schemas/oracle_fusion_cloud_apps_crm_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/oracle_fusion_cloud_apps_crm_esm_keys_config_V1"
           }
         ]
       },
@@ -87112,6 +88180,9 @@
           },
           {
             "$ref": "#/components/schemas/oracle_fusion_cloud_apps_fscm_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/oracle_fusion_cloud_apps_fscm_esm_keys_config_V1"
           }
         ]
       },
@@ -87122,6 +88193,9 @@
           },
           {
             "$ref": "#/components/schemas/oracle_fusion_cloud_apps_hcm_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/oracle_fusion_cloud_apps_hcm_esm_keys_config_V1"
           }
         ]
       },
@@ -88750,6 +89824,9 @@
           },
           {
             "$ref": "#/components/schemas/sap_oracle_readonly_config_V1"
+          },
+          {
+            "$ref": "#/components/schemas/sap_oracle_esm_keys_config_V1"
           }
         ]
       },

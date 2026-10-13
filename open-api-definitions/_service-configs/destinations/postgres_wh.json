@@ -14,67 +14,16 @@
           "type": "object",
           "description": "Authentication method. Supported values: `PASSWORD`, `AWS_IAM`. Default: `PASSWORD`.",
           "enum": [
+            "ENTRA_ID",
             "PASSWORD",
+            "CLIENT_CERTIFICATE",
             "AWS_IAM"
           ]
         },
         "aws_region_code": {
           "title": "",
-          "type": "object",
-          "description": "AWS region code. Required when `auth_method` is set to `AWS_IAM`",
-          "enum": [
-            "me-central-1",
-            "aws-cn-global",
-            "us-isof-south-1",
-            "ap-east-2",
-            "us-west-1",
-            "us-west-2",
-            "af-south-1",
-            "ap-northeast-3",
-            "ap-northeast-2",
-            "ap-northeast-1",
-            "me-south-1",
-            "sa-east-1",
-            "cn-north-1",
-            "ap-southeast-1",
-            "ap-southeast-2",
-            "ap-southeast-3",
-            "ap-southeast-4",
-            "ap-southeast-5",
-            "us-east-1",
-            "us-east-2",
-            "ap-southeast-7",
-            "aws-iso-e-global",
-            "cn-northwest-1",
-            "ap-south-2",
-            "ap-south-1",
-            "eu-south-1",
-            "eu-south-2",
-            "us-gov-east-1",
-            "il-central-1",
-            "ca-central-1",
-            "mx-central-1",
-            "eu-central-1",
-            "eusc-de-east-1",
-            "us-iso-west-1",
-            "eu-central-2",
-            "eu-isoe-west-1",
-            "aws-global",
-            "eu-north-1",
-            "eu-west-3",
-            "eu-west-2",
-            "eu-west-1",
-            "aws-iso-global",
-            "ap-east-1",
-            "ca-west-1",
-            "us-gov-west-1",
-            "us-iso-east-1",
-            "aws-iso-b-global",
-            "aws-iso-f-global",
-            "aws-us-gov-global",
-            "us-isob-east-1",
-            "us-isof-east-1"
-          ]
+          "type": "string",
+          "description": "AWS region code. Required when `auth_method` is set to `AWS_IAM`"
         },
         "connection_type": {
           "title": "",
@@ -118,6 +67,15 @@
           "title": "",
           "type": "string",
           "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`"
+        },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
         },
         "tunnel_host": {
           "title": "",

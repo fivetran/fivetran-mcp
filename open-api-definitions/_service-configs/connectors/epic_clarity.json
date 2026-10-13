@@ -42,6 +42,15 @@
           "description": "The port number.",
           "format": "int32"
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tunnel_host": {
           "title": "",
           "type": "string",
@@ -61,11 +70,12 @@
         "update_method": {
           "title": "",
           "type": "object",
-          "description": "(Optional) The incremental update method the connector will use. The possible values are `\"TELEPORT\"` or `\"NATIVE_UPDATE\"`. The type defaults to `\"NATIVE_UPDATE\"` if the value is set to `null` or not specified.",
+          "description": "Required. The incremental update method the connector will use. The possible values are `\"MIXED_TELEPORT_CSA\"` for [CSA and Teleport](/docs/connectors/databases/epic_clarity#csaandteleport) and `\"EPIC_COGITO\"` for [Epic Cogito](/docs/connectors/databases/epic_clarity#epiccogito). There is no default; setup fails if the value is omitted or set to `null`.",
           "enum": [
             "BINARY_LOG_READER",
             "MIXED_TELEPORT_CSA",
             "NATIVE_UPDATE",
+            "EPIC_CSA",
             "TELEPORT",
             "EPIC_COGITO"
           ]

@@ -40,6 +40,15 @@
           "description": "Port number at which the AF Server is running",
           "format": "int32"
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tunnel_host": {
           "title": "",
           "type": "string",

@@ -23,11 +23,6 @@
             "append_file"
           ]
         },
-        "archive_pattern": {
-          "title": "",
-          "type": "string",
-          "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026."
-        },
         "azure_credential": {
           "title": "",
           "type": "object",
@@ -153,7 +148,7 @@
               "link_pattern": {
                 "title": "",
                 "type": "string",
-                "description": "URLs present in email bodies matching this pattern will be fetched and synced as files to this table. Leave this field blank to match all URLs."
+                "description": "URLs in email bodies that match this pattern are fetched and synced as files to this table."
               },
               "selected_range": {
                 "title": "",
@@ -204,11 +199,6 @@
           "title": "",
           "type": "string",
           "description": "If your CSVs use a special value indicating null, you can specify it here."
-        },
-        "pattern": {
-          "title": "",
-          "type": "string",
-          "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026."
         },
         "quote_char": {
           "title": "",

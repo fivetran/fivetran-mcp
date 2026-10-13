@@ -31,7 +31,7 @@
       "application/json": {
         "required": [
           "code",
-          "message"
+          "data"
         ],
         "properties": {
           "code": {
@@ -41,6 +41,25 @@
           "message": {
             "type": "string",
             "description": "Response status text"
+          },
+          "data": {
+            "required": [
+              "result"
+            ],
+            "type": "object",
+            "properties": {
+              "result": {
+                "type": "string",
+                "description": "The result of starting a connection sync. Available values are:\n- `STARTED` – the sync started successfully.\n- `PAUSED` – the sync has not started because the connection is paused.\n- `INCOMPLETE` – the sync has not started because the connection setup is incomplete.\n- `ALREADY_RUNNING` – the sync has not started because it is already running.\n- `NOT_STARTED` – the sync has not started without a specific reason.",
+                "enum": [
+                  "STARTED",
+                  "PAUSED",
+                  "INCOMPLETE",
+                  "ALREADY_RUNNING",
+                  "NOT_STARTED"
+                ]
+              }
+            }
           }
         }
       }

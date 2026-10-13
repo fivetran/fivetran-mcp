@@ -1,5 +1,5 @@
 {
-  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates an existing Connector SDK package by uploading a new version of the connector code.\n\nAll connections using this package will automatically use the updated code on their next sync.\n",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates an existing Connector SDK package by uploading a new version of the connector code.\n\nConnection using this package will automatically use the updated code on their next sync.\n",
   "path": "/v1/connector-sdk/packages/{package_id}",
   "method": "PATCH",
   "parameters": [
@@ -47,6 +47,7 @@
           },
           "data": {
             "required": [
+              "connection_ids",
               "created_at",
               "created_by",
               "id",
@@ -61,7 +62,14 @@
               },
               "connection_id": {
                 "type": "string",
-                "description": "The connection identifier associated with this package. Each package can only be associated with one connection at a time. Returns null if the package is not yet associated with any connection."
+                "description": "Deprecated. The connection identifier associated with this package. Each package can only be associated with one connection at a time. Returns null if the package is not yet associated with any connection. Use `connection_ids` instead."
+              },
+              "connection_ids": {
+                "type": "array",
+                "description": "The connection identifiers associated with this package. Empty if the package is not yet associated with any connection.",
+                "items": {
+                  "type": "string"
+                }
               },
               "created_by": {
                 "type": "string",

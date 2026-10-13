@@ -89,6 +89,15 @@
           "type": "string",
           "description": "Replication slot name. Specify only for `\"updated_method\": \"WAL_PGOUTPUT\"`."
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tunnel_host": {
           "title": "",
           "type": "string",

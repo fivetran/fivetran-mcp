@@ -4,21 +4,17 @@
     "config": {
       "type": "object",
       "properties": {
-        "consumer_key": {
+        "api_key": {
           "title": "",
           "type": "string",
-          "description": "Consumer key of the OAuth application that you want the connection to use for authentication."
-        },
-        "consumer_secret": {
-          "title": "",
-          "type": "string",
-          "description": "Consumer secret of the OAuth application that you want the connection to use for authentication.",
+          "description": "Your Odoo API key.",
           "format": "password"
         },
         "sub_domain": {
           "title": "",
           "type": "string",
-          "description": "Your Odoo subdomain."
+          "description": "Your Odoo subdomain.",
+          "format": "password"
         },
         "schema": {
           "title": "Destination schema name",
@@ -30,46 +26,10 @@
       "required": [
         "schema"
       ]
-    },
-    "auth": {
-      "type": "object",
-      "properties": {
-        "access_token": {
-          "title": "",
-          "type": "string",
-          "description": "",
-          "format": "password"
-        },
-        "client_access": {
-          "type": "object",
-          "properties": {
-            "client_id": {
-              "title": "",
-              "type": "string",
-              "description": ""
-            },
-            "client_secret": {
-              "title": "",
-              "type": "string",
-              "description": "",
-              "format": "password"
-            }
-          },
-          "description": ""
-        },
-        "refresh_token": {
-          "title": "",
-          "type": "string",
-          "description": "",
-          "format": "password"
-        }
-      },
-      "description": ""
     }
   },
   "x-sources": [
     "odoo_config_V1",
-    "schema_format_schema",
-    "odoo_auth_V1"
+    "schema_format_schema"
   ]
 }

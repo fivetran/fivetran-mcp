@@ -126,10 +126,27 @@
       "required": [
         "schema"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for client ID from the OAuth Server-to-Server credentials of your Adobe Project."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for client Secret from the OAuth Server-to-Server credentials of your Adobe Project."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
     "adobe_analytics_config_V1",
-    "schema_format_schema"
+    "schema_format_schema",
+    "adobe_analytics_esm_keys_config_V1"
   ]
 }

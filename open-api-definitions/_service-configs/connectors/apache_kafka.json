@@ -125,6 +125,15 @@
             "description": ""
           }
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "sync_type": {
           "title": "",
           "type": "object",

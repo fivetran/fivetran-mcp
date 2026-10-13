@@ -117,6 +117,15 @@
           "type": "string",
           "description": ""
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "sysnr": {
           "title": "",
           "type": "string",

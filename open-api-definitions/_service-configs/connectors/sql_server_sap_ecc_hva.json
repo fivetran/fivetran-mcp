@@ -120,6 +120,15 @@
           "type": "string",
           "description": "Server name. Used when authenticating with Windows Authentication."
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tde_certificate": {
           "title": "",
           "type": "string",

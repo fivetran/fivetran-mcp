@@ -70,6 +70,15 @@
           "description": "Unique ID within the MySQL replica set. Must be an integer different from all other master and replica servers within the same group.",
           "format": "int32"
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tunnel_host": {
           "title": "",
           "type": "string",

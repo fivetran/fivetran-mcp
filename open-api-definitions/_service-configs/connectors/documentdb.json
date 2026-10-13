@@ -28,7 +28,6 @@
           "type": "object",
           "description": "Whether to sync all tables in unpacked mode only or all tables in packed mode only. Default value: `UseUnpackedModeOnly`.",
           "enum": [
-            "SelectTablesForPackedMode",
             "UsePackedModeOnly",
             "UseUnpackedModeOnly"
           ]
@@ -44,6 +43,15 @@
           "type": "integer",
           "description": "Port number. Ignored if `hosts` value is provided.",
           "format": "int32"
+        },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
         },
         "sync_pack_mode": {
           "title": "",

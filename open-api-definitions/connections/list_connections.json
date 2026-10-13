@@ -187,6 +187,51 @@
                       },
                       "description": "The connection setup configuration."
                     },
+                    "schedule": {
+                      "type": "object",
+                      "properties": {
+                        "cron": {
+                          "type": "string",
+                          "description": "A UNIX cron expression defining the sync schedule. Set when `schedule_type` is `CRON`."
+                        },
+                        "interval": {
+                          "type": "integer",
+                          "description": "The sync interval in minutes. Set when `schedule_type` is `INTERVAL`.",
+                          "format": "int32"
+                        },
+                        "schedule_type": {
+                          "type": "string",
+                          "description": "The type of sync schedule. Determines which other `schedule` fields are populated. Possible values: `INTERVAL` - syncs repeat on a fixed cadence; `interval` is set. `TIME_OF_DAY` - syncs run at a specific time on the configured `days_of_week`; `time_of_day` is set. `CRON` - syncs run on a cron expression (requires an Enterprise or Business Critical plan); `cron` is set. `MANUAL` - automatic scheduling is disabled; syncs run only when triggered via the Sync Connection endpoint; `days_of_week` and `interval` are not set.",
+                          "enum": [
+                            "TIME_OF_DAY",
+                            "INTERVAL",
+                            "CRON",
+                            "MANUAL"
+                          ]
+                        },
+                        "days_of_week": {
+                          "uniqueItems": true,
+                          "type": "array",
+                          "description": "The days of the week on which the connection can sync. Set only when `schedule_type` is `INTERVAL` or `TIME_OF_DAY`. When omitted or empty in the request with these schedule types set, the connection syncs on all days.",
+                          "items": {
+                            "type": "string",
+                            "enum": [
+                              "MONDAY",
+                              "TUESDAY",
+                              "WEDNESDAY",
+                              "THURSDAY",
+                              "FRIDAY",
+                              "SATURDAY",
+                              "SUNDAY"
+                            ]
+                          }
+                        },
+                        "time_of_day": {
+                          "type": "string",
+                          "description": "The time of day at which the connection syncs, in `HH:MM` format. Interpreted in the destination group's configured UTC offset. Set when `schedule_type` is `TIME_OF_DAY`."
+                        }
+                      }
+                    },
                     "group_id": {
                       "type": "string",
                       "description": "The unique identifier for the group within the Fivetran system."
@@ -363,6 +408,9 @@
                       "additionalProperties": {
                         "type": "string"
                       }
+                    },
+                    "data_checks": {
+                      "type": "boolean"
                     }
                   }
                 }

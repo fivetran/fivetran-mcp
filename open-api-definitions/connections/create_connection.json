@@ -205,6 +205,7 @@
               "crunchbase",
               "cube_software",
               "culture_amp",
+              "cursor",
               "customerio",
               "cvent",
               "d2l_brightspace",
@@ -472,7 +473,7 @@
               "notion",
               "nylas",
               "odoo",
-              "odoo_native",
+              "odoo_synconics",
               "okendo",
               "okta",
               "ometria",
@@ -862,7 +863,7 @@
           },
           "schedule_type": {
             "type": "string",
-            "description": "The connection schedule configuration type. Supported values: auto, manual",
+            "description": "Controls whether Fivetran automatically schedules syncs. `auto` - Fivetran schedules syncs based on the `schedule` object. `manual` - automatic scheduling is disabled; syncs run only when triggered via the [Sync Connection](https://fivetran.com/docs/rest-api/api-reference/connections/sync-connection) endpoint.",
             "enum": [
               "auto",
               "manual"
@@ -929,6 +930,10 @@
           "external_secrets_manager_id": {
             "type": "string",
             "description": "The unique identifier of the [External Secrets Manager](/docs/rest-api/api-reference/external-secrets-managers) instance. Connector service must [support](/docs/core-concepts/features/external-secret-managers#connectors) External Secrets Manager feature to use this field."
+          },
+          "data_checks": {
+            "type": "boolean",
+            "description": "Enables or disables automated data validation (compare) for this connection. When set to `true`, Fivetran compares source and destination data after each sync to detect discrepancies. When set to `false`, validation is skipped. Returned only for connector and destination types that support data validation; absent otherwise. Supported sources: MySQL, Oracle, PostgreSQL, SQL Server, SAP HANA, Snowflake DB. Supported destinations: Snowflake, BigQuery, Redshift, Databricks, PostgreSQL, Managed Data Lake."
           }
         }
       }
@@ -1066,6 +1071,56 @@
                   }
                 ]
               },
+              "schedule": {
+                "description": "The connection's sync schedule configuration",
+                "allOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "cron": {
+                        "type": "string",
+                        "description": "A UNIX cron expression defining the sync schedule. Set when `schedule_type` is `CRON`."
+                      },
+                      "interval": {
+                        "type": "integer",
+                        "description": "The sync interval in minutes. Set when `schedule_type` is `INTERVAL`.",
+                        "format": "int32"
+                      },
+                      "schedule_type": {
+                        "type": "string",
+                        "description": "The type of sync schedule. Determines which other `schedule` fields are populated. Possible values: `INTERVAL` - syncs repeat on a fixed cadence; `interval` is set. `TIME_OF_DAY` - syncs run at a specific time on the configured `days_of_week`; `time_of_day` is set. `CRON` - syncs run on a cron expression (requires an Enterprise or Business Critical plan); `cron` is set. `MANUAL` - automatic scheduling is disabled; syncs run only when triggered via the Sync Connection endpoint; `days_of_week` and `interval` are not set.",
+                        "enum": [
+                          "TIME_OF_DAY",
+                          "INTERVAL",
+                          "CRON",
+                          "MANUAL"
+                        ]
+                      },
+                      "days_of_week": {
+                        "uniqueItems": true,
+                        "type": "array",
+                        "description": "The days of the week on which the connection can sync. Set only when `schedule_type` is `INTERVAL` or `TIME_OF_DAY`. When omitted or empty in the request with these schedule types set, the connection syncs on all days.",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "MONDAY",
+                            "TUESDAY",
+                            "WEDNESDAY",
+                            "THURSDAY",
+                            "FRIDAY",
+                            "SATURDAY",
+                            "SUNDAY"
+                          ]
+                        }
+                      },
+                      "time_of_day": {
+                        "type": "string",
+                        "description": "The time of day at which the connection syncs, in `HH:MM` format. Interpreted in the destination group's configured UTC offset. Set when `schedule_type` is `TIME_OF_DAY`."
+                      }
+                    }
+                  }
+                ]
+              },
               "group_id": {
                 "type": "string",
                 "description": "The unique identifier of the destination group this connection belongs to. Use this value with the [List All Groups](https://fivetran.com/docs/rest-api/api-reference/groups/list-all-groups) or [Retrieve Group Details](https://fivetran.com/docs/rest-api/api-reference/groups/group-details) endpoints."
@@ -1157,7 +1212,7 @@
               },
               "schedule_type": {
                 "type": "string",
-                "description": "The connection schedule configuration type. Supported values: auto, manual"
+                "description": "Controls whether Fivetran automatically schedules syncs. `auto` - Fivetran schedules syncs based on the `schedule` object. `manual` - automatic scheduling is disabled; syncs run only when triggered via the [Sync Connection](https://fivetran.com/docs/rest-api/api-reference/connections/sync-connection) endpoint."
               },
               "setup_tests": {
                 "type": "array",
@@ -1256,6 +1311,10 @@
               "external_secrets_manager_id": {
                 "type": "string",
                 "description": "The unique identifier of the [External Secrets Manager](/docs/rest-api/api-reference/external-secrets-managers) instance. Connector service must [support](/docs/core-concepts/features/external-secret-managers#connectors) External Secrets Manager feature to use this field."
+              },
+              "data_checks": {
+                "type": "boolean",
+                "description": "Enables or disables automated data validation (compare) for this connection. When set to `true`, Fivetran compares source and destination data after each sync to detect discrepancies. When set to `false`, validation is skipped. Returned only for connector and destination types that support data validation; absent otherwise. Supported sources: MySQL, Oracle, PostgreSQL, SQL Server, SAP HANA, Snowflake DB. Supported destinations: Snowflake, BigQuery, Redshift, Databricks, PostgreSQL, Managed Data Lake."
               }
             }
           }

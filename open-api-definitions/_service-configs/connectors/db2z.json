@@ -77,6 +77,15 @@
           "description": "Application secret key registered in RACF for the application. Used to generate a PassTicket when `authentication_method` is `LEGACY_PASS_TICKET` or `ENHANCED_PASS_TICKET`.",
           "format": "password"
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tunnel_host": {
           "title": "",
           "type": "string",

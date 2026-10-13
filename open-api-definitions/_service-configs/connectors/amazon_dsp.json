@@ -23,9 +23,13 @@
           ]
         },
         "profiles": {
-          "title": "",
-          "type": "string",
-          "description": "your Amazon DSP profiles pass it inside an Array list."
+          "type": "array",
+          "description": "your Amazon DSP profiles pass it inside an Array list.",
+          "items": {
+            "title": "",
+            "type": "string",
+            "description": "your Amazon DSP profiles pass it inside an Array list."
+          }
         },
         "token_url_region": {
           "type": "object",

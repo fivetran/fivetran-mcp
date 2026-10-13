@@ -1,5 +1,5 @@
 {
-  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. PRIVATE PREVIEW.  THE ACCOUNT MUST BE ALLOWLISTED TO USE THIS FEATURE. Dismiss all active warnings of a specific type for a connection. Requires the warning type to be registered in the warning type registry.",
+  "description": "⚠️ DESTRUCTIVE - Confirm with user before calling. Dismiss all active warnings of a specific type for a connection. Requires the warning type to be registered in the warning type registry.",
   "path": "/v1/connections/{connectionId}/warnings/{warningType}",
   "method": "DELETE",
   "parameters": [

@@ -14,11 +14,6 @@
             "append_file"
           ]
         },
-        "archive_pattern": {
-          "title": "",
-          "type": "string",
-          "description": "Files inside of compressed archives with filenames matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026."
-        },
         "auth_type": {
           "title": "",
           "type": "object",
@@ -157,11 +152,6 @@
             "fail",
             "skip"
           ]
-        },
-        "pattern": {
-          "title": "",
-          "type": "string",
-          "description": "All files in your search path matching this regular expression will be synced. We have discontinued this field, and will stop supporting it by August 31, 2026."
         },
         "pgp_pass_phrase": {
           "title": "",

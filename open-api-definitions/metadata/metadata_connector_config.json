@@ -155,6 +155,9 @@
                 "description": "The date (yyyy-MM-dd) the connector status was updated to the current availability status",
                 "format": "date-time"
               },
+              "supports_schema_reload": {
+                "type": "boolean"
+              },
               "external_secrets_keys_config": {
                 "type": "object"
               }

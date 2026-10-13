@@ -103,6 +103,15 @@
           "type": "string",
           "description": "User"
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "sync_mode": {
           "title": "",
           "type": "object",

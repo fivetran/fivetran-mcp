@@ -92,10 +92,27 @@
       "required": [
         "schema_prefix"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Oracle Fusion Cloud user password."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Oracle Fusion Cloud username."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
     "oracle_fusion_cloud_apps_fscm_config_V1",
-    "schema_format_schema_prefix"
+    "schema_format_schema_prefix",
+    "oracle_fusion_cloud_apps_fscm_esm_keys_config_V1"
   ]
 }

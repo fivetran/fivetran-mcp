@@ -83,6 +83,15 @@
           "type": "string",
           "description": "The SAP schema."
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tunnel_host": {
           "title": "",
           "type": "string",
@@ -119,10 +128,27 @@
       "required": [
         "schema_prefix"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
     "db2i_hva_config_V1",
-    "schema_format_schema_prefix"
+    "schema_format_schema_prefix",
+    "db2i_hva_esm_keys_config_V1"
   ]
 }

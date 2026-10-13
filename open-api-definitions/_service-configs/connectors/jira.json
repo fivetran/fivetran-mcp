@@ -88,6 +88,22 @@
         "schema"
       ]
     },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The `Client ID` of your Jira service account. Required if `auth_type` is set to `SERVICE_ACCOUNT`."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The `Client secret` of your Jira service account. Required if `auth_type` is set to `SERVICE_ACCOUNT`."
+        }
+      },
+      "description": ""
+    },
     "external_secrets_keys_config": {
       "type": "object",
       "properties": {
@@ -108,6 +124,7 @@
   "x-sources": [
     "jira_config_V1",
     "schema_format_schema",
+    "jira_auth_V1",
     "jira_esm_keys_config_V1"
   ]
 }

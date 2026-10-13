@@ -21,11 +21,6 @@
           "description": "Your Greenhouse client secret.",
           "format": "password"
         },
-        "use_harvest_api_v3": {
-          "title": "",
-          "type": "string",
-          "description": "The confirmation that you want to connect to Harvest V3 API. Possible values: `true`, `false`."
-        },
         "schema": {
           "title": "Destination schema name",
           "type": "string",

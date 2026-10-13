@@ -36,7 +36,7 @@
           },
           "force_move": {
             "type": "boolean",
-            "description": "Set to `true` to confirm that you have completed all prerequisite steps for moving connectors with credential dependencies. Required when moving connectors whose credentials reference the source group—for example, connectors with AWS IAM external IDs or GCP service account credentials. The error response for affected connectors describes the required steps."
+            "description": "Set to `true` to acknowledge move warnings and confirm that you want to proceed. Required if the connector's credentials depend on the current source group, or if the connection and its current destination support unstructured file replication but the target destination doesn't. If you don't provide the confirmation, the API returns an error describing the required action and the functionality you'd lose. Default: `false`"
           }
         }
       }

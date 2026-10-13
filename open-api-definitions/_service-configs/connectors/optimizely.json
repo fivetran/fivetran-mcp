@@ -4,11 +4,6 @@
     "config": {
       "type": "object",
       "properties": {
-        "account_id": {
-          "title": "",
-          "type": "string",
-          "description": "Your Optimizely account ID."
-        },
         "enriched_export": {
           "title": "",
           "type": "string",

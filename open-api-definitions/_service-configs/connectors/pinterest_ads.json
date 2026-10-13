@@ -91,7 +91,7 @@
               "report_type": {
                 "title": "",
                 "type": "object",
-                "description": "The breakdown level for the report (e.g. ADVERTISER, CAMPAIGN, AD_GROUP, PIN_PROMOTION, KEYWORD, PRODUCT_GROUP, PRODUCT_ITEM).",
+                "description": "The breakdown level for the report (e.g. ADVERTISER, CAMPAIGN, AD_GROUP, PIN_PROMOTION, KEYWORD, PRODUCT_GROUP, ADVERTISER_TARGETING, CAMPAIGN_TARGETING, AD_GROUP_TARGETING, PIN_PROMOTION_TARGETING, PRODUCT_GROUP_TARGETING, PRODUCT_ITEM_TARGETING).",
                 "enum": [
                   "PRODUCT_GROUP",
                   "PIN_PROMOTION",
@@ -99,6 +99,7 @@
                   "ADVERTISER_TARGETING",
                   "KEYWORD",
                   "AD_GROUP_TARGETING",
+                  "PRODUCT_ITEM_TARGETING",
                   "AD_GROUP",
                   "ADVERTISER",
                   "CAMPAIGN",
@@ -110,6 +111,30 @@
                 "title": "",
                 "type": "string",
                 "description": "Destination table name for this custom report."
+              },
+              "targeting_type": {
+                "title": "",
+                "type": "object",
+                "description": "The single targeting type to report on. Required for HOUR granularity on targeting breakdown levels and for the PRODUCT_ITEM_TARGETING level at any granularity; ignored otherwise. PRODUCT_ITEM_TARGETING supports only MEDIA_TYPE, APPTYPE, PLACEMENT, AGE_BUCKET, and GENDER.",
+                "enum": [
+                  "LOCATION",
+                  "AUDIENCE_MULTIPLIER",
+                  "TARGETED_INTEREST",
+                  "AUDIENCE_INCLUDE",
+                  "AGE_BUCKET",
+                  "AGE_BUCKET_AND_GENDER",
+                  "KEYWORD",
+                  "REGION",
+                  "CREATIVE_ENHANCEMENTS",
+                  "GEO",
+                  "PINNER_INTEREST",
+                  "PLACEMENT",
+                  "COUNTRY",
+                  "MEDIA_TYPE",
+                  "GENDER",
+                  "LOCAL_ADS_STORE_CODE",
+                  "APPTYPE"
+                ]
               },
               "view_attribution_window": {
                 "title": "",

@@ -1,5 +1,5 @@
 {
-  "description": "⚠️ RESULTS ARE PAGINATED. PRIVATE PREVIEW.  THE ACCOUNT MUST BE ALLOWLISTED TO USE THIS FEATURE. Retrieve all active warnings for a connection, grouped by destination table. Each warning includes a code, message, error details, and creation timestamp.",
+  "description": "⚠️ RESULTS ARE PAGINATED. Retrieve all active warnings for a connection, grouped by destination table. Each warning includes a code, message, error details, and creation timestamp.",
   "path": "/v1/connections/{connectionId}/warnings",
   "method": "GET",
   "parameters": [

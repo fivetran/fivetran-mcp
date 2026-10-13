@@ -5,43 +5,25 @@
       "type": "object",
       "description": "",
       "required": [
-        "schema"
+        "schema",
+        "table"
       ],
       "properties": {
         "schema": {
           "title": "Destination schema name",
           "type": "string",
           "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        },
+        "table": {
+          "title": "Destination table",
+          "type": "string",
+          "description": "Destination table. Table is permanent and cannot be changed after connection creation"
         }
       }
-    },
-    "auth": {
-      "type": "object",
-      "properties": {
-        "client_access": {
-          "title": "",
-          "type": "object",
-          "properties": {
-            "client_id": {
-              "title": "",
-              "type": "string",
-              "description": ""
-            },
-            "client_secret": {
-              "title": "",
-              "type": "string",
-              "description": "",
-              "format": "password"
-            }
-          }
-        }
-      },
-      "description": ""
     }
   },
   "x-sources": [
     "notion_config_V1",
-    "schema_format_schema",
-    "notion_auth_V1"
+    "schema_format_schema_table"
   ]
 }

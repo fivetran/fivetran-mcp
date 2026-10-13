@@ -15,6 +15,11 @@
           "description": "Access Key Secret for access key authentication.",
           "format": "password"
         },
+        "application_path": {
+          "title": "",
+          "type": "string",
+          "description": "Path to the CDA application folder relative to the bucket root. Do not include the deployment timestamp folder. Fivetran automatically identifies the active deployment and follows it when Guidewire redeploys CDA."
+        },
         "auth_type": {
           "title": "",
           "type": "object",
@@ -45,11 +50,6 @@
           "title": "",
           "type": "boolean",
           "description": "Set to `true` if you want to connect to S3 bucket over PrivateLink. Default value: `false`."
-        },
-        "manifest_path": {
-          "title": "",
-          "type": "string",
-          "description": "The path to the Guidewire CDA manifest.json file in the S3 bucket."
         },
         "role_arn": {
           "title": "",

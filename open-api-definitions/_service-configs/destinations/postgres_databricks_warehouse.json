@@ -66,6 +66,15 @@
           "type": "string",
           "description": "AWS IAM role ARN for authentication. Required when `auth_method` is set to `AWS_IAM`."
         },
+        "ssh_algorithm": {
+          "title": "",
+          "type": "object",
+          "description": "SSH Key Type",
+          "enum": [
+            "RSA",
+            "ECDSA"
+          ]
+        },
         "tunnel_host": {
           "title": "",
           "type": "string",

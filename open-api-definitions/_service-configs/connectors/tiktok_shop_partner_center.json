@@ -21,20 +21,24 @@
           "description": "Your TikTok Shop Partner Center authorization URL."
         },
         "platform": {
-          "type": "object",
+          "type": "array",
           "description": "Your TikTok Shop Partner Center external order data.",
-          "enum": [
-            "SALESFORCE_COMMERCE_CLOUD",
-            "AMAZON",
-            "WAREHOUSE_MANAGEMENT_SYSTEM",
-            "BIGCOMMERCE",
-            "MAGENTO",
-            "ORDER_MANAGEMENT_SYSTEM",
-            "SHOPIFY",
-            "WOOCOMMERCE",
-            "CHANNEL_ADVISOR",
-            "ERP_SYSTEM"
-          ]
+          "items": {
+            "type": "object",
+            "description": "Your TikTok Shop Partner Center external order data.",
+            "enum": [
+              "SALESFORCE_COMMERCE_CLOUD",
+              "AMAZON",
+              "WAREHOUSE_MANAGEMENT_SYSTEM",
+              "BIGCOMMERCE",
+              "MAGENTO",
+              "ORDER_MANAGEMENT_SYSTEM",
+              "SHOPIFY",
+              "WOOCOMMERCE",
+              "CHANNEL_ADVISOR",
+              "ERP_SYSTEM"
+            ]
+          }
         },
         "schema": {
           "title": "Destination schema name",

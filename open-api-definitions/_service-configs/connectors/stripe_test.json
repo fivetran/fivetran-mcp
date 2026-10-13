@@ -30,6 +30,11 @@
             "DATE_LIMIT"
           ]
         },
+        "invoice_weekly_resync": {
+          "title": "",
+          "type": "boolean",
+          "description": "Resync the `INVOICE` table weekly to fetch the `hosted_invoice_url` and `invoice_pdf` column data. For more information, see [our documentation](/docs/connectors/applications/stripe#limitations)."
+        },
         "support_connected_accounts_sync": {
           "title": "",
           "type": "boolean",
