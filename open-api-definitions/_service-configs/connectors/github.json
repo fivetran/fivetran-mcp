@@ -85,10 +85,27 @@
       "required": [
         "schema"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for gitHub App Client ID"
+        },
+        "private_key": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for your Private Key"
+        }
+      },
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [
     "github_config_V1",
-    "schema_format_schema"
+    "schema_format_schema",
+    "github_esm_keys_config_V1"
   ]
 }

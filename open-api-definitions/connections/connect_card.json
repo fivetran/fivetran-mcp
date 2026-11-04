@@ -22,7 +22,7 @@
         "type": "object",
         "properties": {
           "connect_card_config": {
-            "description": "Configuration for the Connect Card flow. Connect Card is a Fivetran-hosted UI that allows your end users to authorize a connection without accessing the Fivetran dashboard. Use `redirect_uri` to control where users land after completing setup.",
+            "description": "The [Connect Card](https://fivetran.com/docs/developer-resources/rest-api/getting-started/connect-card) configuration for this connection. Connect Card is a Fivetran-hosted user interface that lets your end users authorize connections without accessing the Fivetran dashboard. `redirect_uri` controls where users land after completing setup.",
             "allOf": [
               {
                 "required": [
@@ -42,7 +42,8 @@
                     "type": "boolean",
                     "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
                   }
-                }
+                },
+                "description": "The [Connect Card](https://fivetran.com/docs/developer-resources/rest-api/getting-started/connect-card) configuration for this connection. Connect Card is a Fivetran-hosted user interface that lets your end users authorize connections without accessing the Fivetran dashboard. `redirect_uri` controls where users land after completing setup."
               }
             ]
           }
@@ -107,7 +108,8 @@
                     "type": "boolean",
                     "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
                   }
-                }
+                },
+                "description": "The [Connect Card](https://fivetran.com/docs/developer-resources/rest-api/getting-started/connect-card) configuration for this connection. Connect Card is a Fivetran-hosted user interface that lets your end users authorize connections without accessing the Fivetran dashboard. `redirect_uri` controls where users land after completing setup."
               }
             }
           }

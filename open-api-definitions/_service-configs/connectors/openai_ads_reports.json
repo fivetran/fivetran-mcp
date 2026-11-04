@@ -1,0 +1,93 @@
+{
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "title": "",
+          "type": "string",
+          "description": "Retrieve from your OpenAI Ads dashboard (**Settings** > **API keys**). Keys are scoped to a single ad account.",
+          "format": "password"
+        },
+        "reports": {
+          "title": "",
+          "type": "array",
+          "description": "Custom reports. Each report lands in its own destination table, in addition to the prebuilt report and metadata tables that are always synced.",
+          "items": {
+            "title": "",
+            "type": "object",
+            "properties": {
+              "aggregation_level": {
+                "title": "",
+                "type": "object",
+                "description": "The entity level the report's rows are aggregated at: AD_ACCOUNT, CAMPAIGN, AD_GROUP, or AD.",
+                "enum": [
+                  "AD_ACCOUNT",
+                  "AD",
+                  "AD_GROUP",
+                  "CAMPAIGN"
+                ]
+              },
+              "fields": {
+                "title": "",
+                "type": "array",
+                "description": "Report fields and metrics to sync. Available fields depend on the selected aggregation level and segment.",
+                "items": {
+                  "title": "",
+                  "type": "string",
+                  "description": ""
+                }
+              },
+              "segments": {
+                "title": "",
+                "type": "array",
+                "description": "Use one segment at most to break the report out by: PRODUCT, COUNTRY, or DEVICE. Not allowed in combination with the hourly time granularity.",
+                "items": {
+                  "title": "",
+                  "type": "object",
+                  "description": "",
+                  "enum": [
+                    "COUNTRY",
+                    "PRODUCT",
+                    "DEVICE",
+                    "NONE"
+                  ]
+                }
+              },
+              "table": {
+                "title": "",
+                "type": "string",
+                "description": "Destination table name for the report. Must be unique and can't be changed once the report is added."
+              },
+              "time_granularity": {
+                "title": "",
+                "type": "object",
+                "description": "The time granularity for the report's rows: NONE, HOURLY, DAILY, or MONTHLY.",
+                "enum": [
+                  "DAILY",
+                  "MONTHLY",
+                  "HOURLY"
+                ]
+              }
+            },
+            "description": "Custom reports. Each report lands in its own destination table, in addition to the prebuilt report and metadata tables that are always synced."
+          }
+        },
+        "schema": {
+          "title": "Destination schema name",
+          "type": "string",
+          "description": "Destination schema name. Schema name is permanent and cannot be changed after connection creation"
+        }
+      },
+      "description": "",
+      "required": [
+        "schema"
+      ]
+    }
+  },
+  "x-sources": [
+    "openai_ads_reports_config_V1",
+    "schema_format_schema"
+  ]
+}

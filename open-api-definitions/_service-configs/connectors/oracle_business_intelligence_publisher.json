@@ -57,10 +57,27 @@
       "required": [
         "schema_prefix"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Oracle Business Intelligence user password."
+        },
+        "username": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the Oracle Business Intelligence username."
+        }
+      },
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [
     "oracle_business_intelligence_publisher_config_V1",
-    "schema_format_schema_prefix"
+    "schema_format_schema_prefix",
+    "oracle_business_intelligence_publisher_esm_keys_config_V1"
   ]
 }

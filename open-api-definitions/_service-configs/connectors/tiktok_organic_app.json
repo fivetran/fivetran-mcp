@@ -12,6 +12,16 @@
             "sandbox-ads.tiktok.com"
           ]
         },
+        "api_rate_limit_tier": {
+          "type": "object",
+          "description": "The API rate limit tier approved for your TikTok developer app. Select Basic unless TikTok has approved a higher tier, otherwise syncs may fail with rate-limit errors.",
+          "enum": [
+            "49",
+            "29",
+            "19",
+            "9"
+          ]
+        },
         "business_category": {
           "type": "array",
           "description": "The TikTok business category whose data you want to sync.",

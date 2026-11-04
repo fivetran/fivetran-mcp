@@ -30,6 +30,11 @@
           "description": "Provide content of the `.pem` certificate (only when authentication_method = `ADVANCED`).",
           "format": "password"
         },
+        "include_inactive_records_in_formula_models": {
+          "title": "",
+          "type": "boolean",
+          "description": "Enable this option to include inactive records in formula field models (default value = `false`). Enabling this setting means that if a table is in soft-delete mode, your models will include soft-deleted records, and if a table is in history mode, your models will include historical records with populated formula fields. Cross-object formula fields, rollup summary fields, and formulas that depend on them are `null` for inactive records. [Learn more](/docs/connectors/applications/salesforce/formula#inactiverecordsinformulafieldmodels)."
+        },
         "private_key": {
           "title": "",
           "type": "string",

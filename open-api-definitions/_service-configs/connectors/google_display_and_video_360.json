@@ -138,8 +138,7 @@
       },
       "description": "",
       "required": [
-        "schema",
-        "table"
+        "schema"
       ]
     },
     "auth": {
@@ -172,7 +171,7 @@
   },
   "x-sources": [
     "google_display_and_video_360_config_V1",
-    "schema_format_schema_table",
+    "schema_format_schema_optional_table",
     "google_display_and_video_360_auth_V1"
   ]
 }

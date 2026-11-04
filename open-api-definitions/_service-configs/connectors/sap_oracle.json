@@ -85,6 +85,12 @@
           "type": "string",
           "description": "<strong>Optional:</strong> The host for the local Oracle Wallet."
         },
+        "local_wallet_machine_id": {
+          "title": "",
+          "type": "string",
+          "description": "<strong>Optional:</strong> The machine id of the database host for the local Oracle Wallet. Required for local Oracle Wallets bound to the machine id (Oracle 23ai and newer).",
+          "format": "password"
+        },
         "local_wallet_user": {
           "title": "",
           "type": "string",
@@ -202,7 +208,7 @@
           "description": "ESM key for the user name."
         }
       },
-      "description": ""
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [

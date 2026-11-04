@@ -1,5 +1,5 @@
 {
-  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates the transformation if a valid identifier is provided.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Updates the transformation if a valid identifier is provided. For Quickstart transformations, `transformation_config.configurable_variables` replaces all existing variable values and flags all models for a full refresh on the next run. To clear all variable values, pass an empty object `{}`. `null` is not accepted. Omit the field to leave the variables unchanged.",
   "path": "/v1/transformations/{transformationId}",
   "method": "PATCH",
   "parameters": [

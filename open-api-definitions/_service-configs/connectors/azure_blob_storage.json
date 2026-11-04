@@ -304,11 +304,33 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for `Client ID` of your Microsoft client application."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for `Client Secret` of your Microsoft client application."
+        },
+        "connection_string": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for connect using a SAS URL or connection string"
+        }
+      },
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [
     "azure_blob_storage_config_V1",
     "schema_format_schema_table_group",
-    "azure_blob_storage_auth_V1"
+    "azure_blob_storage_auth_V1",
+    "azure_blob_storage_esm_keys_config_V1"
   ]
 }

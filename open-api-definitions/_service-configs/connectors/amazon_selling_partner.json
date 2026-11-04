@@ -9,6 +9,11 @@
           "type": "string",
           "description": "The earliest date to sync data from, in YYYY-MM-DD format. Cannot be before 1994-01-01 or in the future."
         },
+        "custom_app_client_id": {
+          "title": "",
+          "type": "string",
+          "description": "The client ID of your custom Amazon Selling Partner app."
+        },
         "historical_sync_time_frame": {
           "title": "",
           "type": "object",
@@ -66,6 +71,16 @@
           "title": "",
           "type": "string",
           "description": ""
+        },
+        "custom_app_client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "The client secret of your custom Amazon Selling Partner app."
+        },
+        "custom_app_refresh_token": {
+          "title": "",
+          "type": "string",
+          "description": "The refresh token for your custom Amazon Selling Partner app."
         },
         "refresh_token": {
           "title": "",

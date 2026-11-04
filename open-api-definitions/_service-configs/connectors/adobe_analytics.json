@@ -141,7 +141,7 @@
           "description": "ESM key for client Secret from the OAuth Server-to-Server credentials of your Adobe Project."
         }
       },
-      "description": ""
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [

@@ -9,7 +9,7 @@ Generated from the OpenAPI spec by `split_openapi_by_endpoint.py`. Each row is a
 | account:read | `account_read` | 1 |
 | connections:delete | `connections_delete` | 5 |
 | connections:read | `connections_read` | 12 |
-| connections:write | `connections_write` | 18 |
+| connections:write | `connections_write` | 19 |
 | connector-sdk:delete | `connector_sdk_delete` | 1 |
 | connector-sdk:read | `connector_sdk_read` | 3 |
 | connector-sdk:write | `connector_sdk_write` | 2 |

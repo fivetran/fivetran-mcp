@@ -251,7 +251,7 @@
           "description": "ESM key for the personal access token you created for authenticating Fivetran"
         }
       },
-      "description": ""
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [

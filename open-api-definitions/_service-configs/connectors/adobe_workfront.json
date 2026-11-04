@@ -4,15 +4,23 @@
     "config": {
       "type": "object",
       "properties": {
+        "auth_type": {
+          "type": "object",
+          "description": "The authentication method you want to use for your connection. Possible values: `workfront_oauth2`, `adobe_developer_console`.",
+          "enum": [
+            "workfront_oauth2",
+            "adobe_developer_console"
+          ]
+        },
         "client_id": {
           "title": "",
           "type": "string",
-          "description": "Your Adobe Workfront client ID."
+          "description": "The client ID of your Adobe Developer Console credential or Workfront OAuth2 application."
         },
         "client_secret": {
           "title": "",
           "type": "string",
-          "description": "Your Adobe Workfront client secret.",
+          "description": "The client secret of your Adobe Developer Console credential or Workfront OAuth2 application.",
           "format": "password"
         },
         "environment": {

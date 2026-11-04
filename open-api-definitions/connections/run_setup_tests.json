@@ -163,23 +163,23 @@
                 ]
               },
               "schedule": {
-                "description": "The connection's sync schedule configuration",
+                "description": "The connection's sync schedule configuration.",
                 "allOf": [
                   {
                     "type": "object",
                     "properties": {
                       "cron": {
                         "type": "string",
-                        "description": "A UNIX cron expression defining the sync schedule. Set when `schedule_type` is `CRON`."
+                        "description": "A UNIX cron expression defining the sync schedule. Applies when `schedule_type` is `CRON`."
                       },
                       "interval": {
                         "type": "integer",
-                        "description": "The sync interval in minutes. Set when `schedule_type` is `INTERVAL`.",
+                        "description": "The sync interval in minutes. Applies when `schedule_type` is `INTERVAL`. To run at a specific time on each configured day, use `schedule_type: TIME_OF_DAY` and `time_of_day` instead; this corresponds to the dashboard's 24-hour (1440-minute) Custom schedule.",
                         "format": "int32"
                       },
                       "schedule_type": {
                         "type": "string",
-                        "description": "The type of sync schedule. Determines which other `schedule` fields are populated. Possible values: `INTERVAL` - syncs repeat on a fixed cadence; `interval` is set. `TIME_OF_DAY` - syncs run at a specific time on the configured `days_of_week`; `time_of_day` is set. `CRON` - syncs run on a cron expression (requires an Enterprise or Business Critical plan); `cron` is set. `MANUAL` - automatic scheduling is disabled; syncs run only when triggered via the Sync Connection endpoint; `days_of_week` and `interval` are not set.",
+                        "description": "The type of sync schedule. Determines which other `schedule` fields apply. Possible values: `INTERVAL` - syncs repeat on a fixed cadence; `interval` is set. `TIME_OF_DAY` - syncs run once on each configured day at `time_of_day`; corresponds to a Custom schedule with a 24-hour (1440-minute) frequency in the dashboard. The `interval` field does not apply. `CRON` - syncs run on a cron expression (requires an Enterprise or Business Critical plan); `cron` is set. `MANUAL` - automatic scheduling is disabled; syncs run only when triggered via the Sync Connection endpoint; `days_of_week` and `interval` are not set.",
                         "enum": [
                           "TIME_OF_DAY",
                           "INTERVAL",
@@ -190,7 +190,7 @@
                       "days_of_week": {
                         "uniqueItems": true,
                         "type": "array",
-                        "description": "The days of the week on which the connection can sync. Set only when `schedule_type` is `INTERVAL` or `TIME_OF_DAY`. When omitted or empty in the request with these schedule types set, the connection syncs on all days.",
+                        "description": "The days of the week on which the connection syncs. Applies only when `schedule_type` is `INTERVAL` or `TIME_OF_DAY`. When omitted or empty in a request with these schedule types set, the connection syncs on all days.",
                         "items": {
                           "type": "string",
                           "enum": [
@@ -206,7 +206,11 @@
                       },
                       "time_of_day": {
                         "type": "string",
-                        "description": "The time of day at which the connection syncs, in `HH:MM` format. Interpreted in the destination group's configured UTC offset. Set when `schedule_type` is `TIME_OF_DAY`."
+                        "description": "The time of day at which the connection syncs, in `HH:MM` format. Interpreted in the destination group's configured UTC offset. Applies when `schedule_type` is `TIME_OF_DAY`, with one sync per configured day. In the dashboard, this is available only for a Custom schedule with a 24-hour (1440-minute) frequency. In the API, use `TIME_OF_DAY` rather than `INTERVAL`; `interval: 1440` is not required."
+                      },
+                      "time_zone": {
+                        "type": "string",
+                        "description": "The IANA time zone in which the `cron` expression is evaluated, for example `Europe/Prague`. Daylight saving transitions are applied automatically. Only supported when `schedule_type` is `CRON`. When omitted from an update request, the connection's existing time zone is preserved; when it has never been set, the destination group's configured UTC offset is used. A connection that has a transformation scheduled on it cannot be given a time zone it is not already syncing in, whether by setting this field or by switching `schedule_type` back to `auto`, which restores the time zone the connection had before it was set to `manual`."
                       }
                     }
                   }
@@ -284,6 +288,7 @@
               },
               "networking_method": {
                 "type": "string",
+                "description": "The method used to connect to the source. Possible values: `Directly` - a direct connection; `SshTunnel` - connection through an SSH tunnel; `PrivateLink` - connection through a Private Link endpoint; `ProxyAgent` - connection through a Fivetran Proxy Agent.",
                 "enum": [
                   "Directly",
                   "SshTunnel",
@@ -376,7 +381,8 @@
                     "type": "boolean",
                     "description": "An optional parameter that lets you show all fields on Connect Card including those that are hidden by default for certain connectors."
                   }
-                }
+                },
+                "description": "The [Connect Card](https://fivetran.com/docs/developer-resources/rest-api/getting-started/connect-card) configuration for this connection. Connect Card is a Fivetran-hosted user interface that lets your end users authorize connections without accessing the Fivetran dashboard. `redirect_uri` controls where users land after completing setup."
               },
               "hybrid_deployment_agent_id": {
                 "type": "string",
@@ -389,7 +395,8 @@
                     "type": "string",
                     "description": "Snowflake's virtual warehouse used in the connection"
                   }
-                }
+                },
+                "description": "Destination-specific configuration for the connection. The accepted fields depend on the destination type. For Snowflake destinations, use `virtual_warehouse` to specify the warehouse used for this connection."
               },
               "destination_schema_names": {
                 "type": "string",

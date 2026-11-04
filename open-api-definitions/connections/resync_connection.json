@@ -1,5 +1,5 @@
 {
-  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Triggers a full historical sync of a connection or multiple schema tables within a connection. If the connection is paused, the table sync will be scheduled to be performed when the connection is re-enabled. If there is a data sync already in progress, we will try to complete it. If it fails, the request will be declined and the HTTP 409 Conflict error will be returned.",
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Triggers a full historical sync of a connection or the specified tables within a connection. If the connection is paused, the table sync will be scheduled to be performed when the connection is re-enabled. If there is a data sync already in progress, we will try to complete it. If it fails, the request will be declined and the HTTP 409 Conflict error will be returned.",
   "path": "/v1/connections/{connectionId}/resync",
   "method": "POST",
   "parameters": [

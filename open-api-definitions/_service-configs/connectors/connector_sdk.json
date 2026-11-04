@@ -9,6 +9,11 @@
           "type": "string",
           "description": ""
         },
+        "proxy_host_config_key": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        },
         "python_version": {
           "title": "",
           "type": "string",

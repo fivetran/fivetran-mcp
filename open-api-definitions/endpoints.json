@@ -22,7 +22,7 @@
       "name": "connections_write",
       "resource": "connections",
       "action": "write",
-      "endpoints": 18
+      "endpoints": 19
     },
     {
       "name": "connector_sdk_delete",
@@ -504,6 +504,17 @@
       "summary": "DESTRUCTIVE - Dismiss Connection Warnings by Type",
       "schema_file": "connections/dismiss_connection_warning.json",
       "scope": "delete",
+      "deprecated": false
+    },
+    {
+      "name": "dismiss_connection_warnings",
+      "resource": "connections",
+      "tool_prefix": "connections",
+      "method": "POST",
+      "path": "/v1/connections/{connectionId}/dismiss-warnings",
+      "summary": "WRITE OPERATION - Dismiss Connection Warnings",
+      "schema_file": "connections/dismiss_connection_warnings.json",
+      "scope": "write",
       "deprecated": false
     },
     {

@@ -7,7 +7,7 @@
         "api_key": {
           "title": "",
           "type": "string",
-          "description": "Your Cursor API key.",
+          "description": "Your Cursor Team Admin API key.",
           "format": "password"
         },
         "schema": {

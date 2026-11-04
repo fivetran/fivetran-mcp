@@ -27,7 +27,7 @@
         "effective_date_disabled": {
           "title": "",
           "type": "boolean",
-          "description": "Select this option to extract all historical records without applying a date filter. Console allows setting this option for all datastores in the connector."
+          "description": "Set the toggle on to disable Oracle BICC effective date filtering and extract all historical records. Applies to all datastores in the connector."
         },
         "issuer": {
           "title": "",
@@ -107,7 +107,7 @@
           "description": "ESM key for the Oracle Fusion Cloud username."
         }
       },
-      "description": ""
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [

@@ -31,11 +31,30 @@
           "description": "Your account password.",
           "format": "password"
         },
+        "rollback_strategy": {
+          "title": "",
+          "type": "object",
+          "description": "When to apply the rollback window: `EVERY_SYNC` applies it on every incremental sync, `DAILY` applies it once a day. The default is `DAILY`.",
+          "enum": [
+            "DAILY",
+            "EVERY_SYNC"
+          ]
+        },
         "rollback_window": {
           "title": "",
           "type": "integer",
-          "description": "Set a rollback window between 0 and 7 days. The default is 0 days.",
+          "description": "Set a rollback window between 0 and 90 minutes, between 0 and 48 hours, or between 0 and 7 days, depending on `rollback_window_unit`. The default is 0.",
           "format": "int32"
+        },
+        "rollback_window_unit": {
+          "title": "",
+          "type": "object",
+          "description": "The unit of the rollback window: `MINUTES`, `HOURS`, or `DAYS`. The default is `DAYS`.",
+          "enum": [
+            "HOURS",
+            "DAYS",
+            "MINUTES"
+          ]
         },
         "username": {
           "title": "",

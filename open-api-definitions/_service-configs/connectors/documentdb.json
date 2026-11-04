@@ -12,10 +12,11 @@
         "connection_type": {
           "title": "",
           "type": "object",
-          "description": "Possible values:`SshTunnel`, `PrivateLink` . `SshTunnel` is used as a value if this parameter is omitted in the request and the following parameter's values are specified: `tunnel_host`, `tunnel_port`, `tunnel_user`.",
+          "description": "Possible values: `SshTunnel`, `PrivateLink`, `ProxyAgent`. `SshTunnel` is used as a value if this parameter is omitted in the request and the following parameter's values are specified: `tunnel_host`, `tunnel_port`, `tunnel_user`.",
           "enum": [
             "PrivateLink",
-            "SshTunnel"
+            "SshTunnel",
+            "ProxyAgent"
           ]
         },
         "host": {
@@ -93,10 +94,27 @@
       "required": [
         "schema_prefix"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [
     "documentdb_config_V1",
-    "schema_format_schema_prefix"
+    "schema_format_schema_prefix",
+    "documentdb_esm_keys_config_V1"
   ]
 }

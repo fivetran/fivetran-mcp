@@ -5,8 +5,7 @@
       "type": "object",
       "description": "",
       "required": [
-        "schema",
-        "table"
+        "schema"
       ],
       "properties": {
         "schema": {
@@ -24,6 +23,6 @@
   },
   "x-sources": [
     "open_data_dc_config_V1",
-    "schema_format_schema_table"
+    "schema_format_schema_optional_table"
   ]
 }

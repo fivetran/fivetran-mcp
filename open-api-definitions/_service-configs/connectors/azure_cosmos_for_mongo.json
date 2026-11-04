@@ -107,10 +107,27 @@
       "required": [
         "schema_prefix"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for password used for source database authentication."
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for username for source database access."
+        }
+      },
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [
     "azure_cosmos_for_mongo_config_V1",
-    "schema_format_schema_prefix"
+    "schema_format_schema_prefix",
+    "azure_cosmos_for_mongo_esm_keys_config_V1"
   ]
 }

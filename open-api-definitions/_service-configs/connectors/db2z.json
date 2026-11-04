@@ -117,10 +117,37 @@
       "required": [
         "schema_prefix"
       ]
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "application_name": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the application name used to generate an RACF PassTicket for user authentication"
+        },
+        "password": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user's password"
+        },
+        "secured_signon_key": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for application secret key registered in RACF for the application"
+        },
+        "user": {
+          "title": "",
+          "type": "string",
+          "description": "ESM key for the user name."
+        }
+      },
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [
     "db2z_config_V1",
-    "schema_format_schema_prefix"
+    "schema_format_schema_prefix",
+    "db2z_esm_keys_config_V1"
   ]
 }

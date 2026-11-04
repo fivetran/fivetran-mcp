@@ -232,8 +232,7 @@
       },
       "description": "",
       "required": [
-        "schema",
-        "table"
+        "schema"
       ]
     },
     "auth": {
@@ -266,7 +265,7 @@
   },
   "x-sources": [
     "double_click_campaign_manager_config_V1",
-    "schema_format_schema_table",
+    "schema_format_schema_optional_table",
     "double_click_campaign_manager_auth_V1"
   ]
 }

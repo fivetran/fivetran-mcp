@@ -166,6 +166,15 @@
           "title": "",
           "type": "string",
           "description": "Your storage account name"
+        },
+        "vacuum_day": {
+          "title": "",
+          "type": "object",
+          "description": "The day of the weekend on which Fivetran runs VACUUM operations on Delta tables.",
+          "enum": [
+            "SUNDAY",
+            "SATURDAY"
+          ]
         }
       },
       "description": ""
@@ -189,7 +198,7 @@
           "description": "ESM key for personal access token"
         }
       },
-      "description": ""
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [

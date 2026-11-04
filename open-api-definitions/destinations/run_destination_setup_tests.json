@@ -93,7 +93,6 @@
                   "postgres_gcp_warehouse",
                   "postgres_rds_warehouse",
                   "postgres_warehouse",
-                  "postgres_wh",
                   "redshift",
                   "singlestore",
                   "snowflake",

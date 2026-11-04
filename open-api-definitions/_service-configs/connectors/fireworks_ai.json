@@ -4,21 +4,19 @@
     "config": {
       "type": "object",
       "properties": {
+        "account_status": {
+          "type": "object",
+          "description": "Select Free tier / no active credits or Paid tier (active credits) to match your Fireworks AI account plan. Fireworks applies request limits across the entire account.",
+          "enum": [
+            "8",
+            "5700"
+          ]
+        },
         "api_key": {
           "title": "",
           "type": "string",
-          "description": "Your OpenAI Compliance Platform API key.",
+          "description": "Your Fireworks AI API key.",
           "format": "password"
-        },
-        "organization_id": {
-          "title": "",
-          "type": "string",
-          "description": "Your OpenAI Compliance Platform organization ID."
-        },
-        "workspace_id": {
-          "title": "",
-          "type": "string",
-          "description": "Your OpenAI Compliance Platform workspace ID."
         },
         "schema": {
           "title": "Destination schema name",
@@ -33,7 +31,7 @@
     }
   },
   "x-sources": [
-    "openai_compliance_platform_config_V1",
+    "fireworks_ai_config_V1",
     "schema_format_schema"
   ]
 }

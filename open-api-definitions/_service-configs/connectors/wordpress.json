@@ -22,8 +22,7 @@
       },
       "description": "",
       "required": [
-        "schema",
-        "table"
+        "schema"
       ]
     },
     "auth": {
@@ -57,7 +56,7 @@
   },
   "x-sources": [
     "wordpress_config_V1",
-    "schema_format_schema_table",
+    "schema_format_schema_optional_table",
     "wordpress_auth_V1"
   ]
 }

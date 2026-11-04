@@ -1,0 +1,53 @@
+{
+  "description": "⚠️ WRITE OPERATION - Confirm with user before calling. Dismisses active warnings for a connection. If `warning_types` is provided, only the provided types are dismissed.\nIf `warning_types` is omitted or empty, all active warnings for the connection are dismissed.\n\nValidation is performed before any warnings are dismissed. If any value in `warning_types` is unrecognized or null,\nthe entire request is rejected with 400 and no warnings are dismissed.\n\nDismissed warnings may reappear on the next sync if the underlying issue is not resolved.\n",
+  "path": "/v1/connections/{connectionId}/dismiss-warnings",
+  "method": "POST",
+  "parameters": [
+    {
+      "name": "connectionId",
+      "in": "path",
+      "required": true,
+      "description": "The unique identifier of the connection. Retrieve it from the `id` field in the [List All Connections](https://fivetran.com/docs/rest-api/api-reference/connections/list-connections) response, or from the `id` field returned when you [Create a Connection](https://fivetran.com/docs/rest-api/api-reference/connections/create-connection).",
+      "schema": {
+        "type": "string"
+      }
+    }
+  ],
+  "request_body": {
+    "content": {
+      "application/json": {
+        "type": "object",
+        "properties": {
+          "warning_types": {
+            "type": "array",
+            "description": "List of warning type codes to dismiss. Use the `type` field from `GET /v1/connections/{connectionId}/warnings` to get valid values. Values are case-sensitive strings. If omitted or empty, all active warnings are dismissed.",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "response": {
+    "content": {
+      "application/json": {
+        "required": [
+          "code",
+          "message"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Response status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response status text"
+          }
+        }
+      }
+    },
+    "description": "Successful response"
+  }
+}

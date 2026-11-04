@@ -4,6 +4,16 @@
     "config": {
       "type": "object",
       "properties": {
+        "auth_type": {
+          "title": "",
+          "type": "object",
+          "description": "Authentication type: `CONNECTION_STRING`, `SERVICE_PRINCIPAL_SECRET` or `SERVICE_PRINCIPAL_CERTIFICATE`. Defaults to `CONNECTION_STRING`.",
+          "enum": [
+            "CONNECTION_STRING",
+            "SERVICE_PRINCIPAL_SECRET",
+            "SERVICE_PRINCIPAL_CERTIFICATE"
+          ]
+        },
         "connection_string": {
           "title": "",
           "type": "string",
@@ -15,6 +25,11 @@
           "type": "string",
           "description": "Name of consumer group created for Fivetran."
         },
+        "event_hub_name": {
+          "title": "",
+          "type": "string",
+          "description": "Name of the single Event Hub to sync. Optional, used with service principal authentication; all Event Hubs in the namespace are synced when empty."
+        },
         "message_type": {
           "title": "",
           "type": "object",
@@ -23,6 +38,11 @@
             "Text",
             "Json"
           ]
+        },
+        "namespace": {
+          "title": "",
+          "type": "string",
+          "description": "Name of your Event Hubs namespace, without the `.servicebus.windows.net` suffix. Used with service principal authentication."
         },
         "sync_type": {
           "title": "",
@@ -43,10 +63,47 @@
       "required": [
         "schema"
       ]
+    },
+    "auth": {
+      "type": "object",
+      "properties": {
+        "client_certificate": {
+          "title": "",
+          "type": "string",
+          "description": "`Client Certificate` of your Microsoft Entra ID application. Used with the `SERVICE_PRINCIPAL_CERTIFICATE` authentication type."
+        },
+        "client_certificate_private_key": {
+          "title": "",
+          "type": "string",
+          "description": "`Certificate Private Key` of your Microsoft Entra ID application. Used with the `SERVICE_PRINCIPAL_CERTIFICATE` authentication type."
+        },
+        "client_certificate_private_key_passphrase": {
+          "title": "",
+          "type": "string",
+          "description": "`Certificate Private Key Passphrase`, if the private key is encrypted. Used with the `SERVICE_PRINCIPAL_CERTIFICATE` authentication type."
+        },
+        "client_id": {
+          "title": "",
+          "type": "string",
+          "description": "`Application (client) ID` of your Microsoft Entra ID application."
+        },
+        "client_secret": {
+          "title": "",
+          "type": "string",
+          "description": "`Client Secret` of your Microsoft Entra ID application. Used with the `SERVICE_PRINCIPAL_SECRET` authentication type."
+        },
+        "tenant_id": {
+          "title": "",
+          "type": "string",
+          "description": "`Directory (tenant) ID` of your Microsoft Entra ID application."
+        }
+      },
+      "description": ""
     }
   },
   "x-sources": [
     "azure_event_hub_config_V1",
-    "schema_format_schema"
+    "schema_format_schema",
+    "azure_event_hub_auth_V1"
   ]
 }

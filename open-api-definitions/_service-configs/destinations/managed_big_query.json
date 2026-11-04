@@ -20,6 +20,16 @@
             "US"
           ]
         },
+        "file_bucket": {
+          "title": "",
+          "type": "string",
+          "description": "GCS bucket used to stage unstructured files. Required if you want Fivetran to replicate unstructured files."
+        },
+        "file_folder": {
+          "title": "",
+          "type": "string",
+          "description": "GCS folder within `fileBucket` used to stage unstructured files."
+        },
         "project_id": {
           "title": "",
           "type": "string",
@@ -38,9 +48,21 @@
         }
       },
       "description": ""
+    },
+    "external_secrets_keys_config": {
+      "type": "object",
+      "properties": {
+        "secret_key": {
+          "title": "",
+          "type": "string",
+          "description": ""
+        }
+      },
+      "description": "A JSON object mapping configuration field names to their corresponding secret key names in your external secrets manager. Requires `external_secrets_manager_id` to be set."
     }
   },
   "x-sources": [
-    "managed_big_query_config_V1"
+    "managed_big_query_config_V1",
+    "managed_big_query_esm_keys_config_V1"
   ]
 }
