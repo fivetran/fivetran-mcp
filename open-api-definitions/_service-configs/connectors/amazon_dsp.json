@@ -53,7 +53,8 @@
       },
       "description": "",
       "required": [
-        "schema"
+        "schema",
+        "table"
       ]
     },
     "auth": {
@@ -95,7 +96,7 @@
   },
   "x-sources": [
     "amazon_dsp_config_V1",
-    "schema_format_schema_optional_table",
+    "schema_format_schema_table",
     "amazon_dsp_auth_V1"
   ]
 }

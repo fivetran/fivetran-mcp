@@ -5,7 +5,8 @@
       "type": "object",
       "description": "",
       "required": [
-        "schema"
+        "schema",
+        "table"
       ],
       "properties": {
         "schema": {
@@ -58,7 +59,7 @@
   },
   "x-sources": [
     "google_classroom_config_V1",
-    "schema_format_schema_optional_table",
+    "schema_format_schema_table",
     "google_classroom_auth_V1"
   ]
 }

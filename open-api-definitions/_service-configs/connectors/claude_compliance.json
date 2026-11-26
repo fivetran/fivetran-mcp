@@ -4,26 +4,11 @@
     "config": {
       "type": "object",
       "properties": {
-        "base_url": {
+        "api_key": {
           "title": "",
           "type": "string",
-          "description": "Your Threads API base URL, without https://."
-        },
-        "client_id": {
-          "title": "",
-          "type": "string",
-          "description": "Your Threads app ID."
-        },
-        "client_secret": {
-          "title": "",
-          "type": "string",
-          "description": "Your Threads app secret.",
+          "description": "Your Claude Compliance Access Key.",
           "format": "password"
-        },
-        "threads_user_id": {
-          "title": "",
-          "type": "string",
-          "description": "Your Threads user ID."
         },
         "schema": {
           "title": "Destination schema name",
@@ -38,7 +23,7 @@
     }
   },
   "x-sources": [
-    "threads_config_V1",
+    "claude_compliance_config_V1",
     "schema_format_schema"
   ]
 }

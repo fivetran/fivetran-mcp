@@ -7,17 +7,17 @@
         "api_key": {
           "title": "",
           "type": "string",
-          "description": "Your dbt platform service token.",
+          "description": "Your dbt Cloud service token.",
           "format": "password"
         },
         "custom_url": {
           "title": "",
           "type": "string",
-          "description": "Your dbt platform access url."
+          "description": "Your dbt Cloud access url."
         },
         "sub_domain": {
           "type": "object",
-          "description": "Your dbt platform API server region.",
+          "description": "Your dbt Cloud API server region.",
           "enum": [
             "",
             "cloud.getdbt.com",
